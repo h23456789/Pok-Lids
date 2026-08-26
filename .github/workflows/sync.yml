@@ -1,0 +1,283 @@
+name: Sync Poké Lids Data
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Download latest Poké Lids data
+        run: |
+          mkdir -p data
+
+          curl -L \
+            "https://raw.githubusercontent.com/yukidaruma/pokefuta-tracker/main/data/data.json" \
+            -o /tmp/latest.json
+
+      - name: Compare and update data
+        run: |
+          python <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+
+          latest_file = "/tmp/latest.json"
+          current_file = "data/data.json"
+          history_file = "history.json"
+
+          # 讀取最新資料
+          with open(latest_file, "r", encoding="utf-8") as f:
+              latest = json.load(f)
+
+          latest_list = latest.get("list", [])
+
+          # 讀取目前資料
+          if os.path.exists(current_file):
+              with open(current_file, "r", encoding="utf-8") as f:
+                  current = json.load(f)
+          else:
+              current = {"list": []}
+
+          current_list = current.get("list", [])
+
+          # 用 ID 判斷同一個 Poké Lid
+          def make_key(item):
+              if item.get("id") is not None:
+                  return str(item.get("id"))
+
+              coords = item.get("coords", [])
+
+              if len(coords) >= 2:
+                  return f"{coords[0]},{coords[1]}"
+
+              return json.dumps(
+                  item,
+                  ensure_ascii=False,
+                  sort_keys=True
+              )
+
+          old_map = {
+              make_key(x): x
+              for x in current_list
+          }
+
+          new_map = {
+              make_key(x): x
+              for x in latest_list
+          }
+
+          added = []
+          removed = []
+          changed = []
+
+          # 新增
+          for key, item in new_map.items():
+
+              if key not in old_map:
+
+                  coords = item.get(
+                      "coords",
+                      ["", ""]
+                  )
+
+                  added.append({
+                      "id": item.get("id"),
+                      "prefecture": item.get(
+                          "prefecture",
+                          item.get("pref", "")
+                      ),
+                      "title": item.get(
+                          "city",
+                          ""
+                      ),
+                      "lat": coords[0] if len(coords) > 0 else "",
+                      "lng": coords[1] if len(coords) > 1 else ""
+                  })
+
+          # 移除
+          for key, item in old_map.items():
+
+              if key not in new_map:
+
+                  coords = item.get(
+                      "coords",
+                      ["", ""]
+                  )
+
+                  removed.append({
+                      "id": item.get("id"),
+                      "prefecture": item.get(
+                          "prefecture",
+                          item.get("pref", "")
+                      ),
+                      "title": item.get(
+                          "city",
+                          ""
+                      ),
+                      "lat": coords[0] if len(coords) > 0 else "",
+                      "lng": coords[1] if len(coords) > 1 else ""
+                  })
+
+          # 修改
+          for key, new_item in new_map.items():
+
+              if key not in old_map:
+                  continue
+
+              old_item = old_map[key]
+
+              if old_item != new_item:
+
+                  changed.append({
+                      "id": new_item.get("id"),
+                      "prefecture": new_item.get(
+                          "prefecture",
+                          new_item.get("pref", "")
+                      ),
+                      "title": new_item.get(
+                          "city",
+                          ""
+                      )
+                  })
+
+          # 建立 data 資料夾
+          os.makedirs("data", exist_ok=True)
+
+          # 寫入最新 data.json
+          with open(
+              current_file,
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              json.dump(
+                  latest,
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          # 讀取 History
+          if os.path.exists(history_file):
+
+              with open(
+                  history_file,
+                  "r",
+                  encoding="utf-8"
+              ) as f:
+
+                  history = json.load(f)
+
+          else:
+
+              history = {
+                  "last_sync": None,
+                  "history": []
+              }
+
+          # 現在時間
+          now = datetime.now(
+              timezone.utc
+          ).astimezone()
+
+          record = {
+              "time": now.strftime(
+                  "%Y-%m-%d %H:%M:%S"
+              ),
+              "total": len(latest_list),
+              "added": added,
+              "removed": removed,
+              "changed": changed
+          }
+
+          # 第一次執行也建立 History
+          if (
+              added
+              or removed
+              or changed
+              or not history.get("history")
+          ):
+
+              history.setdefault(
+                  "history",
+                  []
+              )
+
+              history["history"].append(
+                  record
+              )
+
+          history["last_sync"] = now.strftime(
+              "%Y-%m-%d %H:%M:%S"
+          )
+
+          # 最多保留 200 次紀錄
+          history["history"] = \
+              history["history"][-200:]
+
+          # 寫入 history.json
+          with open(
+              history_file,
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              json.dump(
+                  history,
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          print("================================")
+          print("Poké Lids Sync")
+          print("================================")
+          print("Total   :", len(latest_list))
+          print("Added   :", len(added))
+          print("Removed :", len(removed))
+          print("Changed :", len(changed))
+          print("================================")
+          PY
+
+      - name: Commit changes
+        run: |
+
+          git config user.name \
+            "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            data/data.json \
+            history.json
+
+          if git diff --cached --quiet; then
+
+            echo "No changes detected."
+
+          else
+
+            git commit \
+              -m "chore: sync Poké Lids data"
+
+            git push
+
+          fi

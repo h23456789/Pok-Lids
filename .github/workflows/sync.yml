@@ -1,260 +1,586 @@
-name: Sync Poké Lids Data
+name: Sync Poké Lid Data
 
 on:
   schedule:
+    # 每 5 分鐘執行一次
     - cron: "*/5 * * * *"
 
+  # 可以在 GitHub Actions 頁面手動執行
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
+
   sync:
+
     runs-on: ubuntu-latest
 
     steps:
 
+      # =====================================================
+      # 1. 取得自己的 Repository
+      # =====================================================
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
+
+      # =====================================================
+      # 2. 設定 Python
+      # =====================================================
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Download latest Poké Lids data
+
+      # =====================================================
+      # 3. 建立資料夾
+      # =====================================================
+
+      - name: Prepare folders
         run: |
+
           mkdir -p data
 
-          curl -L \
-            "https://raw.githubusercontent.com/yukidaruma/pokefuta-tracker/main/data/data.json" \
-            -o /tmp/latest.json
+          mkdir -p .tmp
 
-      - name: Compare and update data
+
+      # =====================================================
+      # 4. 下載最新 Poké Lid data.json
+      # =====================================================
+
+      - name: Download latest data.json
         run: |
-          python <<'PY'
+
+          curl -L \
+            --fail \
+            --retry 5 \
+            --retry-delay 3 \
+            "https://raw.githubusercontent.com/yukidaruma/pokefuta-tracker/main/data/data.json" \
+            -o .tmp/new_data.json
+
+
+      # =====================================================
+      # 5. 檢查 JSON 是否正常
+      # =====================================================
+
+      - name: Validate JSON
+        run: |
+
+          python - <<'PY'
+
+          import json
+
+          with open(
+              ".tmp/new_data.json",
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              data = json.load(f)
+
+          if not isinstance(data, dict):
+
+              raise SystemExit(
+                  "data.json 格式錯誤：不是 JSON object"
+              )
+
+          items = data.get("list", [])
+
+          if not isinstance(items, list):
+
+              raise SystemExit(
+                  "data.json 格式錯誤：list 不是 array"
+              )
+
+          print(
+              f"JSON OK：{len(items)} 筆資料"
+          )
+
+          PY
+
+
+      # =====================================================
+      # 6. 比對新舊資料
+      # =====================================================
+
+      - name: Compare data and create history
+        run: |
+
+          python - <<'PY'
+
           import json
           import os
           from datetime import datetime, timezone
 
-          latest_file = "/tmp/latest.json"
-          current_file = "data/data.json"
-          history_file = "history.json"
 
-          # 讀取最新資料
-          with open(latest_file, "r", encoding="utf-8") as f:
-              latest = json.load(f)
+          OLD_FILE = "data/data.json"
+          NEW_FILE = ".tmp/new_data.json"
+          HISTORY_FILE = "history.json"
 
-          latest_list = latest.get("list", [])
 
-          # 讀取目前資料
-          if os.path.exists(current_file):
-              with open(current_file, "r", encoding="utf-8") as f:
-                  current = json.load(f)
-          else:
-              current = {"list": []}
+          # -------------------------------------------------
+          # 讀取新資料
+          # -------------------------------------------------
 
-          current_list = current.get("list", [])
-
-          # 用 ID 判斷同一個 Poké Lid
-          def make_key(item):
-              if item.get("id") is not None:
-                  return str(item.get("id"))
-
-              coords = item.get("coords", [])
-
-              if len(coords) >= 2:
-                  return f"{coords[0]},{coords[1]}"
-
-              return json.dumps(
-                  item,
-                  ensure_ascii=False,
-                  sort_keys=True
-              )
-
-          old_map = {
-              make_key(x): x
-              for x in current_list
-          }
-
-          new_map = {
-              make_key(x): x
-              for x in latest_list
-          }
-
-          added = []
-          removed = []
-          changed = []
-
-          # 新增
-          for key, item in new_map.items():
-
-              if key not in old_map:
-
-                  coords = item.get(
-                      "coords",
-                      ["", ""]
-                  )
-
-                  added.append({
-                      "id": item.get("id"),
-                      "prefecture": item.get(
-                          "prefecture",
-                          item.get("pref", "")
-                      ),
-                      "title": item.get(
-                          "city",
-                          ""
-                      ),
-                      "lat": coords[0] if len(coords) > 0 else "",
-                      "lng": coords[1] if len(coords) > 1 else ""
-                  })
-
-          # 移除
-          for key, item in old_map.items():
-
-              if key not in new_map:
-
-                  coords = item.get(
-                      "coords",
-                      ["", ""]
-                  )
-
-                  removed.append({
-                      "id": item.get("id"),
-                      "prefecture": item.get(
-                          "prefecture",
-                          item.get("pref", "")
-                      ),
-                      "title": item.get(
-                          "city",
-                          ""
-                      ),
-                      "lat": coords[0] if len(coords) > 0 else "",
-                      "lng": coords[1] if len(coords) > 1 else ""
-                  })
-
-          # 修改
-          for key, new_item in new_map.items():
-
-              if key not in old_map:
-                  continue
-
-              old_item = old_map[key]
-
-              if old_item != new_item:
-
-                  changed.append({
-                      "id": new_item.get("id"),
-                      "prefecture": new_item.get(
-                          "prefecture",
-                          new_item.get("pref", "")
-                      ),
-                      "title": new_item.get(
-                          "city",
-                          ""
-                      )
-                  })
-
-          # 建立 data 資料夾
-          os.makedirs("data", exist_ok=True)
-
-          # 寫入最新 data.json
           with open(
-              current_file,
-              "w",
+              NEW_FILE,
+              "r",
               encoding="utf-8"
           ) as f:
 
-              json.dump(
-                  latest,
-                  f,
-                  ensure_ascii=False,
-                  indent=2
-              )
+              new_json = json.load(f)
 
-          # 讀取 History
-          if os.path.exists(history_file):
 
-              with open(
-                  history_file,
-                  "r",
-                  encoding="utf-8"
-              ) as f:
+          new_list = new_json.get(
+              "list",
+              []
+          )
 
-                  history = json.load(f)
+
+          # -------------------------------------------------
+          # 讀取舊資料
+          # -------------------------------------------------
+
+          if os.path.exists(OLD_FILE):
+
+              try:
+
+                  with open(
+                      OLD_FILE,
+                      "r",
+                      encoding="utf-8"
+                  ) as f:
+
+                      old_json = json.load(f)
+
+                  old_list = old_json.get(
+                      "list",
+                      []
+                  )
+
+              except Exception:
+
+                  print(
+                      "舊 data.json 無法解析，視為第一次同步"
+                  )
+
+                  old_list = []
 
           else:
 
-              history = {
-                  "last_sync": None,
-                  "history": []
-              }
+              print(
+                  "找不到舊 data.json，視為第一次同步"
+              )
 
-          # 現在時間
-          now = datetime.now(
-              timezone.utc
-          ).astimezone()
+              old_list = []
 
-          record = {
-              "time": now.strftime(
-                  "%Y-%m-%d %H:%M:%S"
-              ),
-              "total": len(latest_list),
-              "added": added,
-              "removed": removed,
-              "changed": changed
-          }
 
-          # 第一次執行也建立 History
-          if (
-              added
-              or removed
-              or changed
-              or not history.get("history")
-          ):
+          # -------------------------------------------------
+          # 建立唯一 ID
+          # -------------------------------------------------
 
-              history.setdefault(
-                  "history",
+          def get_id(item):
+
+              if item.get("id") is not None:
+
+                  return str(
+                      item.get("id")
+                  )
+
+              coords = item.get(
+                  "coords",
                   []
               )
 
-              history["history"].append(
+              if len(coords) >= 2:
+
+                  return (
+                      f"{coords[0]}_"
+                      f"{coords[1]}_"
+                      f"{item.get('city','')}"
+                  )
+
+              return (
+                  f"{item.get('pref','')}_"
+                  f"{item.get('city','')}_"
+                  f"{item.get('address','')}"
+              )
+
+
+          old_map = {
+
+              get_id(item): item
+
+              for item in old_list
+
+          }
+
+
+          new_map = {
+
+              get_id(item): item
+
+              for item in new_list
+
+          }
+
+
+          # -------------------------------------------------
+          # 新增
+          # -------------------------------------------------
+
+          added_ids = (
+
+              new_map.keys()
+
+              - old_map.keys()
+
+          )
+
+
+          # -------------------------------------------------
+          # 移除
+          # -------------------------------------------------
+
+          removed_ids = (
+
+              old_map.keys()
+
+              - new_map.keys()
+
+          )
+
+
+          # -------------------------------------------------
+          # 修改
+          # -------------------------------------------------
+
+          changed_ids = []
+
+
+          for item_id in (
+
+              new_map.keys()
+
+              & old_map.keys()
+
+          ):
+
+              old_item = old_map[
+                  item_id
+              ]
+
+              new_item = new_map[
+                  item_id
+              ]
+
+
+              if old_item != new_item:
+
+                  changed_ids.append(
+                      item_id
+                  )
+
+
+          # -------------------------------------------------
+          # 建立簡化資料
+          # -------------------------------------------------
+
+          def simplify(item):
+
+              coords = item.get(
+                  "coords",
+                  ["",""]
+              )
+
+
+              return {
+
+                  "id":
+                      item.get(
+                          "id",
+                          ""
+                      ),
+
+                  "prefecture":
+                      item.get(
+                          "pref",
+                          ""
+                      ),
+
+                  "title":
+                      item.get(
+                          "city",
+                          ""
+                      ),
+
+                  "lat":
+                      coords[0]
+                      if len(coords) > 0
+                      else "",
+
+                  "lng":
+                      coords[1]
+                      if len(coords) > 1
+                      else "",
+
+                  "address":
+                      item.get(
+                          "address",
+                          ""
+                      )
+
+              }
+
+
+          added = [
+
+              simplify(
+                  new_map[item_id]
+              )
+
+              for item_id
+              in added_ids
+
+          ]
+
+
+          removed = [
+
+              simplify(
+                  old_map[item_id]
+              )
+
+              for item_id
+              in removed_ids
+
+          ]
+
+
+          changed = [
+
+              simplify(
+                  new_map[item_id]
+              )
+
+              for item_id
+              in changed_ids
+
+          ]
+
+
+          # -------------------------------------------------
+          # 讀取 History
+          # -------------------------------------------------
+
+          if os.path.exists(
+              HISTORY_FILE
+          ):
+
+              try:
+
+                  with open(
+                      HISTORY_FILE,
+                      "r",
+                      encoding="utf-8"
+                  ) as f:
+
+                      history_json = json.load(f)
+
+              except Exception:
+
+                  history_json = {}
+
+          else:
+
+              history_json = {}
+
+
+          history = history_json.get(
+              "history",
+              []
+          )
+
+
+          # -------------------------------------------------
+          # 判斷是否有變化
+          # -------------------------------------------------
+
+          has_change = (
+
+              len(added) > 0
+
+              or
+
+              len(removed) > 0
+
+              or
+
+              len(changed) > 0
+
+          )
+
+
+          now = datetime.now(
+              timezone.utc
+          ).astimezone().isoformat(
+              timespec="seconds"
+          )
+
+
+          if has_change:
+
+              record = {
+
+                  "time":
+                      now,
+
+                  "total":
+                      len(new_list),
+
+                  "added":
+                      added,
+
+                  "removed":
+                      removed,
+
+                  "changed":
+                      changed
+
+              }
+
+
+              history.append(
                   record
               )
 
-          history["last_sync"] = now.strftime(
-              "%Y-%m-%d %H:%M:%S"
-          )
 
-          # 最多保留 200 次紀錄
-          history["history"] = \
-              history["history"][-200:]
+              # 最多保留 200 次紀錄
 
-          # 寫入 history.json
+              history = history[-200:]
+
+
+              print(
+                  "發現資料變化："
+              )
+
+              print(
+                  f"新增：{len(added)}"
+              )
+
+              print(
+                  f"移除：{len(removed)}"
+              )
+
+              print(
+                  f"修改：{len(changed)}"
+              )
+
+          else:
+
+              print(
+                  "沒有資料變化"
+              )
+
+
+          # -------------------------------------------------
+          # 更新 History
+          # -------------------------------------------------
+
+          history_json = {
+
+              "last_sync":
+                  now,
+
+              "total":
+                  len(new_list),
+
+              "history":
+                  history
+
+          }
+
+
           with open(
-              history_file,
+              HISTORY_FILE,
               "w",
               encoding="utf-8"
           ) as f:
 
               json.dump(
-                  history,
+                  history_json,
                   f,
                   ensure_ascii=False,
                   indent=2
               )
 
-          print("================================")
-          print("Poké Lids Sync")
-          print("================================")
-          print("Total   :", len(latest_list))
-          print("Added   :", len(added))
-          print("Removed :", len(removed))
-          print("Changed :", len(changed))
-          print("================================")
+
+          # -------------------------------------------------
+          # 輸出 GitHub Actions Variable
+          # -------------------------------------------------
+
+          with open(
+              os.environ["GITHUB_ENV"],
+              "a"
+          ) as env:
+
+              env.write(
+                  f"HAS_CHANGE={'true' if has_change else 'false'}\n"
+              )
+
+
+          print(
+              f"目前資料：{len(new_list)} 筆"
+          )
+
           PY
+
+
+      # =====================================================
+      # 7. 更新正式 data/data.json
+      # =====================================================
+
+      - name: Update data.json
+        run: |
+
+          cp .tmp/new_data.json data/data.json
+
+
+      # =====================================================
+      # 8. 顯示同步結果
+      # =====================================================
+
+      - name: Show result
+        run: |
+
+          python - <<'PY'
+
+          import json
+
+          with open(
+              "data/data.json",
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              data = json.load(f)
+
+          print(
+              "目前 Poké Lid 數量：",
+              len(data.get("list", []))
+          )
+
+          PY
+
+
+      # =====================================================
+      # 9. Commit
+      # =====================================================
 
       - name: Commit changes
         run: |
@@ -265,18 +591,20 @@ jobs:
           git config user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
 
+
           git add \
             data/data.json \
             history.json
 
+
           if git diff --cached --quiet; then
 
-            echo "No changes detected."
+            echo "沒有任何變化，不需要 Commit"
 
           else
 
             git commit \
-              -m "chore: sync Poké Lids data"
+              -m "chore: sync latest Poké Lid data"
 
             git push
 

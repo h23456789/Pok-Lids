@@ -1,0 +1,1546 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Poké Lids 2026 分組座標下載器</title>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  crossorigin=""
+/>
+
+<style>
+
+body{
+  font-family:Arial,"Noto Sans TC",sans-serif;
+  max-width:1100px;
+  margin:24px auto;
+  padding:0 16px;
+  background:#f5f6f8;
+  color:#222
+}
+
+.box{
+  background:#fff;
+  padding:18px;
+  border-radius:12px;
+  margin:12px 0;
+  box-shadow:0 1px 5px #ddd
+}
+
+button{
+  border:0;
+  border-radius:8px;
+  padding:10px 14px;
+  margin:4px;
+  cursor:pointer;
+  background:#222;
+  color:#fff
+}
+
+button:disabled{
+  opacity:.5
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fill,minmax(230px,1fr));
+  gap:10px
+}
+
+.card{
+  background:#fff;
+  padding:12px;
+  border-radius:10px;
+  box-shadow:0 1px 4px #ddd
+}
+
+.muted{
+  color:#666;
+  font-size:13px
+}
+
+code,pre{
+  background:#111;
+  color:#eee;
+  border-radius:8px
+}
+
+pre{
+  padding:12px;
+  overflow:auto
+}
+
+#map{
+  height:650px;
+  border-radius:12px;
+  overflow:hidden;
+  background:#e9edf2
+}
+
+.map-panel{
+  display:grid;
+  grid-template-columns:
+    minmax(0,1fr) 320px;
+  gap:12px
+}
+
+#cityInfo{
+  min-height:180px
+}
+
+.city-row{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+  padding:7px 0;
+  border-bottom:1px solid #eee
+}
+
+.badge{
+  display:inline-block;
+  background:#222;
+  color:#fff;
+  border-radius:999px;
+  padding:2px 8px;
+  font-size:12px
+}
+
+.pref-tooltip{
+  background:#222;
+  color:#fff;
+  border:0;
+  border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+  padding:7px 10px;
+  font-size:13px;
+}
+
+.map-legend{
+  background:#fff;
+  padding:10px 12px;
+  border-radius:8px;
+  box-shadow:0 1px 5px rgba(0,0,0,.25);
+  line-height:18px;
+  font-size:12px;
+}
+
+.legend-title{
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.legend-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.legend-color{
+  width:18px;
+  height:14px;
+  border:1px solid #999;
+}
+
+@media(max-width:800px){
+
+  .map-panel{
+    grid-template-columns:1fr
+  }
+
+  #map{
+    height:520px
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Poké Lids 2026 座標分組</h1>
+
+<div class="box">
+
+<p>
+<b>資料來源：</b>
+yukidaruma/pokefuta-tracker
+</p>
+
+<p>
+<b>分組方式：</b>
+以日本都道府縣為單位統整。
+</p>
+
+<p>
+<b>TXT 格式：</b>
+<code>緯度,經度,地名</code>
+</p>
+
+<p id="status">
+正在讀取資料……
+</p>
+
+<p id="syncInfo" class="muted"></p>
+
+<button id="all" disabled onclick="downloadAll()">
+下載全部分組 TXT
+</button>
+
+<button id="json" disabled onclick="downloadJSON()">
+下載分組 JSON
+</button>
+
+<button id="csv" disabled onclick="downloadCSV()">
+下載完整 CSV
+</button>
+
+</div>
+
+
+<div class="box">
+
+<h3>🗾 日本都道府縣地圖</h3>
+
+<p class="muted">
+依 Poké Lid 數量著色。
+點擊都道府縣即可查看該縣所有 Poké Lid。
+</p>
+
+<div class="map-panel">
+
+<div id="map"></div>
+
+<div
+  id="cityInfo"
+  class="box"
+  style="margin:0"
+>
+請點擊地圖上的都道府縣。
+</div>
+
+</div>
+
+</div>
+
+
+<div class="box">
+
+<h3>📜 更新 History</h3>
+
+<p class="muted">
+GitHub Actions 會自動檢查資料並記錄新增、移除與修改。
+</p>
+
+<div id="history">
+載入中…
+</div>
+
+</div>
+
+
+<div id="groups" class="grid"></div>
+
+
+<div class="box">
+
+<h3>TXT 範例</h3>
+
+<pre id="preview">
+載入中…
+</pre>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   GitHub Pages 本地資料
+========================================================= */
+
+const DATA_URL="./data/data.json";
+
+const PREF_GEOJSON_URL=
+"./data/prefectures.geojson";
+
+
+const PREF={
+
+1:"北海道",
+2:"青森県",
+3:"岩手県",
+4:"宮城県",
+5:"秋田県",
+6:"山形県",
+7:"福島県",
+8:"茨城県",
+9:"栃木県",
+10:"群馬県",
+11:"埼玉県",
+12:"千葉県",
+13:"東京都",
+14:"神奈川県",
+15:"新潟県",
+16:"富山県",
+17:"石川県",
+18:"福井県",
+19:"山梨県",
+20:"長野県",
+21:"岐阜県",
+22:"静岡県",
+23:"愛知県",
+24:"三重県",
+25:"滋賀県",
+26:"京都府",
+27:"大阪府",
+28:"兵庫県",
+29:"奈良県",
+30:"和歌山県",
+31:"鳥取県",
+32:"島根県",
+33:"岡山県",
+34:"広島県",
+35:"山口県",
+36:"徳島県",
+37:"香川県",
+38:"愛媛県",
+39:"高知県",
+40:"福岡県",
+41:"佐賀県",
+42:"長崎県",
+43:"熊本県",
+44:"大分県",
+45:"宮崎県",
+46:"鹿児島県",
+47:"沖縄県"
+
+};
+
+
+let data=[];
+let groups={};
+
+
+/* =========================================================
+   History
+========================================================= */
+
+async function loadHistory(){
+
+  try{
+
+    const r=await fetch(
+      "history.json?ts="+Date.now(),
+      {cache:"no-store"}
+    );
+
+    if(!r.ok)
+      throw Error();
+
+    const h=await r.json();
+
+    const el=
+      document.getElementById("history");
+
+    const logs=h.history||[];
+
+    if(!logs.length){
+
+      el.innerHTML=
+        '<span class="muted">尚無更新紀錄。</span>';
+
+      return;
+
+    }
+
+    el.innerHTML=
+      logs
+      .slice()
+      .reverse()
+      .slice(0,50)
+      .map(item=>{
+
+        const added=item.added||[];
+        const removed=item.removed||[];
+        const changed=item.changed||[];
+
+        return `
+
+        <div class="card"
+             style="margin:8px 0">
+
+          <b>
+            ${escapeHtml(item.time||"")}
+          </b>
+
+          <br>
+
+          <span class="muted">
+            版本：
+            ${item.total??""} 筆
+          </span>
+
+          <br>
+
+          🟢 新增 ${added.length}
+          　
+          🔴 移除 ${removed.length}
+          　
+          🟡 修改 ${changed.length}
+
+          ${
+            added.length||
+            removed.length||
+            changed.length
+            ?
+            `
+
+            <details>
+
+            <summary>
+              查看變更
+            </summary>
+
+            ${
+              added.length
+              ?
+              `<b>新增</b><br>
+              ${
+                added.map(x=>
+                  `＋ ${x.prefecture||""}
+                   ｜${x.title||""}
+                   ｜${x.lat},${x.lng}`
+                ).join("<br>")
+              }<br>`
+              :""
+            }
+
+            ${
+              removed.length
+              ?
+              `<b>移除</b><br>
+              ${
+                removed.map(x=>
+                  `－ ${x.prefecture||""}
+                   ｜${x.title||""}
+                   ｜${x.lat},${x.lng}`
+                ).join("<br>")
+              }<br>`
+              :""
+            }
+
+            ${
+              changed.length
+              ?
+              `<b>修改</b><br>
+              ${
+                changed.map(x=>
+                  `↔ ${x.prefecture||""}
+                   ｜${x.title||""}`
+                ).join("<br>")
+              }`
+              :""
+            }
+
+            </details>
+
+            `
+            :""
+          }
+
+        </div>
+
+        `;
+
+      })
+      .join("");
+
+    document.getElementById(
+      "syncInfo"
+    ).textContent=
+      `GitHub 最新同步：
+       ${h.last_sync||"未知"}
+       ｜每 5 分鐘自動檢查一次`;
+
+  }
+  catch(e){
+
+    document.getElementById(
+      "history"
+    ).textContent=
+      "尚無 History 資料。";
+
+  }
+
+}
+
+
+/* =========================================================
+   Load Data
+========================================================= */
+
+fetch(
+  DATA_URL+"?ts="+Date.now(),
+  {cache:"no-store"}
+)
+
+.then(r=>{
+
+  if(!r.ok)
+    throw Error(
+      "GitHub 資料無法取得"
+    );
+
+  return r.json();
+
+})
+
+.then(j=>{
+
+  data=j.list||[];
+
+
+  for(const x of data){
+
+    const p=
+      PREF[x.pref]||
+      String(x.pref);
+
+    groups[p]??=[];
+
+    groups[p].push(x);
+
+  }
+
+
+  document.getElementById(
+    "status"
+  ).textContent=
+    `已載入 ${data.length} 筆，
+     共 ${Object.keys(groups).length}
+     個都道府縣。`;
+
+
+  ["all","json","csv"]
+  .forEach(id=>
+    document.getElementById(id)
+    .disabled=false
+  );
+
+
+  render();
+
+  renderMap();
+
+  loadHistory();
+
+})
+
+.catch(e=>{
+
+  document.getElementById(
+    "status"
+  ).textContent=
+    "載入失敗："+e.message;
+
+});
+
+
+/* =========================================================
+   Download
+========================================================= */
+
+function safe(s){
+
+  return String(s)
+    .replace(/[\\/:*?"<>|]/g,"_");
+
+}
+
+
+function blob(
+  s,
+  type="text/plain;charset=utf-8"
+){
+
+  return new Blob(
+    ["\ufeff",s],
+    {type}
+  );
+
+}
+
+
+function save(b,n){
+
+  const a=
+    document.createElement("a");
+
+  a.href=
+    URL.createObjectURL(b);
+
+  a.download=n;
+
+  a.click();
+
+  setTimeout(
+    ()=>URL.revokeObjectURL(a.href),
+    1000
+  );
+
+}
+
+
+function txt(items,groupName){
+
+  return items
+    .map(x=>
+      `${x.coords[0]},
+       ${x.coords[1]},
+       ${x.city||groupName}`
+    )
+    .join("\n")
+    .replaceAll(" ","");
+
+}
+
+
+function render(){
+
+  const el=
+    document.getElementById(
+      "groups"
+    );
+
+  el.innerHTML="";
+
+
+  for(
+    const p of
+    Object.keys(groups).sort()
+  ){
+
+    const items=groups[p];
+
+    const d=
+      document.createElement("div");
+
+    d.className="card";
+
+    d.innerHTML=`
+
+      <b>${escapeHtml(p)}</b>
+
+      <br>
+
+      <span class="muted">
+        ${items.length} 個 Poké Lid
+      </span>
+
+      <br>
+
+      <button
+        onclick='one(${JSON.stringify(p)})'
+      >
+        下載此縣／市 TXT
+      </button>
+
+    `;
+
+    el.appendChild(d);
+
+  }
+
+
+  const first=
+    Object.entries(groups)[0];
+
+  if(first){
+
+    document.getElementById(
+      "preview"
+    ).textContent=
+      txt(
+        first[1],
+        first[0]
+      );
+
+  }
+
+}
+
+
+function one(p){
+
+  save(
+    blob(
+      txt(groups[p],p)
+    ),
+    `${safe(p)}.txt`
+  );
+
+}
+
+
+function downloadAll(){
+
+  let out=[];
+
+
+  for(
+    const p of
+    Object.keys(groups).sort()
+  ){
+
+    out.push(
+      `# ===== ${p}
+       (${groups[p].length}) =====`
+    );
+
+    out.push(
+      txt(groups[p],p),
+      ""
+    );
+
+  }
+
+
+  save(
+    blob(out.join("\n")),
+    "poke_lid_2026_by_prefecture.txt"
+  );
+
+}
+
+
+function downloadJSON(){
+
+  const out={};
+
+
+  for(
+    const p of
+    Object.keys(groups).sort()
+  ){
+
+    out[p]=
+      groups[p].map(x=>({
+
+        lat:String(x.coords[0]),
+
+        lng:String(x.coords[1]),
+
+        title:String(
+          x.city||p
+        )
+
+      }));
+
+  }
+
+
+  save(
+
+    new Blob(
+      [
+        JSON.stringify(
+          out,
+          null,
+          0
+        )
+      ],
+      {
+        type:
+          "application/json;charset=utf-8"
+      }
+    ),
+
+    "poke_lid_2026_favorite_lists.json"
+
+  );
+
+}
+
+
+function downloadCSV(){
+
+  const rows=[
+
+    [
+      "id",
+      "prefecture",
+      "city",
+      "lat",
+      "lng",
+      "name",
+      "address",
+      "pokemons"
+    ]
+
+  ];
+
+
+  for(const x of data){
+
+    rows.push([
+
+      x.id,
+
+      PREF[x.pref]||x.pref,
+
+      x.city||"",
+
+      x.coords[0],
+
+      x.coords[1],
+
+      x.city||"",
+
+      x.address||"",
+
+      (x.pokemons||[])
+      .join("|")
+
+    ]);
+
+  }
+
+
+  save(
+
+    blob(
+
+      rows
+      .map(r=>
+        r.map(v=>
+          `"${String(v)
+            .replaceAll('"','""')}"`
+        ).join(",")
+      )
+      .join("\n"),
+
+      "text/csv;charset=utf-8"
+
+    ),
+
+    "poke_lid_2026.csv"
+
+  );
+
+}
+
+
+/* =========================================================
+   Utility
+========================================================= */
+
+function escapeHtml(s){
+
+  return String(s??"")
+    .replace(
+      /[&<>"']/g,
+      m=>({
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+
+      }[m])
+    );
+
+}
+
+</script>
+
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin="">
+</script>
+
+
+<script>
+
+/* =========================================================
+   MAP
+========================================================= */
+
+let map;
+
+let prefectureLayer;
+
+let pointLayer;
+
+
+/*
+  日本行政區 GeoJSON
+  使用 Repository 本地檔案
+*/
+
+const PREF_GEOJSON_URL=
+"./data/prefectures.geojson";
+
+
+/* =========================================================
+   Map Init
+========================================================= */
+
+function initMap(){
+
+  if(map)
+    return;
+
+
+  map=
+    L.map(
+      "map",
+      {
+        zoomControl:true,
+        attributionControl:true
+      }
+    );
+
+
+  /*
+    不使用 OpenStreetMap tile。
+
+    地圖本身就是日本行政區 Polygon。
+  */
+
+
+  pointLayer=
+    L.layerGroup()
+    .addTo(map);
+
+
+  map.fitBounds([
+    [24,122],
+    [46,146]
+  ]);
+
+
+  addLegend();
+
+}
+
+
+/* =========================================================
+   Color
+========================================================= */
+
+function getMaxCount(){
+
+  const values=
+    Object.values(groups)
+    .map(x=>x.length);
+
+  return Math.max(
+    1,
+    ...values
+  );
+
+}
+
+
+function getPrefColor(count){
+
+  const max=
+    getMaxCount();
+
+
+  if(count<=0)
+    return "#e9ecef";
+
+
+  const ratio=
+    count/max;
+
+
+  if(ratio>0.85)
+    return "#8b1e3f";
+
+  if(ratio>0.65)
+    return "#b52b4b";
+
+  if(ratio>0.45)
+    return "#d45b70";
+
+  if(ratio>0.25)
+    return "#e58a9b";
+
+  return "#f1c1ca";
+
+}
+
+
+/* =========================================================
+   GeoJSON Prefecture Name
+========================================================= */
+
+function getGeoPrefectureName(feature){
+
+  const p=
+    feature.properties||{};
+
+
+  /*
+    Geolonia prefectures.geojson
+    主要使用 name / name_ja / code
+  */
+
+  const raw=
+    p.name||
+    p.name_ja||
+    p.nam_ja||
+    p.N03_001||
+    "";
+
+
+  const EN_TO_JA={
+
+    Hokkaido:"北海道",
+    Aomori:"青森県",
+    Iwate:"岩手県",
+    Miyagi:"宮城県",
+    Akita:"秋田県",
+    Yamagata:"山形県",
+    Fukushima:"福島県",
+    Ibaraki:"茨城県",
+    Tochigi:"栃木県",
+    Gunma:"群馬県",
+    Saitama:"埼玉県",
+    Chiba:"千葉県",
+    Tokyo:"東京都",
+    Kanagawa:"神奈川県",
+    Niigata:"新潟県",
+    Toyama:"富山県",
+    Ishikawa:"石川県",
+    Fukui:"福井県",
+    Yamanashi:"山梨県",
+    Nagano:"長野県",
+    Gifu:"岐阜県",
+    Shizuoka:"静岡県",
+    Aichi:"愛知県",
+    Mie:"三重県",
+    Shiga:"滋賀県",
+    Kyoto:"京都府",
+    Osaka:"大阪府",
+    Hyogo:"兵庫県",
+    Nara:"奈良県",
+    Wakayama:"和歌山県",
+    Tottori:"鳥取県",
+    Shimane:"島根県",
+    Okayama:"岡山県",
+    Hiroshima:"広島県",
+    Yamaguchi:"山口県",
+    Tokushima:"徳島県",
+    Kagawa:"香川県",
+    Ehime:"愛媛県",
+    Kochi:"高知県",
+    Fukuoka:"福岡県",
+    Saga:"佐賀県",
+    Nagasaki:"長崎県",
+    Kumamoto:"熊本県",
+    Oita:"大分県",
+    Miyazaki:"宮崎県",
+    Kagoshima:"鹿児島県",
+    Okinawa:"沖縄県"
+
+  };
+
+
+  /*
+    如果資料是 code，
+    直接使用 PREF 對照
+  */
+
+  if(p.code){
+
+    const n=
+      Number(p.code);
+
+    if(PREF[n])
+      return PREF[n];
+
+  }
+
+
+  return EN_TO_JA[raw]||raw;
+
+}
+
+
+/* =========================================================
+   Style
+========================================================= */
+
+function prefectureStyle(feature){
+
+  const name=
+    getGeoPrefectureName(feature);
+
+  const count=
+    groups[name]
+    ? groups[name].length
+    : 0;
+
+
+  return {
+
+    fillColor:
+      getPrefColor(count),
+
+    weight:1.3,
+
+    opacity:1,
+
+    color:"#fff",
+
+    fillOpacity:.85
+
+  };
+
+}
+
+
+/* =========================================================
+   Legend
+========================================================= */
+
+function addLegend(){
+
+  const legend=
+    L.control({
+      position:"bottomright"
+    });
+
+
+  legend.onAdd=function(){
+
+    const div=
+      L.DomUtil.create(
+        "div",
+        "map-legend"
+      );
+
+
+    div.innerHTML=`
+
+      <div class="legend-title">
+        Poké Lid 數量
+      </div>
+
+      <div class="legend-row">
+        <span
+          class="legend-color"
+          style="background:#e9ecef">
+        </span>
+        0
+      </div>
+
+      <div class="legend-row">
+        <span
+          class="legend-color"
+          style="background:#f1c1ca">
+        </span>
+        少
+      </div>
+
+      <div class="legend-row">
+        <span
+          class="legend-color"
+          style="background:#e58a9b">
+        </span>
+        中
+      </div>
+
+      <div class="legend-row">
+        <span
+          class="legend-color"
+          style="background:#d45b70">
+        </span>
+        多
+      </div>
+
+      <div class="legend-row">
+        <span
+          class="legend-color"
+          style="background:#8b1e3f">
+        </span>
+        最多
+      </div>
+
+    `;
+
+
+    return div;
+
+  };
+
+
+  legend.addTo(map);
+
+}
+
+
+/* =========================================================
+   Render Map
+========================================================= */
+
+async function renderMap(){
+
+  initMap();
+
+
+  try{
+
+    const response=
+      await fetch(
+        PREF_GEOJSON_URL+
+        "?ts="+Date.now(),
+        {
+          cache:"no-store"
+        }
+      );
+
+
+    if(!response.ok)
+      throw Error(
+        "prefectures.geojson 無法取得"
+      );
+
+
+    const geojson=
+      await response.json();
+
+
+    if(prefectureLayer){
+
+      map.removeLayer(
+        prefectureLayer
+      );
+
+    }
+
+
+    prefectureLayer=
+      L.geoJSON(
+        geojson,
+        {
+
+          style:
+            prefectureStyle,
+
+
+          onEachFeature:
+          function(feature,layer){
+
+            const p=
+              getGeoPrefectureName(
+                feature
+              );
+
+
+            const items=
+              groups[p]||[];
+
+
+            layer.bindTooltip(
+
+              `<b>
+                ${escapeHtml(p)}
+               </b>
+               <br>
+               Poké Lid：
+               <b>
+                ${items.length}
+               </b> 個`,
+
+              {
+                sticky:true,
+                className:
+                  "pref-tooltip"
+              }
+
+            );
+
+
+            layer.on({
+
+              mouseover:function(e){
+
+                e.target.setStyle({
+
+                  weight:3,
+
+                  color:"#333",
+
+                  fillOpacity:1
+
+                });
+
+                e.target.bringToFront();
+
+              },
+
+
+              mouseout:function(e){
+
+                prefectureLayer
+                  .resetStyle(
+                    e.target
+                  );
+
+              },
+
+
+              click:function(){
+
+                showPrefecture(p);
+
+              }
+
+            });
+
+          }
+
+        }
+      ).addTo(map);
+
+
+    map.fitBounds(
+      prefectureLayer.getBounds(),
+      {
+        padding:[20,20]
+      }
+    );
+
+
+  }
+  catch(e){
+
+    console.error(e);
+
+    document.getElementById(
+      "cityInfo"
+    ).innerHTML=`
+
+      <h3>
+        ⚠️ 地圖資料載入失敗
+      </h3>
+
+      <p class="muted">
+        ${escapeHtml(e.message)}
+      </p>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   Show Prefecture
+========================================================= */
+
+function showPrefecture(p){
+
+  const items=
+    groups[p]||[];
+
+
+  pointLayer.clearLayers();
+
+
+  const bounds=[];
+
+
+  for(const x of items){
+
+    const lat=
+      Number(x.coords[0]);
+
+    const lng=
+      Number(x.coords[1]);
+
+
+    if(
+      !Number.isFinite(lat)||
+      !Number.isFinite(lng)
+    )
+      continue;
+
+
+    const marker=
+      L.marker([
+        lat,
+        lng
+      ]).addTo(pointLayer);
+
+
+    marker.bindPopup(`
+
+      <b>
+        ${escapeHtml(
+          x.city||p
+        )}
+      </b>
+
+      <br>
+
+      座標：
+      ${lat},
+      ${lng}
+
+      <br>
+
+      ${escapeHtml(
+        x.address||""
+      )}
+
+    `);
+
+
+    bounds.push([
+      lat,
+      lng
+    ]);
+
+  }
+
+
+  if(bounds.length){
+
+    map.fitBounds(
+      bounds,
+      {
+        padding:[40,40],
+        maxZoom:10
+      }
+    );
+
+  }
+
+
+  document.getElementById(
+    "cityInfo"
+  ).innerHTML=`
+
+    <h3 style="margin-top:0">
+      ${escapeHtml(p)}
+    </h3>
+
+    <p>
+      <b>
+        ${items.length}
+      </b>
+      個 Poké Lid
+    </p>
+
+    <button
+      onclick='one(${JSON.stringify(p)})'
+    >
+      下載 ${escapeHtml(p)} TXT
+    </button>
+
+    <button
+      onclick='downloadPrefJSON(${JSON.stringify(p)})'
+    >
+      下載 ${escapeHtml(p)} JSON
+    </button>
+
+    <hr>
+
+    <div style="
+      max-height:300px;
+      overflow:auto;
+    ">
+
+      ${
+        items.map((x,i)=>`
+
+          <div class="city-row">
+
+            <span>
+              ${i+1}.
+              ${escapeHtml(
+                x.city||""
+              )}
+            </span>
+
+            <span class="badge">
+              ${x.coords[0]},
+              ${x.coords[1]}
+            </span>
+
+          </div>
+
+        `).join("")
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   Prefecture JSON
+========================================================= */
+
+function downloadPrefJSON(p){
+
+  const out={};
+
+  out[p]=
+    (groups[p]||[])
+    .map(x=>({
+
+      lat:String(x.coords[0]),
+
+      lng:String(x.coords[1]),
+
+      title:String(
+        x.city||p
+      )
+
+    }));
+
+
+  save(
+
+    new Blob(
+      [
+        JSON.stringify(
+          out,
+          null,
+          0
+        )
+      ],
+      {
+        type:
+          "application/json;charset=utf-8"
+      }
+    ),
+
+    `${safe(p)}.json`
+
+  );
+
+}
+
+</script>
+
+</body>
+</html>

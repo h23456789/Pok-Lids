@@ -63,6 +63,11 @@ p{
   line-height:1.6;
 }
 
+
+/* =========================================================
+   Box
+========================================================= */
+
 .box{
 
   background:#fff;
@@ -112,7 +117,9 @@ button{
 }
 
 button:hover{
+
   opacity:.85;
+
 }
 
 button:disabled{
@@ -154,7 +161,7 @@ button:disabled{
 
 
 /* =========================================================
-   下載
+   Download
 ========================================================= */
 
 .download-area{
@@ -175,7 +182,7 @@ button:disabled{
 
 
 /* =========================================================
-   地圖
+   MAP
 ========================================================= */
 
 #map{
@@ -202,7 +209,7 @@ button:disabled{
 
 
 /* =========================================================
-   Leaflet Zoom
+   Leaflet Zoom Button
 ========================================================= */
 
 .leaflet-control-zoom{
@@ -227,7 +234,7 @@ button:disabled{
 
 
 /* =========================================================
-   滑鼠移到行政區的資訊框
+   行政區 Hover Tooltip
 ========================================================= */
 
 .pref-hover-tooltip{
@@ -261,21 +268,11 @@ button:disabled{
 
 }
 
-
-/*
- * Leaflet Tooltip 小三角
- */
-
 .pref-hover-tooltip:before{
 
   border-top-color:#222 !important;
 
 }
-
-
-/*
- * Tooltip 內文字
- */
 
 .pref-tooltip-name{
 
@@ -311,7 +308,7 @@ button:disabled{
 
 
 /* =========================================================
-   地圖 Header
+   Map Header
 ========================================================= */
 
 .map-header{
@@ -342,7 +339,7 @@ button:disabled{
 
 
 /* =========================================================
-   圖例
+   Legend
 ========================================================= */
 
 .legend{
@@ -407,7 +404,7 @@ button:disabled{
 
 
 /* =========================================================
-   選取行政區
+   Selected Prefecture
 ========================================================= */
 
 #selectedPrefecture{
@@ -452,7 +449,7 @@ button:disabled{
 
 
 /* =========================================================
-   Poké Lid 列表
+   Poké Lid List
 ========================================================= */
 
 .poke-list{
@@ -591,21 +588,6 @@ button:disabled{
 
 
 /* =========================================================
-   Loading
-========================================================= */
-
-.loading{
-
-  padding:40px;
-
-  text-align:center;
-
-  color:#666;
-
-}
-
-
-/* =========================================================
    Mobile
 ========================================================= */
 
@@ -682,7 +664,7 @@ button:disabled{
 
 
 <!-- =======================================================
-     標題
+     TITLE
 ======================================================= -->
 
 <h1>
@@ -691,7 +673,7 @@ button:disabled{
 
 
 <!-- =======================================================
-     資料資訊
+     DATA INFO
 ======================================================= -->
 
 <div class="box">
@@ -714,8 +696,8 @@ button:disabled{
 
   <p>
 
-    <b>地圖方式：</b>
-    都道府縣行政區著色
+    <b>地圖：</b>
+    日本都道府縣行政區著色地圖
 
   </p>
 
@@ -726,7 +708,9 @@ button:disabled{
       id="statusChip"
       class="info-chip"
     >
+
       資料讀取中……
+
     </div>
 
 
@@ -734,7 +718,9 @@ button:disabled{
       id="syncChip"
       class="info-chip"
     >
+
       GitHub 同步：讀取中……
+
     </div>
 
   </div>
@@ -747,7 +733,9 @@ button:disabled{
       disabled
       onclick="downloadAll()"
     >
+
       📥 下載全部 TXT
+
     </button>
 
 
@@ -756,7 +744,9 @@ button:disabled{
       disabled
       onclick="downloadJSON()"
     >
+
       📥 下載分組 JSON
+
     </button>
 
 
@@ -765,7 +755,9 @@ button:disabled{
       disabled
       onclick="downloadCSV()"
     >
+
       📥 下載完整 CSV
+
     </button>
 
   </div>
@@ -774,7 +766,7 @@ button:disabled{
 
 
 <!-- =======================================================
-     地圖
+     MAP
 ======================================================= -->
 
 <div class="box">
@@ -809,13 +801,7 @@ button:disabled{
   </div>
 
 
-  <div id="map">
-
-    <div class="loading">
-      正在建立日本地圖……
-    </div>
-
-  </div>
+  <div id="map"></div>
 
 
   <div class="legend">
@@ -897,7 +883,7 @@ button:disabled{
 
 
 <!-- =======================================================
-     選取行政區後的點位
+     SELECTED PREFECTURE
 ======================================================= -->
 
 <div
@@ -911,7 +897,7 @@ button:disabled{
 
 
 <!-- =======================================================
-     History
+     HISTORY
 ======================================================= -->
 
 <div class="box">
@@ -939,7 +925,7 @@ button:disabled{
 
 
 <!-- =======================================================
-     Leaflet
+     LEAFLET
 ======================================================= -->
 
 <script
@@ -964,7 +950,7 @@ const HISTORY_URL =
 
 
 /* =========================================================
-   日本 47 都道府縣
+   PREFECTURE
 ========================================================= */
 
 const PREF = {
@@ -1028,7 +1014,7 @@ const PREF = {
 
 
 /* =========================================================
-   Global
+   GLOBAL
 ========================================================= */
 
 let data = [];
@@ -1045,7 +1031,7 @@ let selectedPrefecture = null;
 
 
 /* =========================================================
-   Escape HTML
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHtml(value){
@@ -1072,7 +1058,7 @@ function escapeHtml(value){
 
 
 /* =========================================================
-   Safe filename
+   SAFE FILE NAME
 ========================================================= */
 
 function safe(value){
@@ -1087,7 +1073,7 @@ function safe(value){
 
 
 /* =========================================================
-   Blob
+   BLOB
 ========================================================= */
 
 function blob(
@@ -1112,7 +1098,7 @@ function blob(
 
 
 /* =========================================================
-   Save
+   SAVE
 ========================================================= */
 
 function save(
@@ -1149,6 +1135,7 @@ function save(
 
 
   setTimeout(
+
     function(){
 
       URL.revokeObjectURL(
@@ -1156,7 +1143,9 @@ function save(
       );
 
     },
+
     1000
+
   );
 
 }
@@ -1172,7 +1161,9 @@ function txt(
 ){
 
   return items
+
     .map(
+
       function(x){
 
         const lat =
@@ -1192,14 +1183,16 @@ function txt(
         return `${lat},${lng},${title}`;
 
       }
+
     )
+
     .join("\n");
 
 }
 
 
 /* =========================================================
-   Prefecture 排序
+   PREFECTURE NUMBER
 ========================================================= */
 
 function getPrefNumber(
@@ -1230,7 +1223,7 @@ function getPrefNumber(
 
 
 /* =========================================================
-   Load Data
+   LOAD DATA
 ========================================================= */
 
 async function loadData(){
@@ -1340,7 +1333,6 @@ async function loadData(){
 
     await loadGeoJSON();
 
-
     await loadHistory();
 
   }
@@ -1365,7 +1357,7 @@ async function loadData(){
 
 
 /* =========================================================
-   Load History
+   LOAD HISTORY
 ========================================================= */
 
 async function loadHistory(){
@@ -1431,10 +1423,15 @@ async function loadHistory(){
 
     el.innerHTML =
       logs
+
         .slice()
+
         .reverse()
+
         .slice(0,50)
+
         .map(
+
           function(item){
 
             const added =
@@ -1540,6 +1537,7 @@ async function loadHistory(){
                       ${
                         added
                           .map(
+
                             function(x){
 
                               return `＋
@@ -1558,8 +1556,10 @@ async function loadHistory(){
                               )}`;
 
                             }
+
                           )
                           .join("<br>")
+
                       }
 
                       `
@@ -1587,6 +1587,7 @@ async function loadHistory(){
                       ${
                         removed
                           .map(
+
                             function(x){
 
                               return `－
@@ -1605,8 +1606,10 @@ async function loadHistory(){
                               )}`;
 
                             }
+
                           )
                           .join("<br>")
+
                       }
 
                       `
@@ -1634,6 +1637,7 @@ async function loadHistory(){
                       ${
                         changed
                           .map(
+
                             function(x){
 
                               return `↔
@@ -1647,8 +1651,10 @@ async function loadHistory(){
                               )}`;
 
                             }
+
                           )
                           .join("<br>")
+
                       }
 
                       `
@@ -1674,7 +1680,9 @@ async function loadHistory(){
             `;
 
           }
+
         )
+
         .join("");
 
 
@@ -1712,7 +1720,7 @@ async function loadHistory(){
 
 
 /* =========================================================
-   Load GeoJSON
+   LOAD GEOJSON
 ========================================================= */
 
 async function loadGeoJSON(){
@@ -1792,10 +1800,13 @@ async function loadGeoJSON(){
             <code>
               prefectures.geojson
             </code>
+
             與
+
             <code>
               index.html
             </code>
+
             放在同一層。
 
           </p>
@@ -1810,7 +1821,7 @@ async function loadGeoJSON(){
 
 
 /* =========================================================
-   Initialize Map
+   INIT MAP
 ========================================================= */
 
 function initMap(){
@@ -1824,7 +1835,9 @@ function initMap(){
 
   map =
     L.map(
+
       "map",
+
       {
 
         zoomControl:true,
@@ -1840,13 +1853,29 @@ function initMap(){
         dragging:true
 
       }
+
     );
 
 
-map.setView(
-  [36.2,138.3],
-  5.5
-);
+  /*
+   * =======================================================
+   * 預設地圖位置
+   *
+   * Zoom 5 → Zoom 6
+   * 約等於放大一倍
+   *
+   * 中心：
+   * [36.2, 138.3]
+   * =======================================================
+   */
+
+  map.setView(
+
+    [36.2,138.3],
+
+    6
+
+  );
 
 
   pointLayer =
@@ -1857,7 +1886,7 @@ map.setView(
 
 
 /* =========================================================
-   Color
+   COLOR
 ========================================================= */
 
 function getColor(
@@ -1915,7 +1944,7 @@ function getColor(
 
 
 /* =========================================================
-   GeoJSON Property
+   GET GEOJSON PREFECTURE NAME
 ========================================================= */
 
 function getGeoPrefName(
@@ -1980,7 +2009,7 @@ function getGeoPrefName(
 
 
 /* =========================================================
-   Normalize Prefecture
+   NORMALIZE PREFECTURE
 ========================================================= */
 
 function normalizePrefName(
@@ -2085,12 +2114,6 @@ function normalizePrefName(
   }
 
 
-  /*
-   * 例如：
-   * 東京 → 東京都
-   * 大阪 → 大阪府
-   */
-
   for(
     const pref
     of Object.values(PREF)
@@ -2129,7 +2152,7 @@ function normalizePrefName(
 
 
 /* =========================================================
-   行政區 Style
+   PREFECTURE STYLE
 ========================================================= */
 
 function prefectureStyle(
@@ -2177,7 +2200,7 @@ function prefectureStyle(
 
 
 /* =========================================================
-   Hover Highlight
+   HIGHLIGHT
 ========================================================= */
 
 function highlightFeature(
@@ -2213,7 +2236,7 @@ function highlightFeature(
 
 
 /* =========================================================
-   Reset Highlight
+   RESET HIGHLIGHT
 ========================================================= */
 
 function resetHighlight(
@@ -2235,7 +2258,7 @@ function resetHighlight(
 
 
 /* =========================================================
-   Hover Tooltip
+   HOVER TOOLTIP
 ========================================================= */
 
 function createHoverTooltip(
@@ -2278,7 +2301,7 @@ function createHoverTooltip(
 
 
 /* =========================================================
-   行政區事件
+   PREFECTURE EVENT
 ========================================================= */
 
 function onEachPrefecture(
@@ -2307,13 +2330,9 @@ function onEachPrefecture(
 
 
   /*
-   * Tooltip
+   * 非永久 Tooltip
    *
-   * 注意：
-   *
-   * permanent:false
-   *
-   * 所以不會永久顯示。
+   * 只有滑鼠移過去才會顯示。
    */
 
   layer.bindTooltip(
@@ -2341,10 +2360,6 @@ function onEachPrefecture(
   );
 
 
-  /*
-   * Mouse Events
-   */
-
   layer.on({
 
     mouseover:function(e){
@@ -2352,10 +2367,6 @@ function onEachPrefecture(
       highlightFeature(
         e
       );
-
-      /*
-       * 顯示縣名＋數量
-       */
 
       e.target.openTooltip();
 
@@ -2388,7 +2399,7 @@ function onEachPrefecture(
 
 
 /* =========================================================
-   Draw Prefectures
+   DRAW GEOJSON
 ========================================================= */
 
 function drawPrefectures(
@@ -2424,35 +2435,11 @@ function drawPrefectures(
     )
     .addTo(map);
 
-
-  /*
-   * 自動適合日本全圖
-   */
-
-  try{
-
-    map.fitBounds(
-      prefectureLayer.getBounds(),
-      {
-        padding:[20,20]
-      }
-    );
-
-  }
-  catch(error){
-
-    console.warn(
-      "fitBounds 失敗",
-      error
-    );
-
-  }
-
 }
 
 
 /* =========================================================
-   Select Prefecture
+   SELECT PREFECTURE
 ========================================================= */
 
 function selectPrefecture(
@@ -2469,10 +2456,6 @@ function selectPrefecture(
     [];
 
 
-  /*
-   * Map Status
-   */
-
   document
     .getElementById(
       "mapStatus"
@@ -2482,7 +2465,7 @@ function selectPrefecture(
 
 
   /*
-   * Zoom
+   * 點擊行政區後 Zoom
    */
 
   if(
@@ -2527,7 +2510,7 @@ function selectPrefecture(
 
 
   /*
-   * 顯示該區 Poké Lid
+   * 顯示該行政區點位
    */
 
   for(
@@ -2543,7 +2526,7 @@ function selectPrefecture(
 
 
   /*
-   * 地圖下面顯示列表
+   * 地圖下面顯示清單
    */
 
   renderSelectedPrefecture(
@@ -2555,7 +2538,7 @@ function selectPrefecture(
 
 
 /* =========================================================
-   Add Poké Lid Point
+   ADD POINT
 ========================================================= */
 
 function addPoint(
@@ -2689,7 +2672,7 @@ function addPoint(
 
 
 /* =========================================================
-   Render Selected Prefecture
+   RENDER SELECTED PREFECTURE
 ========================================================= */
 
 function renderSelectedPrefecture(
@@ -2722,6 +2705,7 @@ function renderSelectedPrefecture(
 
     list =
       items
+
         .map(
 
           function(item,index){
@@ -2806,6 +2790,7 @@ function renderSelectedPrefecture(
           }
 
         )
+
         .join("");
 
   }
@@ -2879,10 +2864,6 @@ function renderSelectedPrefecture(
   `;
 
 
-  /*
-   * 滑到地圖下面的點位區
-   */
-
   setTimeout(
 
     function(){
@@ -2905,7 +2886,7 @@ function renderSelectedPrefecture(
 
 
 /* =========================================================
-   Focus Point
+   FOCUS POINT
 ========================================================= */
 
 function focusPoint(
@@ -2977,7 +2958,7 @@ function focusPoint(
 
 
 /* =========================================================
-   Close Prefecture
+   CLOSE PREFECTURE
 ========================================================= */
 
 function closePrefecture(){
@@ -3003,63 +2984,38 @@ function closePrefecture(){
 
 
   /*
-   * 非常重要：
-   *
-   * 回到日本全圖時
-   * 清除所有 Poké Lid Marker
+   * 清除 Poké Lid 點位
    */
 
   pointLayer.clearLayers();
 
 
   /*
-   * 回日本全圖
+   * 回到預設位置
+   *
+   * 注意：
+   * 不使用 fitBounds
    */
 
-  if(
-    prefectureLayer
-  ){
+  map.setView(
 
-    try{
+    [36.2,138.3],
 
-      map.fitBounds(
+    6,
 
-        prefectureLayer.getBounds(),
+    {
 
-        {
-
-          padding:
-            [20,20]
-
-        }
-
-      );
-
-    }
-    catch(error){
-
-      map.setView(
-        [36.2,138.3],
-        5
-      );
+      animate:true
 
     }
 
-  }
-  else{
-
-    map.setView(
-      [36.2,138.3],
-      5
-    );
-
-  }
+  );
 
 }
 
 
 /* =========================================================
-   Download All TXT
+   DOWNLOAD ALL TXT
 ========================================================= */
 
 function downloadAll(){
@@ -3069,6 +3025,7 @@ function downloadAll(){
 
   const names =
     Object.keys(groups)
+
       .sort(
 
         function(a,b){
@@ -3124,7 +3081,7 @@ function downloadAll(){
 
 
 /* =========================================================
-   Download JSON
+   DOWNLOAD JSON
 ========================================================= */
 
 function downloadJSON(){
@@ -3134,6 +3091,7 @@ function downloadJSON(){
 
   const names =
     Object.keys(groups)
+
       .sort(
 
         function(a,b){
@@ -3155,6 +3113,7 @@ function downloadJSON(){
 
     output[pref] =
       groups[pref]
+
         .map(
 
           function(x){
@@ -3217,7 +3176,7 @@ function downloadJSON(){
 
 
 /* =========================================================
-   Download CSV
+   DOWNLOAD CSV
 ========================================================= */
 
 function downloadCSV(){
@@ -3280,11 +3239,13 @@ function downloadCSV(){
 
   const csv =
     rows
+
       .map(
 
         function(row){
 
           return row
+
             .map(
 
               function(value){
@@ -3299,11 +3260,13 @@ function downloadCSV(){
               }
 
             )
+
             .join(",");
 
         }
 
       )
+
       .join("\n");
 
 
@@ -3322,7 +3285,7 @@ function downloadCSV(){
 
 
 /* =========================================================
-   Start
+   START
 ========================================================= */
 
 loadData();

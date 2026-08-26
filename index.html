@@ -55,7 +55,7 @@ h1{
   margin:0 0 8px;
 }
 
-h2,h3{
+h3{
   margin-top:0;
 }
 
@@ -86,23 +86,10 @@ p{
 
 }
 
-code,pre{
 
-  background:#111;
-
-  color:#eee;
-
-  border-radius:8px;
-
-}
-
-pre{
-
-  padding:12px;
-
-  overflow:auto;
-
-}
+/* =========================================================
+   Button
+========================================================= */
 
 button{
 
@@ -138,7 +125,7 @@ button:disabled{
 
 
 /* =========================================================
-   頂部
+   上方資訊
 ========================================================= */
 
 .top-info{
@@ -167,7 +154,7 @@ button:disabled{
 
 
 /* =========================================================
-   下載按鈕
+   下載
 ========================================================= */
 
 .download-area{
@@ -177,8 +164,6 @@ button:disabled{
   flex-wrap:wrap;
 
   gap:4px;
-
-  margin-top:12px;
 
 }
 
@@ -197,7 +182,7 @@ button:disabled{
 
   width:100%;
 
-  height:680px;
+  height:700px;
 
   border-radius:12px;
 
@@ -209,11 +194,6 @@ button:disabled{
 
 }
 
-
-/*
- * 完全不使用 OpenStreetMap tile
- */
-
 .leaflet-container{
 
   background:#eef1f4;
@@ -221,7 +201,9 @@ button:disabled{
 }
 
 
-/* Leaflet zoom */
+/* =========================================================
+   Leaflet Zoom
+========================================================= */
 
 .leaflet-control-zoom{
 
@@ -233,69 +215,85 @@ button:disabled{
 
 .leaflet-control-zoom a{
 
-  width:38px !important;
+  width:40px !important;
 
-  height:38px !important;
+  height:40px !important;
 
-  line-height:36px !important;
+  line-height:38px !important;
 
-  font-size:20px !important;
+  font-size:22px !important;
 
 }
 
 
 /* =========================================================
-   地圖標籤
+   行政區名稱＋數量標籤
 ========================================================= */
 
 .pref-label{
 
-  background:rgba(255,255,255,.93);
+  background:rgba(255,255,255,.96);
 
-  border:1px solid rgba(0,0,0,.25);
+  border:2px solid rgba(0,0,0,.30);
 
-  border-radius:6px;
+  border-radius:10px;
 
-  padding:3px 7px;
+  padding:7px 13px 8px;
 
-  font-size:12px;
+  min-width:90px;
 
-  font-weight:bold;
+  text-align:center;
 
-  color:#222;
+  color:#111;
 
   box-shadow:
-    0 1px 3px rgba(0,0,0,.2);
+    0 2px 7px rgba(0,0,0,.28);
 
   white-space:nowrap;
 
+  transition:
+    transform .15s,
+    box-shadow .15s;
+
+  pointer-events:none;
+
+}
+
+.pref-label-name{
+
+  font-size:17px;
+
+  font-weight:800;
+
+  line-height:1.2;
+
+}
+
+.pref-label-count{
+
+  font-size:22px;
+
+  font-weight:900;
+
+  line-height:1.15;
+
+  margin-top:2px;
+
+}
+
+.pref-label-count span{
+
+  font-size:13px;
+
+  font-weight:700;
+
+  margin-left:2px;
+
 }
 
 
 /* =========================================================
-   Poké Lid Marker
-========================================================= */
-
-.poke-marker{
-
-  width:16px;
-
-  height:16px;
-
-  border-radius:50%;
-
-  background:#111;
-
-  border:3px solid #fff;
-
-  box-shadow:
-    0 1px 5px rgba(0,0,0,.55);
-
-}
-
-
-/* =========================================================
-   地圖資訊列
+   地圖 Header
 ========================================================= */
 
 .map-header{
@@ -339,7 +337,7 @@ button:disabled{
 
   margin-top:12px;
 
-  padding:8px 0;
+  padding:5px 0;
 
 }
 
@@ -357,13 +355,35 @@ button:disabled{
 
 .legend-box{
 
-  width:24px;
+  width:28px;
 
-  height:17px;
+  height:18px;
 
-  border-radius:3px;
+  border-radius:4px;
 
   border:1px solid rgba(0,0,0,.15);
+
+}
+
+
+/* =========================================================
+   Poké Lid Marker
+========================================================= */
+
+.poke-marker{
+
+  width:18px;
+
+  height:18px;
+
+  border-radius:50%;
+
+  background:#111;
+
+  border:3px solid #fff;
+
+  box-shadow:
+    0 1px 6px rgba(0,0,0,.65);
 
 }
 
@@ -386,7 +406,7 @@ button:disabled{
 
   align-items:center;
 
-  gap:10px;
+  gap:12px;
 
   flex-wrap:wrap;
 
@@ -396,7 +416,9 @@ button:disabled{
 
 .pref-title h3{
 
-  margin:0 0 4px;
+  margin:0 0 3px;
+
+  font-size:22px;
 
 }
 
@@ -406,13 +428,13 @@ button:disabled{
 
   flex-wrap:wrap;
 
-  gap:4px;
+  gap:3px;
 
 }
 
 
 /* =========================================================
-   Poké Lid 清單
+   點位列表
 ========================================================= */
 
 .poke-list{
@@ -430,11 +452,11 @@ button:disabled{
 
   background:#f7f8fa;
 
-  border:1px solid #e2e5e8;
+  border:1px solid #e1e5e9;
 
-  border-radius:9px;
+  border-radius:10px;
 
-  padding:11px;
+  padding:12px;
 
   cursor:pointer;
 
@@ -449,16 +471,18 @@ button:disabled{
 
   background:#edf1f5;
 
-  transform:translateY(-1px);
+  transform:translateY(-2px);
 
   box-shadow:
-    0 2px 6px rgba(0,0,0,.08);
+    0 3px 8px rgba(0,0,0,.10);
 
 }
 
 .poke-title{
 
-  font-weight:bold;
+  font-weight:800;
+
+  font-size:15px;
 
   margin-bottom:5px;
 
@@ -484,7 +508,7 @@ button:disabled{
 
 .poke-address{
 
-  margin-top:4px;
+  margin-top:5px;
 
   font-size:12px;
 
@@ -536,21 +560,15 @@ button:disabled{
 }
 
 .badge-green{
-
   background:#198754;
-
 }
 
 .badge-red{
-
   background:#dc3545;
-
 }
 
 .badge-yellow{
-
   background:#d99a00;
-
 }
 
 
@@ -570,7 +588,7 @@ button:disabled{
 
 
 /* =========================================================
-   手機
+   Mobile
 ========================================================= */
 
 @media(max-width:700px){
@@ -585,13 +603,7 @@ button:disabled{
 
   #map{
 
-    height:520px;
-
-  }
-
-  .poke-list{
-
-    grid-template-columns:1fr;
+    height:530px;
 
   }
 
@@ -606,6 +618,38 @@ button:disabled{
     width:100%;
 
     margin:3px 0;
+
+  }
+
+  .poke-list{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .pref-label{
+
+    min-width:70px;
+
+    padding:5px 8px 6px;
+
+  }
+
+  .pref-label-name{
+
+    font-size:13px;
+
+  }
+
+  .pref-label-count{
+
+    font-size:18px;
+
+  }
+
+  .pref-label-count span{
+
+    font-size:11px;
 
   }
 
@@ -637,7 +681,6 @@ button:disabled{
   <p>
 
     <b>資料來源：</b>
-
     yukidaruma/pokefuta-tracker
 
   </p>
@@ -646,7 +689,6 @@ button:disabled{
   <p>
 
     <b>分組方式：</b>
-
     日本 47 都道府縣
 
   </p>
@@ -655,17 +697,7 @@ button:disabled{
   <p>
 
     <b>地圖：</b>
-
     日本都道府縣行政區著色地圖
-
-  </p>
-
-
-  <p>
-
-    <b>TXT 格式：</b>
-
-    <code>緯度,經度,地名</code>
 
   </p>
 
@@ -739,8 +771,8 @@ button:disabled{
 
       <p class="muted">
 
-        點擊行政區查看該區的 Poké Lid。
-        滑鼠滾輪、＋／－皆可縮放地圖。
+        全圖只顯示行政區與數量。
+        點擊行政區後才會顯示 Poké Lid 點位。
 
       </p>
 
@@ -762,17 +794,11 @@ button:disabled{
   <div id="map">
 
     <div class="loading">
-
       正在建立日本地圖……
-
     </div>
 
   </div>
 
-
-  <!-- =====================================================
-       圖例
-  ====================================================== -->
 
   <div class="legend">
 
@@ -853,8 +879,7 @@ button:disabled{
 
 
 <!-- =======================================================
-     行政區點擊後的資料
-     注意：這個區塊在地圖下面
+     行政區資料
 ======================================================= -->
 
 <div
@@ -907,23 +932,12 @@ button:disabled{
 <script>
 
 /* =========================================================
-   GitHub 資料來源
+   資料來源
 ========================================================= */
 
 const DATA_URL =
   "https://raw.githubusercontent.com/yukidaruma/pokefuta-tracker/main/data/data.json";
 
-
-/*
- * GitHub Pages：
- *
- * https://h23456789.github.io/Pok-Lids/
- *
- * 所以以下兩個檔案要跟 index.html 同層：
- *
- * prefectures.geojson
- * history.json
- */
 
 const GEOJSON_URL =
   "./prefectures.geojson";
@@ -1007,7 +1021,7 @@ let groups = {};
 
 
 /* =========================================================
-   Leaflet
+   Map
 ========================================================= */
 
 let map = null;
@@ -1015,8 +1029,6 @@ let map = null;
 let prefectureLayer = null;
 
 let pointLayer = null;
-
-let geoFeatures = [];
 
 let selectedPrefecture = null;
 
@@ -1049,7 +1061,7 @@ function escapeHtml(value){
 
 
 /* =========================================================
-   檔名安全處理
+   檔名
 ========================================================= */
 
 function safe(value){
@@ -1086,7 +1098,7 @@ function blob(
 
 
 /* =========================================================
-   下載
+   Download
 ========================================================= */
 
 function save(
@@ -1143,10 +1155,12 @@ function txt(
       function(x){
 
         const lat =
-          x.coords?.[0] ?? "";
+          x.coords?.[0] ??
+          "";
 
         const lng =
-          x.coords?.[1] ?? "";
+          x.coords?.[1] ??
+          "";
 
         const title =
           x.city ||
@@ -1164,7 +1178,7 @@ function txt(
 
 
 /* =========================================================
-   取得都道府縣順序
+   都道府縣排序
 ========================================================= */
 
 function getPrefNumber(
@@ -1195,7 +1209,7 @@ function getPrefNumber(
 
 
 /* =========================================================
-   讀取 Poké Lid
+   載入資料
 ========================================================= */
 
 async function loadData(){
@@ -1239,12 +1253,9 @@ async function loadData(){
     groups = {};
 
 
-    /*
-     * 依都道府縣分組
-     */
-
     for(
-      const item of data
+      const item
+      of data
     ){
 
       const pref =
@@ -1347,9 +1358,7 @@ async function loadHistory(){
 
     if(!response.ok){
 
-      throw new Error(
-        "history.json 不存在"
-      );
+      throw new Error();
 
     }
 
@@ -1499,7 +1508,6 @@ async function loadHistory(){
                       </p>
 
                       ${
-
                         added
                           .map(
                             function(x){
@@ -1522,7 +1530,6 @@ async function loadHistory(){
                             }
                           )
                           .join("<br>")
-
                       }
 
                       `
@@ -1548,7 +1555,6 @@ async function loadHistory(){
                       </p>
 
                       ${
-
                         removed
                           .map(
                             function(x){
@@ -1571,7 +1577,6 @@ async function loadHistory(){
                             }
                           )
                           .join("<br>")
-
                       }
 
                       `
@@ -1597,7 +1602,6 @@ async function loadHistory(){
                       </p>
 
                       ${
-
                         changed
                           .map(
                             function(x){
@@ -1615,7 +1619,6 @@ async function loadHistory(){
                             }
                           )
                           .join("<br>")
-
                       }
 
                       `
@@ -1710,11 +1713,6 @@ async function loadGeoJSON(){
       await response.json();
 
 
-    geoFeatures =
-      geojson.features ||
-      [];
-
-
     initMap();
 
 
@@ -1723,7 +1721,13 @@ async function loadGeoJSON(){
     );
 
 
-    drawAllPoints();
+    /*
+     * 注意：
+     *
+     * 這裡故意不畫 Poké Lid。
+     *
+     * 日本全圖只顯示行政區。
+     */
 
   }
   catch(error){
@@ -1778,7 +1782,7 @@ async function loadGeoJSON(){
 
 
 /* =========================================================
-   初始化地圖
+   初始化 Map
 ========================================================= */
 
 function initMap(){
@@ -1825,7 +1829,7 @@ function initMap(){
 
 
 /* =========================================================
-   行政區顏色
+   顏色
 ========================================================= */
 
 function getColor(
@@ -1878,7 +1882,7 @@ function getColor(
 
 
 /* =========================================================
-   GeoJSON 行政區名稱
+   GeoJSON 名稱
 ========================================================= */
 
 function getGeoPrefName(
@@ -1943,11 +1947,11 @@ function getGeoPrefName(
 
 
 /* =========================================================
-   行政區名稱標準化
+   名稱標準化
 ========================================================= */
 
 function normalizePrefName(
-  name
+name
 ){
 
   if(!name){
@@ -1964,61 +1968,61 @@ function normalizePrefName(
 
   const englishMap = {
 
-    "Hokkaido":"北海道",
+    Hokkaido:"北海道",
 
-    "Aomori":"青森県",
-    "Iwate":"岩手県",
-    "Miyagi":"宮城県",
-    "Akita":"秋田県",
-    "Yamagata":"山形県",
-    "Fukushima":"福島県",
+    Aomori:"青森県",
+    Iwate:"岩手県",
+    Miyagi:"宮城県",
+    Akita:"秋田県",
+    Yamagata:"山形県",
+    Fukushima:"福島県",
 
-    "Ibaraki":"茨城県",
-    "Tochigi":"栃木県",
-    "Gunma":"群馬県",
-    "Saitama":"埼玉県",
-    "Chiba":"千葉県",
-    "Tokyo":"東京都",
-    "Kanagawa":"神奈川県",
+    Ibaraki:"茨城県",
+    Tochigi:"栃木県",
+    Gunma:"群馬県",
+    Saitama:"埼玉県",
+    Chiba:"千葉県",
+    Tokyo:"東京都",
+    Kanagawa:"神奈川県",
 
-    "Niigata":"新潟県",
-    "Toyama":"富山県",
-    "Ishikawa":"石川県",
-    "Fukui":"福井県",
-    "Yamanashi":"山梨県",
-    "Nagano":"長野県",
+    Niigata:"新潟県",
+    Toyama:"富山県",
+    Ishikawa:"石川県",
+    Fukui:"福井県",
+    Yamanashi:"山梨県",
+    Nagano:"長野県",
 
-    "Gifu":"岐阜県",
-    "Shizuoka":"静岡県",
-    "Aichi":"愛知県",
-    "Mie":"三重県",
-    "Shiga":"滋賀県",
-    "Kyoto":"京都府",
+    Gifu:"岐阜県",
+    Shizuoka:"静岡県",
+    Aichi:"愛知県",
+    Mie:"三重県",
+    Shiga:"滋賀県",
+    Kyoto:"京都府",
 
-    "Osaka":"大阪府",
-    "Hyogo":"兵庫県",
-    "Nara":"奈良県",
-    "Wakayama":"和歌山県",
+    Osaka:"大阪府",
+    Hyogo:"兵庫県",
+    Nara:"奈良県",
+    Wakayama:"和歌山県",
 
-    "Tottori":"鳥取県",
-    "Shimane":"島根県",
-    "Okayama":"岡山県",
-    "Hiroshima":"広島県",
-    "Yamaguchi":"山口県",
+    Tottori:"鳥取県",
+    Shimane:"島根県",
+    Okayama:"岡山県",
+    Hiroshima:"広島県",
+    Yamaguchi:"山口県",
 
-    "Tokushima":"徳島県",
-    "Kagawa":"香川県",
-    "Ehime":"愛媛県",
-    "Kochi":"高知県",
+    Tokushima:"徳島県",
+    Kagawa:"香川県",
+    Ehime:"愛媛県",
+    Kochi:"高知県",
 
-    "Fukuoka":"福岡県",
-    "Saga":"佐賀県",
-    "Nagasaki":"長崎県",
-    "Kumamoto":"熊本県",
-    "Oita":"大分県",
-    "Miyazaki":"宮崎県",
-    "Kagoshima":"鹿児島県",
-    "Okinawa":"沖縄県"
+    Fukuoka:"福岡県",
+    Saga:"佐賀県",
+    Nagasaki:"長崎県",
+    Kumamoto:"熊本県",
+    Oita:"大分県",
+    Miyazaki:"宮崎県",
+    Kagoshima:"鹿児島県",
+    Okinawa:"沖縄県"
 
   };
 
@@ -2090,7 +2094,7 @@ function normalizePrefName(
 ========================================================= */
 
 function prefectureStyle(
-  feature
+feature
 ){
 
   const rawName =
@@ -2120,7 +2124,7 @@ function prefectureStyle(
         count
       ),
 
-    weight:1.2,
+    weight:1.5,
 
     opacity:1,
 
@@ -2138,7 +2142,7 @@ function prefectureStyle(
 ========================================================= */
 
 function highlightFeature(
-  e
+e
 ){
 
   const layer =
@@ -2147,7 +2151,7 @@ function highlightFeature(
 
   layer.setStyle({
 
-    weight:2.5,
+    weight:3,
 
     color:"#111",
 
@@ -2174,7 +2178,7 @@ function highlightFeature(
 ========================================================= */
 
 function resetHighlight(
-  e
+e
 ){
 
   if(
@@ -2192,12 +2196,60 @@ function resetHighlight(
 
 
 /* =========================================================
+   行政區 Label
+========================================================= */
+
+function createPrefectureLabel(
+pref,
+count
+){
+
+  return L.divIcon({
+
+    className:"",
+
+    html:`
+
+      <div class="pref-label">
+
+        <div class="pref-label-name">
+
+          ${escapeHtml(
+            pref
+          )}
+
+        </div>
+
+        <div class="pref-label-count">
+
+          ${count}
+
+          <span>
+            個
+          </span>
+
+        </div>
+
+      </div>
+
+    `,
+
+    iconSize:null,
+
+    iconAnchor:null
+
+  });
+
+}
+
+
+/* =========================================================
    行政區點擊
 ========================================================= */
 
 function onEachPrefecture(
-  feature,
-  layer
+feature,
+layer
 ){
 
   const rawName =
@@ -2220,6 +2272,10 @@ function onEachPrefecture(
       0;
 
 
+  /*
+   * Tooltip
+   */
+
   layer.bindTooltip(
 
     `
@@ -2237,13 +2293,7 @@ function onEachPrefecture(
 
       <br>
 
-      <span
-        style="font-size:11px"
-      >
-
-        點擊查看
-
-      </span>
+      點擊查看
 
     `,
 
@@ -2253,6 +2303,72 @@ function onEachPrefecture(
 
   );
 
+
+  /*
+   * 行政區文字＋數量
+   *
+   * 使用 Polygon 中心點
+   */
+
+  try{
+
+    const center =
+      layer.getBounds()
+        .getCenter();
+
+
+    const label =
+      L.marker(
+        center,
+        {
+
+          icon:
+            createPrefectureLabel(
+              pref,
+              count
+            ),
+
+          interactive:false,
+
+          zIndexOffset:500
+
+        }
+      );
+
+
+    label.addTo(
+      map
+    );
+
+
+    /*
+     * 存進 Layer
+     */
+
+    if(
+      !layer._prefLabel
+    ){
+
+      layer._prefLabel =
+        label;
+
+    }
+
+  }
+  catch(error){
+
+    console.warn(
+      "Label 建立失敗",
+      pref,
+      error
+    );
+
+  }
+
+
+  /*
+   * Hover
+   */
 
   layer.on({
 
@@ -2278,11 +2394,11 @@ function onEachPrefecture(
 
 
 /* =========================================================
-   畫行政區
+   Draw 行政區
 ========================================================= */
 
 function drawPrefectures(
-  geojson
+geojson
 ){
 
   if(
@@ -2315,26 +2431,83 @@ function drawPrefectures(
 
 
 /* =========================================================
-   畫全部點位
+   顯示行政區
 ========================================================= */
 
-function drawAllPoints(){
+function selectPrefecture(
+pref,
+clickedLayer
+){
+
+  selectedPrefecture =
+    pref;
+
+
+  const items =
+    groups[pref] ||
+    [];
+
+
+  /*
+   * 更新右上狀態
+   */
+
+  document
+    .getElementById(
+      "mapStatus"
+    )
+    .textContent =
+    `${pref}｜${items.length} 個 Poké Lid`;
+
+
+  /*
+   * 地圖放大
+   */
 
   if(
-    !pointLayer
+    clickedLayer
   ){
 
-    return;
+    try{
+
+      map.fitBounds(
+
+        clickedLayer.getBounds(),
+
+        {
+
+          padding:
+            [30,30],
+
+          maxZoom:
+            8
+
+        }
+
+      );
+
+    }
+    catch(error){
+
+      console.warn(
+        error
+      );
+
+    }
 
   }
 
+
+  /*
+   * 現在才顯示點位
+   */
 
   pointLayer.clearLayers();
 
 
   for(
     const item
-    of data
+    of items
   ){
 
     addPoint(
@@ -2343,15 +2516,25 @@ function drawAllPoints(){
 
   }
 
+
+  /*
+   * 地圖下方顯示清單
+   */
+
+  renderSelectedPrefecture(
+    pref,
+    items
+  );
+
 }
 
 
 /* =========================================================
-   建立 Poké Lid 點位
+   新增點位
 ========================================================= */
 
 function addPoint(
-  item
+item
 ){
 
   const lat =
@@ -2388,7 +2571,9 @@ function addPoint(
 
   const marker =
     L.marker(
+
       [lat,lng],
+
       {
 
         icon:
@@ -2400,14 +2585,15 @@ function addPoint(
               `<div class="poke-marker"></div>`,
 
             iconSize:
-              [16,16],
+              [18,18],
 
             iconAnchor:
-              [8,8]
+              [9,9]
 
           })
 
       }
+
     );
 
 
@@ -2478,108 +2664,12 @@ function addPoint(
 
 
 /* =========================================================
-   點擊行政區
-========================================================= */
-
-function selectPrefecture(
-  pref,
-  clickedLayer=null
-){
-
-  selectedPrefecture =
-    pref;
-
-
-  const items =
-    groups[pref] ||
-    [];
-
-
-  document
-    .getElementById(
-      "mapStatus"
-    )
-    .textContent =
-    `${pref}｜${items.length} 個 Poké Lid`;
-
-
-  /*
-   * 行政區放大
-   */
-
-  if(
-    clickedLayer
-  ){
-
-    try{
-
-      map.fitBounds(
-        clickedLayer.getBounds(),
-        {
-
-          padding:
-            [30,30],
-
-          maxZoom:
-            8
-
-        }
-      );
-
-    }
-    catch(error){
-
-      console.warn(
-        error
-      );
-
-    }
-
-  }
-
-
-  /*
-   * 清掉全部點
-   */
-
-  pointLayer.clearLayers();
-
-
-  /*
-   * 只顯示目前行政區
-   */
-
-  for(
-    const item
-    of items
-  ){
-
-    addPoint(
-      item
-    );
-
-  }
-
-
-  /*
-   * 顯示地圖下面的清單
-   */
-
-  renderSelectedPrefecture(
-    pref,
-    items
-  );
-
-}
-
-
-/* =========================================================
-   行政區下面的 Poké Lid 清單
+   行政區下方資料
 ========================================================= */
 
 function renderSelectedPrefecture(
-  pref,
-  items
+pref,
+items
 ){
 
   const container =
@@ -2619,13 +2709,16 @@ function renderSelectedPrefecture(
           return `
 
             <div
+
               class="poke-item"
+
               onclick="
                 focusPoint(
                   ${Number(lat)},
                   ${Number(lng)}
                 )
               "
+
             >
 
               <div class="poke-title">
@@ -2754,10 +2847,11 @@ function renderSelectedPrefecture(
 
 
   /*
-   * 自動捲到地圖下面
+   * 自動捲到地圖下方
    */
 
   setTimeout(
+
     function(){
 
       container.scrollIntoView({
@@ -2769,19 +2863,21 @@ function renderSelectedPrefecture(
       });
 
     },
+
     100
+
   );
 
 }
 
 
 /* =========================================================
-   點擊清單 → 地圖定位
+   點擊列表項目
 ========================================================= */
 
 function focusPoint(
-  lat,
-  lng
+lat,
+lng
 ){
 
   if(
@@ -2795,18 +2891,25 @@ function focusPoint(
 
 
   map.setView(
+
     [lat,lng],
+
     Math.max(
       map.getZoom(),
       9
     ),
+
     {
+
       animate:true
+
     }
+
   );
 
 
   pointLayer.eachLayer(
+
     function(marker){
 
       const pos =
@@ -2816,13 +2919,15 @@ function focusPoint(
       if(
 
         Math.abs(
-          pos.lat - lat
+          pos.lat -
+          lat
         ) < 0.000001
 
         &&
 
         Math.abs(
-          pos.lng - lng
+          pos.lng -
+          lng
         ) < 0.000001
 
       ){
@@ -2832,6 +2937,7 @@ function focusPoint(
       }
 
     }
+
   );
 
 }
@@ -2843,13 +2949,11 @@ function focusPoint(
 
 function closePrefecture(){
 
-  const container =
-    document.getElementById(
+  document
+    .getElementById(
       "selectedPrefecture"
-    );
-
-
-  container.style.display =
+    )
+    .style.display =
     "none";
 
 
@@ -2866,7 +2970,7 @@ function closePrefecture(){
 
 
   /*
-   * 回到日本全圖
+   * 回日本全圖
    */
 
   map.setView(
@@ -2876,10 +2980,13 @@ function closePrefecture(){
 
 
   /*
-   * 恢復全部點
+   * 清除所有 Poké Lid
+   *
+   * 這裡非常重要：
+   * 全圖狀態不顯示點位
    */
 
-  drawAllPoints();
+  pointLayer.clearLayers();
 
 }
 
@@ -2896,6 +3003,7 @@ function downloadAll(){
   const names =
     Object.keys(groups)
       .sort(
+
         function(a,b){
 
           return (
@@ -2904,6 +3012,7 @@ function downloadAll(){
           );
 
         }
+
       );
 
 
@@ -2931,17 +3040,20 @@ function downloadAll(){
 
 
   save(
+
     blob(
       output.join("\n")
     ),
+
     "poke_lid_2026_by_prefecture.txt"
+
   );
 
 }
 
 
 /* =========================================================
-   分組 JSON
+   JSON
 ========================================================= */
 
 function downloadJSON(){
@@ -2952,6 +3064,7 @@ function downloadJSON(){
   const names =
     Object.keys(groups)
       .sort(
+
         function(a,b){
 
           return (
@@ -2960,6 +3073,7 @@ function downloadJSON(){
           );
 
         }
+
       );
 
 
@@ -2971,6 +3085,7 @@ function downloadJSON(){
     output[pref] =
       groups[pref]
         .map(
+
           function(x){
 
             return {
@@ -2996,6 +3111,7 @@ function downloadJSON(){
             };
 
           }
+
         );
 
   }
@@ -3004,6 +3120,7 @@ function downloadJSON(){
   save(
 
     new Blob(
+
       [
         JSON.stringify(
           output,
@@ -3011,12 +3128,14 @@ function downloadJSON(){
           0
         )
       ],
+
       {
 
         type:
           "application/json;charset=utf-8"
 
       }
+
     ),
 
     "poke_lid_2026_favorite_lists.json"
@@ -3035,6 +3154,7 @@ function downloadCSV(){
   const rows = [
 
     [
+
       "id",
       "prefecture",
       "city",
@@ -3043,6 +3163,7 @@ function downloadCSV(){
       "name",
       "address",
       "pokemons"
+
     ]
 
   ];
@@ -3089,10 +3210,12 @@ function downloadCSV(){
   const csv =
     rows
       .map(
+
         function(row){
 
           return row
             .map(
+
               function(value){
 
                 return `"${String(
@@ -3103,10 +3226,12 @@ function downloadCSV(){
                 )}"`;
 
               }
+
             )
             .join(",");
 
         }
+
       )
       .join("\n");
 
@@ -3126,7 +3251,7 @@ function downloadCSV(){
 
 
 /* =========================================================
-   啟動
+   Start
 ========================================================= */
 
 loadData();

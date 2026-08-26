@@ -227,63 +227,81 @@ button:disabled{
 
 
 /* =========================================================
-   行政區名稱＋數量標籤
+   滑鼠移到行政區的資訊框
 ========================================================= */
 
-.pref-label{
+.pref-hover-tooltip{
 
-  background:rgba(255,255,255,.96);
+  background:
+    rgba(255,255,255,.98) !important;
 
-  border:2px solid rgba(0,0,0,.30);
+  border:
+    2px solid #222 !important;
 
-  border-radius:10px;
+  border-radius:
+    12px !important;
 
-  padding:7px 13px 8px;
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.30) !important;
 
-  min-width:90px;
+  padding:
+    7px 12px !important;
+
+  color:#111 !important;
+
+  font-family:
+    Arial,
+    "Noto Sans TC",
+    "Microsoft JhengHei",
+    sans-serif;
+
+  min-width:135px;
 
   text-align:center;
 
-  color:#111;
+}
 
-  box-shadow:
-    0 2px 7px rgba(0,0,0,.28);
 
-  white-space:nowrap;
+/*
+ * Leaflet Tooltip 小三角
+ */
 
-  transition:
-    transform .15s,
-    box-shadow .15s;
+.pref-hover-tooltip:before{
 
-  pointer-events:none;
+  border-top-color:#222 !important;
 
 }
 
-.pref-label-name{
 
-  font-size:17px;
+/*
+ * Tooltip 內文字
+ */
 
-  font-weight:800;
+.pref-tooltip-name{
 
-  line-height:1.2;
+  font-size:18px;
+
+  font-weight:900;
+
+  line-height:1.25;
 
 }
 
-.pref-label-count{
+.pref-tooltip-count{
 
-  font-size:22px;
+  font-size:27px;
 
   font-weight:900;
 
   line-height:1.15;
 
-  margin-top:2px;
+  margin-top:3px;
 
 }
 
-.pref-label-count span{
+.pref-tooltip-unit{
 
-  font-size:13px;
+  font-size:14px;
 
   font-weight:700;
 
@@ -434,7 +452,7 @@ button:disabled{
 
 
 /* =========================================================
-   點位列表
+   Poké Lid 列表
 ========================================================= */
 
 .poke-list{
@@ -627,29 +645,29 @@ button:disabled{
 
   }
 
-  .pref-label{
+  .pref-hover-tooltip{
 
-    min-width:70px;
+    min-width:110px;
 
-    padding:5px 8px 6px;
-
-  }
-
-  .pref-label-name{
-
-    font-size:13px;
+    padding:5px 8px !important;
 
   }
 
-  .pref-label-count{
+  .pref-tooltip-name{
 
-    font-size:18px;
+    font-size:15px;
 
   }
 
-  .pref-label-count span{
+  .pref-tooltip-count{
 
-    font-size:11px;
+    font-size:22px;
+
+  }
+
+  .pref-tooltip-unit{
+
+    font-size:12px;
 
   }
 
@@ -696,8 +714,8 @@ button:disabled{
 
   <p>
 
-    <b>地圖：</b>
-    日本都道府縣行政區著色地圖
+    <b>地圖方式：</b>
+    都道府縣行政區著色
 
   </p>
 
@@ -771,8 +789,8 @@ button:disabled{
 
       <p class="muted">
 
-        全圖只顯示行政區與數量。
-        點擊行政區後才會顯示 Poké Lid 點位。
+        滑鼠移到行政區查看數量，
+        點擊行政區後才顯示 Poké Lid 點位。
 
       </p>
 
@@ -879,7 +897,7 @@ button:disabled{
 
 
 <!-- =======================================================
-     行政區資料
+     選取行政區後的點位
 ======================================================= -->
 
 <div
@@ -932,16 +950,14 @@ button:disabled{
 <script>
 
 /* =========================================================
-   資料來源
+   URL
 ========================================================= */
 
 const DATA_URL =
   "https://raw.githubusercontent.com/yukidaruma/pokefuta-tracker/main/data/data.json";
 
-
 const GEOJSON_URL =
   "./prefectures.geojson";
-
 
 const HISTORY_URL =
   "./history.json";
@@ -1012,17 +1028,12 @@ const PREF = {
 
 
 /* =========================================================
-   全域資料
+   Global
 ========================================================= */
 
 let data = [];
 
 let groups = {};
-
-
-/* =========================================================
-   Map
-========================================================= */
 
 let map = null;
 
@@ -1034,7 +1045,7 @@ let selectedPrefecture = null;
 
 
 /* =========================================================
-   HTML Escape
+   Escape HTML
 ========================================================= */
 
 function escapeHtml(value){
@@ -1061,7 +1072,7 @@ function escapeHtml(value){
 
 
 /* =========================================================
-   檔名
+   Safe filename
 ========================================================= */
 
 function safe(value){
@@ -1085,20 +1096,23 @@ function blob(
 ){
 
   return new Blob(
+
     [
       "\ufeff",
       text
     ],
+
     {
       type
     }
+
   );
 
 }
 
 
 /* =========================================================
-   Download
+   Save
 ========================================================= */
 
 function save(
@@ -1116,13 +1130,20 @@ function save(
     );
 
 
-  a.href = url;
+  a.href =
+    url;
 
-  a.download = filename;
+  a.download =
+    filename;
 
-  document.body.appendChild(a);
+
+  document.body.appendChild(
+    a
+  );
+
 
   a.click();
+
 
   a.remove();
 
@@ -1178,7 +1199,7 @@ function txt(
 
 
 /* =========================================================
-   都道府縣排序
+   Prefecture 排序
 ========================================================= */
 
 function getPrefNumber(
@@ -1209,7 +1230,7 @@ function getPrefNumber(
 
 
 /* =========================================================
-   載入資料
+   Load Data
 ========================================================= */
 
 async function loadData(){
@@ -1218,12 +1239,15 @@ async function loadData(){
 
     const response =
       await fetch(
+
         DATA_URL +
         "?ts=" +
         Date.now(),
+
         {
           cache:"no-store"
         }
+
       );
 
 
@@ -1294,21 +1318,24 @@ async function loadData(){
       .getElementById(
         "all"
       )
-      .disabled = false;
+      .disabled =
+      false;
 
 
     document
       .getElementById(
         "json"
       )
-      .disabled = false;
+      .disabled =
+      false;
 
 
     document
       .getElementById(
         "csv"
       )
-      .disabled = false;
+      .disabled =
+      false;
 
 
     await loadGeoJSON();
@@ -1338,7 +1365,7 @@ async function loadData(){
 
 
 /* =========================================================
-   History
+   Load History
 ========================================================= */
 
 async function loadHistory(){
@@ -1347,12 +1374,15 @@ async function loadHistory(){
 
     const response =
       await fetch(
+
         HISTORY_URL +
         "?ts=" +
         Date.now(),
+
         {
           cache:"no-store"
         }
+
       );
 
 
@@ -1682,7 +1712,7 @@ async function loadHistory(){
 
 
 /* =========================================================
-   GeoJSON
+   Load GeoJSON
 ========================================================= */
 
 async function loadGeoJSON(){
@@ -1691,12 +1721,15 @@ async function loadGeoJSON(){
 
     const response =
       await fetch(
+
         GEOJSON_URL +
         "?ts=" +
         Date.now(),
+
         {
           cache:"no-store"
         }
+
       );
 
 
@@ -1719,15 +1752,6 @@ async function loadGeoJSON(){
     drawPrefectures(
       geojson
     );
-
-
-    /*
-     * 注意：
-     *
-     * 這裡故意不畫 Poké Lid。
-     *
-     * 日本全圖只顯示行政區。
-     */
 
   }
   catch(error){
@@ -1764,7 +1788,11 @@ async function loadGeoJSON(){
 
           <p class="muted">
 
-            請確認它與
+            請確認
+            <code>
+              prefectures.geojson
+            </code>
+            與
             <code>
               index.html
             </code>
@@ -1782,7 +1810,7 @@ async function loadGeoJSON(){
 
 
 /* =========================================================
-   初始化 Map
+   Initialize Map
 ========================================================= */
 
 function initMap(){
@@ -1829,7 +1857,7 @@ function initMap(){
 
 
 /* =========================================================
-   顏色
+   Color
 ========================================================= */
 
 function getColor(
@@ -1844,6 +1872,7 @@ function getColor(
 
   }
 
+
   if(
     count <= 2
   ){
@@ -1851,6 +1880,7 @@ function getColor(
     return "#dbeafe";
 
   }
+
 
   if(
     count <= 5
@@ -1860,6 +1890,7 @@ function getColor(
 
   }
 
+
   if(
     count <= 10
   ){
@@ -1867,6 +1898,7 @@ function getColor(
     return "#60a5fa";
 
   }
+
 
   if(
     count <= 20
@@ -1876,13 +1908,14 @@ function getColor(
 
   }
 
+
   return "#1d4ed8";
 
 }
 
 
 /* =========================================================
-   GeoJSON 名稱
+   GeoJSON Property
 ========================================================= */
 
 function getGeoPrefName(
@@ -1947,11 +1980,11 @@ function getGeoPrefName(
 
 
 /* =========================================================
-   名稱標準化
+   Normalize Prefecture
 ========================================================= */
 
 function normalizePrefName(
-name
+  name
 ){
 
   if(!name){
@@ -2052,6 +2085,12 @@ name
   }
 
 
+  /*
+   * 例如：
+   * 東京 → 東京都
+   * 大阪 → 大阪府
+   */
+
   for(
     const pref
     of Object.values(PREF)
@@ -2094,7 +2133,7 @@ name
 ========================================================= */
 
 function prefectureStyle(
-feature
+  feature
 ){
 
   const rawName =
@@ -2138,11 +2177,11 @@ feature
 
 
 /* =========================================================
-   Hover
+   Hover Highlight
 ========================================================= */
 
 function highlightFeature(
-e
+  e
 ){
 
   const layer =
@@ -2153,7 +2192,7 @@ e
 
     weight:3,
 
-    color:"#111",
+    color:"#222",
 
     fillOpacity:1
 
@@ -2174,11 +2213,11 @@ e
 
 
 /* =========================================================
-   Reset
+   Reset Highlight
 ========================================================= */
 
 function resetHighlight(
-e
+  e
 ){
 
   if(
@@ -2196,60 +2235,55 @@ e
 
 
 /* =========================================================
-   行政區 Label
+   Hover Tooltip
 ========================================================= */
 
-function createPrefectureLabel(
-pref,
-count
+function createHoverTooltip(
+  pref,
+  count
 ){
 
-  return L.divIcon({
+  return `
 
-    className:"",
+    <div>
 
-    html:`
+      <div class="pref-tooltip-name">
 
-      <div class="pref-label">
-
-        <div class="pref-label-name">
-
-          ${escapeHtml(
-            pref
-          )}
-
-        </div>
-
-        <div class="pref-label-count">
-
-          ${count}
-
-          <span>
-            個
-          </span>
-
-        </div>
+        ${escapeHtml(
+          pref
+        )}
 
       </div>
 
-    `,
 
-    iconSize:null,
+      <div class="pref-tooltip-count">
 
-    iconAnchor:null
+        ${count}
 
-  });
+        <span
+          class="pref-tooltip-unit"
+        >
+
+          個
+
+        </span>
+
+      </div>
+
+    </div>
+
+  `;
 
 }
 
 
 /* =========================================================
-   行政區點擊
+   行政區事件
 ========================================================= */
 
 function onEachPrefecture(
-feature,
-layer
+  feature,
+  layer
 ){
 
   const rawName =
@@ -2274,119 +2308,79 @@ layer
 
   /*
    * Tooltip
+   *
+   * 注意：
+   *
+   * permanent:false
+   *
+   * 所以不會永久顯示。
    */
 
   layer.bindTooltip(
 
-    `
-
-      <b>
-        ${escapeHtml(
-          pref
-        )}
-      </b>
-
-      <br>
-
-      Poké Lid：
-      ${count}
-
-      <br>
-
-      點擊查看
-
-    `,
+    createHoverTooltip(
+      pref,
+      count
+    ),
 
     {
-      sticky:true
+
+      sticky:true,
+
+      direction:"top",
+
+      opacity:1,
+
+      className:
+        "pref-hover-tooltip",
+
+      permanent:false
+
     }
 
   );
 
 
   /*
-   * 行政區文字＋數量
-   *
-   * 使用 Polygon 中心點
-   */
-
-  try{
-
-    const center =
-      layer.getBounds()
-        .getCenter();
-
-
-    const label =
-      L.marker(
-        center,
-        {
-
-          icon:
-            createPrefectureLabel(
-              pref,
-              count
-            ),
-
-          interactive:false,
-
-          zIndexOffset:500
-
-        }
-      );
-
-
-    label.addTo(
-      map
-    );
-
-
-    /*
-     * 存進 Layer
-     */
-
-    if(
-      !layer._prefLabel
-    ){
-
-      layer._prefLabel =
-        label;
-
-    }
-
-  }
-  catch(error){
-
-    console.warn(
-      "Label 建立失敗",
-      pref,
-      error
-    );
-
-  }
-
-
-  /*
-   * Hover
+   * Mouse Events
    */
 
   layer.on({
 
-    mouseover:
-      highlightFeature,
+    mouseover:function(e){
 
-    mouseout:
-      resetHighlight,
+      highlightFeature(
+        e
+      );
 
-    click:
-      function(){
+      /*
+       * 顯示縣名＋數量
+       */
 
-        selectPrefecture(
-          pref,
-          layer
-        );
+      e.target.openTooltip();
 
-      }
+    },
+
+
+    mouseout:function(e){
+
+      resetHighlight(
+        e
+      );
+
+      e.target.closeTooltip();
+
+    },
+
+
+    click:function(){
+
+      selectPrefecture(
+        pref,
+        layer
+      );
+
+    }
 
   });
 
@@ -2394,11 +2388,11 @@ layer
 
 
 /* =========================================================
-   Draw 行政區
+   Draw Prefectures
 ========================================================= */
 
 function drawPrefectures(
-geojson
+  geojson
 ){
 
   if(
@@ -2414,7 +2408,9 @@ geojson
 
   prefectureLayer =
     L.geoJSON(
+
       geojson,
+
       {
 
         style:
@@ -2424,19 +2420,44 @@ geojson
           onEachPrefecture
 
       }
+
     )
     .addTo(map);
+
+
+  /*
+   * 自動適合日本全圖
+   */
+
+  try{
+
+    map.fitBounds(
+      prefectureLayer.getBounds(),
+      {
+        padding:[20,20]
+      }
+    );
+
+  }
+  catch(error){
+
+    console.warn(
+      "fitBounds 失敗",
+      error
+    );
+
+  }
 
 }
 
 
 /* =========================================================
-   顯示行政區
+   Select Prefecture
 ========================================================= */
 
 function selectPrefecture(
-pref,
-clickedLayer
+  pref,
+  clickedLayer
 ){
 
   selectedPrefecture =
@@ -2449,7 +2470,7 @@ clickedLayer
 
 
   /*
-   * 更新右上狀態
+   * Map Status
    */
 
   document
@@ -2461,7 +2482,7 @@ clickedLayer
 
 
   /*
-   * 地圖放大
+   * Zoom
    */
 
   if(
@@ -2499,11 +2520,15 @@ clickedLayer
 
 
   /*
-   * 現在才顯示點位
+   * 清除舊點位
    */
 
   pointLayer.clearLayers();
 
+
+  /*
+   * 顯示該區 Poké Lid
+   */
 
   for(
     const item
@@ -2518,7 +2543,7 @@ clickedLayer
 
 
   /*
-   * 地圖下方顯示清單
+   * 地圖下面顯示列表
    */
 
   renderSelectedPrefecture(
@@ -2530,11 +2555,11 @@ clickedLayer
 
 
 /* =========================================================
-   新增點位
+   Add Poké Lid Point
 ========================================================= */
 
 function addPoint(
-item
+  item
 ){
 
   const lat =
@@ -2664,12 +2689,12 @@ item
 
 
 /* =========================================================
-   行政區下方資料
+   Render Selected Prefecture
 ========================================================= */
 
 function renderSelectedPrefecture(
-pref,
-items
+  pref,
+  items
 ){
 
   const container =
@@ -2688,99 +2713,105 @@ items
     "block";
 
 
-  const list =
+  let list = "";
+
+
+  if(
     items.length
+  ){
 
-    ?
+    list =
+      items
+        .map(
 
-    items
-      .map(
-        function(item,index){
+          function(item,index){
 
-          const lat =
-            item.coords?.[0] ??
-            "";
+            const lat =
+              item.coords?.[0] ??
+              "";
 
-          const lng =
-            item.coords?.[1] ??
-            "";
-
-
-          return `
-
-            <div
-
-              class="poke-item"
-
-              onclick="
-                focusPoint(
-                  ${Number(lat)},
-                  ${Number(lng)}
-                )
-              "
-
-            >
-
-              <div class="poke-title">
-
-                ${index+1}.
-                ${escapeHtml(
-                  item.city ||
-                  pref
-                )}
-
-              </div>
+            const lng =
+              item.coords?.[1] ??
+              "";
 
 
-              <div class="poke-coord">
+            return `
 
-                ${escapeHtml(
-                  lat
-                )}
-                ,
-                ${escapeHtml(
-                  lng
-                )}
+              <div
 
-              </div>
+                class="poke-item"
 
+                onclick="
+                  focusPoint(
+                    ${Number(lat)},
+                    ${Number(lng)}
+                  )
+                "
 
-              ${
-                item.address
+              >
 
-                ?
+                <div class="poke-title">
 
-                `
-
-                <div
-                  class="poke-address"
-                >
-
+                  ${index+1}.
                   ${escapeHtml(
-                    item.address
+                    item.city ||
+                    pref
                   )}
 
                 </div>
 
-                `
 
-                :
+                <div class="poke-coord">
 
-                ""
+                  ${escapeHtml(
+                    lat
+                  )}
+                  ,
+                  ${escapeHtml(
+                    lng
+                  )}
 
-              }
+                </div>
 
-            </div>
 
-          `;
+                ${
+                  item.address
 
-        }
-      )
-      .join("")
+                  ?
 
-    :
+                  `
 
-    `
+                  <div
+                    class="poke-address"
+                  >
+
+                    ${escapeHtml(
+                      item.address
+                    )}
+
+                  </div>
+
+                  `
+
+                  :
+
+                  ""
+
+                }
+
+              </div>
+
+            `;
+
+          }
+
+        )
+        .join("");
+
+  }
+  else{
+
+    list = `
 
       <div class="muted">
 
@@ -2789,6 +2820,8 @@ items
       </div>
 
     `;
+
+  }
 
 
   info.innerHTML = `
@@ -2847,7 +2880,7 @@ items
 
 
   /*
-   * 自動捲到地圖下方
+   * 滑到地圖下面的點位區
    */
 
   setTimeout(
@@ -2872,12 +2905,12 @@ items
 
 
 /* =========================================================
-   點擊列表項目
+   Focus Point
 ========================================================= */
 
 function focusPoint(
-lat,
-lng
+  lat,
+  lng
 ){
 
   if(
@@ -2944,7 +2977,7 @@ lng
 
 
 /* =========================================================
-   關閉行政區
+   Close Prefecture
 ========================================================= */
 
 function closePrefecture(){
@@ -2970,29 +3003,63 @@ function closePrefecture(){
 
 
   /*
-   * 回日本全圖
-   */
-
-  map.setView(
-    [36.2,138.3],
-    5
-  );
-
-
-  /*
-   * 清除所有 Poké Lid
+   * 非常重要：
    *
-   * 這裡非常重要：
-   * 全圖狀態不顯示點位
+   * 回到日本全圖時
+   * 清除所有 Poké Lid Marker
    */
 
   pointLayer.clearLayers();
+
+
+  /*
+   * 回日本全圖
+   */
+
+  if(
+    prefectureLayer
+  ){
+
+    try{
+
+      map.fitBounds(
+
+        prefectureLayer.getBounds(),
+
+        {
+
+          padding:
+            [20,20]
+
+        }
+
+      );
+
+    }
+    catch(error){
+
+      map.setView(
+        [36.2,138.3],
+        5
+      );
+
+    }
+
+  }
+  else{
+
+    map.setView(
+      [36.2,138.3],
+      5
+    );
+
+  }
 
 }
 
 
 /* =========================================================
-   全部 TXT
+   Download All TXT
 ========================================================= */
 
 function downloadAll(){
@@ -3022,15 +3089,19 @@ function downloadAll(){
   ){
 
     output.push(
+
       `# ===== ${pref} (${groups[pref].length}) =====`
+
     );
 
 
     output.push(
+
       txt(
         groups[pref],
         pref
       )
+
     );
 
 
@@ -3053,7 +3124,7 @@ function downloadAll(){
 
 
 /* =========================================================
-   JSON
+   Download JSON
 ========================================================= */
 
 function downloadJSON(){
@@ -3146,7 +3217,7 @@ function downloadJSON(){
 
 
 /* =========================================================
-   CSV
+   Download CSV
 ========================================================= */
 
 function downloadCSV(){

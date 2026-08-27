@@ -23,7 +23,7 @@ jobs:
     steps:
 
       - name:
-          Checkout
+          Checkout repository
 
         uses:
           actions/checkout@v6
@@ -54,6 +54,15 @@ jobs:
 
 
       - name:
+          Check Python syntax
+
+        run: |
+
+          python -m py_compile \
+            scripts/sync_pokemon_center.py
+
+
+      - name:
           Run Pokémon Center Sync
 
         run: |
@@ -63,7 +72,7 @@ jobs:
 
 
       - name:
-          Validate data
+          Validate generated JSON
 
         run: |
 
@@ -82,7 +91,7 @@ jobs:
           if not path.exists():
 
               raise SystemExit(
-                  "pokemon_center.json 不存在"
+                  "找不到 pokemon_center.json"
               )
 
 
@@ -112,48 +121,41 @@ jobs:
           if not items:
 
               raise SystemExit(
-                  "資料為 0 筆，停止"
+                  "Center 資料為 0 筆"
               )
 
 
           print(
               "Pokémon Center:",
-              len(items)
-          )
-
-
-          missing_pref = [
-              x
-              for x
-              in items
-              if x.get("pref") is None
-          ]
-
-
-          missing_coords = [
-              x
-              for x
-              in items
-              if not x.get("coords")
-          ]
-
-
-          print(
-              "缺少 pref:",
-              len(missing_pref)
+              len(items),
+              "筆"
           )
 
 
           print(
-              "缺少 coords:",
-              len(missing_coords)
+              "缺少縣市:",
+              sum(
+                  1
+                  for item in items
+                  if item.get("pref") is None
+              )
+          )
+
+
+          print(
+              "缺少座標:",
+              sum(
+                  1
+                  for item in items
+                  if not item.get("coords")
+              )
           )
 
           PY
 
 
       - name:
-          Commit
+          Commit changes
 
         run: |
 
@@ -173,7 +175,7 @@ jobs:
 
           if git diff --cached --quiet; then
 
-            echo "沒有變化"
+            echo "沒有資料變化"
 
           else
 

@@ -830,8 +830,7 @@ def load_history():
 
 def summarize(item):
 
-    coords =
-        item.get("coords")
+    coords = item.get("coords")
 
     return {
         "id": item.get(
@@ -886,11 +885,9 @@ def main():
         exist_ok=True
     )
 
-    old =
-        load_existing()
+    old = load_existing()
 
-    shops =
-        discover()
+    shops = discover()
 
 
     if not shops:
@@ -909,31 +906,26 @@ def main():
         start=1
     ):
 
-        url =
-            shop["url"]
+        url = shop["url"]
 
         try:
 
-            html =
-                fetch_text(
+            html = fetch_text(
                     url
                 )
 
-            soup =
-                BeautifulSoup(
+            soup = BeautifulSoup(
                     html,
                     "html.parser"
                 )
 
-            name =
-                extract_name(
+            name = extract_name(
                     soup
                 )
 
             if not name:
 
-                name =
-                    shop["name"]
+                name = shop["name"]
 
             if not is_pokemon_center(
                 name
@@ -947,19 +939,16 @@ def main():
 
                 continue
 
-            address =
-                extract_address(
+            address = extract_address(
                     soup
                 )
 
-            image =
-                extract_image(
+            image = extract_image(
                     soup,
                     url
                 )
 
-            coords =
-                extract_coordinates(
+            coords = extract_coordinates(
                     soup
                 )
 
@@ -970,14 +959,12 @@ def main():
                     + address
             )
 
-            item_id =
-                make_id(
+            item_id = make_id(
                     name,
                     url
                 )
 
-            old_item =
-                old.get(
+            old_item = old.get(
                     item_id
                 )
 
@@ -988,31 +975,27 @@ def main():
 
                 if not coords:
 
-                    coords =
-                        old_item.get(
+                    coords = old_item.get(
                             "coords"
                         )
 
                 if not image:
 
-                    image =
-                        old_item.get(
+                    image = old_item.get(
                             "image",
                             ""
                         )
 
                 if not address:
 
-                    address =
-                        old_item.get(
+                    address = old_item.get(
                             "address",
                             ""
                         )
 
                 if pref is None:
 
-                    pref =
-                        old_item.get(
+                    pref = old_item.get(
                             "pref"
                         )
 
@@ -1099,12 +1082,10 @@ def main():
         )
 
 
-    added_ids =
-        set(new) - set(old)
+    added_ids = set(new) - set(old)
 
 
-    removed_ids =
-        set(old) - set(new)
+    removed_ids = set(old) - set(new)
 
 
     changed_ids = []
@@ -1126,11 +1107,9 @@ def main():
         set(new) & set(old)
     ):
 
-        before =
-            old[item_id]
+        before = old[item_id]
 
-        after =
-            new[item_id]
+        after = new[item_id]
 
 
         for field in compare_fields:
@@ -1159,8 +1138,7 @@ def main():
     )
 
 
-    history =
-        load_history()
+    history = load_history()
 
 
     if (
@@ -1224,22 +1202,18 @@ def main():
         })
 
 
-        history["history"] =
-            history["history"][
+        history["history"] = history["history"][
                 -200:
             ]
 
 
-    history["last_sync"] =
-        now
+    history["last_sync"] = now
 
 
-    history["total"] =
-        len(new)
+    history["total"] = len(new)
 
 
-    ordered =
-        sorted(
+    ordered = sorted(
 
             new.values(),
 

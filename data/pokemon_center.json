@@ -1,3 +1,15 @@
 {
-  "list": []
+  "list": [
+    {
+      "id": "pokemon-center-sapporo",
+      "type": "pokemon_center",
+      "pref": 1,
+      "region": "北海道・東北",
+      "name": "Pokémon Center SAPPORO",
+      "address": "",
+      "coords": null,
+      "image": "",
+      "official_url": "https://shop.pokemon.co.jp/..."
+    }
+  ]
 }

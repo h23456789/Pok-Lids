@@ -16,6 +16,10 @@
 
 <style>
 
+/* =========================================================
+   BASE
+========================================================= */
+
 *{
   box-sizing:border-box;
 }
@@ -24,9 +28,7 @@ html,
 body{
   margin:0;
   padding:0;
-
   background:#e9f7fb;
-
   color:#315f66;
 
   font-family:
@@ -148,7 +150,7 @@ button{
 
 
 /* =========================================================
-   MAIN TABS
+   TABS
 ========================================================= */
 
 .main-tabs{
@@ -189,26 +191,12 @@ button{
       .12
     );
 
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    background .18s ease;
+  transition:.18s;
 }
 
 .main-tab:hover{
   transform:
     translateY(-2px);
-
-  box-shadow:
-    0
-    8px
-    22px
-    rgba(
-      70,
-      130,
-      140,
-      .17
-    );
 }
 
 .main-tab.active{
@@ -217,17 +205,6 @@ button{
       135deg,
       #c8edf5,
       #aee0ed
-    );
-
-  box-shadow:
-    0
-    8px
-    24px
-    rgba(
-      70,
-      130,
-      140,
-      .20
     );
 }
 
@@ -239,7 +216,6 @@ button{
   margin-top:4px;
 
   font-size:21px;
-
   font-weight:900;
 }
 
@@ -270,7 +246,6 @@ button{
   display:flex;
 
   align-items:center;
-
   justify-content:center;
 
   gap:18px;
@@ -299,7 +274,7 @@ button{
 
 
 /* =========================================================
-   SECTION TITLE
+   TITLE
 ========================================================= */
 
 .section-title{
@@ -354,9 +329,7 @@ button{
 
   cursor:pointer;
 
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease;
+  transition:.18s;
 }
 
 .region-card:hover{
@@ -380,19 +353,18 @@ button{
 
   background:#9de0cc;
 
-  position:relative;
-
   display:flex;
 
-  justify-content:center;
-
   align-items:center;
+  justify-content:center;
 
   gap:8px;
 
   padding:
     18px
     12px;
+
+  position:relative;
 
   overflow:hidden;
 }
@@ -512,7 +484,6 @@ button{
   display:none;
 
   align-items:center;
-
   justify-content:center;
 
   padding:14px;
@@ -579,7 +550,6 @@ button{
   display:flex;
 
   align-items:center;
-
   justify-content:space-between;
 
   gap:15px;
@@ -607,7 +577,6 @@ button{
 
 .panel-close{
   width:42px;
-
   height:42px;
 
   border:0;
@@ -667,32 +636,18 @@ button{
       .10
     );
 
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease;
+  transition:.15s;
 }
 
 .prefecture-card:hover{
   transform:
     translateY(-3px);
-
-  box-shadow:
-    0
-    7px
-    20px
-    rgba(
-      70,
-      130,
-      140,
-      .17
-    );
 }
 
 .prefecture-card-top{
   display:flex;
 
   justify-content:space-between;
-
   align-items:center;
 
   gap:10px;
@@ -762,7 +717,6 @@ button{
   display:none;
 
   align-items:center;
-
   justify-content:center;
 
   padding:14px;
@@ -883,7 +837,6 @@ button{
 
 .collection-close{
   width:42px;
-
   height:42px;
 
   border:0;
@@ -937,7 +890,6 @@ button{
 
 .legend-dot{
   width:12px;
-
   height:12px;
 
   border-radius:50%;
@@ -991,7 +943,7 @@ button{
 
 
 /* =========================================================
-   COLLECTION ITEM
+   COLLECTION CARD
 ========================================================= */
 
 .collection-item{
@@ -1005,9 +957,7 @@ button{
 
   text-align:center;
 
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease;
+  transition:.18s;
 }
 
 .collection-item:hover{
@@ -1165,7 +1115,6 @@ button{
   display:none;
 
   align-items:center;
-
   justify-content:center;
 
   padding:18px;
@@ -1214,40 +1163,18 @@ button{
 
   position:relative;
 
-  animation:
-    modalIn
-    .18s ease;
-}
-
-@keyframes modalIn{
-
-  from{
-    opacity:0;
-
-    transform:
-      translateY(12px)
-      scale(.97);
-  }
-
-  to{
-    opacity:1;
-
-    transform:none;
-  }
-
+  z-index:11001;
 }
 
 .modal-close{
   position:absolute;
 
   top:12px;
-
   right:12px;
 
   z-index:5;
 
   width:38px;
-
   height:38px;
 
   border:0;
@@ -1265,8 +1192,6 @@ button{
   color:#397b83;
 
   font-size:25px;
-
-  line-height:38px;
 
   cursor:pointer;
 
@@ -1438,8 +1363,7 @@ button{
 
   font-weight:900;
 
-  transition:
-    transform .15s ease;
+  transition:.15s;
 }
 
 .navigation-btn:hover{
@@ -1494,7 +1418,6 @@ button{
   appearance:none;
 
   width:28px;
-
   height:28px;
 
   border:
@@ -1691,8 +1614,16 @@ button{
 
 
 /* =========================================================
-   ERROR
+   LOADING / ERROR
 ========================================================= */
+
+.loading{
+  text-align:center;
+
+  padding:40px;
+
+  color:#6f9095;
+}
 
 .error-box{
   padding:16px;
@@ -1706,14 +1637,6 @@ button{
   font-size:14px;
 
   line-height:1.7;
-}
-
-.loading{
-  text-align:center;
-
-  padding:40px;
-
-  color:#6f9095;
 }
 
 
@@ -1958,6 +1881,10 @@ button{
 </header>
 
 
+<!-- =========================================================
+     TABS
+========================================================= -->
+
 <div class="main-tabs">
 
   <button
@@ -2003,6 +1930,10 @@ button{
 
 </div>
 
+
+<!-- =========================================================
+     PROGRESS
+========================================================= -->
 
 <div class="progress-bar">
 
@@ -2055,6 +1986,10 @@ button{
 </div>
 
 
+<!-- =========================================================
+     DOWNLOAD
+========================================================= -->
+
 <div class="download-box">
 
   <button
@@ -2064,12 +1999,14 @@ button{
     TXT
   </button>
 
+
   <button
     class="download-btn"
     onclick="downloadJSON()"
   >
     JSON
   </button>
+
 
   <button
     class="download-btn"
@@ -2080,6 +2017,10 @@ button{
 
 </div>
 
+
+<!-- =========================================================
+     HISTORY
+========================================================= -->
 
 <div class="history-box">
 
@@ -2098,12 +2039,14 @@ button{
       全部
     </button>
 
+
     <button
       id="historyLid"
       onclick="setHistoryFilter('lid')"
     >
       🔴 Poké Lid
     </button>
+
 
     <button
       id="historyCenter"
@@ -2125,7 +2068,7 @@ button{
 
 
 <!-- =========================================================
-     REGION → PREFECTURE
+     PREFECTURE PANEL
 ========================================================= -->
 
 <div
@@ -2149,6 +2092,7 @@ button{
         >
           區域
         </div>
+
 
         <div
           id="prefectureSummary"
@@ -2181,7 +2125,7 @@ button{
 
 
 <!-- =========================================================
-     PREFECTURE → ITEMS
+     COLLECTION PANEL
 ========================================================= -->
 
 <div
@@ -2205,6 +2149,7 @@ button{
         >
           縣
         </div>
+
 
         <div
           id="collectionSummary"
@@ -2279,7 +2224,7 @@ button{
 
 
 <!-- =========================================================
-     ITEM DETAIL
+     ITEM MODAL
 ========================================================= -->
 
 <div
@@ -2412,29 +2357,51 @@ button{
 <script>
 
 /* =========================================================
-   DATA
+   DATA URL
 ========================================================= */
 
 const DATA_URLS = {
+
   lid:
     "data/data.json",
 
   center:
     "data/pokemon_center.json"
+
+};
+
+
+/*
+ * GitHub Raw fallback
+ *
+ * 如果 GitHub Pages 暫時拿不到 JSON，
+ * 自動從 main branch 讀取。
+ */
+
+const RAW_DATA_URLS = {
+
+  lid:
+    "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/data/data.json",
+
+  center:
+    "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/data/pokemon_center.json"
+
 };
 
 
 const HISTORY_URLS = {
+
   lid:
     "history.json",
 
   center:
     "center_history.json"
+
 };
 
 
 /* =========================================================
-   PREFECTURES
+   PREF
 ========================================================= */
 
 const PREF = {
@@ -2553,20 +2520,26 @@ let collectionType =
 
 
 let dataSets = {
+
   lid:[],
   center:[]
+
 };
 
 
 let groups = {
+
   lid:{},
   center:{}
+
 };
 
 
 let obtainedIds = {
+
   lid:new Set(),
   center:new Set()
+
 };
 
 
@@ -2599,7 +2572,7 @@ let historyEntries =
 
 
 /* =========================================================
-   STORAGE
+   LOCAL STORAGE
 ========================================================= */
 
 const STORAGE_KEYS = {
@@ -2622,7 +2595,9 @@ function getItemId(item){
 }
 
 
-function loadLocalCollection(type){
+function loadLocalCollection(
+  type
+){
 
   try{
 
@@ -2642,26 +2617,33 @@ function loadLocalCollection(type){
     }
 
 
-    const data =
+    const parsed =
       JSON.parse(
         raw
       );
 
 
+    if(
+      !Array.isArray(parsed)
+    ){
+
+      obtainedIds[type] =
+        new Set();
+
+      return;
+
+    }
+
+
     obtainedIds[type] =
-      Array.isArray(data)
-
-      ?
       new Set(
-        data.map(String)
-      )
-
-      :
-      new Set();
+        parsed.map(String)
+      );
 
   }catch(error){
 
     console.error(
+      "LocalStorage error:",
       error
     );
 
@@ -2673,7 +2655,9 @@ function loadLocalCollection(type){
 }
 
 
-function saveLocalCollection(type){
+function saveLocalCollection(
+  type
+){
 
   localStorage.setItem(
 
@@ -2738,7 +2722,9 @@ function getItemImageUrl(
     return (
 
       "https://pokefuta.yuki.games/images/pokefuta/" +
-      encodeURIComponent(item.id) +
+      encodeURIComponent(
+        item.id
+      ) +
       ".png"
 
     );
@@ -2746,22 +2732,32 @@ function getItemImageUrl(
   }
 
 
-  return item.image || "";
+  return (
+    item.image ||
+    ""
+  );
 
 }
 
 
 /* =========================================================
-   JSON
+   LOAD JSON
 ========================================================= */
 
-async function loadJSON(url){
+async function fetchJSON(
+  url
+){
 
   const response =
     await fetch(
 
       url +
-      "?ts=" +
+      (
+        url.includes("?")
+        ? "&"
+        : "?"
+      ) +
+      "ts=" +
       Date.now(),
 
       {
@@ -2771,66 +2767,167 @@ async function loadJSON(url){
     );
 
 
-  if(!response.ok){
+  if(
+    !response.ok
+  ){
 
     throw new Error(
-
-      `${url} 無法取得。HTTP ` +
-      response.status
-
+      `HTTP ${response.status}: ${url}`
     );
 
   }
 
 
-  return await response.json();
+  const json =
+    await response.json();
+
+
+  if(
+    !json ||
+    !Array.isArray(
+      json.list
+    )
+  ){
+
+    throw new Error(
+      `${url} 格式錯誤`
+    );
+
+  }
+
+
+  return json;
 
 }
 
 
-/* =========================================================
-   DATA
-========================================================= */
+/*
+ * 先讀 GitHub Pages。
+ * 如果失敗，再讀 GitHub Raw。
+ */
 
 async function loadDataSet(
   type
 ){
 
-  try{
+  const urls = [
 
-    const json =
-      await loadJSON(
-        DATA_URLS[type]
+    DATA_URLS[type],
+
+    RAW_DATA_URLS[type]
+
+  ];
+
+
+  let lastError =
+    null;
+
+
+  for(
+    const url
+    of urls
+  ){
+
+    try{
+
+      const json =
+        await fetchJSON(
+          url
+        );
+
+
+      dataSets[type] =
+        json.list;
+
+
+      console.log(
+        `[${type}] loaded`,
+        dataSets[type].length,
+        "items from",
+        url
       );
 
 
-    if(
-      !json ||
-      !Array.isArray(
-        json.list
-      )
-    ){
+      return;
 
-      throw new Error(
-        `${DATA_URLS[type]} 格式錯誤`
+    }catch(error){
+
+      lastError =
+        error;
+
+      console.warn(
+        `[${type}] failed`,
+        url,
+        error
       );
 
     }
 
+  }
 
-    dataSets[type] =
-      json.list;
 
-  }catch(error){
+  dataSets[type] =
+    [];
 
-    console.error(
-      `${type} 資料載入失敗`,
-      error
+
+  console.error(
+    `[${type}] ALL DATA SOURCES FAILED`,
+    lastError
+  );
+
+
+  /*
+   * 不再讓錯誤完全無聲無息。
+   */
+
+  const regions =
+    document.getElementById(
+      "regions"
     );
 
 
-    dataSets[type] =
-      [];
+  if(
+    type === collectionType
+    &&
+    regions
+  ){
+
+    regions.innerHTML = `
+
+      <div
+        class="error-box"
+        style="grid-column:1/-1"
+      >
+
+        <b>
+          ⚠️ ${type === "center"
+            ? "Pokémon Center"
+            : "Poké Lid"
+          } 資料載入失敗
+        </b>
+
+        <br><br>
+
+        ${
+          escapeHtml(
+            lastError?.message ||
+            "未知錯誤"
+          )
+        }
+
+        <br><br>
+
+        請確認：
+
+        <br>
+
+        ${escapeHtml(
+          DATA_URLS[type]
+        )}
+
+      </div>
+
+    `;
 
   }
 
@@ -2923,33 +3020,34 @@ function switchCollectionType(
     );
 
 
-  if(type === "lid"){
+  document.getElementById(
+    "sectionTitle"
+  ).textContent =
 
-    document.getElementById(
-      "sectionTitle"
-    ).textContent =
-      "🔴 Poké Lid 蒐集進度";
+    type === "lid"
 
+    ?
 
-    document.getElementById(
-      "progressLabel"
-    ).textContent =
-      "Poké Lid 已收集：";
+    "🔴 Poké Lid 蒐集進度"
 
-  }else{
+    :
 
-    document.getElementById(
-      "sectionTitle"
-    ).textContent =
-      "🟡 Pokémon Center 蒐集進度";
+    "🟡 Pokémon Center 蒐集進度";
 
 
-    document.getElementById(
-      "progressLabel"
-    ).textContent =
-      "Pokémon Center 已收集：";
+  document.getElementById(
+    "progressLabel"
+  ).textContent =
 
-  }
+    type === "lid"
+
+    ?
+
+    "Poké Lid 已收集："
+
+    :
+
+    "Pokémon Center 已收集：";
 
 
   closeAllPanels();
@@ -2976,7 +3074,7 @@ function switchCollectionType(
 
 
 /* =========================================================
-   CLOSE
+   CLOSE PANELS
 ========================================================= */
 
 function closeAllPanels(){
@@ -3062,7 +3160,7 @@ function updateOverall(){
 
 
 /* =========================================================
-   REGIONS
+   REGION CARDS
 ========================================================= */
 
 function renderRegions(){
@@ -3079,31 +3177,9 @@ function renderRegions(){
     ];
 
 
-  if(!list.length){
-
-    el.innerHTML = `
-
-      <div
-        class="loading"
-        style="grid-column:1/-1"
-      >
-
-        ${
-          collectionType === "lid"
-
-          ?
-
-          "目前沒有 Poké Lid 資料。"
-
-          :
-
-          "目前沒有 Pokémon Center 資料。"
-
-        }
-
-      </div>
-
-    `;
+  if(
+    !list.length
+  ){
 
     return;
 
@@ -3272,7 +3348,7 @@ function renderRegions(){
 
 
 /* =========================================================
-   REGION
+   REGION → PREFECTURE
 ========================================================= */
 
 function openRegion(
@@ -3312,6 +3388,15 @@ function openRegion(
 
 
 function renderPrefectureSummary(){
+
+  if(
+    !currentRegion
+  ){
+
+    return;
+
+  }
+
 
   const region =
     REGIONS[
@@ -3501,10 +3586,6 @@ function renderPrefectureGrid(){
 }
 
 
-/* =========================================================
-   CLOSE PREFECTURE
-========================================================= */
-
 function closePrefecturePanel(){
 
   document
@@ -3547,7 +3628,7 @@ function prefectureOverlayClick(
 
 
 /* =========================================================
-   ITEMS
+   PREFECTURE → ITEMS
 ========================================================= */
 
 function openPrefectureCollection(
@@ -3709,9 +3790,7 @@ function renderCollectionGrid(){
 
     card.innerHTML = `
 
-      <div
-        class="collection-image-wrap"
-      >
+      <div class="collection-image-wrap">
 
         ${
           image
@@ -3725,7 +3804,7 @@ function renderCollectionGrid(){
               alt="${escapeHtml(title)}"
               loading="lazy"
               onerror="
-                this.style.visibility='hidden'
+                this.style.opacity='.25'
               "
             >
           `
@@ -3851,28 +3930,9 @@ function closeCollectionPanel(){
     [];
 
 
-  if(
-    document
-      .getElementById(
-        "prefecturePanel"
-      )
-      .classList
-      .contains(
-        "show"
-      )
-  ){
-
-    document.body.classList.add(
-      "no-scroll"
-    );
-
-  }else{
-
-    document.body.classList.remove(
-      "no-scroll"
-    );
-
-  }
+  document.body.classList.remove(
+    "no-scroll"
+  );
 
 }
 
@@ -3974,13 +4034,9 @@ function openModal(
   ).textContent =
 
     currentItemType === "lid"
-
     ?
-
     "🔴 Poké Lid"
-
     :
-
     "🟡 Pokémon Center";
 
 
@@ -4005,8 +4061,7 @@ function openModal(
     "";
 
 
-  const validCoords =
-
+  const valid =
     Number.isFinite(lat) &&
     Number.isFinite(lng);
 
@@ -4015,7 +4070,7 @@ function openModal(
     "modalCoordinate"
   ).textContent =
 
-    validCoords
+    valid
 
     ?
 
@@ -4040,14 +4095,11 @@ function openModal(
   updateModalObtained();
 
 
-  document
-    .getElementById(
-      "modalOverlay"
-    )
-    .classList
-    .add(
-      "show"
-    );
+  document.getElementById(
+    "modalOverlay"
+  ).classList.add(
+    "show"
+  );
 
 
   document.body.classList.add(
@@ -4059,7 +4111,9 @@ function openModal(
 
 function updateModalObtained(){
 
-  if(!currentItem){
+  if(
+    !currentItem
+  ){
 
     return;
 
@@ -4097,7 +4151,9 @@ function updateModalObtained(){
 
 function toggleObtained(){
 
-  if(!currentItem){
+  if(
+    !currentItem
+  ){
 
     return;
 
@@ -4167,7 +4223,7 @@ function toggleObtained(){
 
 
 /* =========================================================
-   NAVIGATION
+   APPLE MAPS
 ========================================================= */
 
 function openAppleMaps(
@@ -4181,7 +4237,9 @@ function openAppleMaps(
   }
 
 
-  if(!currentItem){
+  if(
+    !currentItem
+  ){
 
     return;
 
@@ -4255,6 +4313,10 @@ function openAppleMaps(
 }
 
 
+/* =========================================================
+   GOOGLE MAPS
+========================================================= */
+
 function openGoogleMaps(
   event
 ){
@@ -4266,7 +4328,9 @@ function openGoogleMaps(
   }
 
 
-  if(!currentItem){
+  if(
+    !currentItem
+  ){
 
     return;
 
@@ -4389,6 +4453,8 @@ async function copyCoordinate(
     );
 
 
+    textarea.focus();
+
     textarea.select();
 
 
@@ -4462,9 +4528,37 @@ function closeModal(
     );
 
 
-  document.body.classList.add(
-    "no-scroll"
-  );
+  if(
+    document
+      .getElementById(
+        "collectionPanel"
+      )
+      .classList
+      .contains(
+        "show"
+      )
+    ||
+    document
+      .getElementById(
+        "prefecturePanel"
+      )
+      .classList
+      .contains(
+        "show"
+      )
+  ){
+
+    document.body.classList.add(
+      "no-scroll"
+    );
+
+  }else{
+
+    document.body.classList.remove(
+      "no-scroll"
+    );
+
+  }
 
 }
 
@@ -4492,13 +4586,13 @@ function overlayClick(
 ========================================================= */
 
 function downloadBlob(
-  data,
+  blob,
   filename
 ){
 
   const url =
     URL.createObjectURL(
-      data
+      blob
     );
 
 
@@ -4528,11 +4622,14 @@ function downloadBlob(
 
 
   setTimeout(
+
     () =>
       URL.revokeObjectURL(
         url
       ),
+
     1000
+
   );
 
 }
@@ -4587,14 +4684,17 @@ function downloadAll(){
   downloadBlob(
 
     new Blob(
+
       [
         "\ufeff",
         lines.join("\n")
       ],
+
       {
         type:
           "text/plain;charset=utf-8"
       }
+
     ),
 
     collectionType === "lid"
@@ -4659,6 +4759,7 @@ function downloadJSON(){
   downloadBlob(
 
     new Blob(
+
       [
         JSON.stringify(
           output,
@@ -4666,10 +4767,12 @@ function downloadJSON(){
           2
         )
       ],
+
       {
         type:
           "application/json;charset=utf-8"
       }
+
     ),
 
     collectionType === "lid"
@@ -4733,6 +4836,7 @@ function downloadCSV(){
 
 
   const csv =
+
     rows
       .map(
 
@@ -4759,14 +4863,17 @@ function downloadCSV(){
   downloadBlob(
 
     new Blob(
+
       [
         "\ufeff",
         csv
       ],
+
       {
         type:
           "text/csv;charset=utf-8"
       }
+
     ),
 
     collectionType === "lid"
@@ -4791,14 +4898,16 @@ async function loadHistoryFile(
   try{
 
     const json =
-      await loadJSON(
+      await fetchJSON(
         HISTORY_URLS[type]
       );
 
 
     return (
+
       json.history ||
       []
+
     ).map(
 
       entry => ({
@@ -4811,11 +4920,7 @@ async function loadHistoryFile(
 
     );
 
-  }catch(error){
-
-    console.error(
-      error
-    );
+  }catch{
 
     return [];
 
@@ -4945,14 +5050,19 @@ function renderHistory(){
   }
 
 
-  if(!logs.length){
+  if(
+    !logs.length
+  ){
 
-    el.innerHTML =
-      `
-        <span class="muted">
-          尚無更新紀錄。
-        </span>
-      `;
+    el.innerHTML = `
+
+      <span class="muted">
+
+        尚無更新紀錄。
+
+      </span>
+
+    `;
 
     return;
 
@@ -4968,88 +5078,67 @@ function renderHistory(){
       )
       .map(
 
-        item => {
+        item => `
 
-          const added =
-            item.added ||
-            [];
+          <div class="history-card">
 
-
-          const removed =
-            item.removed ||
-            [];
-
-
-          const changed =
-            item.changed ||
-            [];
+            <b>
+              ${escapeHtml(
+                item.time ||
+                ""
+              )}
+            </b>
 
 
-          return `
+            <span
+              class="history-type ${item.type}"
+            >
 
-            <div class="history-card">
+              ${
+                item.type === "lid"
+                ?
+                "Poké Lid"
+                :
+                "Pokémon Center"
+              }
 
-              <b>
-                ${escapeHtml(
-                  item.time ||
-                  ""
-                )}
-              </b>
-
-
-              <span
-                class="history-type ${
-                  item.type
-                }"
-              >
-
-                ${
-                  item.type === "lid"
-                  ?
-                  "Poké Lid"
-                  :
-                  "Pokémon Center"
-                }
-
-              </span>
+            </span>
 
 
-              <br>
+            <br>
 
 
-              <span class="muted">
+            <span class="muted">
 
-                版本：
-                ${escapeHtml(
-                  item.total ??
-                  ""
-                )}
-                筆
+              版本：
+              ${escapeHtml(
+                item.total ??
+                ""
+              )}
+              筆
 
-              </span>
-
-
-              <br>
+            </span>
 
 
-              🟢 新增
-              ${added.length}
+            <br>
 
-              　
 
-              🔴 移除
-              ${removed.length}
+            🟢 新增
+            ${(item.added || []).length}
 
-              　
+            　
 
-              🟡 修改
-              ${changed.length}
+            🔴 移除
+            ${(item.removed || []).length}
 
-            </div>
+            　
 
-          `;
+            🟡 修改
+            ${(item.changed || []).length}
 
-        }
+          </div>
+
+        `
 
       )
       .join("");
@@ -5087,7 +5176,7 @@ function escapeHtml(
 
 
 /* =========================================================
-   ESC
+   ESC KEY
 ========================================================= */
 
 document.addEventListener(
@@ -5172,10 +5261,15 @@ async function start(){
     "lid"
   );
 
+
   loadLocalCollection(
     "center"
   );
 
+
+  /*
+   * 先把資料讀完。
+   */
 
   await Promise.all([
 
@@ -5188,6 +5282,23 @@ async function start(){
     )
 
   ]);
+
+
+  /*
+   * Center 如果成功取得，
+   * 這裡會直接顯示實際筆數。
+   */
+
+  console.log(
+    "Poké Lid:",
+    dataSets.lid.length
+  );
+
+
+  console.log(
+    "Pokémon Center:",
+    dataSets.center.length
+  );
 
 
   switchCollectionType(

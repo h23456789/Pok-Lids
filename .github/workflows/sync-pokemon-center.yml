@@ -1,4 +1,4 @@
-name: Sync Pokémon Center Data
+name: Sync Pokémon Center
 
 on:
 
@@ -22,21 +22,12 @@ jobs:
 
     steps:
 
-
-      # =====================================================
-      # Checkout
-      # =====================================================
-
       - name:
-          Checkout repository
+          Checkout
 
         uses:
           actions/checkout@v6
 
-
-      # =====================================================
-      # Python
-      # =====================================================
 
       - name:
           Setup Python
@@ -50,10 +41,6 @@ jobs:
             "3.12"
 
 
-      # =====================================================
-      # Dependencies
-      # =====================================================
-
       - name:
           Install dependencies
 
@@ -66,12 +53,8 @@ jobs:
             beautifulsoup4
 
 
-      # =====================================================
-      # Sync
-      # =====================================================
-
       - name:
-          Sync Pokémon Center
+          Run Pokémon Center Sync
 
         run: |
 
@@ -79,40 +62,42 @@ jobs:
             scripts/sync_pokemon_center.py
 
 
-      # =====================================================
-      # Validate JSON
-      # =====================================================
-
       - name:
-          Validate generated JSON
+          Validate data
 
         run: |
 
           python - <<'PY'
 
           import json
+
           from pathlib import Path
 
-          file = Path(
+
+          path = Path(
               "data/pokemon_center.json"
           )
 
-          if not file.exists():
+
+          if not path.exists():
 
               raise SystemExit(
-                  "找不到 pokemon_center.json"
+                  "pokemon_center.json 不存在"
               )
 
-          with file.open(
+
+          with path.open(
               encoding="utf-8"
           ) as f:
 
               data = json.load(f)
 
+
           items = data.get(
               "list",
               []
           )
+
 
           if not isinstance(
               items,
@@ -120,85 +105,55 @@ jobs:
           ):
 
               raise SystemExit(
-                  "pokemon_center.json 的 list 不是 array"
+                  "list 不是陣列"
               )
 
-          if len(items) == 0:
+
+          if not items:
 
               raise SystemExit(
-                  "同步結果為 0 筆，拒絕覆蓋資料"
+                  "資料為 0 筆，停止"
               )
 
+
           print(
-              "Pokémon Center：",
-              len(items),
-              "筆"
+              "Pokémon Center:",
+              len(items)
           )
+
 
           missing_pref = [
               x
-              for x in items
+              for x
+              in items
               if x.get("pref") is None
           ]
 
+
           missing_coords = [
               x
-              for x in items
+              for x
+              in items
               if not x.get("coords")
           ]
 
+
           print(
-              "缺少縣市：",
+              "缺少 pref:",
               len(missing_pref)
           )
 
+
           print(
-              "缺少座標：",
+              "缺少 coords:",
               len(missing_coords)
           )
 
           PY
 
 
-      # =====================================================
-      # Show data
-      # =====================================================
-
       - name:
-          Show Center summary
-
-        run: |
-
-          python - <<'PY'
-
-          import json
-
-          with open(
-              "data/pokemon_center.json",
-              encoding="utf-8"
-          ) as f:
-
-              data = json.load(f)
-
-          for item in data["list"]:
-
-              print(
-                  item["name"],
-                  "|",
-                  item.get("address", ""),
-                  "|",
-                  item.get("coords")
-              )
-
-          PY
-
-
-      # =====================================================
-      # Commit
-      # =====================================================
-
-      - name:
-          Commit changes
+          Commit
 
         run: |
 
@@ -218,12 +173,12 @@ jobs:
 
           if git diff --cached --quiet; then
 
-            echo "沒有資料變化"
+            echo "沒有變化"
 
           else
 
             git commit \
-              -m "chore: sync Pokémon Center data"
+              -m "chore: sync Pokémon Center"
 
             git push
 

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="zh-Hant">
+
 <head>
 
 <meta charset="utf-8">
@@ -9,18 +10,11 @@
   content="width=device-width,initial-scale=1,viewport-fit=cover"
 >
 
-<title>Pokémon Japan Collection｜日本寶可夢收集圖鑑</title>
-
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
->
+<title>
+  Pokémon Japan Collection｜日本寶可夢收集圖鑑
+</title>
 
 <style>
-
-/* =========================================================
-   BASE
-========================================================= */
 
 *{
   box-sizing:border-box;
@@ -32,6 +26,7 @@ body{
   padding:0;
 
   background:#e9f7fb;
+
   color:#315f66;
 
   font-family:
@@ -87,6 +82,7 @@ button{
   margin-bottom:18px;
 
   position:relative;
+
   overflow:hidden;
 }
 
@@ -99,7 +95,12 @@ button{
   border-radius:50%;
 
   background:
-    rgba(255,255,255,.45);
+    rgba(
+      255,
+      255,
+      255,
+      .45
+    );
 }
 
 .header:before{
@@ -181,7 +182,12 @@ button{
     0
     4px
     16px
-    rgba(70,130,140,.12);
+    rgba(
+      70,
+      130,
+      140,
+      .12
+    );
 
   transition:
     transform .18s ease,
@@ -197,7 +203,12 @@ button{
     0
     8px
     22px
-    rgba(70,130,140,.17);
+    rgba(
+      70,
+      130,
+      140,
+      .17
+    );
 }
 
 .main-tab.active{
@@ -212,7 +223,12 @@ button{
     0
     8px
     24px
-    rgba(70,130,140,.20);
+    rgba(
+      70,
+      130,
+      140,
+      .20
+    );
 }
 
 .main-tab-icon{
@@ -223,6 +239,7 @@ button{
   margin-top:4px;
 
   font-size:21px;
+
   font-weight:900;
 }
 
@@ -236,7 +253,7 @@ button{
 
 
 /* =========================================================
-   OVERALL PROGRESS
+   PROGRESS
 ========================================================= */
 
 .progress-bar{
@@ -253,18 +270,25 @@ button{
   display:flex;
 
   align-items:center;
+
   justify-content:center;
 
   gap:18px;
 
   font-size:23px;
+
   font-weight:900;
 
   box-shadow:
     0
     4px
     12px
-    rgba(76,150,90,.15);
+    rgba(
+      76,
+      150,
+      90,
+      .15
+    );
 
   margin-bottom:20px;
 }
@@ -284,6 +308,7 @@ button{
   color:#397b83;
 
   font-size:22px;
+
   font-weight:900;
 
   margin:
@@ -294,7 +319,7 @@ button{
 
 
 /* =========================================================
-   REGION CARDS
+   REGION
 ========================================================= */
 
 .region-grid{
@@ -320,7 +345,12 @@ button{
     0
     4px
     16px
-    rgba(70,130,140,.12);
+    rgba(
+      70,
+      130,
+      140,
+      .12
+    );
 
   cursor:pointer;
 
@@ -337,7 +367,12 @@ button{
     0
     8px
     24px
-    rgba(70,130,140,.18);
+    rgba(
+      70,
+      130,
+      140,
+      .18
+    );
 }
 
 .region-images{
@@ -372,13 +407,11 @@ button{
   opacity:.16;
 
   background-image:
-
     radial-gradient(
       circle at 20px 20px,
       #fff 0 10px,
       transparent 11px
     ),
-
     radial-gradient(
       circle at 65px 65px,
       #fff 0 10px,
@@ -400,6 +433,7 @@ button{
   object-fit:contain;
 
   position:relative;
+
   z-index:1;
 
   filter:
@@ -407,7 +441,12 @@ button{
       0
       3px
       4px
-      rgba(0,0,0,.20)
+      rgba(
+        0,
+        0,
+        0,
+        .20
+      )
     );
 }
 
@@ -434,6 +473,7 @@ button{
 
 .region-name{
   font-size:22px;
+
   font-weight:900;
 
   color:#4c7f86;
@@ -445,6 +485,7 @@ button{
   color:#27bea9;
 
   font-size:27px;
+
   font-weight:900;
 }
 
@@ -454,142 +495,6 @@ button{
   color:#83a3a7;
 
   font-size:13px;
-}
-
-
-/* =========================================================
-   MAP
-========================================================= */
-
-.map-box{
-  background:#fff;
-
-  border-radius:20px;
-
-  padding:12px;
-
-  box-shadow:
-    0
-    4px
-    16px
-    rgba(70,130,140,.12);
-
-  margin-top:22px;
-}
-
-.map-title{
-  display:flex;
-
-  justify-content:space-between;
-  align-items:center;
-
-  padding:
-    5px
-    8px
-    12px;
-}
-
-.map-title h2{
-  margin:0;
-
-  font-size:21px;
-
-  color:#397b83;
-}
-
-.map-title span{
-  font-size:12px;
-
-  color:#829a9e;
-}
-
-#map{
-  height:680px;
-
-  width:100%;
-
-  border-radius:15px;
-
-  overflow:hidden;
-}
-
-.leaflet-control-zoom{
-  border:0 !important;
-
-  box-shadow:
-    0
-    3px
-    12px
-    rgba(0,0,0,.15) !important;
-}
-
-.leaflet-control-zoom a{
-  color:#397b83 !important;
-}
-
-
-/* =========================================================
-   MAP MARKER
-========================================================= */
-
-.poke-marker{
-  width:18px;
-  height:18px;
-
-  border-radius:50%;
-
-  border:3px solid #fff;
-
-  box-shadow:
-    0
-    2px
-    7px
-    rgba(0,0,0,.4),
-
-    0
-    0
-    0
-    1px
-    rgba(0,0,0,.15);
-}
-
-.poke-marker.not-obtained{
-  background:#ef4b55;
-}
-
-.poke-marker.obtained{
-  background:#27c978;
-}
-
-
-/* =========================================================
-   POINT STATUS
-========================================================= */
-
-.point-status{
-  margin-top:10px;
-
-  padding:
-    12px
-    15px;
-
-  background:#f2fbfa;
-
-  border-radius:12px;
-
-  color:#397b83;
-
-  font-size:14px;
-
-  display:none;
-}
-
-.point-status.show{
-  display:block;
-}
-
-.muted{
-  color:#81999d;
 }
 
 
@@ -647,7 +552,12 @@ button{
     0
     20px
     80px
-    rgba(0,0,0,.35);
+    rgba(
+      0,
+      0,
+      0,
+      .35
+    );
 
   display:flex;
 
@@ -669,6 +579,7 @@ button{
   display:flex;
 
   align-items:center;
+
   justify-content:space-between;
 
   gap:15px;
@@ -696,6 +607,7 @@ button{
 
 .panel-close{
   width:42px;
+
   height:42px;
 
   border:0;
@@ -748,7 +660,12 @@ button{
     0
     3px
     12px
-    rgba(70,130,140,.10);
+    rgba(
+      70,
+      130,
+      140,
+      .10
+    );
 
   transition:
     transform .15s ease,
@@ -763,13 +680,19 @@ button{
     0
     7px
     20px
-    rgba(70,130,140,.17);
+    rgba(
+      70,
+      130,
+      140,
+      .17
+    );
 }
 
 .prefecture-card-top{
   display:flex;
 
   justify-content:space-between;
+
   align-items:center;
 
   gap:10px;
@@ -879,7 +802,12 @@ button{
     0
     20px
     80px
-    rgba(0,0,0,.35);
+    rgba(
+      0,
+      0,
+      0,
+      .35
+    );
 
   display:flex;
 
@@ -955,6 +883,7 @@ button{
 
 .collection-close{
   width:42px;
+
   height:42px;
 
   border:0;
@@ -1008,6 +937,7 @@ button{
 
 .legend-dot{
   width:12px;
+
   height:12px;
 
   border-radius:50%;
@@ -1085,12 +1015,8 @@ button{
     translateY(-4px);
 }
 
-
-/* 已收集 */
-
 .collection-item.obtained{
   box-shadow:
-
     0
     0
     0
@@ -1101,7 +1027,6 @@ button{
       120,
       .50
     ),
-
     0
     0
     24px
@@ -1111,7 +1036,6 @@ button{
       120,
       .85
     ),
-
     0
     8px
     20px
@@ -1123,12 +1047,8 @@ button{
     );
 }
 
-
-/* 未收集 */
-
 .collection-item.not-obtained{
   box-shadow:
-
     0
     0
     0
@@ -1139,7 +1059,6 @@ button{
       85,
       .45
     ),
-
     0
     0
     24px
@@ -1149,7 +1068,6 @@ button{
       85,
       .75
     ),
-
     0
     8px
     20px
@@ -1169,6 +1087,7 @@ button{
   display:flex;
 
   align-items:center;
+
   justify-content:center;
 
   border-radius:14px;
@@ -1180,26 +1099,23 @@ button{
 
 .collection-image{
   width:100%;
+
   height:100%;
 
   object-fit:contain;
-
-  transition:
-    transform .18s ease;
 
   filter:
     drop-shadow(
       0
       3px
       5px
-      rgba(0,0,0,.22)
+      rgba(
+        0,
+        0,
+        0,
+        .22
+      )
     );
-}
-
-.collection-item:hover
-.collection-image{
-  transform:
-    scale(1.05);
 }
 
 .collection-city{
@@ -1236,7 +1152,7 @@ button{
 
 
 /* =========================================================
-   THIRD LAYER
+   MODAL
 ========================================================= */
 
 .modal-overlay{
@@ -1289,7 +1205,12 @@ button{
     0
     20px
     70px
-    rgba(0,0,0,.35);
+    rgba(
+      0,
+      0,
+      0,
+      .35
+    );
 
   position:relative;
 
@@ -1301,21 +1222,17 @@ button{
 @keyframes modalIn{
 
   from{
-
     opacity:0;
 
     transform:
       translateY(12px)
       scale(.97);
-
   }
 
   to{
-
     opacity:1;
 
     transform:none;
-
   }
 
 }
@@ -1324,11 +1241,13 @@ button{
   position:absolute;
 
   top:12px;
+
   right:12px;
 
   z-index:5;
 
   width:38px;
+
   height:38px;
 
   border:0;
@@ -1355,7 +1274,12 @@ button{
     0
     2px
     10px
-    rgba(0,0,0,.15);
+    rgba(
+      0,
+      0,
+      0,
+      .15
+    );
 }
 
 .modal-image-wrap{
@@ -1386,7 +1310,12 @@ button{
       0
       5px
       8px
-      rgba(0,0,0,.2)
+      rgba(
+        0,
+        0,
+        0,
+        .2
+      )
     );
 }
 
@@ -1395,25 +1324,20 @@ button{
 }
 
 .modal-type{
-
   font-size:12px;
 
   color:#6d959b;
 
   margin-bottom:2px;
-
 }
 
 .modal-pref{
-
   font-size:13px;
 
   color:#7b999d;
-
 }
 
 .modal-city{
-
   font-size:25px;
 
   font-weight:900;
@@ -1426,11 +1350,9 @@ button{
     10px;
 
   line-height:1.35;
-
 }
 
 .modal-address{
-
   color:#637f83;
 
   font-size:14px;
@@ -1438,11 +1360,9 @@ button{
   line-height:1.6;
 
   margin-bottom:12px;
-
 }
 
 .coordinate{
-
   display:inline-block;
 
   padding:
@@ -1466,11 +1386,9 @@ button{
   max-width:100%;
 
   overflow-wrap:anywhere;
-
 }
 
 .copy-hint{
-
   display:inline-block;
 
   margin-left:8px;
@@ -1484,22 +1402,18 @@ button{
   opacity:0;
 
   transition:.2s;
-
 }
 
 .copy-hint.show{
-
   opacity:1;
-
 }
 
 
 /* =========================================================
-   NAVIGATION BUTTONS
+   NAVIGATION
 ========================================================= */
 
 .map-navigation{
-
   display:grid;
 
   grid-template-columns:
@@ -1509,11 +1423,9 @@ button{
   gap:10px;
 
   margin-top:16px;
-
 }
 
 .navigation-btn{
-
   border:0;
 
   border-radius:13px;
@@ -1527,41 +1439,32 @@ button{
   font-weight:900;
 
   transition:
-    transform .15s ease,
-    opacity .15s ease;
-
+    transform .15s ease;
 }
 
 .navigation-btn:hover{
-
   transform:
     translateY(-2px);
-
 }
 
 .apple-map-btn{
-
   background:#111;
 
   color:#fff;
-
 }
 
 .google-map-btn{
-
   background:#4285f4;
 
   color:#fff;
-
 }
 
 
 /* =========================================================
-   OBTAINED
+   OBTAIN
 ========================================================= */
 
 .obtain-row{
-
   margin-top:18px;
 
   border-top:
@@ -1569,11 +1472,9 @@ button{
     #edf1f1;
 
   padding-top:16px;
-
 }
 
 .obtain-label{
-
   display:flex;
 
   align-items:center;
@@ -1587,14 +1488,13 @@ button{
   font-weight:900;
 
   color:#397b83;
-
 }
 
 .obtain-label input{
-
   appearance:none;
 
   width:28px;
+
   height:28px;
 
   border:
@@ -1608,19 +1508,15 @@ button{
   cursor:pointer;
 
   background:#fff;
-
 }
 
 .obtain-label input:checked{
-
   background:#27c978;
 
   border-color:#27c978;
-
 }
 
 .obtain-label input:checked:after{
-
   content:"✓";
 
   position:absolute;
@@ -1634,11 +1530,9 @@ button{
   left:3px;
 
   top:-1px;
-
 }
 
 .save-status{
-
   margin-top:8px;
 
   color:#27bd7a;
@@ -1646,7 +1540,6 @@ button{
   font-size:13px;
 
   min-height:18px;
-
 }
 
 
@@ -1655,7 +1548,6 @@ button{
 ========================================================= */
 
 .history-box{
-
   background:#fff;
 
   border-radius:20px;
@@ -1666,22 +1558,23 @@ button{
     0
     4px
     16px
-    rgba(70,130,140,.12);
+    rgba(
+      70,
+      130,
+      140,
+      .12
+    );
 
   margin-top:22px;
-
 }
 
 .history-box h2{
-
   margin-top:0;
 
   color:#397b83;
-
 }
 
 .history-filter{
-
   display:flex;
 
   gap:8px;
@@ -1689,11 +1582,9 @@ button{
   flex-wrap:wrap;
 
   margin-bottom:12px;
-
 }
 
 .history-filter button{
-
   border:0;
 
   border-radius:999px;
@@ -1711,19 +1602,15 @@ button{
   font-weight:800;
 
   cursor:pointer;
-
 }
 
 .history-filter button.active{
-
   background:#397b83;
 
   color:#fff;
-
 }
 
 .history-card{
-
   border-bottom:
     1px solid
     #eee;
@@ -1733,17 +1620,13 @@ button{
     0;
 
   font-size:14px;
-
 }
 
 .history-card:last-child{
-
   border-bottom:0;
-
 }
 
 .history-type{
-
   display:inline-block;
 
   border-radius:999px;
@@ -1757,23 +1640,18 @@ button{
   font-size:10px;
 
   font-weight:900;
-
 }
 
 .history-type.lid{
-
   background:#ffe8e8;
 
   color:#df4a52;
-
 }
 
 .history-type.center{
-
   background:#fff3ce;
 
   color:#b68100;
-
 }
 
 
@@ -1782,7 +1660,6 @@ button{
 ========================================================= */
 
 .download-box{
-
   margin-top:22px;
 
   display:flex;
@@ -1792,11 +1669,9 @@ button{
   justify-content:center;
 
   gap:8px;
-
 }
 
 .download-btn{
-
   border:0;
 
   border-radius:999px;
@@ -1812,7 +1687,6 @@ button{
   cursor:pointer;
 
   font-weight:800;
-
 }
 
 
@@ -1821,11 +1695,6 @@ button{
 ========================================================= */
 
 .error-box{
-
-  margin:
-    10px
-    0;
-
   padding:16px;
 
   border-radius:12px;
@@ -1837,17 +1706,14 @@ button{
   font-size:14px;
 
   line-height:1.7;
-
 }
 
 .loading{
-
   text-align:center;
 
   padding:40px;
 
   color:#6f9095;
-
 }
 
 
@@ -1858,13 +1724,11 @@ button{
 @media(max-width:900px){
 
   .collection-grid{
-
     grid-template-columns:
       repeat(
         4,
         minmax(0,1fr)
       );
-
   }
 
 }
@@ -1873,64 +1737,47 @@ button{
 @media(max-width:700px){
 
   .container{
-
     padding:10px;
-
   }
 
   .header{
-
     border-radius:18px;
 
     padding:
       22px
       15px
       18px;
-
   }
 
   .logo-title h1{
-
     font-size:23px;
-
   }
 
   .main-tabs{
-
     gap:8px;
-
   }
 
   .main-tab{
-
     padding:
       12px
       8px;
 
     border-radius:16px;
-
   }
 
   .main-tab-icon{
-
     font-size:22px;
-
   }
 
   .main-tab-title{
-
     font-size:16px;
-
   }
 
   .main-tab-sub{
-
     font-size:10px;
-
   }
 
   .progress-bar{
-
     font-size:18px;
 
     padding:
@@ -1938,27 +1785,20 @@ button{
       12px;
 
     gap:8px;
-
   }
 
   .progress-bar .ball{
-
     font-size:18px;
-
   }
 
   .region-grid{
-
     grid-template-columns:
-      1fr
-      1fr;
+      1fr 1fr;
 
     gap:10px;
-
   }
 
   .region-images{
-
     height:120px;
 
     padding:
@@ -1966,160 +1806,79 @@ button{
       5px;
 
     gap:3px;
-
   }
 
   .region-info{
-
     padding:
       12px
       5px
       14px;
-
   }
 
   .region-name{
-
     font-size:17px;
-
   }
 
   .region-count{
-
     font-size:21px;
-
   }
 
   .region-percent{
-
     font-size:11px;
-
   }
 
-  .map-box{
-
-    margin-top:14px;
-
-    padding:7px;
-
-  }
-
-  .map-title{
-
-    padding:
-      5px
-      6px
-      9px;
-
-  }
-
-  .map-title h2{
-
-    font-size:18px;
-
-  }
-
-  .map-title span{
-
-    display:none;
-
-  }
-
-  #map{
-
-    height:520px;
-
-  }
-
-  .prefecture-window{
-
+  .prefecture-window,
+  .collection-window{
     max-height:
       calc(
         100vh - 14px
       );
 
     border-radius:20px;
-
   }
 
-  .prefecture-header{
-
+  .prefecture-header,
+  .collection-header{
     padding:15px;
-
   }
 
-  .prefecture-title{
-
+  .prefecture-title,
+  .collection-title{
     font-size:21px;
-
   }
 
   .prefecture-grid{
-
     padding:12px;
 
     gap:10px;
 
     grid-template-columns:
       1fr;
-
   }
 
   .prefecture-card{
-
     padding:13px;
-
-  }
-
-  .collection-window{
-
-    max-height:
-      calc(
-        100vh - 14px
-      );
-
-    border-radius:20px;
-
-  }
-
-  .collection-header{
-
-    padding:15px;
-
-  }
-
-  .collection-title{
-
-    font-size:21px;
-
   }
 
   .collection-header-actions{
-
     gap:5px;
-
   }
 
   .back-btn{
-
     padding:
       8px
       11px;
 
     font-size:13px;
-
   }
 
   .collection-toolbar{
-
     padding:
       10px
       14px;
-
   }
 
   .collection-grid{
-
     padding:12px;
 
     gap:12px;
@@ -2129,30 +1888,22 @@ button{
         3,
         minmax(0,1fr)
       );
-
   }
 
   .collection-city{
-
     font-size:12px;
-
   }
 
   .map-navigation{
-
     grid-template-columns:
       1fr;
-
   }
 
   .modal-overlay{
-
     padding:10px;
-
   }
 
   .poke-modal{
-
     width:
       calc(
         100vw - 20px
@@ -2164,23 +1915,18 @@ button{
       );
 
     border-radius:20px;
-
   }
 
   .modal-image{
-
     width:
       min(
         260px,
         78vw
       );
-
   }
 
   .modal-city{
-
     font-size:22px;
-
   }
 
 }
@@ -2192,13 +1938,8 @@ button{
 
 <body>
 
-
 <div class="container">
 
-
-<!-- =========================================================
-     HEADER
-========================================================= -->
 
 <header class="header">
 
@@ -2217,12 +1958,7 @@ button{
 </header>
 
 
-<!-- =========================================================
-     MAIN TABS
-========================================================= -->
-
 <div class="main-tabs">
-
 
   <button
     id="tabLid"
@@ -2268,16 +2004,11 @@ button{
 </div>
 
 
-<!-- =========================================================
-     OVERALL PROGRESS
-========================================================= -->
-
 <div class="progress-bar">
 
   <span class="ball">
     ◉
   </span>
-
 
   <span>
 
@@ -2285,21 +2016,17 @@ button{
       Poké Lid 已收集：
     </span>
 
-
     <b id="totalObtained">
       0
     </b>
 
-
     ／
-
 
     <b id="totalCount">
       0
     </b>
 
   </span>
-
 
   <span class="ball">
     ◉
@@ -2308,17 +2035,11 @@ button{
 </div>
 
 
-<!-- =========================================================
-     COLLECTION TITLE
-========================================================= -->
-
 <div
   id="sectionTitle"
   class="section-title"
 >
-
   🔴 Poké Lid 蒐集進度
-
 </div>
 
 
@@ -2334,40 +2055,6 @@ button{
 </div>
 
 
-<!-- =========================================================
-     MAP
-========================================================= -->
-
-<div class="map-box">
-
-  <div class="map-title">
-
-    <h2 id="mapTitle">
-      🗾 Poké Lid 地圖
-    </h2>
-
-    <span>
-      點擊行政區 → 顯示該區點位
-    </span>
-
-  </div>
-
-
-  <div id="map"></div>
-
-
-  <div
-    id="pointStatus"
-    class="point-status"
-  ></div>
-
-</div>
-
-
-<!-- =========================================================
-     DOWNLOAD
-========================================================= -->
-
 <div class="download-box">
 
   <button
@@ -2377,14 +2064,12 @@ button{
     TXT
   </button>
 
-
   <button
     class="download-btn"
     onclick="downloadJSON()"
   >
     JSON
   </button>
-
 
   <button
     class="download-btn"
@@ -2395,10 +2080,6 @@ button{
 
 </div>
 
-
-<!-- =========================================================
-     HISTORY
-========================================================= -->
 
 <div class="history-box">
 
@@ -2417,14 +2098,12 @@ button{
       全部
     </button>
 
-
     <button
       id="historyLid"
       onclick="setHistoryFilter('lid')"
     >
       🔴 Poké Lid
     </button>
-
 
     <button
       id="historyCenter"
@@ -2442,12 +2121,11 @@ button{
 
 </div>
 
-
 </div>
 
 
 <!-- =========================================================
-     FIRST LAYER
+     REGION → PREFECTURE
 ========================================================= -->
 
 <div
@@ -2471,7 +2149,6 @@ button{
         >
           區域
         </div>
-
 
         <div
           id="prefectureSummary"
@@ -2504,7 +2181,7 @@ button{
 
 
 <!-- =========================================================
-     SECOND LAYER
+     PREFECTURE → ITEMS
 ========================================================= -->
 
 <div
@@ -2528,7 +2205,6 @@ button{
         >
           縣
         </div>
-
 
         <div
           id="collectionSummary"
@@ -2603,7 +2279,7 @@ button{
 
 
 <!-- =========================================================
-     THIRD LAYER
+     ITEM DETAIL
 ========================================================= -->
 
 <div
@@ -2613,7 +2289,6 @@ button{
 >
 
   <div
-    id="pokeModal"
     class="poke-modal"
     onclick="event.stopPropagation()"
   >
@@ -2621,7 +2296,6 @@ button{
     <button
       class="modal-close"
       onclick="closeModal(event)"
-      aria-label="關閉"
     >
       ×
     </button>
@@ -2640,7 +2314,6 @@ button{
 
 
     <div class="modal-content">
-
 
       <div
         id="modalType"
@@ -2685,8 +2358,6 @@ button{
       </div>
 
 
-      <!-- Navigation -->
-
       <div class="map-navigation">
 
         <button
@@ -2707,8 +2378,6 @@ button{
       </div>
 
 
-      <!-- Obtained -->
-
       <div class="obtain-row">
 
         <label class="obtain-label">
@@ -2718,7 +2387,6 @@ button{
             type="checkbox"
             onchange="toggleObtained()"
           >
-
 
           <span>
             已獲得
@@ -2734,17 +2402,11 @@ button{
 
       </div>
 
-
     </div>
 
   </div>
 
 </div>
-
-
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-></script>
 
 
 <script>
@@ -2754,33 +2416,25 @@ button{
 ========================================================= */
 
 const DATA_URLS = {
-
   lid:
     "data/data.json",
 
   center:
     "data/pokemon_center.json"
-
 };
 
 
 const HISTORY_URLS = {
-
   lid:
     "history.json",
 
   center:
     "center_history.json"
-
 };
 
 
-const GEOJSON_URL =
-  "prefectures.geojson";
-
-
 /* =========================================================
-   PREFECTURE
+   PREFECTURES
 ========================================================= */
 
 const PREF = {
@@ -2899,29 +2553,20 @@ let collectionType =
 
 
 let dataSets = {
-
   lid:[],
-
   center:[]
-
 };
 
 
 let groups = {
-
   lid:{},
-
   center:{}
-
 };
 
 
 let obtainedIds = {
-
   lid:new Set(),
-
   center:new Set()
-
 };
 
 
@@ -2954,7 +2599,7 @@ let historyEntries =
 
 
 /* =========================================================
-   LOCAL STORAGE
+   STORAGE
 ========================================================= */
 
 const STORAGE_KEYS = {
@@ -2968,9 +2613,16 @@ const STORAGE_KEYS = {
 };
 
 
-function loadLocalCollection(
-  type
-){
+function getItemId(item){
+
+  return String(
+    item.id
+  );
+
+}
+
+
+function loadLocalCollection(type){
 
   try{
 
@@ -2990,33 +2642,26 @@ function loadLocalCollection(
     }
 
 
-    const values =
-      JSON.parse(raw);
-
-
-    if(!Array.isArray(values)){
-
-      obtainedIds[type] =
-        new Set();
-
-      return;
-
-    }
+    const data =
+      JSON.parse(
+        raw
+      );
 
 
     obtainedIds[type] =
+      Array.isArray(data)
+
+      ?
       new Set(
+        data.map(String)
+      )
 
-        values
-          .map(String)
-          .filter(Boolean)
-
-      );
+      :
+      new Set();
 
   }catch(error){
 
     console.error(
-      "LocalStorage 讀取失敗:",
       error
     );
 
@@ -3028,51 +2673,25 @@ function loadLocalCollection(
 }
 
 
-function saveLocalCollection(
-  type
-){
+function saveLocalCollection(type){
 
-  try{
+  localStorage.setItem(
 
-    localStorage.setItem(
+    STORAGE_KEYS[type],
 
-      STORAGE_KEYS[type],
+    JSON.stringify(
+      [
+        ...obtainedIds[type]
+      ]
+    )
 
-      JSON.stringify(
-        [...obtainedIds[type]]
-      )
-
-    );
-
-  }catch(error){
-
-    console.error(
-      "LocalStorage 儲存失敗:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   ITEM ID
-========================================================= */
-
-function getItemId(
-  item
-){
-
-  return String(
-    item.id
   );
 
 }
 
 
 /* =========================================================
-   ITEM TITLE
+   ITEM
 ========================================================= */
 
 function getItemTitle(
@@ -3087,11 +2706,8 @@ function getItemTitle(
     return (
 
       item.name ||
-
       item.title ||
-
       item.city ||
-
       "Pokémon Center"
 
     );
@@ -3102,19 +2718,13 @@ function getItemTitle(
   return (
 
     item.city ||
-
     item.title ||
-
     "Poké Lid"
 
   );
 
 }
 
-
-/* =========================================================
-   IMAGE URL
-========================================================= */
 
 function getItemImageUrl(
   type,
@@ -3128,11 +2738,7 @@ function getItemImageUrl(
     return (
 
       "https://pokefuta.yuki.games/images/pokefuta/" +
-
-      encodeURIComponent(
-        item.id
-      ) +
-
+      encodeURIComponent(item.id) +
       ".png"
 
     );
@@ -3140,21 +2746,16 @@ function getItemImageUrl(
   }
 
 
-  return (
-    item.image ||
-    ""
-  );
+  return item.image || "";
 
 }
 
 
 /* =========================================================
-   LOAD JSON
+   JSON
 ========================================================= */
 
-async function loadJSON(
-  url
-){
+async function loadJSON(url){
 
   const response =
     await fetch(
@@ -3188,7 +2789,7 @@ async function loadJSON(
 
 
 /* =========================================================
-   LOAD DATA
+   DATA
 ========================================================= */
 
 async function loadDataSet(
@@ -3220,11 +2821,10 @@ async function loadDataSet(
     dataSets[type] =
       json.list;
 
-
   }catch(error){
 
     console.error(
-      `${type} 資料載入失敗:`,
+      `${type} 資料載入失敗`,
       error
     );
 
@@ -3241,10 +2841,6 @@ async function loadDataSet(
 
 }
 
-
-/* =========================================================
-   BUILD GROUPS
-========================================================= */
 
 function buildGroups(
   type
@@ -3264,7 +2860,9 @@ function buildGroups(
       String(item.pref);
 
 
-    if(!groups[type][pref]){
+    if(
+      !groups[type][pref]
+    ){
 
       groups[type][pref] =
         [];
@@ -3282,7 +2880,7 @@ function buildGroups(
 
 
 /* =========================================================
-   SWITCH COLLECTION
+   SWITCH
 ========================================================= */
 
 function switchCollectionType(
@@ -3338,12 +2936,6 @@ function switchCollectionType(
     ).textContent =
       "Poké Lid 已收集：";
 
-
-    document.getElementById(
-      "mapTitle"
-    ).textContent =
-      "🗾 Poké Lid 地圖";
-
   }else{
 
     document.getElementById(
@@ -3357,13 +2949,10 @@ function switchCollectionType(
     ).textContent =
       "Pokémon Center 已收集：";
 
-
-    document.getElementById(
-      "mapTitle"
-    ).textContent =
-      "🏬 Pokémon Center 地圖";
-
   }
+
+
+  closeAllPanels();
 
 
   currentRegion =
@@ -3379,25 +2968,15 @@ function switchCollectionType(
     null;
 
 
-  closeAllPanels();
-
-
   renderRegions();
 
   updateOverall();
-
-
-  clearPointLayer();
-
-  resetSelectedLayer();
-
-  refreshMapForCollectionType();
 
 }
 
 
 /* =========================================================
-   CLOSE ALL PANELS
+   CLOSE
 ========================================================= */
 
 function closeAllPanels(){
@@ -3448,8 +3027,7 @@ function updateOverall(){
   const list =
     dataSets[
       collectionType
-    ] ||
-    [];
+    ];
 
 
   const total =
@@ -3484,7 +3062,7 @@ function updateOverall(){
 
 
 /* =========================================================
-   REGION
+   REGIONS
 ========================================================= */
 
 function renderRegions(){
@@ -3495,18 +3073,10 @@ function renderRegions(){
     );
 
 
-  if(!el){
-
-    return;
-
-  }
-
-
   const list =
     dataSets[
       collectionType
-    ] ||
-    [];
+    ];
 
 
   if(!list.length){
@@ -3622,61 +3192,43 @@ function renderRegions(){
         );
 
 
-    const imageHtml =
-      sample.length
+    const images =
+      sample
+        .map(
 
-      ?
-
-      sample.map(
-
-        item => {
-
-          const imageUrl =
-            getItemImageUrl(
-              collectionType,
-              item
-            );
-
-
-          return `
+          item => `
 
             <img
               class="region-image"
               src="${escapeHtml(
-                imageUrl
-              )}"
-              alt="${escapeHtml(
-                getItemTitle(
+                getItemImageUrl(
                   collectionType,
                   item
                 )
               )}"
+              alt=""
               loading="lazy"
-              onerror="
-                this.style.visibility='hidden'
-              "
             >
 
-          `;
+          `
 
-        }
-
-      ).join("")
-
-      :
-
-      `
-        <div class="region-empty">
-          尚無資料
-        </div>
-      `;
+        )
+        .join("");
 
 
     card.innerHTML = `
 
       <div class="region-images">
 
-        ${imageHtml}
+        ${
+          images ||
+
+          `
+            <div class="region-empty">
+              尚無資料
+            </div>
+          `
+        }
 
       </div>
 
@@ -3694,17 +3246,14 @@ function renderRegions(){
 
         <div class="region-count">
 
-          ${obtained}
-          /
-          ${total}
+          ${obtained} / ${total}
 
         </div>
 
 
         <div class="region-percent">
 
-          完成率
-          ${percent}%
+          完成率 ${percent}%
 
         </div>
 
@@ -3723,7 +3272,7 @@ function renderRegions(){
 
 
 /* =========================================================
-   REGION → PREFECTURE
+   REGION
 ========================================================= */
 
 function openRegion(
@@ -3762,18 +3311,7 @@ function openRegion(
 }
 
 
-/* =========================================================
-   REGION SUMMARY
-========================================================= */
-
 function renderPrefectureSummary(){
-
-  if(!currentRegion){
-
-    return;
-
-  }
-
 
   const region =
     REGIONS[
@@ -3815,20 +3353,10 @@ function renderPrefectureSummary(){
     "prefectureSummary"
   ).textContent =
 
-    `${
-      collectionType === "lid"
-      ?
-      "Poké Lid"
-      :
-      "Pokémon Center"
-    } 已收集 ${obtained} / ${items.length}`;
+    `已收集 ${obtained} / ${items.length}`;
 
 }
 
-
-/* =========================================================
-   PREFECTURE GRID
-========================================================= */
 
 function renderPrefectureGrid(){
 
@@ -3836,24 +3364,6 @@ function renderPrefectureGrid(){
     document.getElementById(
       "prefectureGrid"
     );
-
-
-  if(!el){
-
-    return;
-
-  }
-
-
-  el.innerHTML =
-    "";
-
-
-  if(!currentRegion){
-
-    return;
-
-  }
 
 
   const region =
@@ -3866,6 +3376,10 @@ function renderPrefectureGrid(){
     dataSets[
       collectionType
     ];
+
+
+  el.innerHTML =
+    "";
 
 
   for(
@@ -3952,9 +3466,7 @@ function renderPrefectureGrid(){
 
         <div class="prefecture-count">
 
-          ${obtained}
-          /
-          ${total}
+          ${obtained} / ${total}
 
         </div>
 
@@ -3965,9 +3477,7 @@ function renderPrefectureGrid(){
 
         <div
           class="prefecture-progress-bar"
-          style="
-            width:${percent}%;
-          "
+          style="width:${percent}%"
         ></div>
 
       </div>
@@ -3975,8 +3485,7 @@ function renderPrefectureGrid(){
 
       <div class="prefecture-percent">
 
-        完成率
-        ${percent}%
+        完成率 ${percent}%
 
       </div>
 
@@ -4038,7 +3547,7 @@ function prefectureOverlayClick(
 
 
 /* =========================================================
-   PREFECTURE → ITEMS
+   ITEMS
 ========================================================= */
 
 function openPrefectureCollection(
@@ -4052,7 +3561,9 @@ function openPrefectureCollection(
   currentCollectionItems =
     groups[
       collectionType
-    ][prefName] ||
+    ][
+      prefName
+    ] ||
     [];
 
 
@@ -4084,17 +3595,7 @@ function openPrefectureCollection(
 }
 
 
-/* =========================================================
-   COLLECTION SUMMARY
-========================================================= */
-
 function updateCollectionSummary(){
-
-  const el =
-    document.getElementById(
-      "collectionSummary"
-    );
-
 
   const obtained =
     currentCollectionItems.filter(
@@ -4109,7 +3610,9 @@ function updateCollectionSummary(){
     ).length;
 
 
-  el.textContent =
+  document.getElementById(
+    "collectionSummary"
+  ).textContent =
 
     `已收集 ${obtained} / ` +
     `${currentCollectionItems.length}`;
@@ -4117,23 +3620,12 @@ function updateCollectionSummary(){
 }
 
 
-/* =========================================================
-   COLLECTION GRID
-========================================================= */
-
 function renderCollectionGrid(){
 
   const el =
     document.getElementById(
       "collectionGrid"
     );
-
-
-  if(!el){
-
-    return;
-
-  }
 
 
   el.innerHTML =
@@ -4175,6 +3667,20 @@ function renderCollectionGrid(){
       );
 
 
+    const title =
+      getItemTitle(
+        collectionType,
+        item
+      );
+
+
+    const image =
+      getItemImageUrl(
+        collectionType,
+        item
+      );
+
+
     const card =
       document.createElement(
         "div"
@@ -4201,23 +3707,11 @@ function renderCollectionGrid(){
         );
 
 
-    const title =
-      getItemTitle(
-        collectionType,
-        item
-      );
-
-
-    const image =
-      getItemImageUrl(
-        collectionType,
-        item
-      );
-
-
     card.innerHTML = `
 
-      <div class="collection-image-wrap">
+      <div
+        class="collection-image-wrap"
+      >
 
         ${
           image
@@ -4225,29 +3719,30 @@ function renderCollectionGrid(){
           ?
 
           `
-          <img
-            class="collection-image"
-            src="${escapeHtml(image)}"
-            alt="${escapeHtml(title)}"
-            loading="lazy"
-            onerror="
-              this.style.visibility='hidden'
-            "
-          >
+            <img
+              class="collection-image"
+              src="${escapeHtml(image)}"
+              alt="${escapeHtml(title)}"
+              loading="lazy"
+              onerror="
+                this.style.visibility='hidden'
+              "
+            >
           `
 
           :
 
           `
-          <div
-            style="
-              font-size:42px;
-              color:#397b83;
-            "
-          >
-            🏬
-          </div>
+            <div
+              style="
+                font-size:42px;
+                color:#397b83;
+              "
+            >
+              🏬
+            </div>
           `
+
         }
 
       </div>
@@ -4255,9 +3750,7 @@ function renderCollectionGrid(){
 
       <div class="collection-city">
 
-        ${escapeHtml(
-          title
-        )}
+        ${escapeHtml(title)}
 
       </div>
 
@@ -4287,7 +3780,7 @@ function renderCollectionGrid(){
 
 
 /* =========================================================
-   BACK TO PREFECTURES
+   BACK
 ========================================================= */
 
 function backToPrefectureList(){
@@ -4334,10 +3827,6 @@ function backToPrefectureList(){
 
 }
 
-
-/* =========================================================
-   CLOSE COLLECTION
-========================================================= */
 
 function closeCollectionPanel(){
 
@@ -4407,7 +3896,7 @@ function collectionOverlayClick(
 
 
 /* =========================================================
-   DETAIL MODAL
+   MODAL
 ========================================================= */
 
 function openModalFromItem(
@@ -4465,17 +3954,13 @@ function openModal(
     );
 
 
-  const image =
+  document.getElementById(
+    "modalImage"
+  ).src =
     getItemImageUrl(
       currentItemType,
       item
     );
-
-
-  document.getElementById(
-    "modalImage"
-  ).src =
-    image;
 
 
   document.getElementById(
@@ -4520,7 +4005,8 @@ function openModal(
     "";
 
 
-  const hasCoords =
+  const validCoords =
+
     Number.isFinite(lat) &&
     Number.isFinite(lng);
 
@@ -4529,7 +4015,7 @@ function openModal(
     "modalCoordinate"
   ).textContent =
 
-    hasCoords
+    validCoords
 
     ?
 
@@ -4551,12 +4037,6 @@ function openModal(
   );
 
 
-  document.getElementById(
-    "saveStatus"
-  ).textContent =
-    "";
-
-
   updateModalObtained();
 
 
@@ -4576,10 +4056,6 @@ function openModal(
 
 }
 
-
-/* =========================================================
-   MODAL OBTAINED
-========================================================= */
 
 function updateModalObtained(){
 
@@ -4619,10 +4095,6 @@ function updateModalObtained(){
 }
 
 
-/* =========================================================
-   TOGGLE
-========================================================= */
-
 function toggleObtained(){
 
   if(!currentItem){
@@ -4632,14 +4104,10 @@ function toggleObtained(){
   }
 
 
-  const checkbox =
+  const value =
     document.getElementById(
       "obtainedCheckbox"
-    );
-
-
-  const value =
-    checkbox.checked;
+    ).checked;
 
 
   const type =
@@ -4677,13 +4145,9 @@ function toggleObtained(){
   ).textContent =
 
     value
-
     ?
-
     "✓ 已獲得"
-
     :
-
     "已取消";
 
 
@@ -4699,13 +4163,11 @@ function toggleObtained(){
 
   renderCollectionGrid();
 
-  refreshMapMarkers();
-
 }
 
 
 /* =========================================================
-   APPLE MAPS
+   NAVIGATION
 ========================================================= */
 
 function openAppleMaps(
@@ -4754,19 +4216,13 @@ function openAppleMaps(
   ){
 
     url =
-
       "https://maps.apple.com/" +
-
       "?daddr=" +
-
       encodeURIComponent(
         `${lat},${lng}`
       ) +
-
       "&dirflg=d" +
-
       "&q=" +
-
       encodeURIComponent(
         title
       );
@@ -4780,15 +4236,11 @@ function openAppleMaps(
 
 
     url =
-
       "https://maps.apple.com/" +
-
       "?daddr=" +
-
       encodeURIComponent(
         destination
       ) +
-
       "&dirflg=d";
 
   }
@@ -4802,10 +4254,6 @@ function openAppleMaps(
 
 }
 
-
-/* =========================================================
-   GOOGLE MAPS
-========================================================= */
 
 function openGoogleMaps(
   event
@@ -4859,13 +4307,9 @@ function openGoogleMaps(
 
 
   const url =
-
     "https://www.google.com/maps/dir/" +
-
     "?api=1" +
-
     "&destination=" +
-
     encodeURIComponent(
       destination
     );
@@ -4881,7 +4325,7 @@ function openGoogleMaps(
 
 
 /* =========================================================
-   COPY COORDINATE
+   COPY
 ========================================================= */
 
 async function copyCoordinate(
@@ -4916,20 +4360,9 @@ async function copyCoordinate(
 
   try{
 
-    if(
-      navigator.clipboard &&
-      navigator.clipboard.writeText
-    ){
-
-      await navigator.clipboard.writeText(
-        text
-      );
-
-    }else{
-
-      throw new Error();
-
-    }
+    await navigator.clipboard.writeText(
+      text
+    );
 
   }catch{
 
@@ -4954,9 +4387,6 @@ async function copyCoordinate(
     document.body.appendChild(
       textarea
     );
-
-
-    textarea.focus();
 
 
     textarea.select();
@@ -5032,47 +4462,7 @@ function closeModal(
     );
 
 
-  if(
-    document
-      .getElementById(
-        "collectionPanel"
-      )
-      .classList
-      .contains(
-        "show"
-      )
-  ){
-
-    document.body.classList.add(
-      "no-scroll"
-    );
-
-    return;
-
-  }
-
-
-  if(
-    document
-      .getElementById(
-        "prefecturePanel"
-      )
-      .classList
-      .contains(
-        "show"
-      )
-  ){
-
-    document.body.classList.add(
-      "no-scroll"
-    );
-
-    return;
-
-  }
-
-
-  document.body.classList.remove(
+  document.body.classList.add(
     "no-scroll"
   );
 
@@ -5098,994 +4488,17 @@ function overlayClick(
 
 
 /* =========================================================
-   MAP
-========================================================= */
-
-let map =
-  null;
-
-let prefectureLayer =
-  null;
-
-let pointLayer =
-  null;
-
-let selectedLayer =
-  null;
-
-
-const JAPAN_CENTER =
-  [36.2,138.3];
-
-
-const JAPAN_ZOOM =
-  6;
-
-
-/* =========================================================
-   SETUP MAP
-========================================================= */
-
-async function setupMap(){
-
-  if(map){
-
-    return;
-
-  }
-
-
-  map =
-    L.map(
-      "map",
-      {
-
-        zoomControl:true,
-
-        minZoom:4,
-
-        maxZoom:18,
-
-        tap:true
-
-      }
-
-    )
-    .setView(
-      JAPAN_CENTER,
-      JAPAN_ZOOM
-    );
-
-
-  L.tileLayer(
-
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
-    {
-
-      maxZoom:19,
-
-      attribution:
-        "&copy; OpenStreetMap contributors"
-
-    }
-
-  ).addTo(
-    map
-  );
-
-
-  pointLayer =
-    L.layerGroup()
-      .addTo(
-        map
-      );
-
-
-  try{
-
-    const geojson =
-      await loadJSON(
-        GEOJSON_URL
-      );
-
-
-    prefectureLayer =
-      L.geoJSON(
-
-        geojson,
-
-        {
-
-          style:
-            prefectureStyle,
-
-          onEachFeature:
-            onEachPrefecture
-
-        }
-
-      )
-      .addTo(
-        map
-      );
-
-
-    map.on(
-      "click",
-      () => {
-
-        if(currentPrefecture){
-
-          clearPointLayer();
-
-
-          currentPrefecture =
-            null;
-
-
-          resetSelectedLayer();
-
-
-          map.setView(
-
-            JAPAN_CENTER,
-
-            JAPAN_ZOOM
-
-          );
-
-        }
-
-      }
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "GeoJSON 載入失敗:",
-      error
-    );
-
-
-    document.getElementById(
-      "map"
-    ).innerHTML = `
-
-      <div
-        class="error-box"
-        style="margin:20px"
-      >
-
-        <b>
-          ⚠️ 行政區地圖載入失敗
-        </b>
-
-        <br><br>
-
-        ${escapeHtml(
-          error.message
-        )}
-
-      </div>
-
-    `;
-
-  }
-
-}
-
-
-/* =========================================================
-   PREFECTURE NAME
-========================================================= */
-
-function getFeaturePrefecture(
-  feature
-){
-
-  const p =
-    feature?.properties ||
-    {};
-
-
-  const candidates = [
-
-    p.pref,
-    p.PREF,
-    p.code,
-    p.CODE,
-    p.pref_code,
-    p.prefCode,
-    p.name_ja,
-    p.name_local,
-    p.nam_ja,
-    p.N03_001,
-    p.N03_003,
-    p.name
-
-  ];
-
-
-  for(
-    const value
-    of candidates
-  ){
-
-    if(
-      value == null
-    ){
-
-      continue;
-
-    }
-
-
-    const text =
-      String(value);
-
-
-    const digits =
-      text.replace(
-        /\D/g,
-        ""
-      );
-
-
-    const number =
-      parseInt(
-        digits,
-        10
-      );
-
-
-    if(
-      number >= 1 &&
-      number <= 47
-    ){
-
-      return PREF[number];
-
-    }
-
-
-    const found =
-      Object.values(
-        PREF
-      ).find(
-
-        name =>
-          text.includes(name)
-
-      );
-
-
-    if(found){
-
-      return found;
-
-    }
-
-  }
-
-
-  return null;
-
-}
-
-
-/* =========================================================
-   MAP COLOR
-========================================================= */
-
-function getColorByCount(
-  count
-){
-
-  if(count >= 70)
-    return "#38a169";
-
-  if(count >= 50)
-    return "#58b87b";
-
-  if(count >= 30)
-    return "#79c58c";
-
-  if(count >= 20)
-    return "#9bd49d";
-
-  if(count >= 10)
-    return "#b9dfae";
-
-  if(count >= 5)
-    return "#d5e9c4";
-
-  return "#e6f1d9";
-
-}
-
-
-function prefectureStyle(
-  feature
-){
-
-  const pref =
-    getFeaturePrefecture(
-      feature
-    );
-
-
-  const items =
-    groups[
-      collectionType
-    ][pref] ||
-    [];
-
-
-  return {
-
-    fillColor:
-      getColorByCount(
-        items.length
-      ),
-
-    weight:1.5,
-
-    opacity:1,
-
-    color:"#fff",
-
-    fillOpacity:.85
-
-  };
-
-}
-
-
-/* =========================================================
-   REFRESH MAP FOR TYPE
-========================================================= */
-
-function refreshMapForCollectionType(){
-
-  if(!prefectureLayer){
-
-    return;
-
-  }
-
-
-  prefectureLayer.eachLayer(
-
-    layer => {
-
-      prefectureLayer.resetStyle(
-        layer
-      );
-
-
-      const pref =
-        getFeaturePrefecture(
-          layer.feature
-        );
-
-
-      const items =
-        groups[
-          collectionType
-        ][pref] ||
-        [];
-
-
-      layer.unbindTooltip();
-
-
-      layer.bindTooltip(
-
-        `
-
-          <b>
-            ${escapeHtml(
-              pref ||
-              "行政區"
-            )}
-          </b>
-
-          <br>
-
-          ${
-            collectionType === "lid"
-            ?
-            "Poké Lid"
-            :
-            "Pokémon Center"
-          }
-
-          ：
-
-          <strong>
-            ${items.length}
-          </strong>
-
-          個
-
-        `,
-
-        {
-
-          sticky:true,
-
-          className:
-            "pref-tooltip",
-
-          direction:
-            "top"
-
-        }
-
-      );
-
-    }
-
-  );
-
-
-  if(currentPrefecture){
-
-    refreshMapMarkers();
-
-  }
-
-}
-
-
-/* =========================================================
-   PREFECTURE EVENTS
-========================================================= */
-
-function onEachPrefecture(
-  feature,
-  layer
-){
-
-  bindPrefectureTooltip(
-    feature,
-    layer
-  );
-
-
-  layer.on({
-
-    mouseover:function(){
-
-      this.setStyle({
-
-        weight:3,
-
-        color:"#397b83",
-
-        fillOpacity:.95
-
-      });
-
-    },
-
-
-    mouseout:function(){
-
-      if(
-        this !==
-        selectedLayer
-      ){
-
-        prefectureLayer.resetStyle(
-          this
-        );
-
-      }
-
-    },
-
-
-    click:function(e){
-
-      L.DomEvent.stopPropagation(
-        e
-      );
-
-
-      const pref =
-        getFeaturePrefecture(
-          feature
-        );
-
-
-      showPrefectureOnMap(
-        pref,
-        layer
-      );
-
-    }
-
-  });
-
-}
-
-
-function bindPrefectureTooltip(
-  feature,
-  layer
-){
-
-  const pref =
-    getFeaturePrefecture(
-      feature
-    );
-
-
-  const items =
-    groups[
-      collectionType
-    ][pref] ||
-    [];
-
-
-  layer.bindTooltip(
-
-    `
-
-      <b>
-        ${escapeHtml(
-          pref ||
-          "行政區"
-        )}
-      </b>
-
-      <br>
-
-      ${
-        collectionType === "lid"
-        ?
-        "Poké Lid"
-        :
-        "Pokémon Center"
-      }
-
-      ：
-
-      <strong>
-        ${items.length}
-      </strong>
-
-      個
-
-    `,
-
-    {
-
-      sticky:true,
-
-      className:
-        "pref-tooltip",
-
-      direction:
-        "top"
-
-    }
-
-  );
-
-}
-
-
-/* =========================================================
-   SHOW PREFECTURE MAP
-========================================================= */
-
-function showPrefectureOnMap(
-  pref,
-  layer
-){
-
-  if(!pref){
-
-    return;
-
-  }
-
-
-  currentPrefecture =
-    pref;
-
-
-  clearPointLayer();
-
-
-  resetSelectedLayer();
-
-
-  selectedLayer =
-    layer;
-
-
-  layer.setStyle({
-
-    weight:4,
-
-    color:"#397b83",
-
-    fillOpacity:1
-
-  });
-
-
-  try{
-
-    const bounds =
-      layer.getBounds();
-
-
-    if(
-      bounds &&
-      bounds.isValid()
-    ){
-
-      map.fitBounds(
-
-        bounds,
-
-        {
-
-          padding:[
-            30,
-            30
-          ],
-
-          maxZoom:9
-
-        }
-
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  const items =
-    groups[
-      collectionType
-    ][pref] ||
-    [];
-
-
-  for(
-    const item
-    of items
-  ){
-
-    addPointMarker(
-      item,
-      pref
-    );
-
-  }
-
-
-  updatePointStatus();
-
-}
-
-
-/* =========================================================
-   ADD MARKER
-========================================================= */
-
-function addPointMarker(
-  item,
-  pref
-){
-
-  const lat =
-    Number(
-      item.coords?.[0]
-    );
-
-
-  const lng =
-    Number(
-      item.coords?.[1]
-    );
-
-
-  if(
-    !Number.isFinite(lat) ||
-    !Number.isFinite(lng)
-  ){
-
-    return;
-
-  }
-
-
-  const obtained =
-    obtainedIds[
-      collectionType
-    ].has(
-      getItemId(item)
-    );
-
-
-  const icon =
-    L.divIcon({
-
-      className:"",
-
-      html:`
-
-        <div
-          class="poke-marker ${
-            obtained
-            ?
-            "obtained"
-            :
-            "not-obtained"
-          }"
-        ></div>
-
-      `,
-
-      iconSize:[
-        18,
-        18
-      ],
-
-      iconAnchor:[
-        9,
-        9
-      ]
-
-    });
-
-
-  const marker =
-    L.marker(
-
-      [
-        lat,
-        lng
-      ],
-
-      {
-
-        icon,
-
-        riseOnHover:true
-
-      }
-
-    );
-
-
-  marker.on(
-    "click",
-    function(e){
-
-      L.DomEvent.stopPropagation(
-        e
-      );
-
-
-      openModal(
-
-        item,
-
-        pref,
-
-        lat,
-
-        lng
-
-      );
-
-    }
-  );
-
-
-  marker.addTo(
-    pointLayer
-  );
-
-}
-
-
-/* =========================================================
-   REFRESH MARKERS
-========================================================= */
-
-function refreshMapMarkers(){
-
-  if(
-    !pointLayer ||
-    !currentPrefecture
-  ){
-
-    return;
-
-  }
-
-
-  clearPointLayer();
-
-
-  const items =
-    groups[
-      collectionType
-    ][
-      currentPrefecture
-    ] ||
-    [];
-
-
-  for(
-    const item
-    of items
-  ){
-
-    addPointMarker(
-      item,
-      currentPrefecture
-    );
-
-  }
-
-
-  updatePointStatus();
-
-}
-
-
-/* =========================================================
-   POINT STATUS
-========================================================= */
-
-function updatePointStatus(){
-
-  if(!currentPrefecture){
-
-    return;
-
-  }
-
-
-  const status =
-    document.getElementById(
-      "pointStatus"
-    );
-
-
-  const items =
-    groups[
-      collectionType
-    ][
-      currentPrefecture
-    ] ||
-    [];
-
-
-  const obtained =
-    items.filter(
-
-      item =>
-        obtainedIds[
-          collectionType
-        ].has(
-          getItemId(item)
-        )
-
-    ).length;
-
-
-  status.innerHTML = `
-
-    <b>
-      ${escapeHtml(
-        currentPrefecture
-      )}
-    </b>
-
-    ／
-
-    ${obtained}
-    /
-    ${items.length}
-
-    已獲得
-
-    <span class="muted">
-
-      　點擊地圖紅／綠點查看詳細資料
-
-    </span>
-
-  `;
-
-
-  status.classList.add(
-    "show"
-  );
-
-}
-
-
-/* =========================================================
-   CLEAR POINT
-========================================================= */
-
-function clearPointLayer(){
-
-  if(pointLayer){
-
-    pointLayer.clearLayers();
-
-  }
-
-
-  document
-    .getElementById(
-      "pointStatus"
-    )
-    .classList
-    .remove(
-      "show"
-    );
-
-}
-
-
-/* =========================================================
-   RESET SELECTED
-========================================================= */
-
-function resetSelectedLayer(){
-
-  if(
-    selectedLayer &&
-    prefectureLayer
-  ){
-
-    prefectureLayer.resetStyle(
-      selectedLayer
-    );
-
-  }
-
-
-  selectedLayer =
-    null;
-
-}
-
-
-/* =========================================================
    DOWNLOAD
 ========================================================= */
 
 function downloadBlob(
-  blobData,
+  data,
   filename
 ){
 
   const url =
     URL.createObjectURL(
-      blobData
+      data
     );
 
 
@@ -6115,14 +4528,11 @@ function downloadBlob(
 
 
   setTimeout(
-
     () =>
       URL.revokeObjectURL(
         url
       ),
-
     1000
-
   );
 
 }
@@ -6130,8 +4540,7 @@ function downloadBlob(
 
 function downloadAll(){
 
-  const lines =
-    [];
+  const lines = [];
 
 
   for(
@@ -6143,15 +4552,11 @@ function downloadAll(){
       groups[
         collectionType
       ]
-    )
-    .sort()
+    ).sort()
   ){
 
     lines.push(
-
-      `# ===== ${pref} ` +
-      `(${items.length}) =====`
-
+      `# ===== ${pref} (${items.length}) =====`
     );
 
 
@@ -6163,9 +4568,7 @@ function downloadAll(){
       lines.push(
 
         `${item.coords?.[0] ?? ""},` +
-
         `${item.coords?.[1] ?? ""},` +
-
         `${getItemTitle(
           collectionType,
           item
@@ -6184,28 +4587,21 @@ function downloadAll(){
   downloadBlob(
 
     new Blob(
-
       [
         "\ufeff",
         lines.join("\n")
       ],
-
       {
         type:
           "text/plain;charset=utf-8"
       }
-
     ),
 
     collectionType === "lid"
-
-    ?
-
-    "poke_lid_2026.txt"
-
-    :
-
-    "pokemon_center_2026.txt"
+      ?
+      "poke_lid_2026.txt"
+      :
+      "pokemon_center_2026.txt"
 
   );
 
@@ -6214,8 +4610,7 @@ function downloadAll(){
 
 function downloadJSON(){
 
-  const out =
-    {};
+  const output = {};
 
 
   for(
@@ -6230,7 +4625,7 @@ function downloadJSON(){
     )
   ){
 
-    out[pref] =
+    output[pref] =
       items.map(
 
         item => ({
@@ -6245,12 +4640,10 @@ function downloadJSON(){
             ),
 
           lat:
-            item.coords?.[0] ??
-            "",
+            item.coords?.[0] ?? "",
 
           lng:
-            item.coords?.[1] ??
-            "",
+            item.coords?.[1] ?? "",
 
           address:
             item.address ||
@@ -6266,31 +4659,24 @@ function downloadJSON(){
   downloadBlob(
 
     new Blob(
-
       [
         JSON.stringify(
-          out,
+          output,
           null,
           2
         )
       ],
-
       {
         type:
           "application/json;charset=utf-8"
       }
-
     ),
 
     collectionType === "lid"
-
-    ?
-
-    "poke_lid_2026.json"
-
-    :
-
-    "pokemon_center_2026.json"
+      ?
+      "poke_lid_2026.json"
+      :
+      "pokemon_center_2026.json"
 
   );
 
@@ -6347,7 +4733,6 @@ function downloadCSV(){
 
 
   const csv =
-
     rows
       .map(
 
@@ -6374,28 +4759,21 @@ function downloadCSV(){
   downloadBlob(
 
     new Blob(
-
       [
         "\ufeff",
         csv
       ],
-
       {
         type:
           "text/csv;charset=utf-8"
       }
-
     ),
 
     collectionType === "lid"
-
-    ?
-
-    "poke_lid_2026.csv"
-
-    :
-
-    "pokemon_center_2026.csv"
+      ?
+      "poke_lid_2026.csv"
+      :
+      "pokemon_center_2026.csv"
 
   );
 
@@ -6419,10 +4797,8 @@ async function loadHistoryFile(
 
 
     return (
-
       json.history ||
       []
-
     ).map(
 
       entry => ({
@@ -6438,10 +4814,8 @@ async function loadHistoryFile(
   }catch(error){
 
     console.error(
-      `${type} History 載入失敗:`,
       error
     );
-
 
     return [];
 
@@ -6472,7 +4846,6 @@ async function loadHistory(){
   historyEntries = [
 
     ...lidHistory,
-
     ...centerHistory
 
   ];
@@ -6510,7 +4883,9 @@ function setHistoryFilter(
 
   document.getElementById(
     "historyAll"
-  ).classList.toggle(
+  )
+  .classList
+  .toggle(
     "active",
     filter === "all"
   );
@@ -6518,7 +4893,9 @@ function setHistoryFilter(
 
   document.getElementById(
     "historyLid"
-  ).classList.toggle(
+  )
+  .classList
+  .toggle(
     "active",
     filter === "lid"
   );
@@ -6526,7 +4903,9 @@ function setHistoryFilter(
 
   document.getElementById(
     "historyCenter"
-  ).classList.toggle(
+  )
+  .classList
+  .toggle(
     "active",
     filter === "center"
   );
@@ -6568,15 +4947,12 @@ function renderHistory(){
 
   if(!logs.length){
 
-    el.innerHTML = `
-
-      <span class="muted">
-
-        尚無更新紀錄。
-
-      </span>
-
-    `;
+    el.innerHTML =
+      `
+        <span class="muted">
+          尚無更新紀錄。
+        </span>
+      `;
 
     return;
 
@@ -6586,12 +4962,10 @@ function renderHistory(){
   el.innerHTML =
 
     logs
-
       .slice(
         0,
         50
       )
-
       .map(
 
         item => {
@@ -6611,30 +4985,15 @@ function renderHistory(){
             [];
 
 
-          const typeText =
-            item.type ===
-            "lid"
-
-            ?
-
-            "Poké Lid"
-
-            :
-
-            "Pokémon Center";
-
-
           return `
 
             <div class="history-card">
 
               <b>
-
                 ${escapeHtml(
                   item.time ||
                   ""
                 )}
-
               </b>
 
 
@@ -6644,7 +5003,13 @@ function renderHistory(){
                 }"
               >
 
-                ${typeText}
+                ${
+                  item.type === "lid"
+                  ?
+                  "Poké Lid"
+                  :
+                  "Pokémon Center"
+                }
 
               </span>
 
@@ -6680,57 +5045,6 @@ function renderHistory(){
               🟡 修改
               ${changed.length}
 
-
-              ${
-                added.length
-
-                ?
-
-                `
-
-                <div
-                  class="muted"
-                  style="margin-top:6px"
-                >
-
-                  新增：
-
-                  ${added
-                    .slice(0,5)
-                    .map(
-
-                      x =>
-                        escapeHtml(
-
-                          x.title ||
-                          x.name ||
-                          x.city ||
-                          ""
-
-                        )
-
-                    )
-                    .join("、")
-                  }
-
-                  ${
-                    added.length > 5
-                    ?
-                    "…"
-                    :
-                    ""
-                  }
-
-                </div>
-
-                `
-
-                :
-
-                ""
-
-              }
-
             </div>
 
           `;
@@ -6738,7 +5052,6 @@ function renderHistory(){
         }
 
       )
-
       .join("");
 
 }
@@ -6757,7 +5070,8 @@ function escapeHtml(
   )
   .replace(
     /[&<>"']/g,
-    m => ({
+
+    char => ({
 
       "&":"&amp;",
       "<":"&lt;",
@@ -6765,14 +5079,15 @@ function escapeHtml(
       '"':"&quot;",
       "'":"&#39;"
 
-    }[m])
+    }[char])
+
   );
 
 }
 
 
 /* =========================================================
-   ESC KEY
+   ESC
 ========================================================= */
 
 document.addEventListener(
@@ -6878,16 +5193,6 @@ async function start(){
   switchCollectionType(
     "lid"
   );
-
-
-  await setupMap();
-
-
-  /*
-   * 地圖建立後重新套用目前圖鑑
-   */
-
-  refreshMapForCollectionType();
 
 
   await loadHistory();

@@ -1,3 +1,292 @@
 {
-  "list": []
+  "list": [
+    {
+      "id": "pokemon-center-ca458741220f",
+      "type": "pokemon_center",
+      "pref": 1,
+      "region": "",
+      "name": "Pokémon Center SAPPORO",
+      "city": "",
+      "address": "Daimaru Sapporo Store 8F4-7 Kita-5-jonishi, Chuo-ku, Sapporo, Hokkaido060-0005",
+      "coords": [
+        43.06746909999999,
+        141.3492665
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-sapporo/images/mv/mv-pokemoncenter-sapporo-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-sapporo/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-ac5a007b16e1",
+      "type": "pokemon_center",
+      "pref": 4,
+      "region": "",
+      "name": "Pokémon Center TOHOKU",
+      "city": "",
+      "address": "Sendai PARCO1 3F1-2-3 Chuo, Aoba-ku, Sendai, Miyagi980-8484",
+      "coords": [
+        38.2621602,
+        140.8817018
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-tohoku/images/mv/mv-pokemoncenter-tohoku-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-tohoku/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-da9faf563d3a",
+      "type": "pokemon_center",
+      "pref": 12,
+      "region": "",
+      "name": "Pokémon Center TOKYO-BAY",
+      "city": "",
+      "address": "Mitsui Shopping Park LaLaport TOKYO-BAY West Wing 2F2-1-1,Hama-cho, Funabashi-shi, Chiba273-8530",
+      "coords": [
+        35.6866032,
+        139.9890362
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-tokyobay/images/mv/mv-pokemoncenter-tokyobay-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-tokyobay/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-308d733e61c4",
+      "type": "pokemon_center",
+      "pref": 13,
+      "region": "",
+      "name": "Pokémon Center MEGA TOKYO",
+      "city": "",
+      "address": "Sunshine City alpa 2F3-1-2 Higashi-Ikebukuro, Toshima-ku, Tokyo170-6002",
+      "coords": [
+        35.7289056,
+        139.7193245
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-megatokyo/images/mv/mv-pokemoncenter-megatokyo-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-megatokyo/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-aac88eeb0b6e",
+      "type": "pokemon_center",
+      "pref": 13,
+      "region": "",
+      "name": "Pokémon Center SHIBUYA",
+      "city": "",
+      "address": "Shibuya PARCO 6F15-1, Udagawa-cho, Shibuya-ku, Tokyo150-8377",
+      "coords": [
+        35.66195569999999,
+        139.6984408
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-shibuya/images/mv/mv-pokemoncenter-shibuya-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-shibuya/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-84e13f43c58c",
+      "type": "pokemon_center",
+      "pref": 13,
+      "region": "",
+      "name": "Pokémon Center SKYTREE TOWN",
+      "city": "",
+      "address": "Tokyo SKYTREE TOWN Solamachi East Yard 4F1-1-2 Oshiage, Sumida-ku, Tokyo131-0045",
+      "coords": [
+        35.710344799999994,
+        139.8126119
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-skytreetown/images/mv/mv-pokemoncenter-skytreetown-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-skytreetown/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-b9b03c933ecc",
+      "type": "pokemon_center",
+      "pref": 13,
+      "region": "",
+      "name": "Pokémon Center TOKYO DX",
+      "city": "",
+      "address": "Nihombashi Takashimaya S.C. East Building 5F2-11-2 Nihombashi, Chuo-ku, Tokyo103-0027",
+      "coords": [
+        35.6802902,
+        139.7742695
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-tokyodx/images/mv/mv-pokemoncenter-tokyodx-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-tokyodx/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-c693e71051bf",
+      "type": "pokemon_center",
+      "pref": 14,
+      "region": "",
+      "name": "Pokémon Center YOKOHAMA",
+      "city": "",
+      "address": "Yokohama Sky Building 8F2-19-12 Takashima, Nishi-ku, Yokohama-shi, Kanagawa220-0011",
+      "coords": [
+        35.4645717,
+        139.6244898
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-yokohama/images/mv/mv-pokemoncenter-yokohama-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-yokohama/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-870f9bfaaa78",
+      "type": "pokemon_center",
+      "pref": 14,
+      "region": "",
+      "name": "Pokémon Center YOKOHAMA SATELLITE",
+      "city": "",
+      "address": "JOINUS 2F1-5-1 Minamisaiwai, Nishi-ku, Yokohama-shi, Kanagawa220-0005",
+      "coords": [
+        35.46680229999999,
+        139.6213024
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-yokohama-satellite/images/mv/mv-pokemoncenter-yokohama-satellite-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-yokohama-satellite/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-dfc0f0937624",
+      "type": "pokemon_center",
+      "pref": 17,
+      "region": "",
+      "name": "Pokémon Center KANAZAWA",
+      "city": "",
+      "address": "Kanazawa FORUS 5F3-1 Horikawashinmachi, Kanazawa, Ishikawa920-0849",
+      "coords": [
+        36.5791483,
+        136.64975429999998
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-kanazawa/images/mv-pokemoncenter-kanazawa-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-kanazawa/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-6a1c5e7f2a35",
+      "type": "pokemon_center",
+      "pref": 23,
+      "region": "",
+      "name": "Pokémon Center NAGOYA",
+      "city": "",
+      "address": "Nagoya PARCO East Building 2F3-29-1, Sakae, Naka-ku,Nagoya-shi, Aichi460-0008",
+      "coords": [
+        35.1636262,
+        136.90803
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-nagoya/images/mv-pokemoncenter-nagoya-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-nagoya/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-1145e44ab5f0",
+      "type": "pokemon_center",
+      "pref": 26,
+      "region": "",
+      "name": "Pokémon Center KYOTO",
+      "city": "",
+      "address": "KYOTO Economy Center SUINA-MUROMACHI 2F78 Higashi Iru Hakoyahokomachi, Muromachi, Shijo-dori, Shimogyou-ku, Kyoto-shi, Kyoto600-8009",
+      "coords": [
+        35.003416699999995,
+        135.75838389999998
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-kyoto/images/mv-pokemoncenter-kyoto-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-kyoto/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-9b256eb876fc",
+      "type": "pokemon_center",
+      "pref": 27,
+      "region": "",
+      "name": "Pokémon Center OSAKA",
+      "city": "",
+      "address": "LUCUA SOUTH 13F3-1-1, Umeda, Kita-ku,Osaka-shi, Osaka530-8373",
+      "coords": [
+        34.70185250000001,
+        135.49655909999998
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-osaka/images/mv-pokemoncenter-osaka-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-osaka/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-a3231c21c80f",
+      "type": "pokemon_center",
+      "pref": 27,
+      "region": "",
+      "name": "Pokémon Center OSAKA DX",
+      "city": "",
+      "address": "DAIMARU SHINSAIBASHI Main Building 9F1-7-1, Shinsaibashisuji, Chuo-ku, Osaka-shi, Osaka542-8501",
+      "coords": [
+        34.6731719,
+        135.5007545
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-osakadx/images/mv-pokemoncenter-osakadx-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-osakadx/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-6192107a0d31",
+      "type": "pokemon_center",
+      "pref": 34,
+      "region": "",
+      "name": "Pokémon Center HIROSHIMA",
+      "city": "",
+      "address": "ekie store 2F1-2 Matsubara-cho, Minami-ku, Hiroshima City, Hiroshima732-0822",
+      "coords": [
+        34.3986243,
+        132.4759743
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-hiroshima/images/mv-pokemoncenter-hiroshima-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-hiroshima/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-b66486bec168",
+      "type": "pokemon_center",
+      "pref": 37,
+      "region": "",
+      "name": "Pokémon Center KAGAWA",
+      "city": "",
+      "address": "Marugamemachi Green East Bldg. 1F8-23 Marugame-machi, Takamatsu-shi, Kagawa760-0029",
+      "coords": [
+        34.3422817,
+        134.05006079999998
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-kagawa/images/mv-pokemoncenter-kagawa-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-kagawa/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-f96148076ba0",
+      "type": "pokemon_center",
+      "pref": 40,
+      "region": "",
+      "name": "Pokémon Center FUKUOKA",
+      "city": "",
+      "address": "Hakata Marui 2F9-1 Hakataekichuogai, Hakata-ku, Fukuoka812-0012",
+      "coords": [
+        33.5890033,
+        130.4192564
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-fukuoka/images/mv-pokemoncenter-fukuoka-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-fukuoka/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-15f44dc933dd",
+      "type": "pokemon_center",
+      "pref": 47,
+      "region": "",
+      "name": "Pokémon Center OKINAWA",
+      "city": "",
+      "address": "AEON MALL Okinawa Rycom 1F1, Rycom, Kitanakagusuku-son, Nakagami-gun, Okinawa901-2306",
+      "coords": [
+        26.314085199999997,
+        127.7962995
+      ],
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-okinawa/images/mv-pokemoncenter-okinawa-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-okinawa/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    }
+  ]
 }

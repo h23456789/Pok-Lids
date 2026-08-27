@@ -1,5 +1,159 @@
 {
-  "last_sync": null,
-  "total": 0,
-  "history": []
+  "last_sync": "2026-08-27T16:55:12.167Z",
+  "total": 18,
+  "history": [
+    {
+      "time": "2026-08-27T16:55:12.167Z",
+      "type": "center",
+      "total": 18,
+      "added": [
+        {
+          "id": "pokemon-center-ca458741220f",
+          "prefecture": 1,
+          "title": "Pokémon Center SAPPORO",
+          "lat": 43.06746909999999,
+          "lng": 141.3492665,
+          "address": "Daimaru Sapporo Store 8F4-7 Kita-5-jonishi, Chuo-ku, Sapporo, Hokkaido060-0005"
+        },
+        {
+          "id": "pokemon-center-ac5a007b16e1",
+          "prefecture": 4,
+          "title": "Pokémon Center TOHOKU",
+          "lat": 38.2621602,
+          "lng": 140.8817018,
+          "address": "Sendai PARCO1 3F1-2-3 Chuo, Aoba-ku, Sendai, Miyagi980-8484"
+        },
+        {
+          "id": "pokemon-center-b9b03c933ecc",
+          "prefecture": 13,
+          "title": "Pokémon Center TOKYO DX",
+          "lat": 35.6802902,
+          "lng": 139.7742695,
+          "address": "Nihombashi Takashimaya S.C. East Building 5F2-11-2 Nihombashi, Chuo-ku, Tokyo103-0027"
+        },
+        {
+          "id": "pokemon-center-308d733e61c4",
+          "prefecture": 13,
+          "title": "Pokémon Center MEGA TOKYO",
+          "lat": 35.7289056,
+          "lng": 139.7193245,
+          "address": "Sunshine City alpa 2F3-1-2 Higashi-Ikebukuro, Toshima-ku, Tokyo170-6002"
+        },
+        {
+          "id": "pokemon-center-aac88eeb0b6e",
+          "prefecture": 13,
+          "title": "Pokémon Center SHIBUYA",
+          "lat": 35.66195569999999,
+          "lng": 139.6984408,
+          "address": "Shibuya PARCO 6F15-1, Udagawa-cho, Shibuya-ku, Tokyo150-8377"
+        },
+        {
+          "id": "pokemon-center-84e13f43c58c",
+          "prefecture": 13,
+          "title": "Pokémon Center SKYTREE TOWN",
+          "lat": 35.710344799999994,
+          "lng": 139.8126119,
+          "address": "Tokyo SKYTREE TOWN Solamachi East Yard 4F1-1-2 Oshiage, Sumida-ku, Tokyo131-0045"
+        },
+        {
+          "id": "pokemon-center-da9faf563d3a",
+          "prefecture": 12,
+          "title": "Pokémon Center TOKYO-BAY",
+          "lat": 35.6866032,
+          "lng": 139.9890362,
+          "address": "Mitsui Shopping Park LaLaport TOKYO-BAY West Wing 2F2-1-1,Hama-cho, Funabashi-shi, Chiba273-8530"
+        },
+        {
+          "id": "pokemon-center-c693e71051bf",
+          "prefecture": 14,
+          "title": "Pokémon Center YOKOHAMA",
+          "lat": 35.4645717,
+          "lng": 139.6244898,
+          "address": "Yokohama Sky Building 8F2-19-12 Takashima, Nishi-ku, Yokohama-shi, Kanagawa220-0011"
+        },
+        {
+          "id": "pokemon-center-870f9bfaaa78",
+          "prefecture": 14,
+          "title": "Pokémon Center YOKOHAMA SATELLITE",
+          "lat": 35.46680229999999,
+          "lng": 139.6213024,
+          "address": "JOINUS 2F1-5-1 Minamisaiwai, Nishi-ku, Yokohama-shi, Kanagawa220-0005"
+        },
+        {
+          "id": "pokemon-center-6a1c5e7f2a35",
+          "prefecture": 23,
+          "title": "Pokémon Center NAGOYA",
+          "lat": 35.1636262,
+          "lng": 136.90803,
+          "address": "Nagoya PARCO East Building 2F3-29-1, Sakae, Naka-ku,Nagoya-shi, Aichi460-0008"
+        },
+        {
+          "id": "pokemon-center-dfc0f0937624",
+          "prefecture": 17,
+          "title": "Pokémon Center KANAZAWA",
+          "lat": 36.5791483,
+          "lng": 136.64975429999998,
+          "address": "Kanazawa FORUS 5F3-1 Horikawashinmachi, Kanazawa, Ishikawa920-0849"
+        },
+        {
+          "id": "pokemon-center-1145e44ab5f0",
+          "prefecture": 26,
+          "title": "Pokémon Center KYOTO",
+          "lat": 35.003416699999995,
+          "lng": 135.75838389999998,
+          "address": "KYOTO Economy Center SUINA-MUROMACHI 2F78 Higashi Iru Hakoyahokomachi, Muromachi, Shijo-dori, Shimogyou-ku, Kyoto-shi, Kyoto600-8009"
+        },
+        {
+          "id": "pokemon-center-a3231c21c80f",
+          "prefecture": 27,
+          "title": "Pokémon Center OSAKA DX",
+          "lat": 34.6731719,
+          "lng": 135.5007545,
+          "address": "DAIMARU SHINSAIBASHI Main Building 9F1-7-1, Shinsaibashisuji, Chuo-ku, Osaka-shi, Osaka542-8501"
+        },
+        {
+          "id": "pokemon-center-9b256eb876fc",
+          "prefecture": 27,
+          "title": "Pokémon Center OSAKA",
+          "lat": 34.70185250000001,
+          "lng": 135.49655909999998,
+          "address": "LUCUA SOUTH 13F3-1-1, Umeda, Kita-ku,Osaka-shi, Osaka530-8373"
+        },
+        {
+          "id": "pokemon-center-6192107a0d31",
+          "prefecture": 34,
+          "title": "Pokémon Center HIROSHIMA",
+          "lat": 34.3986243,
+          "lng": 132.4759743,
+          "address": "ekie store 2F1-2 Matsubara-cho, Minami-ku, Hiroshima City, Hiroshima732-0822"
+        },
+        {
+          "id": "pokemon-center-b66486bec168",
+          "prefecture": 37,
+          "title": "Pokémon Center KAGAWA",
+          "lat": 34.3422817,
+          "lng": 134.05006079999998,
+          "address": "Marugamemachi Green East Bldg. 1F8-23 Marugame-machi, Takamatsu-shi, Kagawa760-0029"
+        },
+        {
+          "id": "pokemon-center-f96148076ba0",
+          "prefecture": 40,
+          "title": "Pokémon Center FUKUOKA",
+          "lat": 33.5890033,
+          "lng": 130.4192564,
+          "address": "Hakata Marui 2F9-1 Hakataekichuogai, Hakata-ku, Fukuoka812-0012"
+        },
+        {
+          "id": "pokemon-center-15f44dc933dd",
+          "prefecture": 47,
+          "title": "Pokémon Center OKINAWA",
+          "lat": 26.314085199999997,
+          "lng": 127.7962995,
+          "address": "AEON MALL Okinawa Rycom 1F1, Rycom, Kitanakagusuku-son, Nakagami-gun, Okinawa901-2306"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  ]
 }

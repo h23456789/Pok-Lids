@@ -1,20 +1,28 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
 
 <title>Poké Lids 2026 分組座標下載器</title>
 
+
+<!-- Leaflet -->
 <link
   rel="stylesheet"
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+>
+
 
 <style>
 
 /* =========================================================
-   BASIC
+   GLOBAL
 ========================================================= */
 
 *{
@@ -28,6 +36,7 @@ body{
 }
 
 body{
+
   font-family:
     Arial,
     "Noto Sans TC",
@@ -44,11 +53,15 @@ body{
   color:#222;
 }
 
+
 h1{
-  margin:0 0 10px;
+  margin:
+    0 0 10px;
 }
 
+
 .box{
+
   background:#fff;
 
   padding:18px;
@@ -61,7 +74,9 @@ h1{
     0 1px 5px #ddd;
 }
 
+
 button{
+
   border:0;
 
   border-radius:8px;
@@ -75,43 +90,28 @@ button{
   background:#222;
 
   color:#fff;
+
+  font-size:14px;
 }
+
 
 button:disabled{
   opacity:.5;
+  cursor:not-allowed;
 }
 
-.grid{
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(230px,1fr)
-    );
-
-  gap:10px;
-}
-
-.card{
-  background:#fff;
-
-  padding:12px;
-
-  border-radius:10px;
-
-  box-shadow:
-    0 1px 4px #ddd;
-}
 
 .muted{
+
   color:#666;
 
   font-size:13px;
 }
 
+
 code,
 pre{
+
   background:#111;
 
   color:#eee;
@@ -119,7 +119,9 @@ pre{
   border-radius:8px;
 }
 
+
 pre{
+
   padding:12px;
 
   overflow:auto;
@@ -131,6 +133,9 @@ pre{
 ========================================================= */
 
 #map{
+
+  width:100%;
+
   height:700px;
 
   border-radius:12px;
@@ -138,8 +143,12 @@ pre{
   overflow:hidden;
 }
 
+
 .map-wrapper{
+
   position:relative;
+
+  width:100%;
 }
 
 
@@ -148,7 +157,8 @@ pre{
 ========================================================= */
 
 .pref-tooltip{
-  font-size:14px;
+
+  font-size:15px;
 
   font-weight:bold;
 
@@ -157,41 +167,29 @@ pre{
 
 
 /* =========================================================
-   PREFECTURE LABEL
+   PREFECTURE HOVER LABEL
 ========================================================= */
 
-.pref-label{
-  background:#222;
+.leaflet-tooltip{
 
-  color:#fff;
+  border:0;
 
-  border:
-    3px solid #fff;
-
-  border-radius:999px;
-
-  padding:
-    8px 14px;
+  border-radius:8px;
 
   box-shadow:
-    0 2px 8px rgba(0,0,0,.35);
-
-  font-size:15px;
-
-  font-weight:bold;
-
-  white-space:nowrap;
+    0 2px 8px rgba(0,0,0,.25);
 }
 
 
 /* =========================================================
-   POKEFUTA DOT
+   POKÉ LID DOT
 ========================================================= */
 
 .poke-dot{
-  width:15px;
 
-  height:15px;
+  width:16px;
+
+  height:16px;
 
   background:#e53935;
 
@@ -201,14 +199,14 @@ pre{
   border-radius:50%;
 
   box-shadow:
-    0 1px 6px rgba(0,0,0,.55);
+    0 2px 7px rgba(0,0,0,.55);
 
   touch-action:manipulation;
 }
 
 
 /* =========================================================
-   FLOAT CARD
+   FLOAT CARD OVERLAY
 ========================================================= */
 
 #pokeCardOverlay{
@@ -225,38 +223,43 @@ pre{
 
   justify-content:center;
 
-  pointer-events:none;
-
   background:
-    rgba(0,0,0,.15);
+    rgba(0,0,0,.22);
+
+  pointer-events:auto;
+
+  padding:12px;
 }
+
+
+/* =========================================================
+   FLOAT CARD
+========================================================= */
 
 #pokeCard{
 
+  position:relative;
+
   width:
     min(
-      440px,
+      460px,
       calc(100vw - 24px)
     );
 
   max-height:
     calc(100vh - 24px);
 
-  overflow:auto;
+  overflow-y:auto;
 
   background:#fff;
 
   border-radius:18px;
 
-  box-shadow:
-    0 15px 55px
-    rgba(0,0,0,.4);
-
   padding:20px;
 
-  position:relative;
-
-  pointer-events:auto;
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,.45);
 
   -webkit-overflow-scrolling:touch;
 
@@ -272,11 +275,11 @@ pre{
 
   position:absolute;
 
-  right:10px;
-
   top:10px;
 
-  z-index:5;
+  right:10px;
+
+  z-index:10;
 
   width:40px;
 
@@ -292,60 +295,64 @@ pre{
 
   color:#fff;
 
-  font-size:24px;
+  font-size:25px;
 
   line-height:40px;
+
+  text-align:center;
 }
 
 
 /* =========================================================
-   POKEFUTA IMAGE
+   POKÉ LID IMAGE
 ========================================================= */
 
 #pokeCardImage{
 
+  display:none;
+
   width:100%;
 
-  max-height:300px;
+  max-height:320px;
 
   object-fit:contain;
 
+  background:#f4f4f4;
+
   border-radius:12px;
 
-  background:#f3f3f3;
-
-  margin:
-    0 0 15px;
-
-  display:none;
+  margin-bottom:16px;
 }
 
 
 /* =========================================================
-   TITLE
+   CARD TITLE
 ========================================================= */
 
-.poke-title{
+#pokeCardTitle{
 
-  font-size:23px;
+  font-size:24px;
 
   font-weight:bold;
 
-  padding-right:48px;
+  padding-right:50px;
 
   margin-bottom:15px;
 }
 
 
 /* =========================================================
-   INFO
+   CARD INFORMATION
 ========================================================= */
 
 .info-row{
 
-  margin:10px 0;
+  margin:
+    9px 0;
 
   line-height:1.55;
+
+  word-break:break-word;
 }
 
 
@@ -369,7 +376,11 @@ pre{
   border:
     1px solid #ddd;
 
-  font-family:monospace;
+  border-radius:9px;
+
+  font-family:
+    Consolas,
+    monospace;
 
   font-size:15px;
 
@@ -382,9 +393,12 @@ pre{
   -webkit-user-select:none;
 }
 
+
 .coord-button:hover{
-  background:#e7e7e7;
+
+  background:#e5e5e5;
 }
+
 
 .coord-copied{
 
@@ -397,21 +411,45 @@ pre{
 
 
 /* =========================================================
+   HISTORY
+========================================================= */
+
+.history-card{
+
+  background:#fafafa;
+
+  border:
+    1px solid #eee;
+
+  border-radius:10px;
+
+  padding:12px;
+
+  margin:
+    8px 0;
+}
+
+
+/* =========================================================
    MOBILE
 ========================================================= */
 
 @media(max-width:800px){
 
   body{
+
     margin:10px auto;
 
     padding:
       0 10px;
   }
 
+
   #map{
+
     height:620px;
   }
+
 
   #pokeCard{
 
@@ -424,32 +462,34 @@ pre{
     padding:18px;
   }
 
+
   #pokeCardImage{
-    max-height:230px;
+
+    max-height:250px;
+  }
+
+
+  #pokeCardTitle{
+
+    font-size:21px;
   }
 
 }
 
-
-/* =========================================================
-   LEAFLET
-========================================================= */
-
-.leaflet-tooltip{
-  font-size:14px;
-
-  font-weight:bold;
-}
-
 </style>
+
 </head>
 
 
 <body>
 
 
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
 <h1>
-Poké Lids 2026 分組座標
+Poké Lids 2026 分組座標下載器
 </h1>
 
 
@@ -460,19 +500,24 @@ Poké Lids 2026 分組座標
 GitHub <code>data/data.json</code>
 </p>
 
+
 <p>
 <b>分組方式：</b>
 47 都道府縣
 </p>
 
+
 <p>
 <b>地圖：</b>
-行政區數量以色階顯示，點擊行政區後才顯示 Poké Lid 點位。
+行政區依 Poké Lid 數量自動著色，
+點擊行政區後才顯示該區 Poké Lid 點位。
 </p>
+
 
 <p id="status">
 正在讀取資料……
 </p>
+
 
 <p
   id="syncInfo"
@@ -523,16 +568,24 @@ GitHub <code>data/data.json</code>
 🗾 日本 Poké Lid 地圖
 </h3>
 
+
 <p class="muted">
 
-滑鼠移到行政區可以查看數量。
-行政區顏色依 Poké Lid 數量自動變化。
+滑鼠移到行政區：
+查看縣名與 Poké Lid 數量。
 
 <br>
 
-點擊行政區後才會顯示該區的 Poké Lid 小點。
+點擊行政區：
+顯示該行政區的 Poké Lid。
+
+<br>
+
+點擊紅色小點：
+查看 Poké Lid 詳細資料與圖片。
 
 </p>
+
 
 <div class="map-wrapper">
 
@@ -554,28 +607,22 @@ GitHub <code>data/data.json</code>
 📜 更新 History
 </h3>
 
+
 <p class="muted">
 
 History 由 GitHub Actions 寫入
-<code>history.json</code>。
+<code>history.json</code>，
+換電腦也可以看到。
 
 </p>
 
+
 <div id="history">
-載入中…
-</div>
+
+載入中……
 
 </div>
 
-
-
-<!-- =========================================================
-     GROUPS
-========================================================= -->
-
-<div
-  id="groups"
-  class="grid">
 </div>
 
 
@@ -584,13 +631,20 @@ History 由 GitHub Actions 寫入
      FLOAT CARD
 ========================================================= -->
 
-<div id="pokeCardOverlay">
+<div
+  id="pokeCardOverlay"
+>
 
-  <div id="pokeCard">
+
+  <div
+    id="pokeCard"
+  >
+
 
     <button
       id="pokeCardClose"
-      type="button">
+      type="button"
+    >
 
       ×
 
@@ -599,18 +653,19 @@ History 由 GitHub Actions 寫入
 
     <img
       id="pokeCardImage"
-      alt="Poké Lid">
+      alt="Poké Lid"
+    >
 
 
     <div
       id="pokeCardTitle"
-      class="poke-title">
-    </div>
+    ></div>
 
 
     <div
-      id="pokeCardContent">
-    </div>
+      id="pokeCardContent"
+    ></div>
+
 
   </div>
 
@@ -618,9 +673,14 @@ History 由 GitHub Actions 寫入
 
 
 
+<!-- =========================================================
+     LEAFLET
+========================================================= -->
+
 <script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
+
 
 
 <script>
@@ -633,62 +693,173 @@ const DATA_URL =
 "https://raw.githubusercontent.com/yukidaruma/pokefuta-tracker/main/data/data.json";
 
 
-const PREF={
+const PREF = {
 
-1:"北海道",
-2:"青森県",
-3:"岩手県",
-4:"宮城県",
-5:"秋田県",
-6:"山形県",
-7:"福島県",
-8:"茨城県",
-9:"栃木県",
-10:"群馬県",
-11:"埼玉県",
-12:"千葉県",
-13:"東京都",
-14:"神奈川県",
-15:"新潟県",
-16:"富山県",
-17:"石川県",
-18:"福井県",
-19:"山梨県",
-20:"長野県",
-21:"岐阜県",
-22:"静岡県",
-23:"愛知県",
-24:"三重県",
-25:"滋賀県",
-26:"京都府",
-27:"大阪府",
-28:"兵庫県",
-29:"奈良県",
-30:"和歌山県",
-31:"鳥取県",
-32:"島根県",
-33:"岡山県",
-34:"広島県",
-35:"山口県",
-36:"徳島県",
-37:"香川県",
-38:"愛媛県",
-39:"高知県",
-40:"福岡県",
-41:"佐賀県",
-42:"長崎県",
-43:"熊本県",
-44:"大分県",
-45:"宮崎県",
-46:"鹿児島県",
-47:"沖縄県"
+  1:"北海道",
+  2:"青森県",
+  3:"岩手県",
+  4:"宮城県",
+  5:"秋田県",
+  6:"山形県",
+  7:"福島県",
+  8:"茨城県",
+  9:"栃木県",
+  10:"群馬県",
+  11:"埼玉県",
+  12:"千葉県",
+  13:"東京都",
+  14:"神奈川県",
+  15:"新潟県",
+  16:"富山県",
+  17:"石川県",
+  18:"福井県",
+  19:"山梨県",
+  20:"長野県",
+  21:"岐阜県",
+  22:"静岡県",
+  23:"愛知県",
+  24:"三重県",
+  25:"滋賀県",
+  26:"京都府",
+  27:"大阪府",
+  28:"兵庫県",
+  29:"奈良県",
+  30:"和歌山県",
+  31:"鳥取県",
+  32:"島根県",
+  33:"岡山県",
+  34:"広島県",
+  35:"山口県",
+  36:"徳島県",
+  37:"香川県",
+  38:"愛媛県",
+  39:"高知県",
+  40:"福岡県",
+  41:"佐賀県",
+  42:"長崎県",
+  43:"熊本県",
+  44:"大分県",
+  45:"宮崎県",
+  46:"鹿児島県",
+  47:"沖縄県"
 
 };
 
 
-let data=[];
+let data = [];
 
-let groups={};
+let groups = {};
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+fetch(
+  DATA_URL +
+  "?ts=" +
+  Date.now(),
+  {
+    cache:"no-store"
+  }
+)
+
+.then(response=>{
+
+  if(!response.ok){
+
+    throw new Error(
+      "GitHub data.json 無法取得"
+    );
+
+  }
+
+  return response.json();
+
+})
+
+.then(json=>{
+
+  data =
+    Array.isArray(json)
+      ? json
+      : (
+          Array.isArray(json.list)
+            ? json.list
+            : []
+        );
+
+
+  groups={};
+
+
+  for(
+    const item of data
+  ){
+
+    const prefecture =
+      PREF[item.pref] ||
+      String(item.pref);
+
+
+    if(!groups[prefecture]){
+
+      groups[prefecture]=[];
+
+    }
+
+
+    groups[prefecture].push(
+      item
+    );
+
+  }
+
+
+  document
+    .getElementById("status")
+    .textContent =
+
+    `已載入 ${data.length} 筆，
+     共 ${Object.keys(groups).length}
+     個都道府縣。`;
+
+
+  document
+    .getElementById("all")
+    .disabled=false;
+
+
+  document
+    .getElementById("json")
+    .disabled=false;
+
+
+  document
+    .getElementById("csv")
+    .disabled=false;
+
+
+  renderMap();
+
+  loadHistory();
+
+})
+
+.catch(error=>{
+
+  console.error(error);
+
+
+  document
+    .getElementById("status")
+    .textContent =
+
+    "載入失敗：" +
+    error.message;
+
+});
+
 
 
 /* =========================================================
@@ -699,7 +870,7 @@ async function loadHistory(){
 
   try{
 
-    const r=
+    const response =
       await fetch(
         "history.json?ts="+Date.now(),
         {
@@ -708,34 +879,38 @@ async function loadHistory(){
       );
 
 
-    if(!r.ok)
-      throw Error();
+    if(!response.ok){
+
+      throw new Error();
+
+    }
 
 
-    const h=
-      await r.json();
+    const historyData =
+      await response.json();
 
 
-    const el=
+    const logs =
+      historyData.history || [];
+
+
+    const element =
       document.getElementById(
         "history"
       );
 
 
-    const logs=
-      h.history || [];
-
-
     if(!logs.length){
 
-      el.innerHTML=
+      element.innerHTML =
         '<span class="muted">尚無更新紀錄。</span>';
 
       return;
+
     }
 
 
-    el.innerHTML=
+    element.innerHTML =
 
       logs
       .slice()
@@ -743,21 +918,19 @@ async function loadHistory(){
       .slice(0,50)
       .map(item=>{
 
-        const added=
+        const added =
           item.added || [];
 
-        const removed=
+        const removed =
           item.removed || [];
 
-        const changed=
+        const changed =
           item.changed || [];
 
 
         return `
 
-        <div
-          class="card"
-          style="margin:8px 0">
+        <div class="history-card">
 
           <b>
             ${escapeHtml(
@@ -770,7 +943,8 @@ async function loadHistory(){
           <span class="muted">
 
             版本：
-            ${item.total ?? ""} 筆
+            ${item.total ?? ""}
+            筆
 
           </span>
 
@@ -788,9 +962,11 @@ async function loadHistory(){
 
 
           ${
-            added.length ||
-            removed.length ||
-            changed.length
+            (
+              added.length ||
+              removed.length ||
+              changed.length
+            )
 
             ?
 
@@ -808,26 +984,37 @@ async function loadHistory(){
 
                 ?
 
-                `<b>新增</b><br>
+                `
+
+                <br>
+
+                <b>新增</b>
+
+                <br>
 
                 ${
                   added
                   .map(x=>
+
                     `＋
                     ${escapeHtml(
-                      x.prefecture||""
+                      x.prefecture || ""
                     )}
                     ｜
                     ${escapeHtml(
-                      x.title||""
+                      x.title || ""
                     )}
                     ｜
-                    ${x.lat},${x.lng}`
+                    ${x.lat},
+                    ${x.lng}`
+
                   )
                   .join("<br>")
                 }
 
-                <br>`
+                <br>
+
+                `
 
                 :
 
@@ -840,26 +1027,35 @@ async function loadHistory(){
 
                 ?
 
-                `<b>移除</b><br>
+                `
+
+                <b>移除</b>
+
+                <br>
 
                 ${
                   removed
                   .map(x=>
+
                     `－
                     ${escapeHtml(
-                      x.prefecture||""
+                      x.prefecture || ""
                     )}
                     ｜
                     ${escapeHtml(
-                      x.title||""
+                      x.title || ""
                     )}
                     ｜
-                    ${x.lat},${x.lng}`
+                    ${x.lat},
+                    ${x.lng}`
+
                   )
                   .join("<br>")
                 }
 
-                <br>`
+                <br>
+
+                `
 
                 :
 
@@ -872,22 +1068,30 @@ async function loadHistory(){
 
                 ?
 
-                `<b>修改</b><br>
+                `
+
+                <b>修改</b>
+
+                <br>
 
                 ${
                   changed
                   .map(x=>
+
                     `↔
                     ${escapeHtml(
-                      x.prefecture||""
+                      x.prefecture || ""
                     )}
                     ｜
                     ${escapeHtml(
-                      x.title||""
+                      x.title || ""
                     )}`
+
                   )
                   .join("<br>")
-                }`
+                }
+
+                `
 
                 :
 
@@ -912,460 +1116,30 @@ async function loadHistory(){
       .join("");
 
 
-    document.getElementById(
-      "syncInfo"
-    ).textContent=
+    document
+      .getElementById(
+        "syncInfo"
+      )
+      .textContent =
 
       `GitHub 最新同步：
-      ${h.last_sync||"未知"}
+      ${
+        historyData.last_sync ||
+        "未知"
+      }
       ｜每 5 分鐘自動檢查一次`;
 
   }
 
-  catch(e){
-
-    document.getElementById(
-      "history"
-    ).textContent=
-      "尚無 History 資料。";
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD DATA
-========================================================= */
-
-fetch(
-
-  DATA_URL+
-  "?ts="+Date.now(),
-
-  {
-    cache:"no-store"
-  }
-
-)
-
-.then(r=>{
-
-  if(!r.ok)
-    throw Error(
-      "GitHub 資料無法取得"
-    );
-
-  return r.json();
-
-})
-
-.then(j=>{
-
-  data=
-    Array.isArray(j)
-      ? j
-      : (j.list || []);
-
-
-  groups={};
-
-
-  for(
-    const x of data
-  ){
-
-    const p=
-      PREF[x.pref] ||
-      String(x.pref);
-
-
-    if(!groups[p])
-      groups[p]=[];
-
-
-    groups[p].push(x);
-
-  }
-
-
-  document.getElementById(
-    "status"
-  ).textContent=
-
-    `已載入 ${data.length} 筆，
-    共 ${Object.keys(groups).length}
-    個都道府縣。`;
-
-
-  ["all","json","csv"]
-    .forEach(id=>{
-
-      document
-        .getElementById(id)
-        .disabled=false;
-
-    });
-
-
-  render();
-
-  renderMap();
-
-  loadHistory();
-
-})
-
-.catch(e=>{
-
-  document.getElementById(
-    "status"
-  ).textContent=
-    "載入失敗："+e.message;
-
-});
-
-
-
-/* =========================================================
-   DOWNLOAD
-========================================================= */
-
-function safe(s){
-
-  return String(s)
-    .replace(
-      /[\\/:*?"<>|]/g,
-      "_"
-    );
-
-}
-
-
-function blob(
-  s,
-  type="text/plain;charset=utf-8"
-){
-
-  return new Blob(
-    ["\ufeff",s],
-    {
-      type:type
-    }
-  );
-
-}
-
-
-function save(b,n){
-
-  const a=
-    document.createElement("a");
-
-
-  a.href=
-    URL.createObjectURL(b);
-
-
-  a.download=n;
-
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
-
-
-  setTimeout(
-    ()=>{
-      URL.revokeObjectURL(
-        a.href
-      );
-    },
-    1000
-  );
-
-}
-
-
-function txt(
-  items,
-  groupName
-){
-
-  return items
-    .map(x=>
-
-      `${x.coords[0]},
-      ${x.coords[1]},
-      ${x.city||groupName}`
-
-    )
-    .map(x=>
-      x.replace(/\s+/g," ")
-    )
-    .join("\n");
-
-}
-
-
-function one(p){
-
-  save(
-
-    blob(
-      txt(
-        groups[p],
-        p
+  catch(error){
+
+    document
+      .getElementById(
+        "history"
       )
-    ),
+      .innerHTML =
 
-    `${safe(p)}.txt`
-
-  );
-
-}
-
-
-function downloadAll(){
-
-  let out=[];
-
-
-  for(
-    const p of
-    Object.keys(groups).sort()
-  ){
-
-    out.push(
-      `# ===== ${p} (${groups[p].length}) =====`
-    );
-
-    out.push(
-      txt(groups[p],p),
-      ""
-    );
-
-  }
-
-
-  save(
-
-    blob(
-      out.join("\n")
-    ),
-
-    "poke_lid_2026_by_prefecture.txt"
-
-  );
-
-}
-
-
-function downloadJSON(){
-
-  const out={};
-
-
-  for(
-    const p of
-    Object.keys(groups).sort()
-  ){
-
-    out[p]=
-
-      groups[p]
-      .map(x=>({
-
-        lat:
-          String(
-            x.coords[0]
-          ),
-
-        lng:
-          String(
-            x.coords[1]
-          ),
-
-        title:
-          String(
-            x.city||p
-          )
-
-      }));
-
-  }
-
-
-  save(
-
-    new Blob(
-
-      [
-        JSON.stringify(
-          out,
-          null,
-          0
-        )
-      ],
-
-      {
-        type:
-          "application/json;charset=utf-8"
-      }
-
-    ),
-
-    "poke_lid_2026_favorite_lists.json"
-
-  );
-
-}
-
-
-function downloadCSV(){
-
-  const rows=[
-
-    [
-      "id",
-      "prefecture",
-      "city",
-      "lat",
-      "lng",
-      "name",
-      "address",
-      "pokemons"
-    ]
-
-  ];
-
-
-  for(
-    const x of data
-  ){
-
-    rows.push([
-
-      x.id,
-
-      PREF[x.pref] ||
-      x.pref,
-
-      x.city || "",
-
-      x.coords?.[0] || "",
-
-      x.coords?.[1] || "",
-
-      x.city || "",
-
-      x.address || "",
-
-      (x.pokemons||[])
-        .join("|")
-
-    ]);
-
-  }
-
-
-  const csv=
-
-    rows
-    .map(r=>
-
-      r.map(v=>
-
-        `"${String(v)
-          .replaceAll(
-            '"',
-            '""'
-          )}"`
-
-      ).join(",")
-
-    )
-    .join("\n");
-
-
-  save(
-
-    blob(
-      csv,
-      "text/csv;charset=utf-8"
-    ),
-
-    "poke_lid_2026.csv"
-
-  );
-
-}
-
-
-
-/* =========================================================
-   GROUP LIST
-========================================================= */
-
-function render(){
-
-  const el=
-    document.getElementById(
-      "groups"
-    );
-
-
-  el.innerHTML="";
-
-
-  for(
-    const p of
-    Object.keys(groups).sort()
-  ){
-
-    const items=
-      groups[p];
-
-
-    const d=
-      document.createElement(
-        "div"
-      );
-
-
-    d.className="card";
-
-
-    d.innerHTML=`
-
-      <b>
-        ${escapeHtml(p)}
-      </b>
-
-      <br>
-
-      <span class="muted">
-
-        ${items.length}
-        個 Poké Lid
-
-      </span>
-
-      <br>
-
-      <button
-        onclick='one(${JSON.stringify(p)})'>
-
-        下載此都道府縣 TXT
-
-      </button>
-
-    `;
-
-
-    el.appendChild(d);
+      '<span class="muted">尚無 History 資料。第一次 GitHub Actions 執行後會建立。</span>';
 
   }
 
@@ -1374,177 +1148,24 @@ function render(){
 
 
 /* =========================================================
-   MAP
+   MAP VARIABLES
 ========================================================= */
 
-let map=null;
+let map = null;
 
-let prefectureLayers={};
+let pointLayer = null;
 
-let pointLayer=null;
+let prefectureLayers = {};
 
-let selectedPrefecture=null;
+let selectedPrefecture = null;
 
 
 /* =========================================================
    JAPAN CENTER
 ========================================================= */
 
-const JAPAN_CENTER=
+const JAPAN_CENTER =
   [36.2,138.3];
-
-
-/* =========================================================
-   PREFECTURE CENTER
-========================================================= */
-
-const PREF_CENTER={
-
-"北海道":[43.4,142.5],
-"青森県":[40.8,140.8],
-"岩手県":[39.6,141.4],
-"宮城県":[38.4,140.9],
-"秋田県":[39.8,140.2],
-"山形県":[38.4,140.1],
-"福島県":[37.4,140.2],
-"茨城県":[36.3,140.4],
-"栃木県":[36.7,139.9],
-"群馬県":[36.5,138.9],
-"埼玉県":[35.9,139.5],
-"千葉県":[35.5,140.2],
-"東京都":[35.7,139.7],
-"神奈川県":[35.4,139.4],
-"新潟県":[37.5,138.9],
-"富山県":[36.7,137.2],
-"石川県":[36.6,136.8],
-"福井県":[35.9,136.2],
-"山梨県":[35.6,138.6],
-"長野県":[36.2,138.0],
-"岐阜県":[35.8,137.0],
-"静岡県":[35.0,138.4],
-"愛知県":[35.1,137.0],
-"三重県":[34.7,136.5],
-"滋賀県":[35.2,136.1],
-"京都府":[35.2,135.6],
-"大阪府":[34.7,135.5],
-"兵庫県":[35.0,134.8],
-"奈良県":[34.6,135.9],
-"和歌山県":[33.9,135.2],
-"鳥取県":[35.4,133.8],
-"島根県":[35.1,132.6],
-"岡山県":[34.9,133.8],
-"広島県":[34.6,132.8],
-"山口県":[34.2,131.5],
-"徳島県":[33.9,134.2],
-"香川県":[34.3,134.0],
-"愛媛県":[33.6,132.8],
-"高知県":[33.5,133.5],
-"福岡県":[33.5,130.4],
-"佐賀県":[33.3,130.2],
-"長崎県":[32.8,129.9],
-"熊本県":[32.8,130.7],
-"大分県":[33.2,131.6],
-"宮崎県":[32.2,131.4],
-"鹿児島県":[31.6,130.5],
-"沖縄県":[26.2,127.7]
-
-};
-
-
-
-/* =========================================================
-   COLOR SCALE
-========================================================= */
-
-function getMaxCount(){
-
-  return Math.max(
-    1,
-
-    ...Object
-      .values(groups)
-      .map(
-        x=>x.length
-      )
-  );
-
-}
-
-
-function getPrefColor(count){
-
-  const max=
-    getMaxCount();
-
-
-  if(count<=0){
-
-    return "#e5e7eb";
-
-  }
-
-
-  /*
-    使用平方根比例，
-
-    避免某一個縣數量太多
-    導致其他縣全部看起來一樣。
-
-    0 → 淺灰
-
-    少 → 淺藍
-
-    中 → 中藍
-
-    多 → 深藍
-  */
-
-  const ratio=
-    Math.sqrt(
-      count/max
-    );
-
-
-  const start=[
-    219,
-    234,
-    254
-  ];
-
-  const end=[
-    30,
-    64,
-    175
-  ];
-
-
-  const r=
-    Math.round(
-      start[0]+
-      (end[0]-start[0])
-      *ratio
-    );
-
-
-  const g=
-    Math.round(
-      start[1]+
-      (end[1]-start[1])
-      *ratio
-    );
-
-
-  const b=
-    Math.round(
-      start[2]+
-      (end[2]-start[2])
-      *ratio
-    );
-
-
-  return `rgb(${r},${g},${b})`;
-
-}
 
 
 
@@ -1558,7 +1179,7 @@ function initMap(){
     return;
 
 
-  map=
+  map =
     L.map(
       "map",
       {
@@ -1571,20 +1192,16 @@ function initMap(){
 
         touchZoom:true,
 
-        dragging:true,
-
-        tap:true
+        dragging:true
 
       }
     );
 
 
   /*
-    預設放大一倍：
+    預設放大一倍
 
-    原本約 5
-
-    現在 6
+    日本全圖 Zoom 6
   */
 
   map.setView(
@@ -1593,21 +1210,43 @@ function initMap(){
   );
 
 
-  /*
-    點位 Layer
-
-    一開始完全沒有點
-  */
-
-  pointLayer=
+  pointLayer =
     L.layerGroup()
       .addTo(map);
 
 
   /*
-    =========================
-    行政區 GeoJSON
-    =========================
+    不使用 OpenStreetMap 底圖。
+
+    使用空白背景，
+    讓 GeoJSON 行政區成為主要地圖。
+  */
+
+
+  L.rectangle(
+
+    [
+      [-90,-180],
+      [90,180]
+    ],
+
+    {
+
+      stroke:false,
+
+      fillColor:"#f3f4f6",
+
+      fillOpacity:1,
+
+      interactive:false
+
+    }
+
+  ).addTo(map);
+
+
+  /*
+    載入日本行政區
   */
 
   fetch(
@@ -1617,241 +1256,39 @@ function initMap(){
     }
   )
 
-  .then(r=>{
+  .then(response=>{
 
-    if(!r.ok){
+    if(!response.ok){
 
-      throw Error(
+      throw new Error(
         "prefectures.geojson 載入失敗"
       );
 
     }
 
-    return r.json();
+    return response.json();
 
   })
 
-  .then(geo=>{
-
-    L.geoJSON(
-
-      geo,
-
-      {
-
-        style:function(feature){
-
-          const name=
-            getGeoName(
-              feature
-            );
-
-
-          const count=
-            groups[name]?.length ||
-            0;
-
-
-          return {
-
-            color:"#ffffff",
-
-            weight:1.5,
-
-            fillColor:
-              getPrefColor(
-                count
-              ),
-
-            fillOpacity:.85
-
-          };
-
-        },
-
-
-        onEachFeature:
-        function(
-          feature,
-          layer
-        ){
-
-          const name=
-            getGeoName(
-              feature
-            );
-
-
-          if(!name)
-            return;
-
-
-          const items=
-            groups[name] ||
-            [];
-
-
-          /*
-            儲存行政區 Layer
-          */
-
-          prefectureLayers[name]=
-            layer;
-
-
-          /*
-            =========================
-            Hover Tooltip
-            =========================
-          */
-
-          layer.bindTooltip(
-
-            `<b>
-              ${escapeHtml(name)}
-            </b>
-            ｜${items.length} 個`,
-
-            {
-
-              sticky:true,
-
-              direction:"top",
-
-              className:
-                "pref-tooltip"
-
-            }
-
-          );
-
-
-          /*
-            =========================
-            Mouse Over
-            =========================
-          */
-
-          layer.on(
-            "mouseover",
-            function(){
-
-              layer.setStyle({
-
-                weight:3,
-
-                color:"#222",
-
-                fillOpacity:1
-
-              });
-
-              layer.bringToFront();
-
-            }
-          );
-
-
-          /*
-            =========================
-            Mouse Out
-            =========================
-          */
-
-          layer.on(
-            "mouseout",
-            function(){
-
-              layer.setStyle({
-
-                weight:1.5,
-
-                color:"#fff",
-
-                fillOpacity:.85
-
-              });
-
-            }
-          );
-
-
-          /*
-            =========================
-            CLICK
-            =========================
-          */
-
-          layer.on(
-            "click",
-            function(e){
-
-              if(e)
-                L.DomEvent
-                  .stopPropagation(e);
-
-
-              showPrefecture(
-                name
-              );
-
-            }
-          );
-
-
-          /*
-            =========================
-            TOUCH
-            =========================
-          */
-
-          layer.on(
-            "touchstart",
-            function(e){
-
-              if(e)
-                L.DomEvent
-                  .stopPropagation(e);
-
-            }
-          );
-
-
-          layer.on(
-            "touchend",
-            function(e){
-
-              if(e)
-                L.DomEvent
-                  .stopPropagation(e);
-
-
-              showPrefecture(
-                name
-              );
-
-            }
-          );
-
-        }
-
-      }
-
-    ).addTo(map);
+  .then(geojson=>{
+
+    createPrefectureLayer(
+      geojson
+    );
 
   })
 
-  .catch(err=>{
+  .catch(error=>{
 
-    console.error(err);
+    console.error(
+      error
+    );
 
   });
 
 
   /*
-    =========================
     地圖空白點擊
-    =========================
   */
 
   map.on(
@@ -1859,24 +1296,25 @@ function initMap(){
     function(){
 
       /*
-        有選行政區
+        第一次點擊：
 
-        → 回日本全圖
+        關閉小卡
       */
 
-      if(
-        selectedPrefecture
-      ){
-
-        closePokeCard();
+      closePokeCard();
 
 
-        selectedPrefecture=
-          null;
+      /*
+        如果目前有選行政區：
 
+        回日本全圖
+      */
+
+      if(selectedPrefecture){
+
+        selectedPrefecture=null;
 
         pointLayer.clearLayers();
-
 
         map.setView(
           JAPAN_CENTER,
@@ -1896,12 +1334,235 @@ function initMap(){
 
 
 /* =========================================================
-   RENDER MAP
+   CREATE PREFECTURE GEOJSON
 ========================================================= */
 
-function renderMap(){
+function createPrefectureLayer(
+  geojson
+){
 
-  initMap();
+  /*
+    如果之前已經建立過
+    先移除
+  */
+
+  Object
+    .values(prefectureLayers)
+    .forEach(
+      layer=>{
+        map.removeLayer(
+          layer
+        );
+      }
+    );
+
+
+  prefectureLayers={};
+
+
+  const layer =
+    L.geoJSON(
+
+      geojson,
+
+      {
+
+        style:function(feature){
+
+          const name =
+            getGeoName(
+              feature
+            );
+
+
+          const count =
+            groups[name]?.length ||
+            0;
+
+
+          return {
+
+            color:"#ffffff",
+
+            weight:1.5,
+
+            fillColor:
+              getPrefColor(
+                count
+              ),
+
+            fillOpacity:.88
+
+          };
+
+        },
+
+
+        onEachFeature:
+        function(
+          feature,
+          polygon
+        ){
+
+          const name =
+            getGeoName(
+              feature
+            );
+
+
+          if(!name)
+            return;
+
+
+          const items =
+            groups[name] ||
+            [];
+
+
+          prefectureLayers[name] =
+            polygon;
+
+
+          /*
+            Hover 顯示數量
+          */
+
+          polygon.bindTooltip(
+
+            `<b>
+              ${escapeHtml(name)}
+            </b>
+            <br>
+            Poké Lid：
+            ${items.length} 個`,
+
+            {
+
+              sticky:true,
+
+              direction:"top",
+
+              className:
+                "pref-tooltip"
+
+            }
+
+          );
+
+
+          /*
+            Mouse Over
+          */
+
+          polygon.on(
+            "mouseover",
+            function(){
+
+              polygon.setStyle({
+
+                weight:3,
+
+                color:"#222",
+
+                fillOpacity:1
+
+              });
+
+
+              polygon.bringToFront();
+
+            }
+          );
+
+
+          /*
+            Mouse Out
+          */
+
+          polygon.on(
+            "mouseout",
+            function(){
+
+              polygon.setStyle({
+
+                weight:1.5,
+
+                color:"#fff",
+
+                fillOpacity:.88
+
+              });
+
+            }
+          );
+
+
+          /*
+            Click
+          */
+
+          polygon.on(
+            "click",
+            function(event){
+
+              L.DomEvent
+                .stopPropagation(
+                  event
+                );
+
+
+              showPrefecture(
+                name
+              );
+
+            }
+          );
+
+
+          /*
+            Touch
+
+            手機版非常重要
+          */
+
+          polygon.on(
+            "touchstart",
+            function(event){
+
+              L.DomEvent
+                .stopPropagation(
+                  event
+                );
+
+            }
+          );
+
+
+          polygon.on(
+            "touchend",
+            function(event){
+
+              L.DomEvent
+                .stopPropagation(
+                  event
+                );
+
+
+              showPrefecture(
+                name
+              );
+
+            }
+          );
+
+        }
+
+      }
+
+    );
+
+
+  layer.addTo(map);
 
 }
 
@@ -1915,33 +1576,161 @@ function getGeoName(
   feature
 ){
 
-  const p=
-    feature?.properties || {};
+  const properties =
+    feature?.properties ||
+    {};
 
 
   /*
-    常見日本 GeoJSON 欄位
+    支援多種 GeoJSON 格式
   */
 
   return (
 
-    p.name ||
+    properties.name ||
 
-    p.nam_ja ||
+    properties.nam_ja ||
 
-    p.N03_001 ||
+    properties.name_ja ||
 
-    p.NAME_1 ||
+    properties.N03_001 ||
 
-    p.NAME ||
+    properties.NAME_1 ||
 
-    p.name_ja ||
+    properties.NAME ||
 
-    p.prefecture ||
+    properties.prefecture ||
 
-    p.pref
+    properties.pref ||
+
+    ""
 
   );
+
+}
+
+
+
+/* =========================================================
+   COLOR SCALE
+========================================================= */
+
+function getMaxCount(){
+
+  const counts =
+    Object
+      .values(groups)
+      .map(
+        items =>
+          items.length
+      );
+
+
+  return Math.max(
+    1,
+    ...counts
+  );
+
+}
+
+
+function getPrefColor(
+  count
+){
+
+  if(count<=0){
+
+    return "#e5e7eb";
+
+  }
+
+
+  const max =
+    getMaxCount();
+
+
+  /*
+    使用平方根：
+
+    避免最高數量縣市
+    把其他縣市全部壓成同一色。
+  */
+
+  const ratio =
+    Math.sqrt(
+      count /
+      max
+    );
+
+
+  /*
+    淺藍
+    ↓
+    深藍
+  */
+
+  const start =
+    [
+      219,
+      234,
+      254
+    ];
+
+
+  const end =
+    [
+      30,
+      64,
+      175
+    ];
+
+
+  const r =
+    Math.round(
+      start[0] +
+      (
+        end[0] -
+        start[0]
+      ) *
+      ratio
+    );
+
+
+  const g =
+    Math.round(
+      start[1] +
+      (
+        end[1] -
+        start[1]
+      ) *
+      ratio
+    );
+
+
+  const b =
+    Math.round(
+      start[2] +
+      (
+        end[2] -
+        start[2]
+      ) *
+      ratio
+    );
+
+
+  return `rgb(${r},${g},${b})`;
+
+}
+
+
+
+/* =========================================================
+   RENDER MAP
+========================================================= */
+
+function renderMap(){
+
+  initMap();
 
 }
 
@@ -1951,24 +1740,28 @@ function getGeoName(
    SHOW PREFECTURE
 ========================================================= */
 
-function showPrefecture(p){
+function showPrefecture(
+  prefecture
+){
 
-  const items=
-    groups[p] || [];
-
-
-  selectedPrefecture=
-    p;
+  selectedPrefecture =
+    prefecture;
 
 
   closePokeCard();
 
 
   /*
-    清除舊點
+    清除之前的小點
   */
 
   pointLayer.clearLayers();
+
+
+  const polygon =
+    prefectureLayers[
+      prefecture
+    ];
 
 
   /*
@@ -1977,14 +1770,10 @@ function showPrefecture(p){
     =========================
   */
 
-  const layer=
-    prefectureLayers[p];
+  if(polygon){
 
-
-  if(layer){
-
-    const bounds=
-      layer.getBounds();
+    const bounds =
+      polygon.getBounds();
 
 
     if(
@@ -1999,8 +1788,8 @@ function showPrefecture(p){
         {
 
           padding:[
-            60,
-            60
+            70,
+            70
           ],
 
           maxZoom:9,
@@ -2015,23 +1804,6 @@ function showPrefecture(p){
 
   }
 
-  else{
-
-    const center=
-      PREF_CENTER[p] ||
-      JAPAN_CENTER;
-
-
-    map.setView(
-      center,
-      8,
-      {
-        animate:true
-      }
-    );
-
-  }
-
 
   /*
     =========================
@@ -2039,19 +1811,24 @@ function showPrefecture(p){
     =========================
   */
 
+  const items =
+    groups[prefecture] ||
+    [];
+
+
   for(
-    const x of items
+    const item of items
   ){
 
-    const lat=
+    const lat =
       Number(
-        x.coords?.[0]
+        item.coords?.[0]
       );
 
 
-    const lng=
+    const lng =
       Number(
-        x.coords?.[1]
+        item.coords?.[1]
       );
 
 
@@ -2065,34 +1842,28 @@ function showPrefecture(p){
     }
 
 
-    /*
-      自訂紅色小點
-    */
-
-    const icon=
+    const icon =
       L.divIcon({
 
         className:"",
 
         html:
-          `<div
-            class="poke-dot">
-          </div>`,
+          '<div class="poke-dot"></div>',
 
         iconSize:[
-          15,
-          15
+          16,
+          16
         ],
 
         iconAnchor:[
-          7.5,
-          7.5
+          8,
+          8
         ]
 
       });
 
 
-    const marker=
+    const marker =
       L.marker(
 
         [
@@ -2106,9 +1877,7 @@ function showPrefecture(p){
 
           interactive:true,
 
-          bubblingMouseEvents:false,
-
-          keyboard:true
+          bubblingMouseEvents:false
 
         }
 
@@ -2121,22 +1890,21 @@ function showPrefecture(p){
 
 
     /*
-      =========================
-      CLICK
-      =========================
+      電腦點擊
     */
 
     marker.on(
       "click",
-      function(e){
+      function(event){
 
-        if(e)
-          L.DomEvent
-            .stopPropagation(e);
+        L.DomEvent
+          .stopPropagation(
+            event
+          );
 
 
         showPokeCard(
-          x
+          item
         );
 
       }
@@ -2144,18 +1912,17 @@ function showPrefecture(p){
 
 
     /*
-      =========================
-      MOBILE TOUCH
-      =========================
+      手機 touch
     */
 
     marker.on(
       "touchstart",
-      function(e){
+      function(event){
 
-        if(e)
-          L.DomEvent
-            .stopPropagation(e);
+        L.DomEvent
+          .stopPropagation(
+            event
+          );
 
       }
     );
@@ -2163,15 +1930,16 @@ function showPrefecture(p){
 
     marker.on(
       "touchend",
-      function(e){
+      function(event){
 
-        if(e)
-          L.DomEvent
-            .stopPropagation(e);
+        L.DomEvent
+          .stopPropagation(
+            event
+          );
 
 
         showPokeCard(
-          x
+          item
         );
 
       }
@@ -2184,7 +1952,7 @@ function showPrefecture(p){
 
 
 /* =========================================================
-   POKEFUTA IMAGE URL
+   POKÉFUTA IMAGE
 ========================================================= */
 
 function getPokeFutaImage(
@@ -2203,45 +1971,56 @@ function getPokeFutaImage(
 
 
   /*
-    原始 Poké Lids Tracker
-    的圖片格式：
+    Poké Lid 原圖
 
-    /images/pokefuta/{id}.png
+    例如：
+
+    id = 59
+
+    ↓
+
+    /images/pokefuta/59.png
   */
 
-  return:
-
-    `https://pokefuta.yuki.games/images/pokefuta/${id}.png`;
+  return (
+    "https://pokefuta.yuki.games/images/pokefuta/" +
+    encodeURIComponent(
+      id
+    ) +
+    ".png"
+  );
 
 }
 
 
 
 /* =========================================================
-   SHOW POKEFUTA CARD
+   SHOW POKÉ LID CARD
 ========================================================= */
 
-function showPokeCard(x){
+function showPokeCard(
+  item
+){
 
-  const overlay=
+  const overlay =
     document.getElementById(
       "pokeCardOverlay"
     );
 
 
-  const title=
+  const title =
     document.getElementById(
       "pokeCardTitle"
     );
 
 
-  const content=
+  const content =
     document.getElementById(
       "pokeCardContent"
     );
 
 
-  const image=
+  const image =
     document.getElementById(
       "pokeCardImage"
     );
@@ -2253,8 +2032,9 @@ function showPokeCard(x){
     =========================
   */
 
-  const id=
-    x.id;
+  const id =
+    item.id ??
+    "";
 
 
   /*
@@ -2263,15 +2043,17 @@ function showPokeCard(x){
     =========================
   */
 
-  const lat=
-    x.coords?.[0] ?? "";
+  const lat =
+    item.coords?.[0] ??
+    "";
 
 
-  const lng=
-    x.coords?.[1] ?? "";
+  const lng =
+    item.coords?.[1] ??
+    "";
 
 
-  const coord=
+  const coordinate =
     `${lat},${lng}`;
 
 
@@ -2281,8 +2063,8 @@ function showPokeCard(x){
     =========================
   */
 
-  title.textContent=
-    x.city ||
+  title.textContent =
+    item.city ||
     "Poké Lid";
 
 
@@ -2292,73 +2074,68 @@ function showPokeCard(x){
     =========================
   */
 
-  const imageUrl=
-    getPokeFutaImage(
-      id
-    );
+  image.style.display =
+    "none";
 
 
-  image.onload=
+  image.onload =
     function(){
 
-      image.style.display=
+      image.style.display =
         "block";
 
     };
 
 
-  image.onerror=
+  image.onerror =
     function(){
 
       console.warn(
         "Poké Lid 圖片載入失敗：",
-        imageUrl
+        image.src
       );
 
 
-      image.style.display=
+      image.style.display =
         "none";
 
     };
 
 
-  if(imageUrl){
+  const imageURL =
+    getPokeFutaImage(
+      id
+    );
 
-    image.src=
-      imageUrl;
 
-    image.style.display=
-      "block";
+  if(imageURL){
+
+    image.src =
+      imageURL;
 
   }
-
   else{
 
     image.removeAttribute(
       "src"
     );
 
-    image.style.display=
-      "none";
-
   }
 
 
   /*
     =========================
-    資料
+    CARD CONTENT
     =========================
   */
 
-  content.innerHTML=`
+  content.innerHTML = `
 
     <div class="info-row">
 
       <b>ID：</b>
 
-      ${escapeHtml(
-        id
-      )}
+      ${escapeHtml(id)}
 
     </div>
 
@@ -2368,8 +2145,8 @@ function showPokeCard(x){
       <b>都道府縣：</b>
 
       ${escapeHtml(
-        PREF[x.pref] ||
-        x.pref ||
+        PREF[item.pref] ||
+        item.pref ||
         ""
       )}
 
@@ -2381,7 +2158,7 @@ function showPokeCard(x){
       <b>地點：</b>
 
       ${escapeHtml(
-        x.city ||
+        item.city ||
         ""
       )}
 
@@ -2393,7 +2170,7 @@ function showPokeCard(x){
       <b>地址：</b>
 
       ${escapeHtml(
-        x.address ||
+        item.address ||
         "無資料"
       )}
 
@@ -2405,8 +2182,10 @@ function showPokeCard(x){
       <b>Pokémon：</b>
 
       ${escapeHtml(
-        (x.pokemons || [])
-          .join("、") ||
+        (
+          item.pokemons ||
+          []
+        ).join("、") ||
         "無資料"
       )}
 
@@ -2423,9 +2202,13 @@ function showPokeCard(x){
     <button
       id="copyCoordButton"
       class="coord-button"
-      type="button">
+      type="button"
+    >
 
-      📍 ${escapeHtml(coord)}
+      📍
+      ${escapeHtml(
+        coordinate
+      )}
 
     </button>
 
@@ -2434,142 +2217,150 @@ function showPokeCard(x){
 
   /*
     =========================
-    複製座標
+    COPY COORDINATE
     =========================
   */
 
-  const copyButton=
+  const copyButton =
     document.getElementById(
       "copyCoordButton"
     );
 
 
-  function copyCoordinate(e){
+  copyButton.addEventListener(
+    "click",
+    function(event){
 
-    if(e){
+      event.preventDefault();
 
-      e.preventDefault();
+      event.stopPropagation();
 
-      e.stopPropagation();
-
-    }
-
-
-    if(
-
-      navigator.clipboard &&
-
-      window.isSecureContext
-
-    ){
-
-      navigator.clipboard
-        .writeText(coord)
-
-        .then(()=>{
-
-          copiedFeedback(
-            copyButton
-          );
-
-        })
-
-        .catch(()=>{
-
-          fallbackCopy(
-            coord,
-            copyButton
-          );
-
-        });
-
-    }
-
-    else{
-
-      fallbackCopy(
-        coord,
+      copyCoordinate(
+        coordinate,
         copyButton
       );
 
     }
-
-  }
-
-
-  copyButton.addEventListener(
-    "click",
-    copyCoordinate
   );
 
 
   copyButton.addEventListener(
-
     "touchend",
+    function(event){
 
-    copyCoordinate,
+      event.preventDefault();
 
+      event.stopPropagation();
+
+      copyCoordinate(
+        coordinate,
+        copyButton
+      );
+
+    },
     {
       passive:false
     }
-
   );
 
 
   copyButton.addEventListener(
-
     "touchstart",
+    function(event){
 
-    function(e){
-
-      e.stopPropagation();
+      event.stopPropagation();
 
     },
-
     {
       passive:true
     }
-
   );
 
 
   /*
     =========================
-    顯示卡片
+    顯示中央小卡
     =========================
   */
 
-  overlay.style.display=
+  overlay.style.display =
     "flex";
 
 
   /*
-    =========================
-    卡片阻止 Leaflet 穿透
-    =========================
+    確保畫面重新計算
   */
 
-  L.DomEvent
-    .disableClickPropagation(
-      document.getElementById(
-        "pokeCard"
-      )
-    );
+  requestAnimationFrame(
+    ()=>{
 
+      overlay.style.display =
+        "flex";
 
-  L.DomEvent
-    .disableScrollPropagation(
-      document.getElementById(
-        "pokeCard"
-      )
-    );
+    }
+  );
 
 }
 
 
 
 /* =========================================================
-   COPY FALLBACK
+   COPY COORDINATE
+========================================================= */
+
+function copyCoordinate(
+  coordinate,
+  button
+){
+
+  /*
+    Clipboard API
+  */
+
+  if(
+    navigator.clipboard &&
+    window.isSecureContext
+  ){
+
+    navigator.clipboard
+      .writeText(
+        coordinate
+      )
+
+      .then(()=>{
+
+        copiedFeedback(
+          button
+        );
+
+      })
+
+      .catch(()=>{
+
+        fallbackCopy(
+          coordinate,
+          button
+        );
+
+      });
+
+  }
+
+  else{
+
+    fallbackCopy(
+      coordinate,
+      button
+    );
+
+  }
+
+}
+
+
+
+/* =========================================================
+   FALLBACK COPY
 ========================================================= */
 
 function fallbackCopy(
@@ -2577,22 +2368,26 @@ function fallbackCopy(
   button
 ){
 
-  const textarea=
+  const textarea =
     document.createElement(
       "textarea"
     );
 
 
-  textarea.value=
+  textarea.value =
     text;
 
 
-  textarea.style.position=
+  textarea.style.position =
     "fixed";
 
 
-  textarea.style.left=
+  textarea.style.left =
     "-9999px";
+
+
+  textarea.style.top =
+    "0";
 
 
   document.body.appendChild(
@@ -2607,21 +2402,31 @@ function fallbackCopy(
 
   try{
 
-    document.execCommand(
-      "copy"
-    );
+    const success =
+      document.execCommand(
+        "copy"
+      );
 
 
-    copiedFeedback(
-      button
-    );
+    if(success){
+
+      copiedFeedback(
+        button
+      );
+
+    }
+    else{
+
+      throw new Error();
+
+    }
 
   }
 
-  catch(e){
+  catch(error){
 
     alert(
-      "複製失敗，請手動複製座標："+
+      "複製失敗，請手動複製：\n" +
       text
     );
 
@@ -2635,18 +2440,22 @@ function fallbackCopy(
 
 
 /* =========================================================
-   COPY FEEDBACK
+   COPIED FEEDBACK
 ========================================================= */
 
 function copiedFeedback(
   button
 ){
 
-  const oldText=
+  if(!button)
+    return;
+
+
+  const original =
     button.textContent;
 
 
-  button.textContent=
+  button.textContent =
     "✓ 已複製";
 
 
@@ -2656,10 +2465,10 @@ function copiedFeedback(
 
 
   setTimeout(
-    ()=>{
+    function(){
 
-      button.textContent=
-        oldText;
+      button.textContent =
+        original;
 
 
       button.classList.remove(
@@ -2680,13 +2489,13 @@ function copiedFeedback(
 
 function closePokeCard(){
 
-  const overlay=
+  const overlay =
     document.getElementById(
       "pokeCardOverlay"
     );
 
 
-  overlay.style.display=
+  overlay.style.display =
     "none";
 
 }
@@ -2703,14 +2512,55 @@ document
   )
   .addEventListener(
     "click",
-    function(e){
+    function(event){
 
-      e.preventDefault();
+      event.preventDefault();
 
-      e.stopPropagation();
+      event.stopPropagation();
 
       closePokeCard();
 
+    }
+  );
+
+
+
+/* =========================================================
+   CARD ITSELF
+========================================================= */
+
+document
+  .getElementById(
+    "pokeCard"
+  )
+  .addEventListener(
+    "click",
+    function(event){
+
+      /*
+        小卡本身點擊
+        不關閉
+      */
+
+      event.stopPropagation();
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "pokeCard"
+  )
+  .addEventListener(
+    "touchstart",
+    function(event){
+
+      event.stopPropagation();
+
+    },
+    {
+      passive:true
     }
   );
 
@@ -2726,10 +2576,11 @@ document
   )
   .addEventListener(
     "click",
-    function(e){
+    function(event){
 
       if(
-        e.target === this
+        event.target ===
+        this
       ){
 
         closePokeCard();
@@ -2742,37 +2593,15 @@ document
 
 
 /* =========================================================
-   TOUCH CARD
-========================================================= */
-
-document
-  .getElementById(
-    "pokeCard"
-  )
-  .addEventListener(
-    "touchstart",
-    function(e){
-
-      e.stopPropagation();
-
-    },
-    {
-      passive:true
-    }
-  );
-
-
-
-/* =========================================================
    ESC
 ========================================================= */
 
 document.addEventListener(
   "keydown",
-  function(e){
+  function(event){
 
     if(
-      e.key === "Escape"
+      event.key === "Escape"
     ){
 
       closePokeCard();
@@ -2785,24 +2614,387 @@ document.addEventListener(
 
 
 /* =========================================================
-   ESCAPE HTML
+   DOWNLOAD HELPERS
 ========================================================= */
 
-function escapeHtml(s){
+function safe(
+  value
+){
 
-  return String(s ?? "")
+  return String(value)
     .replace(
-      /[&<>"']/g,
-      m=>({
+      /[\\/:*?"<>|]/g,
+      "_"
+    );
+
+}
+
+
+function makeBlob(
+  content,
+  type="text/plain;charset=utf-8"
+){
+
+  return new Blob(
+    [
+      "\ufeff",
+      content
+    ],
+    {
+      type:type
+    }
+  );
+
+}
+
+
+function saveFile(
+  blob,
+  filename
+){
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href =
+    url;
+
+
+  link.download =
+    filename;
+
+
+  document.body.appendChild(
+    link
+  );
+
+
+  link.click();
+
+
+  link.remove();
+
+
+  setTimeout(
+    ()=>{
+      URL.revokeObjectURL(
+        url
+      );
+    },
+    1000
+  );
+
+}
+
+
+
+/* =========================================================
+   TXT
+========================================================= */
+
+function makeTXT(
+  items,
+  prefecture
+){
+
+  return items
+
+    .map(item=>{
+
+      return (
+
+        String(
+          item.coords?.[0] ??
+          ""
+        )
+
+        +
+
+        ","
+
+        +
+
+        String(
+          item.coords?.[1] ??
+          ""
+        )
+
+        +
+
+        ","
+
+        +
+
+        String(
+          item.city ||
+          prefecture
+        )
+
+      );
+
+    })
+
+    .join("\n");
+
+}
+
+
+
+function downloadAll(){
+
+  const output=[];
+
+
+  for(
+    const prefecture of
+    Object.keys(groups).sort()
+  ){
+
+    const items =
+      groups[prefecture];
+
+
+    output.push(
+
+      `# ===== ${prefecture} (${items.length}) =====`
+
+    );
+
+
+    output.push(
+
+      makeTXT(
+        items,
+        prefecture
+      )
+
+    );
+
+
+    output.push("");
+
+  }
+
+
+  saveFile(
+
+    makeBlob(
+      output.join("\n")
+    ),
+
+    "poke_lid_2026_by_prefecture.txt"
+
+  );
+
+}
+
+
+
+/* =========================================================
+   JSON
+========================================================= */
+
+function downloadJSON(){
+
+  const output={};
+
+
+  for(
+    const prefecture of
+    Object.keys(groups).sort()
+  ){
+
+    output[prefecture] =
+
+      groups[prefecture]
+      .map(item=>({
+
+        lat:
+          String(
+            item.coords?.[0] ??
+            ""
+          ),
+
+        lng:
+          String(
+            item.coords?.[1] ??
+            ""
+          ),
+
+        title:
+          String(
+            item.city ||
+            prefecture
+          )
+
+      }));
+
+  }
+
+
+  saveFile(
+
+    new Blob(
+
+      [
+        JSON.stringify(
+          output,
+          null,
+          0
+        )
+      ],
+
+      {
+        type:
+          "application/json;charset=utf-8"
+      }
+
+    ),
+
+    "poke_lid_2026_favorite_lists.json"
+
+  );
+
+}
+
+
+
+/* =========================================================
+   CSV
+========================================================= */
+
+function downloadCSV(){
+
+  const rows=[
+
+    [
+      "id",
+      "prefecture",
+      "city",
+      "lat",
+      "lng",
+      "name",
+      "address",
+      "pokemons"
+    ]
+
+  ];
+
+
+  for(
+    const item of data
+  ){
+
+    rows.push([
+
+      item.id,
+
+      PREF[item.pref] ||
+      item.pref ||
+      "",
+
+      item.city ||
+      "",
+
+      item.coords?.[0] ||
+      "",
+
+      item.coords?.[1] ||
+      "",
+
+      item.city ||
+      "",
+
+      item.address ||
+      "",
+
+      (
+        item.pokemons ||
+        []
+      ).join("|")
+
+    ]);
+
+  }
+
+
+  const csv =
+
+    rows
+    .map(row=>{
+
+      return row
+        .map(value=>{
+
+          return `"${String(value)
+            .replaceAll(
+              '"',
+              '""'
+            )}"`;
+
+        })
+        .join(",");
+
+    })
+    .join("\n");
+
+
+  saveFile(
+
+    makeBlob(
+      csv,
+      "text/csv;charset=utf-8"
+    ),
+
+    "poke_lid_2026.csv"
+
+  );
+
+}
+
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+
+  .replace(
+    /[&<>"']/g,
+    function(match){
+
+      return {
 
         "&":"&amp;",
+
         "<":"&lt;",
+
         ">":"&gt;",
+
         '"':"&quot;",
+
         "'":"&#39;"
 
-      }[m])
-    );
+      }[match];
+
+    }
+  );
 
 }
 

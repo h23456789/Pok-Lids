@@ -71,6 +71,7 @@ p{
 
 }
 
+
 /* =========================================================
    BOX
 ========================================================= */
@@ -97,6 +98,7 @@ p{
   font-size:13px;
 
 }
+
 
 /* =========================================================
    BUTTON
@@ -136,6 +138,7 @@ button:disabled{
 
 }
 
+
 /* =========================================================
    INFO
 ========================================================= */
@@ -164,6 +167,7 @@ button:disabled{
 
 }
 
+
 /* =========================================================
    DOWNLOAD
 ========================================================= */
@@ -178,11 +182,14 @@ button:disabled{
 
 }
 
+
 /* =========================================================
    MAP
 ========================================================= */
 
 #map{
+
+  position:relative;
 
   width:100%;
 
@@ -203,6 +210,7 @@ button:disabled{
   background:#edf0f3;
 
 }
+
 
 /* =========================================================
    MAP HEADER
@@ -236,6 +244,7 @@ button:disabled{
 
 }
 
+
 /* =========================================================
    ZOOM CONTROL
 ========================================================= */
@@ -259,6 +268,7 @@ button:disabled{
   font-size:22px !important;
 
 }
+
 
 /* =========================================================
    PREFECTURE HOVER TOOLTIP
@@ -325,6 +335,7 @@ button:disabled{
 
 }
 
+
 /* =========================================================
    PREFECTURE SELECT
 ========================================================= */
@@ -337,9 +348,18 @@ button:disabled{
 
 }
 
+
 /* =========================================================
    POKÉ LID MARKER
 ========================================================= */
+
+.poke-marker-wrapper{
+
+  background:transparent;
+
+  border:0;
+
+}
 
 .poke-marker{
 
@@ -367,6 +387,7 @@ button:disabled{
 
 }
 
+
 /* =========================================================
    CENTRAL POPUP OVERLAY
 ========================================================= */
@@ -382,6 +403,7 @@ button:disabled{
   pointer-events:none;
 
 }
+
 
 /* =========================================================
    CENTRAL CARD
@@ -432,6 +454,10 @@ button:disabled{
 
     visibility .18s ease;
 
+  -webkit-overflow-scrolling:touch;
+
+  touch-action:auto;
+
 }
 
 #pokeCard.show{
@@ -445,6 +471,7 @@ button:disabled{
     scale(1);
 
 }
+
 
 /* =========================================================
    CARD CLOSE
@@ -483,6 +510,8 @@ button:disabled{
 
   cursor:pointer;
 
+  touch-action:manipulation;
+
 }
 
 .poke-card-close:hover{
@@ -492,6 +521,7 @@ button:disabled{
   opacity:1;
 
 }
+
 
 /* =========================================================
    CARD IMAGE
@@ -538,6 +568,7 @@ button:disabled{
   font-size:14px;
 
 }
+
 
 /* =========================================================
    CARD CONTENT
@@ -587,11 +618,29 @@ button:disabled{
 
 .poke-card-coordinate{
 
+  display:flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  margin-top:4px;
+
+}
+
+.coordinate-button{
+
+  width:100%;
+
+  border:0;
+
   background:#f5f5f5;
 
-  border-radius:7px;
+  color:#222;
 
-  padding:7px 9px;
+  border-radius:8px;
+
+  padding:9px 10px;
 
   font-family:
     Consolas,
@@ -599,7 +648,34 @@ button:disabled{
 
   font-size:12px;
 
-  word-break:break-all;
+  text-align:left;
+
+  cursor:pointer;
+
+  margin:0;
+
+  touch-action:manipulation;
+
+  transition:
+    background .15s ease;
+
+}
+
+.coordinate-button:hover{
+
+  background:#e9ecef;
+
+  opacity:1;
+
+}
+
+.coordinate-button.copied{
+
+  background:#d1e7dd;
+
+  color:#146c43;
+
+  font-weight:700;
 
 }
 
@@ -636,6 +712,7 @@ button:disabled{
   color:#999;
 
 }
+
 
 /* =========================================================
    HISTORY
@@ -690,6 +767,7 @@ button:disabled{
   background:#d99a00;
 
 }
+
 
 /* =========================================================
    MOBILE
@@ -780,7 +858,9 @@ button:disabled{
 
 </head>
 
+
 <body>
+
 
 <!-- =======================================================
      TITLE
@@ -791,6 +871,7 @@ button:disabled{
   Poké Lids 2026 座標分組
 
 </h1>
+
 
 <!-- =======================================================
      INFORMATION
@@ -806,6 +887,7 @@ button:disabled{
 
   </p>
 
+
   <p>
 
     <b>分組方式：</b>
@@ -813,6 +895,7 @@ button:disabled{
     日本 47 都道府縣
 
   </p>
+
 
   <p>
 
@@ -825,6 +908,7 @@ button:disabled{
 
   </p>
 
+
   <div class="top-info">
 
     <div
@@ -836,6 +920,7 @@ button:disabled{
 
     </div>
 
+
     <div
       id="syncChip"
       class="info-chip"
@@ -846,6 +931,7 @@ button:disabled{
     </div>
 
   </div>
+
 
   <div class="download-area">
 
@@ -859,6 +945,7 @@ button:disabled{
 
     </button>
 
+
     <button
       id="json"
       disabled
@@ -868,6 +955,7 @@ button:disabled{
       📥 下載分組 JSON
 
     </button>
+
 
     <button
       id="csv"
@@ -882,6 +970,7 @@ button:disabled{
   </div>
 
 </div>
+
 
 <!-- =======================================================
      MAP
@@ -899,6 +988,7 @@ button:disabled{
 
       </h3>
 
+
       <p class="muted">
 
         點擊行政區後才顯示該區 Poké Lid。
@@ -907,6 +997,7 @@ button:disabled{
       </p>
 
     </div>
+
 
     <div
       id="mapStatus"
@@ -919,14 +1010,8 @@ button:disabled{
 
   </div>
 
-  <div id="map">
 
-    <!--
-      中央 Poké Lid 卡片
-      注意：
-      它直接放在 map 裡面，
-      因此會以地圖視窗為中心。
-    -->
+  <div id="map">
 
     <div
       id="pokeCardOverlay"
@@ -937,8 +1022,9 @@ button:disabled{
       >
 
         <button
+          id="pokeCardClose"
           class="poke-card-close"
-          onclick="closePokeCard()"
+          type="button"
           aria-label="關閉"
         >
 
@@ -946,11 +1032,13 @@ button:disabled{
 
         </button>
 
+
         <img
           id="pokeCardImage"
           class="poke-card-image"
           alt=""
         >
+
 
         <div
           id="pokeCardPlaceholder"
@@ -962,6 +1050,7 @@ button:disabled{
           Poké Lid 圖片暫無
 
         </div>
+
 
         <div
           id="pokeCardContent"
@@ -978,6 +1067,7 @@ button:disabled{
 
 </div>
 
+
 <!-- =======================================================
      HISTORY
 ======================================================= -->
@@ -990,12 +1080,14 @@ button:disabled{
 
   </h3>
 
+
   <p class="muted">
 
     GitHub Actions 會定期同步最新資料，
     並將新增、移除、修改記錄在 history.json。
 
   </p>
+
 
   <div id="history">
 
@@ -1005,6 +1097,7 @@ button:disabled{
 
 </div>
 
+
 <!-- =======================================================
      LEAFLET
 ======================================================= -->
@@ -1012,6 +1105,7 @@ button:disabled{
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 ></script>
+
 
 <script>
 
@@ -1027,6 +1121,7 @@ const GEOJSON_URL =
 
 const HISTORY_URL =
   "./history.json";
+
 
 /* =========================================================
    PREFECTURES
@@ -1084,6 +1179,7 @@ const PREF = {
 
 };
 
+
 /* =========================================================
    GLOBAL
 ========================================================= */
@@ -1101,6 +1197,20 @@ let pointLayer = null;
 let selectedPrefecture = null;
 
 let selectedLayer = null;
+
+/*
+ * 用來判斷：
+ *
+ * 第一次點空白：
+ *   關閉小卡
+ *
+ * 第二次點空白：
+ *   回日本全圖
+ *
+ */
+
+let cardWasJustClosed = false;
+
 
 /* =========================================================
    ESCAPE HTML
@@ -1129,6 +1239,7 @@ function escapeHtml(value){
 
 }
 
+
 /* =========================================================
    SAFE FILENAME
 ========================================================= */
@@ -1143,6 +1254,7 @@ function safe(value){
     );
 
 }
+
 
 /* =========================================================
    BLOB
@@ -1170,6 +1282,7 @@ function blob(
   );
 
 }
+
 
 /* =========================================================
    SAVE
@@ -1221,6 +1334,7 @@ function save(
 
 }
 
+
 /* =========================================================
    TXT
 ========================================================= */
@@ -1239,16 +1353,22 @@ function txt(
 
       function(x){
 
+        const coords =
+          getItemCoords(x);
+
         const lat =
-          x.coords?.[0] ??
-          "";
+          coords
+            ? coords.lat
+            : "";
 
         const lng =
-          x.coords?.[1] ??
-          "";
+          coords
+            ? coords.lng
+            : "";
 
         const title =
           x.city ||
+          x.title ||
           groupName ||
           "";
 
@@ -1261,6 +1381,7 @@ function txt(
     .join("\n");
 
 }
+
 
 /* =========================================================
    PREFECTURE NUMBER
@@ -1295,6 +1416,165 @@ function getPrefNumber(
 
 }
 
+
+/* =========================================================
+   IMPORTANT
+   COORDINATE PARSER
+========================================================= */
+
+function getItemCoords(item){
+
+  if(!item){
+
+    return null;
+
+  }
+
+
+  /*
+   * ① 原本格式
+   *
+   * coords: [lat,lng]
+   */
+
+  if(
+    Array.isArray(item.coords) &&
+    item.coords.length >= 2
+  ){
+
+    const lat =
+      Number(
+        item.coords[0]
+      );
+
+    const lng =
+      Number(
+        item.coords[1]
+      );
+
+    if(
+      Number.isFinite(lat) &&
+      Number.isFinite(lng)
+    ){
+
+      return {
+        lat,
+        lng
+      };
+
+    }
+
+  }
+
+
+  /*
+   * ② coords: "lat,lng"
+   */
+
+  if(
+    typeof item.coords === "string"
+  ){
+
+    const parts =
+      item.coords
+        .split(",");
+
+    if(
+      parts.length >= 2
+    ){
+
+      const lat =
+        Number(
+          parts[0].trim()
+        );
+
+      const lng =
+        Number(
+          parts[1].trim()
+        );
+
+      if(
+        Number.isFinite(lat) &&
+        Number.isFinite(lng)
+      ){
+
+        return {
+          lat,
+          lng
+        };
+
+      }
+
+    }
+
+  }
+
+
+  /*
+   * ③ lat / lng
+   */
+
+  if(
+    item.lat !== undefined &&
+    item.lng !== undefined
+  ){
+
+    const lat =
+      Number(item.lat);
+
+    const lng =
+      Number(item.lng);
+
+    if(
+      Number.isFinite(lat) &&
+      Number.isFinite(lng)
+    ){
+
+      return {
+        lat,
+        lng
+      };
+
+    }
+
+  }
+
+
+  /*
+   * ④ latitude / longitude
+   */
+
+  if(
+    item.latitude !== undefined &&
+    item.longitude !== undefined
+  ){
+
+    const lat =
+      Number(item.latitude);
+
+    const lng =
+      Number(item.longitude);
+
+    if(
+      Number.isFinite(lat) &&
+      Number.isFinite(lng)
+    ){
+
+      return {
+        lat,
+        lng
+      };
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
 /* =========================================================
    LOAD DATA
 ========================================================= */
@@ -1316,6 +1596,7 @@ async function loadData(){
 
       );
 
+
     if(
       !response.ok
     ){
@@ -1326,8 +1607,10 @@ async function loadData(){
 
     }
 
+
     const json =
       await response.json();
+
 
     data =
 
@@ -1343,7 +1626,9 @@ async function loadData(){
 
       [];
 
+
     groups = {};
+
 
     for(
 
@@ -1354,10 +1639,14 @@ async function loadData(){
 
       const pref =
         PREF[item.pref] ||
+        normalizePrefName(
+          item.pref
+        ) ||
         String(
           item.pref ??
           "未知"
         );
+
 
       if(
         !groups[pref]
@@ -1367,11 +1656,13 @@ async function loadData(){
 
       }
 
+
       groups[pref].push(
         item
       );
 
     }
+
 
     document
       .getElementById(
@@ -1381,11 +1672,13 @@ async function loadData(){
 
       `已載入 ${data.length} 筆｜${Object.keys(groups).length} 個都道府縣`;
 
+
     document
       .getElementById(
         "all"
       )
       .disabled = false;
+
 
     document
       .getElementById(
@@ -1393,15 +1686,19 @@ async function loadData(){
       )
       .disabled = false;
 
+
     document
       .getElementById(
         "csv"
       )
       .disabled = false;
 
+
     initMap();
 
+
     await loadGeoJSON();
+
 
     await loadHistory();
 
@@ -1412,6 +1709,7 @@ async function loadData(){
     console.error(
       error
     );
+
 
     document
       .getElementById(
@@ -1425,6 +1723,7 @@ async function loadData(){
   }
 
 }
+
 
 /* =========================================================
    HISTORY
@@ -1447,6 +1746,7 @@ async function loadHistory(){
 
       );
 
+
     if(
       !response.ok
     ){
@@ -1455,17 +1755,21 @@ async function loadHistory(){
 
     }
 
+
     const historyJson =
       await response.json();
+
 
     const logs =
       historyJson.history ||
       [];
 
+
     const el =
       document.getElementById(
         "history"
       );
+
 
     if(
       !logs.length
@@ -1473,6 +1777,7 @@ async function loadHistory(){
 
       el.innerHTML =
         '<span class="muted">尚無更新紀錄。</span>';
+
 
       document
         .getElementById(
@@ -1484,6 +1789,7 @@ async function loadHistory(){
       return;
 
     }
+
 
     el.innerHTML =
 
@@ -1513,6 +1819,7 @@ async function loadHistory(){
             const changed =
               item.changed ||
               [];
+
 
             return `
 
@@ -1589,7 +1896,6 @@ async function loadHistory(){
                           </p>
 
                           ${
-
                             added
 
                               .map(
@@ -1639,6 +1945,7 @@ async function loadHistory(){
 
                       }
 
+
                       ${
                         removed.length
 
@@ -1651,7 +1958,6 @@ async function loadHistory(){
                           </p>
 
                           ${
-
                             removed
 
                               .map(
@@ -1701,6 +2007,7 @@ async function loadHistory(){
 
                       }
 
+
                       ${
                         changed.length
 
@@ -1713,7 +2020,6 @@ async function loadHistory(){
                           </p>
 
                           ${
-
                             changed
 
                               .map(
@@ -1773,6 +2079,7 @@ async function loadHistory(){
 
         .join("");
 
+
     document
       .getElementById(
         "syncChip"
@@ -1796,6 +2103,7 @@ async function loadHistory(){
 
       '<span class="muted">尚無 History 資料。</span>';
 
+
     document
       .getElementById(
         "syncChip"
@@ -1808,6 +2116,7 @@ async function loadHistory(){
 
 }
 
+
 /* =========================================================
    MAP INIT
 ========================================================= */
@@ -1819,6 +2128,7 @@ function initMap(){
     return;
 
   }
+
 
   map =
 
@@ -1846,9 +2156,6 @@ function initMap(){
 
     );
 
-  /*
-   * 預設日本
-   */
 
   map.setView(
 
@@ -1858,6 +2165,7 @@ function initMap(){
 
   );
 
+
   /*
    * 點位 Layer
    */
@@ -1866,7 +2174,13 @@ function initMap(){
     L.layerGroup()
       .addTo(map);
 
+
+  setupMapClick();
+
+  setupCardEvents();
+
 }
+
 
 /* =========================================================
    LOAD GEOJSON
@@ -1889,6 +2203,7 @@ async function loadGeoJSON(){
 
       );
 
+
     if(
       !response.ok
     ){
@@ -1899,8 +2214,10 @@ async function loadGeoJSON(){
 
     }
 
+
     const geojson =
       await response.json();
+
 
     drawPrefectures(
       geojson
@@ -1913,6 +2230,7 @@ async function loadGeoJSON(){
     console.error(
       error
     );
+
 
     document
       .getElementById(
@@ -1947,6 +2265,7 @@ async function loadGeoJSON(){
 
 }
 
+
 /* =========================================================
    GEOJSON NAME
 ========================================================= */
@@ -1960,6 +2279,7 @@ function getGeoPrefName(
   const p =
     feature.properties ||
     {};
+
 
   const possible = [
 
@@ -1979,6 +2299,7 @@ function getGeoPrefName(
 
   ];
 
+
   for(
 
     const value
@@ -1996,9 +2317,11 @@ function getGeoPrefName(
 
   }
 
+
   return "";
 
 }
+
 
 /* =========================================================
    NORMALIZE PREFECTURE
@@ -2016,9 +2339,11 @@ function normalizePrefName(
 
   }
 
+
   const text =
     String(name)
       .trim();
+
 
   const englishMap = {
 
@@ -2072,6 +2397,7 @@ function normalizePrefName(
 
   };
 
+
   if(
     englishMap[text]
   ){
@@ -2079,6 +2405,7 @@ function normalizePrefName(
     return englishMap[text];
 
   }
+
 
   for(
 
@@ -2097,6 +2424,7 @@ function normalizePrefName(
 
   }
 
+
   for(
 
     const pref
@@ -2110,6 +2438,7 @@ function normalizePrefName(
         .replace("府","")
         .replace("都","");
 
+
     if(
       text === short
     ){
@@ -2120,9 +2449,11 @@ function normalizePrefName(
 
   }
 
+
   return text;
 
 }
+
 
 /* =========================================================
    COLOR
@@ -2178,6 +2509,7 @@ function getColor(
 
 }
 
+
 /* =========================================================
    PREFECTURE STYLE
 ========================================================= */
@@ -2195,12 +2527,14 @@ function prefectureStyle(
       )
     );
 
+
   const count =
     groups[pref]
       ?
       groups[pref].length
       :
       0;
+
 
   return {
 
@@ -2221,6 +2555,7 @@ function prefectureStyle(
 
 }
 
+
 /* =========================================================
    HIGHLIGHT
 ========================================================= */
@@ -2234,6 +2569,7 @@ function highlightFeature(
   const layer =
     e.target;
 
+
   layer.setStyle({
 
     weight:3,
@@ -2243,6 +2579,7 @@ function highlightFeature(
     fillOpacity:1
 
   });
+
 
   if(
 
@@ -2257,6 +2594,7 @@ function highlightFeature(
   }
 
 }
+
 
 /* =========================================================
    RESET
@@ -2280,6 +2618,7 @@ function resetHighlight(
   }
 
 }
+
 
 /* =========================================================
    HOVER TOOLTIP
@@ -2305,6 +2644,7 @@ function createHoverTooltip(
 
       </div>
 
+
       <div class="pref-tooltip-count">
 
         ${count}
@@ -2325,6 +2665,7 @@ function createHoverTooltip(
 
 }
 
+
 /* =========================================================
    GEOJSON EVENT
 ========================================================= */
@@ -2344,12 +2685,14 @@ function onEachPrefecture(
       )
     );
 
+
   const count =
     groups[pref]
       ?
       groups[pref].length
       :
       0;
+
 
   layer.bindTooltip(
 
@@ -2375,6 +2718,7 @@ function onEachPrefecture(
 
   );
 
+
   layer.on({
 
     mouseover:function(e){
@@ -2385,6 +2729,7 @@ function onEachPrefecture(
 
     },
 
+
     mouseout:function(e){
 
       resetHighlight(
@@ -2393,7 +2738,24 @@ function onEachPrefecture(
 
     },
 
-    click:function(){
+
+    click:function(e){
+
+      /*
+       * 阻止這次行政區點擊再被 map click
+       * 當成「空白處」
+       */
+
+      if(
+        e.originalEvent
+      ){
+
+        L.DomEvent.stopPropagation(
+          e.originalEvent
+        );
+
+      }
+
 
       selectPrefecture(
 
@@ -2408,6 +2770,7 @@ function onEachPrefecture(
   });
 
 }
+
 
 /* =========================================================
    DRAW PREFECTURES
@@ -2429,6 +2792,7 @@ function drawPrefectures(
 
   }
 
+
   prefectureLayer =
 
     L.geoJSON(
@@ -2441,7 +2805,13 @@ function drawPrefectures(
           prefectureStyle,
 
         onEachFeature:
-          onEachPrefecture
+          onEachPrefecture,
+
+        /*
+         * 確保行政區圖層在 marker 下方
+         */
+
+        pane:"overlayPane"
 
       }
 
@@ -2450,6 +2820,7 @@ function drawPrefectures(
     .addTo(map);
 
 }
+
 
 /* =========================================================
    SELECT PREFECTURE
@@ -2466,14 +2837,21 @@ function selectPrefecture(
   selectedPrefecture =
     pref;
 
+
   selectedLayer =
     clickedLayer;
 
+
+  cardWasJustClosed =
+    false;
+
+
   /*
-   * 關閉之前的小卡
+   * 關閉舊卡片
    */
 
   closePokeCard();
+
 
   /*
    * 清除舊點
@@ -2481,9 +2859,11 @@ function selectPrefecture(
 
   pointLayer.clearLayers();
 
+
   const items =
     groups[pref] ||
     [];
+
 
   document
     .getElementById(
@@ -2493,9 +2873,13 @@ function selectPrefecture(
 
     `${pref}｜${items.length} 個 Poké Lid`;
 
+
   /*
    * 加入新的點
    */
+
+  let validPointCount = 0;
+
 
   for(
 
@@ -2504,12 +2888,24 @@ function selectPrefecture(
 
   ){
 
-    addPoint(
-      item,
-      pref
-    );
+    if(
+      addPoint(
+        item,
+        pref
+      )
+    ){
+
+      validPointCount++;
+
+    }
 
   }
+
+
+  console.log(
+    `[Poké Lid] ${pref}: ${items.length} 筆資料，成功建立 ${validPointCount} 個地圖點`
+  );
+
 
   /*
    * 放大到行政區
@@ -2523,6 +2919,7 @@ function selectPrefecture(
 
       const bounds =
         clickedLayer.getBounds();
+
 
       map.fitBounds(
 
@@ -2555,8 +2952,9 @@ function selectPrefecture(
 
 }
 
+
 /* =========================================================
-   POKÉ CARD IMAGE URL
+   POKÉ LID IMAGE URL
 ========================================================= */
 
 function getImageUrl(
@@ -2564,11 +2962,6 @@ function getImageUrl(
   item
 
 ){
-
-  /*
-   * 如果資料本身有 image 欄位，
-   * 優先使用。
-   */
 
   if(
     item.image
@@ -2580,6 +2973,7 @@ function getImageUrl(
 
   }
 
+
   if(
     item.image_url
   ){
@@ -2589,6 +2983,7 @@ function getImageUrl(
     );
 
   }
+
 
   if(
     item.imageUrl
@@ -2600,9 +2995,6 @@ function getImageUrl(
 
   }
 
-  /*
-   * 預設 Poké Lid 圖片位置
-   */
 
   if(
     item.id !== undefined &&
@@ -2623,9 +3015,124 @@ function getImageUrl(
 
   }
 
+
   return "";
 
 }
+
+
+/* =========================================================
+   COPY COORDINATE
+========================================================= */
+
+async function copyCoordinate(
+
+  lat,
+
+  lng,
+
+  button
+
+){
+
+  const text =
+    `${lat},${lng}`;
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+      text
+    );
+
+  }
+
+  catch(error){
+
+    /*
+     * iOS / HTTP / 部分瀏覽器 fallback
+     */
+
+    const textarea =
+      document.createElement(
+        "textarea"
+      );
+
+    textarea.value =
+      text;
+
+    textarea.style.position =
+      "fixed";
+
+    textarea.style.left =
+      "-9999px";
+
+    document.body.appendChild(
+      textarea
+    );
+
+    textarea.focus();
+
+    textarea.select();
+
+    try{
+
+      document.execCommand(
+        "copy"
+      );
+
+    }
+
+    catch(copyError){
+
+      console.error(
+        copyError
+      );
+
+    }
+
+    textarea.remove();
+
+  }
+
+
+  const original =
+    button.dataset.original ||
+    button.textContent;
+
+
+  button.dataset.original =
+    original;
+
+
+  button.textContent =
+    "✓ 已複製";
+
+
+  button.classList.add(
+    "copied"
+  );
+
+
+  setTimeout(
+
+    function(){
+
+      button.textContent =
+        original;
+
+      button.classList.remove(
+        "copied"
+      );
+
+    },
+
+    1500
+
+  );
+
+}
+
 
 /* =========================================================
    SHOW POKÉ CARD
@@ -2648,20 +3155,24 @@ function showPokeCard(
       "pokeCard"
     );
 
+
   const image =
     document.getElementById(
       "pokeCardImage"
     );
+
 
   const placeholder =
     document.getElementById(
       "pokeCardPlaceholder"
     );
 
+
   const content =
     document.getElementById(
       "pokeCardContent"
     );
+
 
   const title =
 
@@ -2671,14 +3182,12 @@ function showPokeCard(
 
     "Poké Lid";
 
+
   const imageUrl =
     getImageUrl(
       item
     );
 
-  /*
-   * Pokémon
-   */
 
   const pokemons =
 
@@ -2694,7 +3203,9 @@ function showPokeCard(
 
     [];
 
+
   let pokemonHtml = "";
+
 
   if(
     pokemons.length
@@ -2709,6 +3220,7 @@ function showPokeCard(
           Pokémon
 
         </div>
+
 
         <div class="poke-card-pokemon">
 
@@ -2750,8 +3262,9 @@ function showPokeCard(
 
   }
 
+
   /*
-   * Content
+   * 這裡座標改成真正 BUTTON
    */
 
   content.innerHTML = `
@@ -2763,6 +3276,7 @@ function showPokeCard(
       )}
 
     </div>
+
 
     <div class="poke-card-row">
 
@@ -2777,6 +3291,7 @@ function showPokeCard(
       )}
 
     </div>
+
 
     ${
       item.address
@@ -2807,6 +3322,7 @@ function showPokeCard(
 
     }
 
+
     <div class="poke-card-row">
 
       <div class="poke-card-label">
@@ -2815,21 +3331,31 @@ function showPokeCard(
 
       </div>
 
+
       <div class="poke-card-coordinate">
 
-        ${escapeHtml(
-          lat
-        )},
+        <button
+          type="button"
+          class="coordinate-button"
+          id="coordinateCopyButton"
+          data-original="${escapeHtml(
+            `${lat},${lng}`
+          )}"
+        >
 
-        ${escapeHtml(
-          lng
-        )}
+          ${escapeHtml(
+            `${lat},${lng}`
+          )}
+
+        </button>
 
       </div>
 
     </div>
 
+
     ${pokemonHtml}
+
 
     <div class="poke-card-id">
 
@@ -2843,9 +3369,80 @@ function showPokeCard(
 
   `;
 
+
   /*
-   * 圖片處理
+   * 綁定座標按鈕
    */
+
+  const coordinateButton =
+    document.getElementById(
+      "coordinateCopyButton"
+    );
+
+
+  if(
+    coordinateButton
+  ){
+
+    coordinateButton.addEventListener(
+
+      "click",
+
+      function(e){
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+        copyCoordinate(
+
+          lat,
+
+          lng,
+
+          coordinateButton
+
+        );
+
+      },
+
+      {
+        passive:false
+      }
+
+    );
+
+
+    coordinateButton.addEventListener(
+
+      "touchstart",
+
+      function(e){
+
+        e.stopPropagation();
+
+      },
+
+      {
+        passive:true
+      }
+
+    );
+
+  }
+
+
+  /*
+   * 圖片先重置
+   */
+
+  image.onload = null;
+
+  image.onerror = null;
+
+  image.removeAttribute(
+    "src"
+  );
 
   image.style.display =
     "none";
@@ -2853,31 +3450,38 @@ function showPokeCard(
   placeholder.style.display =
     "flex";
 
-  image.onload =
-    function(){
 
-      image.style.display =
-        "block";
-
-      placeholder.style.display =
-        "none";
-
-    };
-
-  image.onerror =
-    function(){
-
-      image.style.display =
-        "none";
-
-      placeholder.style.display =
-        "flex";
-
-    };
+  /*
+   * 載入圖片
+   */
 
   if(
     imageUrl
   ){
+
+    image.onload =
+      function(){
+
+        image.style.display =
+          "block";
+
+        placeholder.style.display =
+          "none";
+
+      };
+
+
+    image.onerror =
+      function(){
+
+        image.style.display =
+          "none";
+
+        placeholder.style.display =
+          "flex";
+
+      };
+
 
     image.src =
       imageUrl;
@@ -2887,6 +3491,7 @@ function showPokeCard(
 
   }
 
+
   /*
    * 顯示中央小卡
    */
@@ -2895,7 +3500,12 @@ function showPokeCard(
     "show"
   );
 
+
+  cardWasJustClosed =
+    false;
+
 }
+
 
 /* =========================================================
    CLOSE CARD
@@ -2908,17 +3518,146 @@ function closePokeCard(){
       "pokeCard"
     );
 
+
   if(
-    card
+    card &&
+    card.classList.contains("show")
   ){
 
     card.classList.remove(
       "show"
     );
 
+    /*
+     * 記錄「剛剛有關閉卡片」
+     *
+     * 下一次點地圖空白
+     * 才回日本全圖
+     */
+
+    cardWasJustClosed =
+      true;
+
   }
 
 }
+
+
+/* =========================================================
+   CARD EVENTS
+========================================================= */
+
+function setupCardEvents(){
+
+  const card =
+    document.getElementById(
+      "pokeCard"
+    );
+
+
+  const closeButton =
+    document.getElementById(
+      "pokeCardClose"
+    );
+
+
+  if(!card){
+
+    return;
+
+  }
+
+
+  /*
+   * 卡片本身所有滑鼠事件都不要傳到地圖
+   */
+
+  [
+    "click",
+    "mousedown",
+    "dblclick",
+    "touchstart",
+    "touchend",
+    "pointerdown",
+    "pointerup"
+  ]
+
+  .forEach(
+
+    function(eventName){
+
+      card.addEventListener(
+
+        eventName,
+
+        function(e){
+
+          e.stopPropagation();
+
+        },
+
+        {
+          passive:false
+        }
+
+      );
+
+    }
+
+  );
+
+
+  /*
+   * ×
+   */
+
+  if(closeButton){
+
+    closeButton.addEventListener(
+
+      "click",
+
+      function(e){
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+        closePokeCard();
+
+      },
+
+      {
+        passive:false
+      }
+
+    );
+
+
+    closeButton.addEventListener(
+
+      "touchend",
+
+      function(e){
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+        closePokeCard();
+
+      },
+
+      {
+        passive:false
+      }
+
+    );
+
+  }
+
+}
+
 
 /* =========================================================
    ADD POINT
@@ -2932,26 +3671,39 @@ function addPoint(
 
 ){
 
-  const lat =
-    Number(
-      item.coords?.[0]
+  const coords =
+    getItemCoords(
+      item
     );
 
-  const lng =
-    Number(
-      item.coords?.[1]
+
+  if(!coords){
+
+    console.warn(
+      "[Poké Lid] 無法解析座標：",
+      item
     );
 
-  if(
-
-    !Number.isFinite(lat) ||
-    !Number.isFinite(lng)
-
-  ){
-
-    return;
+    return false;
 
   }
+
+
+  const lat =
+    coords.lat;
+
+  const lng =
+    coords.lng;
+
+
+  /*
+   * 使用 markerPane
+   *
+   * Leaflet marker pane 預設 z-index 600
+   * 行政區 overlay pane 預設 z-index 400
+   *
+   * 確保小點一定在行政區上面
+   */
 
   const marker =
 
@@ -2961,11 +3713,18 @@ function addPoint(
 
       {
 
+        pane:"markerPane",
+
+        keyboard:true,
+
+        riseOnHover:true,
+
         icon:
 
           L.divIcon({
 
-            className:"",
+            className:
+              "poke-marker-wrapper",
 
             html:
 
@@ -2983,6 +3742,7 @@ function addPoint(
 
     );
 
+
   /*
    * 點擊點位
    */
@@ -2994,7 +3754,7 @@ function addPoint(
     function(e){
 
       /*
-       * 阻止地圖 click
+       * 不讓地圖 click 收到
        */
 
       if(
@@ -3007,8 +3767,13 @@ function addPoint(
 
       }
 
+
+      cardWasJustClosed =
+        false;
+
+
       /*
-       * 顯示中央小卡
+       * 直接切換卡片
        */
 
       showPokeCard(
@@ -3027,11 +3792,41 @@ function addPoint(
 
   );
 
+
+  /*
+   * 手機 touch
+   */
+
+  marker.on(
+
+    "touchstart",
+
+    function(e){
+
+      if(
+        e.originalEvent
+      ){
+
+        L.DomEvent.stopPropagation(
+          e.originalEvent
+        );
+
+      }
+
+    }
+
+  );
+
+
   marker.addTo(
     pointLayer
   );
 
+
+  return true;
+
 }
+
 
 /* =========================================================
    MAP CLICK
@@ -3039,19 +3834,92 @@ function addPoint(
 
 function setupMapClick(){
 
+  if(!map){
+
+    return;
+
+  }
+
+
   map.on(
 
     "click",
 
     function(){
 
-      closePokeCard();
+      const card =
+        document.getElementById(
+          "pokeCard"
+        );
+
+
+      const cardIsOpen =
+        card &&
+        card.classList.contains(
+          "show"
+        );
+
+
+      /*
+       * 第一層：
+       *
+       * 小卡開啟時
+       * 點地圖空白
+       * → 關閉小卡
+       */
+
+      if(
+        cardIsOpen
+      ){
+
+        closePokeCard();
+
+        return;
+
+      }
+
+
+      /*
+       * 第二層：
+       *
+       * 小卡剛剛被關閉
+       * 再點一次地圖空白
+       * → 回日本全圖
+       */
+
+      if(
+        cardWasJustClosed
+      ){
+
+        cardWasJustClosed =
+          false;
+
+        showJapan();
+
+        return;
+
+      }
+
+
+      /*
+       * 如果目前正在某行政區
+       * 點空白 → 回日本全圖
+       */
+
+      if(
+        selectedPrefecture !== null
+      ){
+
+        showJapan();
+
+      }
 
     }
 
   );
 
 }
+
 
 /* =========================================================
    RETURN JAPAN
@@ -3065,9 +3933,42 @@ function showJapan(){
   selectedLayer =
     null;
 
-  pointLayer.clearLayers();
 
-  closePokeCard();
+  /*
+   * 清除所有 Poké Lid 小點
+   */
+
+  if(
+    pointLayer
+  ){
+
+    pointLayer.clearLayers();
+
+  }
+
+
+  /*
+   * 關閉卡片
+   */
+
+  const card =
+    document.getElementById(
+      "pokeCard"
+    );
+
+
+  if(card){
+
+    card.classList.remove(
+      "show"
+    );
+
+  }
+
+
+  cardWasJustClosed =
+    false;
+
 
   document
     .getElementById(
@@ -3076,19 +3977,29 @@ function showJapan(){
     .textContent =
     "🇯🇵 日本全圖";
 
-  map.setView(
 
-    [36.2,138.3],
+  /*
+   * 回到日本全圖
+   */
 
-    6,
+  if(map){
 
-    {
-      animate:true
-    }
+    map.setView(
 
-  );
+      [36.2,138.3],
+
+      6,
+
+      {
+        animate:true
+      }
+
+    );
+
+  }
 
 }
+
 
 /* =========================================================
    DOWNLOAD ALL
@@ -3097,6 +4008,7 @@ function showJapan(){
 function downloadAll(){
 
   const output = [];
+
 
   const names =
 
@@ -3117,6 +4029,7 @@ function downloadAll(){
         }
 
       );
+
 
   for(
 
@@ -3131,6 +4044,7 @@ function downloadAll(){
 
     );
 
+
     output.push(
 
       txt(
@@ -3140,9 +4054,11 @@ function downloadAll(){
 
     );
 
+
     output.push("");
 
   }
+
 
   save(
 
@@ -3156,6 +4072,7 @@ function downloadAll(){
 
 }
 
+
 /* =========================================================
    DOWNLOAD JSON
 ========================================================= */
@@ -3163,6 +4080,7 @@ function downloadAll(){
 function downloadJSON(){
 
   const output = {};
+
 
   const names =
 
@@ -3183,6 +4101,7 @@ function downloadJSON(){
         }
 
       );
+
 
   for(
 
@@ -3199,23 +4118,34 @@ function downloadJSON(){
 
           function(x){
 
+            const coords =
+              getItemCoords(x);
+
+
             return {
 
               lat:
-                String(
-                  x.coords?.[0] ??
-                  ""
-                ),
+                coords
+                  ?
+                  String(
+                    coords.lat
+                  )
+                  :
+                  "",
 
               lng:
-                String(
-                  x.coords?.[1] ??
-                  ""
-                ),
+                coords
+                  ?
+                  String(
+                    coords.lng
+                  )
+                  :
+                  "",
 
               title:
                 String(
                   x.city ||
+                  x.title ||
                   pref
                 )
 
@@ -3226,6 +4156,7 @@ function downloadJSON(){
         );
 
   }
+
 
   save(
 
@@ -3254,6 +4185,7 @@ function downloadJSON(){
 
 }
 
+
 /* =========================================================
    DOWNLOAD CSV
 ========================================================= */
@@ -3277,12 +4209,17 @@ function downloadCSV(){
 
   ];
 
+
   for(
 
     const x
     of data
 
   ){
+
+    const coords =
+      getItemCoords(x);
+
 
     rows.push([
 
@@ -3293,15 +4230,23 @@ function downloadCSV(){
       "",
 
       x.city ||
+      x.title ||
       "",
 
-      x.coords?.[0] ??
-      "",
+      coords
+        ?
+        coords.lat
+        :
+        "",
 
-      x.coords?.[1] ??
-      "",
+      coords
+        ?
+        coords.lng
+        :
+        "",
 
       x.city ||
+      x.title ||
       "",
 
       x.address ||
@@ -3315,6 +4260,7 @@ function downloadCSV(){
     ]);
 
   }
+
 
   const csv =
 
@@ -3353,6 +4299,7 @@ function downloadCSV(){
 
       .join("\n");
 
+
   save(
 
     blob(
@@ -3369,31 +4316,12 @@ function downloadCSV(){
 
 }
 
+
 /* =========================================================
    START
 ========================================================= */
 
 loadData();
-
-/*
- * 地圖建立後註冊 click
- */
-
-setTimeout(
-
-  function(){
-
-    if(map){
-
-      setupMapClick();
-
-    }
-
-  },
-
-  500
-
-);
 
 </script>
 

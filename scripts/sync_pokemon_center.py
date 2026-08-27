@@ -1,22 +1,35 @@
 #!/usr/bin/env python3
 
+import hashlib
 import json
 import re
-import hashlib
-import urllib.request
 import urllib.parse
+import urllib.request
 
-from pathlib import Path
 from datetime import datetime, timezone
+from pathlib import Path
 
 from bs4 import BeautifulSoup
 
 
+# =========================================================
+# Settings
+# =========================================================
+
 SITEMAP_URL = "https://shop.pokemon.co.jp/en/sitemap/"
 
-DATA_FILE = Path("data/pokemon_center.json")
-HISTORY_FILE = Path("center_history.json")
+DATA_FILE = Path(
+    "data/pokemon_center.json"
+)
 
+HISTORY_FILE = Path(
+    "center_history.json"
+)
+
+
+# =========================================================
+# Prefecture
+# =========================================================
 
 PREF = {
     1: "北海道",
@@ -69,76 +82,118 @@ PREF = {
 }
 
 
-def fetch(url):
-    req = urllib.request.Request(
+# =========================================================
+# HTTP
+# =========================================================
+
+def fetch_text(url):
+    request = urllib.request.Request(
         url,
         headers={
             "User-Agent": (
                 "Mozilla/5.0 "
-                "(compatible; PokLidsBot/1.0)"
+                "(compatible; PokemonCenterSync/1.0)"
             ),
-            "Accept-Language": "ja-JP,ja;q=0.9,en;q=0.8"
-        }
+            "Accept-Language": (
+                "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7"
+            ),
+        },
     )
 
-    with urllib.request.urlopen(req, timeout=40) as r:
-        return r.read().decode(
+    with urllib.request.urlopen(
+        request,
+        timeout=40,
+    ) as response:
+
+        return response.read().decode(
             "utf-8",
-            errors="replace"
+            errors="replace",
         )
 
 
-def clean(text):
+# =========================================================
+# Text helpers
+# =========================================================
+
+def clean_text(text):
     if not text:
         return ""
 
     return re.sub(
         r"\s+",
         " ",
-        text
+        str(text),
     ).strip()
 
 
+# =========================================================
+# Stable ID
+# =========================================================
+
 def make_id(name, url):
     base = (
-        clean(name) +
-        "|" +
-        clean(url)
+        clean_text(name)
+        + "|"
+        + clean_text(url)
     ).encode("utf-8")
 
+    digest = hashlib.sha1(
+        base
+    ).hexdigest()[:12]
+
     return (
-        "pokemon-center-" +
-        hashlib.sha1(base)
-        .hexdigest()[:12]
+        "pokemon-center-"
+        + digest
     )
 
 
-def is_center_name(text):
+# =========================================================
+# Is Pokémon Center
+# =========================================================
 
-    text = clean(text).lower()
+def is_pokemon_center(name):
 
-    return (
-        "pokemon center" in text
-        or
-        "pokémon center" in text
-        or
-        "ポケモンセンター" in text
-    )
+    text = clean_text(
+        name
+    ).lower()
+
+    if "pokemon center" in text:
+        return True
+
+    if "pokémon center" in text:
+        return True
+
+    if "ポケモンセンター" in text:
+        return True
+
+    return False
 
 
-def extract_prefecture(
+# =========================================================
+# Detect Prefecture
+# =========================================================
+
+def detect_prefecture(
     text
 ):
 
-    text = clean(text)
+    text = clean_text(
+        text
+    )
 
+    # Japanese
     for code, name in PREF.items():
+
         if name in text:
             return code
 
+
+    # English fallback
     english = text.lower()
 
+
     rules = {
+
         "hokkaido": 1,
         "aomori": 2,
         "iwate": 3,
@@ -146,6 +201,7 @@ def extract_prefecture(
         "akita": 5,
         "yamagata": 6,
         "fukushima": 7,
+
         "ibaraki": 8,
         "tochigi": 9,
         "gunma": 10,
@@ -153,6 +209,7 @@ def extract_prefecture(
         "chiba": 12,
         "tokyo": 13,
         "kanagawa": 14,
+
         "niigata": 15,
         "toyama": 16,
         "ishikawa": 17,
@@ -162,6 +219,7 @@ def extract_prefecture(
         "gifu": 21,
         "shizuoka": 22,
         "aichi": 23,
+
         "mie": 24,
         "shiga": 25,
         "kyoto": 26,
@@ -169,15 +227,18 @@ def extract_prefecture(
         "hyogo": 28,
         "nara": 29,
         "wakayama": 30,
+
         "tottori": 31,
         "shimane": 32,
         "okayama": 33,
         "hiroshima": 34,
         "yamaguchi": 35,
+
         "tokushima": 36,
         "kagawa": 37,
         "ehime": 38,
         "kochi": 39,
+
         "fukuoka": 40,
         "saga": 41,
         "nagasaki": 42,
@@ -186,14 +247,22 @@ def extract_prefecture(
         "miyazaki": 45,
         "kagoshima": 46,
         "okinawa": 47,
+
     }
 
+
     for keyword, code in rules.items():
+
         if keyword in english:
             return code
 
+
     return None
 
+
+# =========================================================
+# JSON-LD
+# =========================================================
 
 def extract_jsonld(
     soup
@@ -201,376 +270,796 @@ def extract_jsonld(
 
     output = []
 
-    for script in soup.find_all(
-        "script",
-        type="application/ld+json"
-    ):
 
-        raw = script.string or script.get_text()
+    scripts = soup.find_all(
+        "script",
+        type="application/ld+json",
+    )
+
+
+    for script in scripts:
+
+        raw = (
+            script.string
+            or
+            script.get_text()
+        )
+
 
         if not raw:
             continue
 
-        try:
-            obj = json.loads(raw)
 
-            if isinstance(obj, list):
-                output.extend(obj)
-            else:
-                output.append(obj)
+        raw = raw.strip()
+
+
+        try:
+
+            obj = json.loads(
+                raw
+            )
+
 
         except Exception:
-            pass
+
+            continue
+
+
+        if isinstance(
+            obj,
+            list,
+        ):
+
+            output.extend(
+                obj
+            )
+
+        else:
+
+            output.append(
+                obj
+            )
+
 
     return output
 
 
-def parse_shop(
-    url,
-    fallback_name=""
+# =========================================================
+# Shop name
+# =========================================================
+
+def extract_shop_name(
+    soup
 ):
 
-    html = fetch(url)
-
-    soup = BeautifulSoup(
-        html,
-        "html.parser"
+    h1 = soup.find(
+        "h1"
     )
 
-    title = ""
-
-    h1 = soup.find("h1")
 
     if h1:
-        title = clean(
+
+        value = clean_text(
             h1.get_text(
                 " ",
-                strip=True
+                strip=True,
             )
         )
 
-    if not title:
-        title_tag = soup.find("title")
+        if value:
+            return value
 
-        if title_tag:
-            title = clean(
-                title_tag.get_text(
-                    " ",
-                    strip=True
-                )
+
+    title = soup.find(
+        "title"
+    )
+
+
+    if title:
+
+        value = clean_text(
+            title.get_text(
+                " ",
+                strip=True,
             )
+        )
 
-    if not title:
-        title = fallback_name
+        if value:
+            return value
 
 
-    if not is_center_name(title):
-        return None
+    return ""
 
+
+# =========================================================
+# Address
+# =========================================================
+
+def extract_address(
+    soup
+):
 
     # -----------------------------------------------------
-    # JSON-LD
+    # JSON-LD first
     # -----------------------------------------------------
 
-    jsonld = extract_jsonld(soup)
+    jsonld = extract_jsonld(
+        soup
+    )
 
-    address = ""
-    image = ""
-    lat = None
-    lng = None
 
     for obj in jsonld:
 
-        if not isinstance(obj, dict):
+        if not isinstance(
+            obj,
+            dict,
+        ):
             continue
 
-        obj_address = obj.get(
-            "address"
-        )
+
+        address =
+            obj.get("address")
+
 
         if isinstance(
-            obj_address,
-            dict
+            address,
+            dict,
         ):
 
             parts = [
 
-                obj_address.get(
+                address.get(
                     "postalCode",
-                    ""
+                    "",
                 ),
 
-                obj_address.get(
+                address.get(
                     "addressRegion",
-                    ""
+                    "",
                 ),
 
-                obj_address.get(
+                address.get(
                     "addressLocality",
-                    ""
+                    "",
                 ),
 
-                obj_address.get(
+                address.get(
                     "streetAddress",
-                    ""
+                    "",
                 ),
 
             ]
 
-            candidate = clean(
+
+            result = clean_text(
                 " ".join(
-                    x
-                    for x in parts
-                    if x
+                    part
+                    for part in parts
+                    if part
                 )
             )
 
-            if candidate:
-                address = candidate
+
+            if result:
+                return result
+
 
         elif isinstance(
-            obj_address,
-            str
+            address,
+            str,
         ):
 
-            if obj_address:
-                address = clean(
-                    obj_address
-                )
+            result = clean_text(
+                address
+            )
 
 
-        if not image:
+            if result:
+                return result
 
-            image_candidate =
-                obj.get("image", "")
 
-            if isinstance(
-                image_candidate,
-                list
-            ):
+    # -----------------------------------------------------
+    # HTML fallback
+    # -----------------------------------------------------
 
-                if image_candidate:
-                    image = str(
-                        image_candidate[0]
-                    )
+    text = clean_text(
+        soup.get_text(
+            " ",
+            strip=True,
+        )
+    )
 
-            elif image_candidate:
+
+    patterns = [
+
+        r"Location\s+(.{5,350}?)"
+        r"(?:Google Maps|Opening Hours|Business Hours)",
+
+        r"所在地\s+(.{5,350}?)"
+        r"(?:Google Maps|営業時間|アクセス)",
+
+    ]
+
+
+    for pattern in patterns:
+
+        match = re.search(
+            pattern,
+            text,
+            flags=re.IGNORECASE,
+        )
+
+
+        if match:
+
+            value = clean_text(
+                match.group(1)
+            )
+
+
+            if value:
+                return value
+
+
+    return ""
+
+
+# =========================================================
+# Image
+# =========================================================
+
+def extract_image(
+    soup,
+    page_url,
+):
+
+    # -----------------------------------------------------
+    # og:image
+    # -----------------------------------------------------
+
+    meta = soup.find(
+        "meta",
+        attrs={
+            "property":
+                "og:image"
+        },
+    )
+
+
+    if meta:
+
+        image = (
+            meta.get(
+                "content"
+            )
+            or
+            ""
+        ).strip()
+
+
+        if image:
+
+            return urllib.parse.urljoin(
+                page_url,
+                image,
+            )
+
+
+    # -----------------------------------------------------
+    # JSON-LD fallback
+    # -----------------------------------------------------
+
+    jsonld = extract_jsonld(
+        soup
+    )
+
+
+    for obj in jsonld:
+
+        if not isinstance(
+            obj,
+            dict,
+        ):
+            continue
+
+
+        image_candidate = obj.get(
+            "image",
+            "",
+        )
+
+
+        if isinstance(
+            image_candidate,
+            list,
+        ):
+
+            if image_candidate:
 
                 image = str(
-                    image_candidate
+                    image_candidate[0]
+                ).strip()
+
+
+                if image:
+
+                    return urllib.parse.urljoin(
+                        page_url,
+                        image,
+                    )
+
+
+        elif image_candidate:
+
+            image = str(
+                image_candidate
+            ).strip()
+
+
+            if image:
+
+                return urllib.parse.urljoin(
+                    page_url,
+                    image,
                 )
+
+
+    return ""
+
+
+# =========================================================
+# Coordinates
+# =========================================================
+
+def parse_google_coordinates(
+    raw,
+):
+
+    if not raw:
+        return None
+
+
+    decoded = urllib.parse.unquote(
+        raw
+    )
+
+
+    # Format:
+    # !2d139.7742695 !3d35.6802902
+
+    match = re.search(
+        r"!2d(-?\d+(?:\.\d+)?)"
+        r".*?"
+        r"!3d(-?\d+(?:\.\d+)?)",
+        decoded,
+    )
+
+
+    if match:
+
+        try:
+
+            lng = float(
+                match.group(1)
+            )
+
+            lat = float(
+                match.group(2)
+            )
+
+
+            if (
+                20 <= lat <= 50
+                and
+                120 <= lng <= 150
+            ):
+
+                return [
+                    lat,
+                    lng,
+                ]
+
+        except ValueError:
+            pass
+
+
+    # Format:
+    # @35.6802902,139.7742695
+
+    match = re.search(
+        r"@(-?\d+(?:\.\d+)?),"
+        r"(-?\d+(?:\.\d+)?)",
+        decoded,
+    )
+
+
+    if match:
+
+        try:
+
+            lat = float(
+                match.group(1)
+            )
+
+            lng = float(
+                match.group(2)
+            )
+
+
+            if (
+                20 <= lat <= 50
+                and
+                120 <= lng <= 150
+            ):
+
+                return [
+                    lat,
+                    lng,
+                ]
+
+        except ValueError:
+            pass
+
+
+    return None
+
+
+def extract_coordinates(
+    soup
+):
+
+    # -----------------------------------------------------
+    # JSON-LD geo
+    # -----------------------------------------------------
+
+    jsonld = extract_jsonld(
+        soup
+    )
+
+
+    for obj in jsonld:
+
+        if not isinstance(
+            obj,
+            dict,
+        ):
+            continue
 
 
         geo = obj.get(
             "geo"
         )
 
-        if isinstance(
+
+        if not isinstance(
             geo,
-            dict
+            dict,
         ):
+            continue
 
-            try:
-                if geo.get(
+
+        try:
+
+            lat = float(
+                geo.get(
                     "latitude"
-                ) is not None:
-
-                    lat = float(
-                        geo["latitude"]
-                    )
-
-                if geo.get(
-                    "longitude"
-                ) is not None:
-
-                    lng = float(
-                        geo["longitude"]
-                    )
-
-            except Exception:
-                pass
-
-
-    # -----------------------------------------------------
-    # Meta image fallback
-    # -----------------------------------------------------
-
-    if not image:
-
-        meta = soup.find(
-            "meta",
-            attrs={
-                "property":
-                    "og:image"
-            }
-        )
-
-        if meta:
-            image = (
-                meta.get(
-                    "content"
                 )
-                or
-                ""
-            ).strip()
-
-
-    # -----------------------------------------------------
-    # Page text fallback for address
-    # -----------------------------------------------------
-
-    page_text = clean(
-        soup.get_text(
-            " ",
-            strip=True
-        )
-    )
-
-
-    if not address:
-
-        patterns = [
-
-            r"Location\s+(.{5,300}?)(?:Google Maps|Opening Hours|Business Hours)",
-
-            r"所在地\s+(.{5,300}?)(?:Google Maps|営業時間|アクセス)",
-
-        ]
-
-        for pattern in patterns:
-
-            m = re.search(
-                pattern,
-                page_text,
-                re.IGNORECASE
             )
 
-            if m:
-                address = clean(
-                    m.group(1)
+            lng = float(
+                geo.get(
+                    "longitude"
                 )
-                break
+            )
 
-
-    # -----------------------------------------------------
-    # Google Maps coordinates
-    # -----------------------------------------------------
-
-    if lat is None or lng is None:
-
-        google_links = []
-
-        for a in soup.find_all(
-            "a",
-            href=True
-        ):
-
-            href = a["href"]
 
             if (
-                "google.com/maps"
-                in href
-                or
-                "google.co.jp/maps"
-                in href
+                20 <= lat <= 50
+                and
+                120 <= lng <= 150
             ):
 
-                google_links.append(
-                    href
-                )
+                return [
+                    lat,
+                    lng,
+                ]
 
-
-        for iframe in soup.find_all(
-            "iframe",
-            src=True
+        except (
+            TypeError,
+            ValueError,
         ):
 
-            src = iframe["src"]
-
-            if "google.com/maps" in src:
-
-                google_links.append(
-                    src
-                )
+            pass
 
 
-        for raw_url in google_links:
+    # -----------------------------------------------------
+    # Google Maps links
+    # -----------------------------------------------------
 
-            decoded = urllib.parse.unquote(
-                raw_url
-            )
-
-            m = re.search(
-                r"!2d(-?\d+(?:\.\d+)?)"
-                r".*?"
-                r"!3d(-?\d+(?:\.\d+)?)",
-                decoded
-            )
-
-            if not m:
-
-                m = re.search(
-                    r"@(-?\d+(?:\.\d+)?),"
-                    r"(-?\d+(?:\.\d+)?)",
-                    decoded
-                )
-
-            if m:
-
-                try:
-
-                    lng = float(
-                        m.group(1)
-                    )
-
-                    lat = float(
-                        m.group(2)
-                    )
-
-                    break
-
-                except Exception:
-
-                    pass
-
-
-    combined = (
-        title +
-        " " +
-        address
-    )
-
-
-    pref = extract_prefecture(
-        combined
-    )
-
-
-    coords = None
-
-    if (
-        lat is not None
-        and
-        lng is not None
-        and
-        20 <= lat <= 50
-        and
-        120 <= lng <= 150
+    for anchor in soup.find_all(
+        "a",
+        href=True,
     ):
 
-        coords = [
-            lat,
-            lng
-        ]
+        href = anchor.get(
+            "href",
+            "",
+        )
+
+
+        if (
+            "google.com/maps"
+            not in href
+            and
+            "google.co.jp/maps"
+            not in href
+        ):
+            continue
+
+
+        coords =
+            parse_google_coordinates(
+                href
+            )
+
+
+        if coords:
+            return coords
+
+
+    # -----------------------------------------------------
+    # iframe
+    # -----------------------------------------------------
+
+    for iframe in soup.find_all(
+        "iframe",
+        src=True,
+    ):
+
+        src = iframe.get(
+            "src",
+            "",
+        )
+
+
+        if (
+            "google.com/maps"
+            not in src
+        ):
+            continue
+
+
+        coords =
+            parse_google_coordinates(
+                src
+            )
+
+
+        if coords:
+            return coords
+
+
+    # -----------------------------------------------------
+    # Raw HTML
+    # -----------------------------------------------------
+
+    raw_html = str(
+        soup
+    )
+
+
+    coords =
+        parse_google_coordinates(
+            raw_html
+        )
+
+
+    return coords
+
+
+# =========================================================
+# Discover Shop URLs
+# =========================================================
+
+def discover_shop_urls():
+
+    print(
+        "======================================"
+    )
+
+    print(
+        "讀取 Pokémon 官方 Sitemap"
+    )
+
+    print(
+        SITEMAP_URL
+    )
+
+    print(
+        "======================================"
+    )
+
+
+    html =
+        fetch_text(
+            SITEMAP_URL
+        )
+
+
+    soup =
+        BeautifulSoup(
+            html,
+            "html.parser",
+        )
+
+
+    results = []
+
+
+    for anchor in soup.find_all(
+        "a",
+        href=True,
+    ):
+
+        name = clean_text(
+            anchor.get_text(
+                " ",
+                strip=True,
+            )
+        )
+
+
+        href = anchor.get(
+            "href",
+            "",
+        )
+
+
+        if not name or not href:
+            continue
+
+
+        if not is_pokemon_center(
+            name
+        ):
+            continue
+
+
+        lower = name.lower()
+
+
+        # Exclude Store
+        if (
+            "pokemon store"
+            in lower
+            or
+            "pokémon store"
+            in lower
+            or
+            "ストア"
+            in name
+        ):
+            continue
+
+
+        # Exclude Cafe
+        if (
+            "pokemon cafe"
+            in lower
+            or
+            "pokémon cafe"
+            in lower
+            or
+            "カフェ"
+            in name
+        ):
+            continue
+
+
+        full_url =
+            urllib.parse.urljoin(
+                SITEMAP_URL,
+                href,
+            )
+
+
+        if full_url not in results:
+
+            results.append(
+                full_url
+            )
+
+
+    print(
+        "找到 Center 詳細頁：",
+        len(results),
+    )
+
+
+    return results
+
+
+# =========================================================
+# Parse one center
+# =========================================================
+
+def parse_shop(
+    url
+):
+
+    html =
+        fetch_text(
+            url
+        )
+
+
+    soup =
+        BeautifulSoup(
+            html,
+            "html.parser",
+        )
+
+
+    name =
+        extract_shop_name(
+            soup
+        )
+
+
+    if not name:
+        return None
+
+
+    if not is_pokemon_center(
+        name
+    ):
+        return None
+
+
+    address =
+        extract_address(
+            soup
+        )
+
+
+    image =
+        extract_image(
+            soup,
+            url,
+        )
+
+
+    coords =
+        extract_coordinates(
+            soup
+        )
+
+
+    combined =
+        (
+            name
+            + " "
+            + address
+        )
+
+
+    pref =
+        detect_prefecture(
+            combined
+        )
+
+
+    item_id =
+        make_id(
+            name,
+            url,
+        )
 
 
     return {
 
         "id":
-            make_id(
-                title,
-                url
-            ),
+            item_id,
 
         "type":
             "pokemon_center",
@@ -579,7 +1068,7 @@ def parse_shop(
             pref,
 
         "name":
-            title,
+            name,
 
         "city":
             "",
@@ -591,172 +1080,195 @@ def parse_shop(
             coords,
 
         "image":
-            urllib.parse.urljoin(
-                url,
-                image
-            )
-            if image
-            else
-            "",
+            image,
 
         "official_url":
             url,
 
         "source":
-            "Pokemon Official Shop"
+            "https://shop.pokemon.co.jp/en/sitemap/"
 
     }
 
 
-def discover_urls():
-
-    print(
-        "讀取官方 Sitemap..."
-    )
-
-    html =
-        fetch(
-            SITEMAP_URL
-        )
-
-    soup =
-        BeautifulSoup(
-            html,
-            "html.parser"
-        )
-
-    urls = []
-
-    for a in soup.find_all(
-        "a",
-        href=True
-    ):
-
-        href =
-            a["href"]
-
-        text =
-            clean(
-                a.get_text(
-                    " ",
-                    strip=True
-                )
-            )
-
-        full =
-            urllib.parse.urljoin(
-                SITEMAP_URL,
-                href
-            )
-
-
-        if "shop.pokemon.co.jp" not in full:
-            continue
-
-
-        # 不抓 Store
-        if (
-            "store"
-            in
-            text.lower()
-            or
-            "ストア"
-            in
-            text
-        ):
-            continue
-
-
-        # 不抓 Cafe
-        if (
-            "cafe"
-            in
-            text.lower()
-            or
-            "カフェ"
-            in
-            text
-        ):
-            continue
-
-
-        if full not in urls:
-
-            urls.append(
-                full
-            )
-
-
-    print(
-        "找到詳細頁：",
-        len(urls)
-    )
-
-
-    return urls
-
+# =========================================================
+# Load Existing
+# =========================================================
 
 def load_existing():
 
     if not DATA_FILE.exists():
         return {}
 
+
     try:
+
+        raw =
+            DATA_FILE.read_text(
+                encoding="utf-8"
+            )
+
 
         data =
             json.loads(
-                DATA_FILE.read_text(
-                    encoding="utf-8"
-                )
+                raw
             )
 
+
         return {
-            str(x["id"]): x
-            for x
+
+            str(item["id"]):
+                item
+
+            for item
             in data.get(
                 "list",
                 []
             )
-            if x.get("id")
+
+            if item.get("id")
+
         }
 
-    except Exception:
+
+    except Exception as exc:
+
+        print(
+            "舊資料讀取失敗：",
+            exc
+        )
 
         return {}
 
+
+# =========================================================
+# Load History
+# =========================================================
 
 def load_history():
 
     if not HISTORY_FILE.exists():
 
         return {
-            "last_sync": None,
-            "total": 0,
-            "history": []
+
+            "last_sync":
+                None,
+
+            "total":
+                0,
+
+            "history":
+                []
+
         }
+
 
     try:
 
         return json.loads(
+
             HISTORY_FILE.read_text(
                 encoding="utf-8"
             )
+
         )
 
     except Exception:
 
         return {
-            "last_sync": None,
-            "total": 0,
-            "history": []
+
+            "last_sync":
+                None,
+
+            "total":
+                0,
+
+            "history":
+                []
+
         }
 
+
+# =========================================================
+# Summary
+# =========================================================
+
+def summary(
+    item
+):
+
+    coords =
+        item.get(
+            "coords"
+        )
+
+
+    return {
+
+        "id":
+            item.get(
+                "id",
+                ""
+            ),
+
+        "prefecture":
+            item.get(
+                "pref",
+                ""
+            ),
+
+        "title":
+            item.get(
+                "name",
+                ""
+            ),
+
+        "lat":
+            (
+                coords[0]
+                if
+                isinstance(
+                    coords,
+                    list
+                )
+                and
+                len(coords) >= 2
+                else
+                ""
+            ),
+
+        "lng":
+            (
+                coords[1]
+                if
+                isinstance(
+                    coords,
+                    list
+                )
+                and
+                len(coords) >= 2
+                else
+                ""
+            ),
+
+        "address":
+            item.get(
+                "address",
+                ""
+            ),
+
+    }
+
+
+# =========================================================
+# MAIN
+# =========================================================
 
 def main():
 
     DATA_FILE.parent.mkdir(
         parents=True,
-        exist_ok=True
+        exist_ok=True,
     )
 
 
@@ -765,13 +1277,13 @@ def main():
 
 
     urls =
-        discover_urls()
+        discover_shop_urls()
 
 
     if not urls:
 
         raise RuntimeError(
-            "找不到任何官方詳細頁，停止更新。"
+            "官方 Sitemap 沒找到任何 Pokémon Center 詳細頁。"
         )
 
 
@@ -782,7 +1294,20 @@ def main():
     failed = 0
 
 
-    for url in urls:
+    for index, url in enumerate(
+        urls,
+        start=1,
+    ):
+
+        print("")
+        print(
+            f"[{index}/{len(urls)}]"
+        )
+        print(
+            "URL:",
+            url,
+        )
+
 
         try:
 
@@ -794,19 +1319,20 @@ def main():
 
             if item is None:
 
+                print(
+                    "SKIP: 不是 Pokémon Center"
+                )
+
                 continue
 
 
-            success += 1
-
-
-            # 保留舊資料
             old_item =
                 old.get(
                     item["id"]
                 )
 
 
+            # 保留舊資料
             if old_item:
 
                 if not item.get(
@@ -857,10 +1383,29 @@ def main():
                 item
 
 
+            success += 1
+
+
             print(
                 "OK:",
-                item["name"]
+                item["name"],
             )
+
+            print(
+                "pref:",
+                item.get("pref")
+            )
+
+            print(
+                "address:",
+                item.get("address")
+            )
+
+            print(
+                "coords:",
+                item.get("coords")
+            )
+
 
         except Exception as exc:
 
@@ -868,80 +1413,95 @@ def main():
 
             print(
                 "FAILED:",
-                url,
-                exc
+                url
+            )
+
+            print(
+                repr(exc)
             )
 
 
     print("")
     print(
-        "成功取得 Center：",
+        "======================================"
+    )
+    print(
+        "同步結果"
+    )
+    print(
+        "成功：",
         success
     )
-
     print(
         "失敗：",
         failed
     )
+    print(
+        "總數：",
+        len(new)
+    )
+    print(
+        "======================================"
+    )
 
 
     # =====================================================
-    # CRITICAL SAFETY CHECK
+    # Critical safety check
     # =====================================================
 
     if len(new) == 0:
 
         raise RuntimeError(
             "同步結果為 0 筆，"
-            "拒絕覆蓋 pokemon_center.json。"
+            "為避免清空現有資料，停止更新。"
         )
 
 
-    now =
-        datetime.now(
-            timezone.utc
-        ).astimezone().isoformat(
-            timespec="seconds"
-        )
-
+    # =====================================================
+    # Compare
+    # =====================================================
 
     added_ids =
-        set(new) -
-        set(old)
+        set(new) - set(old)
 
 
     removed_ids =
-        set(old) -
-        set(new)
+        set(old) - set(new)
 
 
-    common =
-        set(new) &
-        set(old)
+    common_ids =
+        set(new) & set(old)
 
 
     changed_ids = []
 
 
-    for item_id in common:
+    compare_fields = [
 
-        a = old[item_id]
-        b = new[item_id]
+        "pref",
+        "name",
+        "address",
+        "coords",
+        "image"
 
-        fields = [
-            "pref",
-            "name",
-            "address",
-            "coords",
-            "image"
-        ]
+    ]
 
-        for field in fields:
+
+    for item_id in common_ids:
+
+        before =
+            old[item_id]
+
+        after =
+            new[item_id]
+
+
+        for field in compare_fields:
 
             if (
-                a.get(field)
+                before.get(field)
                 !=
-                b.get(field)
+                after.get(field)
             ):
 
                 changed_ids.append(
@@ -951,56 +1511,16 @@ def main():
                 break
 
 
-    def summary(item):
+    # =====================================================
+    # History
+    # =====================================================
 
-        coords =
-            item.get(
-                "coords"
-            )
-
-
-        return {
-
-            "id":
-                item.get(
-                    "id"
-                ),
-
-            "prefecture":
-                item.get(
-                    "pref"
-                ),
-
-            "title":
-                item.get(
-                    "name"
-                ),
-
-            "lat":
-                (
-                    coords[0]
-                    if
-                    coords
-                    else
-                    ""
-                ),
-
-            "lng":
-                (
-                    coords[1]
-                    if
-                    coords
-                    else
-                    ""
-                ),
-
-            "address":
-                item.get(
-                    "address",
-                    ""
-                )
-
-        }
+    now =
+        datetime.now(
+            timezone.utc
+        ).astimezone().isoformat(
+            timespec="seconds"
+        )
 
 
     history =
@@ -1034,27 +1554,36 @@ def main():
 
             "added":
                 [
-                    summary(new[x])
-                    for x in sorted(
+                    summary(
+                        new[item_id]
+                    )
+                    for item_id
+                    in sorted(
                         added_ids
                     )
                 ],
 
             "removed":
                 [
-                    summary(old[x])
-                    for x in sorted(
+                    summary(
+                        old[item_id]
+                    )
+                    for item_id
+                    in sorted(
                         removed_ids
                     )
                 ],
 
             "changed":
                 [
-                    summary(new[x])
-                    for x in sorted(
+                    summary(
+                        new[item_id]
+                    )
+                    for item_id
+                    in sorted(
                         changed_ids
                     )
-                ]
+                ],
 
         })
 
@@ -1073,26 +1602,33 @@ def main():
         len(new)
 
 
+    # =====================================================
+    # Save JSON
+    # =====================================================
+
     ordered =
         sorted(
 
             new.values(),
 
-            key=lambda x: (
+            key=lambda item: (
 
-                x.get(
-                    "pref"
-                )
-                if x.get(
-                    "pref"
-                ) is not None
-                else
-                999,
+                (
+                    item.get(
+                        "pref"
+                    )
+                    if
+                    item.get(
+                        "pref"
+                    ) is not None
+                    else
+                    999
+                ),
 
-                x.get(
+                item.get(
                     "name",
                     ""
-                )
+                ),
 
             )
 
@@ -1102,15 +1638,19 @@ def main():
     DATA_FILE.write_text(
 
         json.dumps(
+
             {
                 "list":
                     ordered
             },
+
             ensure_ascii=False,
-            indent=2
+
+            indent=2,
+
         ),
 
-        encoding="utf-8"
+        encoding="utf-8",
 
     )
 
@@ -1118,26 +1658,31 @@ def main():
     HISTORY_FILE.write_text(
 
         json.dumps(
+
             history,
+
             ensure_ascii=False,
-            indent=2
+
+            indent=2,
+
         ),
 
-        encoding="utf-8"
+        encoding="utf-8",
 
     )
 
 
     print("")
     print(
-        "================================"
+        "======================================"
     )
     print(
-        " Pokémon Center Sync OK"
+        " Pokémon Center Sync 完成"
     )
     print(
-        "總數：",
-        len(ordered)
+        "目前：",
+        len(ordered),
+        "筆"
     )
     print(
         "新增：",
@@ -1152,7 +1697,7 @@ def main():
         len(changed_ids)
     )
     print(
-        "================================"
+        "======================================"
     )
 
 

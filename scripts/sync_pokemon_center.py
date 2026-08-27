@@ -2,18 +2,22 @@
 
 import json
 import re
-import time
 import hashlib
 import urllib.request
+import urllib.parse
+
 from datetime import datetime, timezone
-from html import unescape
 from pathlib import Path
 
 from bs4 import BeautifulSoup
 
 
-OFFICIAL_URL = (
-    "https://www.pokemon.co.jp/shop/"
+# =========================================================
+# Settings
+# =========================================================
+
+SITEMAP_URL = (
+    "https://shop.pokemon.co.jp/en/sitemap/"
 )
 
 DATA_FILE = Path(
@@ -24,7 +28,13 @@ HISTORY_FILE = Path(
     "center_history.json"
 )
 
+
+# =========================================================
+# Prefecture
+# =========================================================
+
 PREF_NAMES = {
+
     1: "北海道",
     2: "青森県",
     3: "岩手県",
@@ -32,6 +42,7 @@ PREF_NAMES = {
     5: "秋田県",
     6: "山形県",
     7: "福島県",
+
     8: "茨城県",
     9: "栃木県",
     10: "群馬県",
@@ -39,6 +50,7 @@ PREF_NAMES = {
     12: "千葉県",
     13: "東京都",
     14: "神奈川県",
+
     15: "新潟県",
     16: "富山県",
     17: "石川県",
@@ -48,6 +60,7 @@ PREF_NAMES = {
     21: "岐阜県",
     22: "静岡県",
     23: "愛知県",
+
     24: "三重県",
     25: "滋賀県",
     26: "京都府",
@@ -55,15 +68,18 @@ PREF_NAMES = {
     28: "兵庫県",
     29: "奈良県",
     30: "和歌山県",
+
     31: "鳥取県",
     32: "島根県",
     33: "岡山県",
     34: "広島県",
     35: "山口県",
+
     36: "徳島県",
     37: "香川県",
     38: "愛媛県",
     39: "高知県",
+
     40: "福岡県",
     41: "佐賀県",
     42: "長崎県",
@@ -74,47 +90,66 @@ PREF_NAMES = {
     47: "沖縄県",
 }
 
-PREF_BY_TEXT = {
-    name: code
-    for code, name in PREF_NAMES.items()
-}
 
+# =========================================================
+# Region
+# =========================================================
 
-REGION_TO_CODES = {
+REGIONS = {
+
     "北海道・東北": [1, 2, 3, 4, 5, 6, 7],
-    "関東": [8, 9, 10, 11, 12, 13, 14],
+
+    "関東": [
+        8, 9, 10, 11,
+        12, 13, 14
+    ],
+
     "中部・北陸": [
-        15, 16, 17, 18, 19,
-        20, 21, 22, 23
+        15, 16, 17, 18,
+        19, 20, 21, 22,
+        23
     ],
+
     "関西": [
-        24, 25, 26, 27, 28, 29, 30
+        24, 25, 26, 27,
+        28, 29, 30
     ],
+
     "中国・四国": [
-        31, 32, 33, 34, 35,
-        36, 37, 38, 39
+        31, 32, 33, 34,
+        35, 36, 37, 38,
+        39
     ],
+
     "九州・沖縄": [
-        40, 41, 42, 43, 44,
-        45, 46, 47
+        40, 41, 42, 43,
+        44, 45, 46, 47
     ],
 }
 
 
-def fetch_text(url, timeout=30):
+# =========================================================
+# HTTP
+# =========================================================
+
+def fetch_text(url):
 
     request = urllib.request.Request(
+
         url,
+
         headers={
             "User-Agent":
-                "Pok-Lids-Pokemon-Center-Sync/1.0 "
-                "(GitHub Actions)"
+                "Mozilla/5.0 "
+                "(compatible; Pok-Lids-Center-Sync/1.0)",
+            "Accept-Language":
+                "en-US,en;q=0.9"
         }
     )
 
     with urllib.request.urlopen(
         request,
-        timeout=timeout
+        timeout=40
     ) as response:
 
         return response.read().decode(
@@ -123,49 +158,688 @@ def fetch_text(url, timeout=30):
         )
 
 
-def normalize_space(text):
+# =========================================================
+# Normalize
+# =========================================================
 
-    return re.sub(
+def clean_text(text):
+
+    if not text:
+        return ""
+
+    text = re.sub(
         r"\s+",
         " ",
-        unescape(text or "")
-    ).strip()
+        text
+    )
+
+    return text.strip()
 
 
-def make_id(url, name, address):
+# =========================================================
+# Region Detection
+# =========================================================
 
-    if url:
+def get_region_from_heading(
+    heading
+):
 
-        path = (
-            urllib.parse.urlparse(url)
-            .path
-            .strip("/")
+    text =
+        clean_text(
+            heading.get_text(
+                " ",
+                strip=True
+            )
         )
 
-        if path:
-            slug = re.sub(
+    for region in REGIONS:
+
+        if region.lower() in text.lower():
+
+            return region
+
+    return None
+
+
+# =========================================================
+# Prefecture Detection
+# =========================================================
+
+def detect_prefecture(
+    address,
+    name
+):
+
+    text = (
+        clean_text(address)
+        + " "
+        + clean_text(name)
+    )
+
+    # 直接比對日本都道府縣名稱
+    for code, pref in PREF_NAMES.items():
+
+        if pref in text:
+
+            return code
+
+    # English fallback
+    english = text.lower()
+
+    rules = [
+
+        ("hokkaido", 1),
+
+        ("aomori", 2),
+        ("iwate", 3),
+        ("miyagi", 4),
+        ("akita", 5),
+        ("yamagata", 6),
+        ("fukushima", 7),
+
+        ("ibaraki", 8),
+        ("tochigi", 9),
+        ("gunma", 10),
+        ("saitama", 11),
+        ("chiba", 12),
+        ("tokyo", 13),
+        ("kanagawa", 14),
+
+        ("niigata", 15),
+        ("toyama", 16),
+        ("ishikawa", 17),
+        ("fukui", 18),
+        ("yamanashi", 19),
+        ("nagano", 20),
+        ("gifu", 21),
+        ("shizuoka", 22),
+        ("aichi", 23),
+
+        ("mie", 24),
+        ("shiga", 25),
+        ("kyoto", 26),
+        ("osaka", 27),
+        ("hyogo", 28),
+        ("nara", 29),
+        ("wakayama", 30),
+
+        ("tottori", 31),
+        ("shimane", 32),
+        ("okayama", 33),
+        ("hiroshima", 34),
+        ("yamaguchi", 35),
+
+        ("tokushima", 36),
+        ("kagawa", 37),
+        ("ehime", 38),
+        ("kochi", 39),
+
+        ("fukuoka", 40),
+        ("saga", 41),
+        ("nagasaki", 42),
+        ("kumamoto", 43),
+        ("oita", 44),
+        ("miyazaki", 45),
+        ("kagoshima", 46),
+        ("okinawa", 47),
+
+    ]
+
+    for keyword, code in rules:
+
+        if keyword in english:
+
+            return code
+
+    return None
+
+
+# =========================================================
+# Extract JSON-LD
+# =========================================================
+
+def extract_json_ld(
+    soup
+):
+
+    output = []
+
+    for script in soup.find_all(
+        "script",
+        type="application/ld+json"
+    ):
+
+        raw =
+            script.string or \
+            script.get_text()
+
+        if not raw:
+            continue
+
+        try:
+
+            data =
+                json.loads(raw)
+
+            if isinstance(
+                data,
+                list
+            ):
+
+                output.extend(
+                    data
+                )
+
+            else:
+
+                output.append(
+                    data
+                )
+
+        except Exception:
+
+            continue
+
+    return output
+
+
+# =========================================================
+# Extract Address
+# =========================================================
+
+def extract_address(
+    soup
+):
+
+    # -----------------------------------------------------
+    # 1. JSON-LD
+    # -----------------------------------------------------
+
+    json_ld =
+        extract_json_ld(
+            soup
+        )
+
+    for obj in json_ld:
+
+        address =
+            obj.get(
+                "address"
+            ) \
+            if isinstance(
+                obj,
+                dict
+            ) \
+            else None
+
+        if isinstance(
+            address,
+            dict
+        ):
+
+            parts = [
+
+                address.get(
+                    "postalCode",
+                    ""
+                ),
+
+                address.get(
+                    "streetAddress",
+                    ""
+                ),
+
+                address.get(
+                    "addressLocality",
+                    ""
+                ),
+
+                address.get(
+                    "addressRegion",
+                    ""
+                )
+
+            ]
+
+            result =
+                clean_text(
+                    " ".join(
+                        p
+                        for p
+                        in parts
+                        if p
+                    )
+                )
+
+            if result:
+
+                return result
+
+        elif isinstance(
+            address,
+            str
+        ):
+
+            result =
+                clean_text(
+                    address
+                )
+
+            if result:
+
+                return result
+
+    # -----------------------------------------------------
+    # 2. Shop Information text
+    # -----------------------------------------------------
+
+    text =
+        clean_text(
+            soup.get_text(
+                " ",
+                strip=True
+            )
+        )
+
+    patterns = [
+
+        r"Location\s+(.+?)"
+        r"\s+\d{3}-\d{4}",
+
+        r"Location\s+(.+?)"
+        r"\s+Google Maps",
+
+        r"所在地\s+(.+?)"
+        r"\s+Google Maps",
+
+    ]
+
+    for pattern in patterns:
+
+        match =
+            re.search(
+                pattern,
+                text,
+                flags=re.IGNORECASE
+            )
+
+        if match:
+
+            result =
+                clean_text(
+                    match.group(1)
+                )
+
+            if result:
+
+                return result
+
+    return ""
+
+
+# =========================================================
+# Extract Image
+# =========================================================
+
+def extract_image(
+    soup
+):
+
+    meta =
+        soup.find(
+            "meta",
+            attrs={
+                "property":
+                    "og:image"
+            }
+        )
+
+    if meta:
+
+        url =
+            meta.get(
+                "content"
+            )
+
+        if url:
+
+            return urllib.parse.urljoin(
+                SITEMAP_URL,
+                url.strip()
+            )
+
+    return ""
+
+
+# =========================================================
+# Extract Google Maps Coordinates
+# =========================================================
+
+def extract_google_coords(
+    soup
+):
+
+    # -----------------------------------------------------
+    # Look for Google Maps links
+    # -----------------------------------------------------
+
+    for a in soup.find_all(
+        "a",
+        href=True
+    ):
+
+        href =
+            a.get(
+                "href",
+                ""
+            )
+
+        if (
+            "google.com/maps" not in
+            href
+            and
+            "google.co.jp/maps" not in
+            href
+        ):
+
+            continue
+
+        coords =
+            parse_google_url(
+                href
+            )
+
+        if coords:
+
+            return coords
+
+
+    # -----------------------------------------------------
+    # Look for iframe src
+    # -----------------------------------------------------
+
+    for iframe in soup.find_all(
+        "iframe",
+        src=True
+    ):
+
+        src =
+            iframe.get(
+                "src",
+                ""
+            )
+
+        if "google.com/maps" not in src:
+
+            continue
+
+        coords =
+            parse_google_url(
+                src
+            )
+
+        if coords:
+
+            return coords
+
+
+    # -----------------------------------------------------
+    # Search raw HTML
+    # -----------------------------------------------------
+
+    html =
+        str(soup)
+
+
+    coords =
+        parse_google_url(
+            html
+        )
+
+
+    return coords
+
+
+# =========================================================
+# Parse Google Map Embed URL
+# =========================================================
+
+def parse_google_url(
+    text
+):
+
+    if not text:
+
+        return None
+
+    decoded =
+        urllib.parse.unquote(
+            text
+        )
+
+
+    # Google embed often has:
+    #
+    # !2d139.7742695
+    # !3d35.6802902
+
+    lng_match =
+        re.search(
+            r"!2d(-?\d+\.\d+)",
+            decoded
+        )
+
+
+    lat_match =
+        re.search(
+            r"!3d(-?\d+\.\d+)",
+            decoded
+        )
+
+
+    if (
+        lat_match and
+        lng_match
+    ):
+
+        try:
+
+            lat =
+                float(
+                    lat_match.group(1)
+                )
+
+            lng =
+                float(
+                    lng_match.group(1)
+                )
+
+            if (
+                20 <= lat <= 50
+                and
+                120 <= lng <= 150
+            ):
+
+                return [
+                    lat,
+                    lng
+                ]
+
+        except ValueError:
+
+            pass
+
+
+    # Another common format:
+    #
+    # @35.6802902,139.7742695
+
+    match =
+        re.search(
+            r"@(-?\d+\.\d+),(-?\d+\.\d+)",
+            decoded
+        )
+
+
+    if match:
+
+        try:
+
+            lat =
+                float(
+                    match.group(1)
+                )
+
+            lng =
+                float(
+                    match.group(2)
+                )
+
+            if (
+                20 <= lat <= 50
+                and
+                120 <= lng <= 150
+            ):
+
+                return [
+                    lat,
+                    lng
+                ]
+
+        except ValueError:
+
+            pass
+
+
+    return None
+
+
+# =========================================================
+# Extract Shop Name
+# =========================================================
+
+def extract_shop_name(
+    soup
+):
+
+    h1 =
+        soup.find(
+            "h1"
+        )
+
+    if h1:
+
+        text =
+            clean_text(
+                h1.get_text(
+                    " ",
+                    strip=True
+                )
+            )
+
+        if text:
+
+            return text
+
+    title =
+        soup.title
+
+    if title:
+
+        return clean_text(
+            title.get_text(
+                " ",
+                strip=True
+            )
+        )
+
+    return ""
+
+
+# =========================================================
+# Is Pokémon Center
+# =========================================================
+
+def is_pokemon_center(
+    name
+):
+
+    name_lower =
+        name.lower()
+
+    return (
+
+        "pokémon center"
+        in
+        name_lower
+
+        or
+
+        "pokemon center"
+        in
+        name_lower
+
+        or
+
+        "ポケモンセンター"
+        in
+        name
+
+    )
+
+
+# =========================================================
+# Stable ID
+# =========================================================
+
+def make_id(
+    url,
+    name
+):
+
+    parsed =
+        urllib.parse.urlparse(
+            url
+        )
+
+    path =
+        parsed.path.strip(
+            "/"
+        )
+
+    if path:
+
+        slug =
+            re.sub(
                 r"[^a-zA-Z0-9]+",
                 "-",
                 path
-            ).strip("-").lower()
+            ) \
+            .strip(
+                "-"
+            ) \
+            .lower()
 
-            if slug:
-                return (
-                    "pokemon-center-" +
-                    slug
-                )
+        if slug:
 
-    raw = (
-        name +
-        "|" +
-        address
-    ).encode(
-        "utf-8"
-    )
+            return (
+                "pokemon-center-" +
+                slug
+            )
 
-    digest = hashlib.sha1(
-        raw
-    ).hexdigest()[:12]
+    raw =
+        (
+            name +
+            "|" +
+            url
+        ).encode(
+            "utf-8"
+        )
+
+    digest =
+        hashlib.sha1(
+            raw
+        ).hexdigest()[:12]
 
     return (
         "pokemon-center-" +
@@ -173,254 +847,284 @@ def make_id(url, name, address):
     )
 
 
-def extract_pref(
-    address,
-    name,
-    region
-):
+# =========================================================
+# Discover Shops From Sitemap
+# =========================================================
 
-    address =
-        normalize_space(address)
+def discover_shops():
 
-    name =
-        normalize_space(name)
-
-    for code, pref in PREF_NAMES.items():
-
-        if pref in address:
-
-            return code
-
-    special_rules = [
-
-        ("札幌", 1),
-        ("仙台", 4),
-        ("盛岡", 3),
-        ("秋田", 5),
-        ("山形", 6),
-        ("福島市", 7),
-
-        ("水戸", 8),
-        ("宇都宮", 9),
-        ("前橋", 10),
-        ("さいたま", 11),
-        ("千葉市", 12),
-        ("船橋", 12),
-        ("日本橋", 13),
-        ("渋谷", 13),
-        ("池袋", 13),
-        ("押上", 13),
-        ("横浜", 14),
-
-        ("新潟", 15),
-        ("富山", 16),
-        ("金沢", 17),
-        ("福井", 18),
-        ("甲府", 19),
-        ("長野", 20),
-        ("岐阜", 21),
-        ("静岡", 22),
-        ("名古屋", 23),
-
-        ("津市", 24),
-        ("大津", 25),
-        ("京都", 26),
-        ("大阪", 27),
-        ("神戸", 28),
-        ("奈良", 29),
-        ("和歌山", 30),
-
-        ("鳥取", 31),
-        ("松江", 32),
-        ("岡山", 33),
-        ("広島", 34),
-        ("山口", 35),
-
-        ("徳島", 36),
-        ("高松", 37),
-        ("松山", 38),
-        ("高知", 39),
-
-        ("福岡", 40),
-        ("佐賀", 41),
-        ("長崎", 42),
-        ("熊本", 43),
-        ("大分", 44),
-        ("宮崎", 45),
-        ("鹿児島", 46),
-        ("沖縄", 47),
-        ("北中城", 47),
-    ]
-
-    combined = (
-        name +
-        " " +
-        address
+    print(
+        "讀取官方 Sitemap..."
     )
 
-    for keyword, code in special_rules:
 
-        if keyword in combined:
-
-            return code
-
-    codes = REGION_TO_CODES.get(
-        region,
-        []
-    )
-
-    if len(codes) == 1:
-
-        return codes[0]
-
-    return None
-
-
-def extract_address(text):
-
-    text =
-        normalize_space(text)
-
-    patterns = [
-
-        r"所在地(.+?)(?:詳細はこちら|$)",
-
-        r"Address(.+?)(?:Learn More|$)",
-
-    ]
-
-    for pattern in patterns:
-
-        match = re.search(
-            pattern,
-            text,
-            flags=re.IGNORECASE
+    html =
+        fetch_text(
+            SITEMAP_URL
         )
 
-        if match:
 
-            return normalize_space(
-                match.group(1)
-            )
-
-    return ""
-
-
-def extract_image(detail_url):
-
-    if not detail_url:
-
-        return ""
-
-    try:
-
-        html =
-            fetch_text(
-                detail_url
-            )
-
-        soup =
-            BeautifulSoup(
-                html,
-                "html.parser"
-            )
-
-        meta =
-            soup.find(
-                "meta",
-                attrs={
-                    "property":
-                        "og:image"
-                }
-            )
-
-        if meta:
-
-            image =
-                meta.get("content")
-
-            if image:
-
-                return image.strip()
-
-    except Exception as exc:
-
-        print(
-            "詳細頁圖片取得失敗:",
-            detail_url,
-            exc
+    soup =
+        BeautifulSoup(
+            html,
+            "html.parser"
         )
 
-    return ""
+
+    shops = []
+
+    current_region =
+        None
 
 
-def geocode(
-    address
-):
+    # sitemap has h3 region headings
+    for element in soup.find_all(
+        ["h3", "a"]
+    ):
 
-    if not address:
+        if element.name == "h3":
 
-        return None
-
-    query =
-        address
-
-    url = (
-        "https://nominatim.openstreetmap.org/search"
-        "?format=jsonv2"
-        "&limit=1"
-        "&countrycodes=jp"
-        "&q="
-        +
-        urllib.parse.quote(
-            query
-        )
-    )
-
-    try:
-
-        request =
-            urllib.request.Request(
-
-                url,
-
-                headers={
-                    "User-Agent":
-                        "Pok-Lids-Pokemon-Center-Sync/1.0 "
-                        "(GitHub Actions)"
-                }
-
-            )
-
-
-        with urllib.request.urlopen(
-            request,
-            timeout=30
-        ) as response:
-
-            rows =
-                json.load(
-                    response
+            region =
+                get_region_from_heading(
+                    element
                 )
 
+            if region:
 
-        if rows:
+                current_region =
+                    region
 
-            return [
-                float(rows[0]["lat"]),
-                float(rows[0]["lon"])
-            ]
+            continue
 
-    except Exception as exc:
 
-        print(
-            "Geocoding failed:",
-            address,
-            exc
+        name =
+            clean_text(
+                element.get_text(
+                    " ",
+                    strip=True
+                )
+            )
+
+
+        href =
+            element.get(
+                "href",
+                ""
+            )
+
+
+        if not name or not href:
+
+            continue
+
+
+        if not is_pokemon_center(
+            name
+        ):
+
+            continue
+
+
+        # Exclude Store / Cafe explicitly
+
+        name_lower =
+            name.lower()
+
+
+        if (
+            "store"
+            in
+            name_lower
+            or
+            "cafe"
+            in
+            name_lower
+            or
+            "ストア"
+            in
+            name
+            or
+            "カフェ"
+            in
+            name
+        ):
+
+            continue
+
+
+        href =
+            urllib.parse.urljoin(
+                SITEMAP_URL,
+                href
+            )
+
+
+        # International should not enter
+        # Japan collection
+
+        if (
+            "taipei"
+            in
+            name_lower
+            or
+            "singapore"
+            in
+            name_lower
+        ):
+
+            continue
+
+
+        item = {
+
+            "name":
+                name,
+
+            "url":
+                href,
+
+            "region":
+                current_region
+
+        }
+
+
+        # Avoid duplicates
+
+        if not any(
+
+            s["url"] ==
+            item["url"]
+
+            for s in shops
+
+        ):
+
+            shops.append(
+                item
+            )
+
+
+    print(
+        "找到 Pokémon Center：",
+        len(shops)
+    )
+
+
+    return shops
+
+
+# =========================================================
+# Parse Detail Page
+# =========================================================
+
+def parse_shop(
+    shop
+):
+
+    url =
+        shop["url"]
+
+    print(
+        "讀取：",
+        shop["name"]
+    )
+
+
+    html =
+        fetch_text(
+            url
         )
 
-    return None
 
+    soup =
+        BeautifulSoup(
+            html,
+            "html.parser"
+        )
+
+
+    name =
+        extract_shop_name(
+            soup
+        ) or shop["name"]
+
+
+    address =
+        extract_address(
+            soup
+        )
+
+
+    image =
+        extract_image(
+            soup
+        )
+
+
+    coords =
+        extract_google_coords(
+            soup
+        )
+
+
+    pref =
+        detect_prefecture(
+            address,
+            name
+        )
+
+
+    item_id =
+        make_id(
+            url,
+            name
+        )
+
+
+    return {
+
+        "id":
+            item_id,
+
+        "type":
+            "pokemon_center",
+
+        "pref":
+            pref,
+
+        "region":
+            shop.get(
+                "region"
+            ),
+
+        "name":
+            name,
+
+        "city":
+            "",
+
+        "address":
+            address,
+
+        "coords":
+            coords,
+
+        "image":
+            image,
+
+        "official_url":
+            url,
+
+        "source":
+            "https://shop.pokemon.co.jp/en/sitemap/"
+
+    }
+
+
+# =========================================================
+# Existing Data
+# =========================================================
 
 def load_existing():
 
@@ -428,24 +1132,38 @@ def load_existing():
 
         return {}
 
+
     try:
 
-        data =
+        json_data =
             json.loads(
                 DATA_FILE.read_text(
                     encoding="utf-8"
                 )
             )
 
-        return {
-            str(item["id"]):
-                item
-            for item
-            in data.get(
+
+        items =
+            json_data.get(
                 "list",
                 []
             )
-            if item.get("id")
+
+
+        return {
+
+            str(
+                item["id"]
+            ):
+                item
+
+            for item
+            in items
+
+            if item.get(
+                "id"
+            )
+
         }
 
     except Exception:
@@ -453,14 +1171,27 @@ def load_existing():
         return {}
 
 
+# =========================================================
+# Existing History
+# =========================================================
+
 def load_history():
 
     if not HISTORY_FILE.exists():
 
         return {
-            "last_sync": None,
-            "history": []
+
+            "last_sync":
+                None,
+
+            "total":
+                0,
+
+            "history":
+                []
+
         }
+
 
     try:
 
@@ -473,241 +1204,93 @@ def load_history():
     except Exception:
 
         return {
-            "last_sync": None,
-            "history": []
+
+            "last_sync":
+                None,
+
+            "total":
+                0,
+
+            "history":
+                []
+
         }
 
 
-def get_anchor_region(
-    anchor
+# =========================================================
+# Summary
+# =========================================================
+
+def simplify(
+    item
 ):
 
-    current = anchor
-
-    for _ in range(6):
-
-        if not current:
-            break
-
-        text =
-            normalize_space(
-                current.get_text(
-                    " ",
-                    strip=True
-                )
-            )
-
-        for region in REGION_TO_CODES:
-
-            if region in text:
-
-                return region
-
-        current =
-            current.parent
-
-    return ""
-
-
-def is_center_name(
-    name
-):
-
-    normalized =
-        name.lower()
-
-    if "ポケモンセンター" in name:
-
-        return True
-
-    if "pokemon center" in normalized:
-
-        return True
-
-    return False
-
-
-def scrape_official():
-
-    html =
-        fetch_text(
-            OFFICIAL_URL
+    coords =
+        item.get(
+            "coords"
         )
 
-    soup =
-        BeautifulSoup(
-            html,
-            "html.parser"
-        )
 
-    results = {}
-    current_region = ""
+    return {
 
-    for heading in soup.find_all(
-        ["h2", "h3"]
-    ):
+        "id":
+            item.get(
+                "id",
+                ""
+            ),
 
-        heading_text =
-            normalize_space(
-                heading.get_text(
-                    " ",
-                    strip=True
+        "prefecture":
+            item.get(
+                "pref",
+                ""
+            ),
+
+        "title":
+            item.get(
+                "name",
+                ""
+            ),
+
+        "lat":
+            (
+                coords[0]
+                if
+                isinstance(
+                    coords,
+                    list
                 )
-            )
+                and
+                len(coords) >= 2
+                else
+                ""
+            ),
 
-        for region in REGION_TO_CODES:
+        "lng":
+            (
+                coords[1]
+                if
+                isinstance(
+                    coords,
+                    list
+                )
+                and
+                len(coords) >= 2
+                else
+                ""
+            ),
 
-            if region in heading_text:
-
-                current_region =
-                    region
-
-                break
-
-    for anchor in soup.find_all(
-        "a"
-    ):
-
-        href =
-            anchor.get(
-                "href",
+        "address":
+            item.get(
+                "address",
                 ""
             )
 
-        if "shop.pokemon.co.jp" not in href:
+    }
 
-            continue
 
-        if href.startswith("/"):
-
-            href =
-                urllib.parse.urljoin(
-                    OFFICIAL_URL,
-                    href
-                )
-
-        name =
-            normalize_space(
-                anchor.get_text(
-                    " ",
-                    strip=True
-                )
-            )
-
-        if not name:
-
-            continue
-
-        if not is_center_name(
-            name
-        ):
-
-            continue
-
-        if "ストア" in name:
-            continue
-
-        if "カフェ" in name:
-            continue
-
-        if "cafe" in name.lower():
-            continue
-
-        parent =
-            anchor.parent
-
-        block_text =
-            normalize_space(
-                parent.get_text(
-                    " ",
-                    strip=True
-                )
-            )
-
-        if len(block_text) < len(name):
-
-            block_text =
-                normalize_space(
-                    anchor.parent.parent
-                    .get_text(
-                        " ",
-                        strip=True
-                    )
-                )
-
-        address =
-            extract_address(
-                block_text
-            )
-
-        if not address:
-
-            address =
-                block_text
-
-        region =
-            get_anchor_region(
-                anchor
-            ) or current_region
-
-        pref =
-            extract_pref(
-                address,
-                name,
-                region
-            )
-
-        detail_url =
-            href
-
-        item_id =
-            make_id(
-                detail_url,
-                name,
-                address
-            )
-
-        results[item_id] = {
-
-            "id":
-                item_id,
-
-            "type":
-                "pokemon_center",
-
-            "pref":
-                pref,
-
-            "region":
-                region,
-
-            "name":
-                name,
-
-            "city":
-                "",
-
-            "address":
-                address,
-
-            "coords":
-                None,
-
-            "image":
-                "",
-
-            "source":
-                OFFICIAL_URL,
-
-            "official_url":
-                detail_url
-
-        }
-
-    return list(
-        results.values()
-    )
-
+# =========================================================
+# MAIN
+# =========================================================
 
 def main():
 
@@ -716,219 +1299,177 @@ def main():
         exist_ok=True
     )
 
+
     old_map =
         load_existing()
 
 
-    scraped =
-        scrape_official()
+    shops =
+        discover_shops()
 
 
-    print(
-        "官方頁面抓到：",
-        len(scraped),
-        "筆"
-    )
+    if not shops:
+
+        raise RuntimeError(
+            "官方 Sitemap 沒有找到 Pokémon Center。"
+        )
 
 
     new_map = {}
 
 
-    for item in scraped:
+    for shop in shops:
 
-        item_id =
-            item["id"]
+        item =
+            parse_shop(
+                shop
+            )
 
 
         old =
             old_map.get(
-                item_id
+                item["id"]
             )
 
+
+        # Preserve old data when
+        # official page temporarily misses it.
 
         if old:
 
-            item["coords"] =
-                old.get(
-                    "coords"
-                )
+            if not item.get(
+                "coords"
+            ):
 
-            item["image"] =
-                old.get(
-                    "image",
-                    ""
-                )
+                item["coords"] =
+                    old.get(
+                        "coords"
+                    )
 
 
-        if not item.get(
-            "image"
-        ):
+            if not item.get(
+                "image"
+            ):
 
-            item["image"] =
-                extract_image(
-                    item["official_url"]
-                )
+                item["image"] =
+                    old.get(
+                        "image",
+                        ""
+                    )
 
 
-        address_changed = (
-
-            not old
-
-            or
-
-            old.get(
+            if not item.get(
                 "address"
-            ) !=
-            item.get(
-                "address"
-            )
+            ):
 
+                item["address"] =
+                    old.get(
+                        "address",
+                        ""
+                    )
+
+
+            if not item.get(
+                "pref"
+            ):
+
+                item["pref"] =
+                    old.get(
+                        "pref"
+                    )
+
+
+        new_map[
+            item["id"]
+        ] = item
+
+
+    # =====================================================
+    # Compare
+    # =====================================================
+
+    added_ids =
+        set(
+            new_map
+        ) - set(
+            old_map
         )
 
 
-        if (
-            not item.get("coords")
-            or
-            address_changed
-        ):
-
-            print(
-                "Geocoding:",
-                item["name"]
-            )
-
-
-            coords =
-                geocode(
-                    item["address"]
-                )
-
-
-            if coords:
-
-                item["coords"] =
-                    coords
-
-
-            # Nominatim 公開服務的保守使用頻率
-            time.sleep(
-                1.1
-            )
-
-
-        new_map[item_id] =
-            item
-
-
-    added_ids =
-        set(new_map) -
-        set(old_map)
-
     removed_ids =
-        set(old_map) -
-        set(new_map)
+        set(
+            old_map
+        ) - set(
+            new_map
+        )
 
-    changed_ids = set()
+
+    common_ids =
+        set(
+            new_map
+        ) & set(
+            old_map
+        )
 
 
-    for item_id in (
-        set(new_map) &
-        set(old_map)
-    ):
+    changed_ids = []
+
+
+    fields = [
+
+        "pref",
+        "region",
+        "name",
+        "address",
+        "coords",
+        "image"
+
+    ]
+
+
+    for item_id in common_ids:
 
         old =
-            old_map[item_id]
+            old_map[
+                item_id
+            ]
 
         new =
-            new_map[item_id]
+            new_map[
+                item_id
+            ]
 
-        compare_fields = [
 
-            "pref",
-            "region",
-            "name",
-            "address",
-            "coords",
-            "image"
+        changed = False
 
-        ]
 
-        if any(
+        for field in fields:
 
-            old.get(field)
-            !=
-            new.get(field)
+            if (
+                old.get(field)
+                !=
+                new.get(field)
+            ):
 
-            for field
-            in compare_fields
+                changed = True
 
-        ):
+                break
 
-            changed_ids.add(
+
+        if changed:
+
+            changed_ids.append(
                 item_id
             )
-
-
-    def simplify(item):
-
-        return {
-
-            "id":
-                item.get(
-                    "id",
-                    ""
-                ),
-
-            "prefecture":
-                item.get(
-                    "pref",
-                    ""
-                ),
-
-            "title":
-                item.get(
-                    "name",
-                    ""
-                ),
-
-            "lat":
-                (
-                    item.get(
-                        "coords"
-                    )[0]
-                    if item.get(
-                        "coords"
-                    )
-                    else ""
-                ),
-
-            "lng":
-                (
-                    item.get(
-                        "coords"
-                    )[1]
-                    if item.get(
-                        "coords"
-                    )
-                    else ""
-                ),
-
-            "address":
-                item.get(
-                    "address",
-                    ""
-                )
-
-        }
 
 
     added = [
 
         simplify(
-            new_map[item_id]
+            new_map[x]
         )
 
-        for item_id
+        for x
         in sorted(
             added_ids
         )
@@ -939,10 +1480,10 @@ def main():
     removed = [
 
         simplify(
-            old_map[item_id]
+            old_map[x]
         )
 
-        for item_id
+        for x
         in sorted(
             removed_ids
         )
@@ -953,10 +1494,10 @@ def main():
     changed = [
 
         simplify(
-            new_map[item_id]
+            new_map[x]
         )
 
-        for item_id
+        for x
         in sorted(
             changed_ids
         )
@@ -994,6 +1535,7 @@ def main():
             []
         )
 
+
         history["history"].append({
 
             "time":
@@ -1016,6 +1558,7 @@ def main():
 
         })
 
+
         history["history"] =
             history["history"][
                 -200:
@@ -1025,24 +1568,35 @@ def main():
     history["last_sync"] =
         now
 
+
     history["total"] =
         len(new_map)
 
+
+    # =====================================================
+    # Save Data
+    # =====================================================
 
     ordered =
         sorted(
 
             new_map.values(),
 
-            key=lambda x: (
+            key=lambda item: (
 
-                x.get(
+                item.get(
                     "pref"
                 )
-                or
+                if
+                item.get(
+                    "pref"
+                )
+                is not None
+
+                else
                 999,
 
-                x.get(
+                item.get(
                     "name",
                     ""
                 )
@@ -1089,34 +1643,33 @@ def main():
     )
 
 
-    print(
-        "Pokémon Center 更新完成"
-    )
+    # =====================================================
+    # Output
+    # =====================================================
 
+    print("")
+    print("======================================")
+    print(" Pokémon Center Sync 完成")
+    print("======================================")
     print(
         "目前：",
-        len(ordered),
-        "筆"
+        len(ordered)
     )
-
     print(
         "新增：",
         len(added)
     )
-
     print(
         "移除：",
         len(removed)
     )
-
     print(
         "修改：",
         len(changed)
     )
+    print("======================================")
 
 
 if __name__ == "__main__":
-
-    import urllib.parse
 
     main()

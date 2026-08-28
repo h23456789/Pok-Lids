@@ -3147,11 +3147,16 @@ function getItemTitle(
   ){
 
     return (
+      item.nameZh ||
+      item.titleZh ||
+      item.locationZh ||
+      item.venueZh ||
+      item.cityZh ||
       item.name ||
       item.title ||
       item.location ||
       item.city ||
-      "Stamp Rally"
+      "集章活動"
     );
 
   }
@@ -3267,10 +3272,41 @@ function getStampEventName(
 ){
 
   return (
+    item.eventZh ||
+    item.eventNameZh ||
+    item.activityZh ||
     item.event ||
     item.eventName ||
     item.activity ||
-    "期間限定 Stamp Rally"
+    "期間限定集章活動"
+  );
+
+}
+
+function getStampReward(
+  item
+){
+
+  return (
+    item.rewardZh ||
+    item.rewardPokemonZh ||
+    item.backgroundZh ||
+    item.reward ||
+    item.rewardPokemon ||
+    item.background ||
+    ""
+  );
+
+}
+
+function getStampActivityType(
+  item
+){
+
+  return (
+    item.activityZh ||
+    item.activity ||
+    "集章活動"
   );
 
 }
@@ -3760,21 +3796,6 @@ function updateOverall(){
 
 function renderRegions(){
 
-  /*
-   * Stamp Rally 使用「活動 → 收集點」模式。
-   * Poké Lid 完全維持原本的區域顯示流程。
-   */
-
-  if(
-    collectionType === "stamp"
-  ){
-
-    renderStampRallyEvents();
-
-    return;
-
-  }
-
   const el =
     document.getElementById(
       "regions"
@@ -3984,261 +4005,6 @@ function renderRegions(){
     );
 
   }
-
-}
-
-
-/* =========================================================
-   STAMP RALLY → EVENTS
-========================================================= */
-
-function getStampEvents(){
-
-  const events = new Map();
-
-  for(
-    const item
-    of dataSets.stamp
-  ){
-
-    const eventId =
-      item.eventId ||
-      item.event ||
-      item.eventName ||
-      "STAMP-EVENT";
-
-    if(
-      !events.has(eventId)
-    ){
-
-      events.set(
-        eventId,
-        {
-
-          id:eventId,
-
-          eventName:
-            getStampEventName(item),
-
-          startDate:
-            item.startDate || "",
-
-          endDate:
-            item.endDate || "",
-
-          sourceUrl:
-            item.sourceUrl || "",
-
-          reward:
-            item.reward ||
-            item.rewardPokemon ||
-            item.background ||
-            "",
-
-          items:[]
-
-        }
-      );
-
-    }
-
-    events
-      .get(eventId)
-      .items
-      .push(item);
-
-  }
-
-  return [...events.values()];
-
-}
-
-
-function renderStampRallyEvents(){
-
-  const el =
-    document.getElementById(
-      "regions"
-    );
-
-  const events =
-    getStampEvents();
-
-  if(
-    !events.length
-  ){
-
-    el.innerHTML = `
-
-      <div
-        class="error-box"
-        style="grid-column:1/-1"
-      >
-
-        ⚠️ 限時 Stamp Rally 沒有資料
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-  el.innerHTML = "";
-
-  for(
-    const event
-    of events
-  ){
-
-    const obtained =
-      event.items.filter(
-        item =>
-          obtainedIds.stamp.has(
-            getItemId(item)
-          )
-      ).length;
-
-    const total =
-      event.items.length;
-
-    const percent =
-      total
-      ?
-      Math.round(
-        obtained /
-        total *
-        1000
-      ) / 10
-      :
-      0;
-
-    const sample =
-      event.items
-        .map(
-          item =>
-            getItemImageUrl(
-              "stamp",
-              item
-            )
-        )
-        .filter(Boolean)
-        .slice(0,3);
-
-    const card =
-      document.createElement(
-        "div"
-      );
-
-    card.className =
-      "region-card";
-
-    card.onclick =
-      () =>
-        openStampEvent(
-          event.id
-        );
-
-    const images =
-      sample.map(
-        image => `
-          <img
-            class="region-image"
-            src="${escapeHtml(image)}"
-            alt=""
-            loading="lazy"
-          >
-        `
-      ).join("");
-
-    card.innerHTML = `
-
-      <div class="region-images">
-
-        ${
-          images
-          ||
-          `
-            <div class="region-empty">
-              🎟️
-            </div>
-          `
-        }
-
-      </div>
-
-      <div class="region-info">
-
-        <div class="region-name">
-          ${escapeHtml(event.eventName)}
-        </div>
-
-        <div class="region-count">
-          ${obtained} / ${total}
-        </div>
-
-        <div class="region-percent">
-          完成率 ${percent}%
-        </div>
-
-      </div>
-
-    `;
-
-    el.appendChild(card);
-
-  }
-
-}
-
-
-function openStampEvent(
-  eventId
-){
-
-  const event =
-    getStampEvents().find(
-      item =>
-        item.id === eventId
-    );
-
-  if(!event){
-
-    return;
-
-  }
-
-  currentRegion = null;
-  currentPrefecture = null;
-
-  currentCollectionItems =
-    event.items;
-
-  document.getElementById(
-    "collectionTitle"
-  ).textContent =
-    event.eventName;
-
-  document.querySelector(
-    "#collectionPanel .back-btn"
-  ).textContent =
-    "← 返回活動列表";
-
-  updateCollectionSummary();
-
-  renderCollectionGrid();
-
-  document
-    .getElementById(
-      "collectionPanel"
-    )
-    .classList
-    .add("show");
-
-  document.body.classList.add(
-    "no-scroll"
-  );
 
 }
 
@@ -4822,23 +4588,6 @@ function backToPrefectureList(){
     );
 
 
-  if(
-    collectionType === "stamp"
-  ){
-
-    currentCollectionItems = [];
-
-    renderStampRallyEvents();
-
-    document.body.classList.add(
-      "no-scroll"
-    );
-
-    return;
-
-  }
-
-
   renderPrefectureSummary();
 
   renderPrefectureGrid();
@@ -5031,9 +4780,19 @@ function openModal(
   document.getElementById(
     "modalAddress"
   ).textContent =
-    item.address ||
-    item.location ||
-    "";
+    currentItemType === "stamp"
+    ? (
+        item.addressZh ||
+        item.locationZh ||
+        item.address ||
+        item.location ||
+        ""
+      )
+    : (
+        item.address ||
+        item.location ||
+        ""
+      );
 
 
   const valid =
@@ -5099,17 +4858,12 @@ function openModal(
       </span>
 
       ${
-        item.reward ||
-        item.rewardPokemon ||
-        item.background
+        getStampReward(item)
         ?
         `
           <div class="stamp-reward">
             🎁 ${escapeHtml(
-              item.reward ||
-              item.rewardPokemon ||
-              item.background ||
-              ""
+              getStampReward(item)
             )}
           </div>
         `
@@ -5255,20 +5009,9 @@ function toggleObtained(){
 
   renderRegions();
 
-  /*
-   * 只有 Poké Lid 需要更新「區域 → 縣」面板。
-   * Stamp Rally 不走這套縣市面板，避免 currentRegion 為 null。
-   */
+  renderPrefectureSummary();
 
-  if(
-    collectionType === "lid"
-  ){
-
-    renderPrefectureSummary();
-
-    renderPrefectureGrid();
-
-  }
+  renderPrefectureGrid();
 
   updateCollectionSummary();
 

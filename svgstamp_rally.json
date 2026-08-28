@@ -1,7 +1,7 @@
 {
-  "version": "3.0",
-  "updated": "2026-08-28",
-  "source": "official",
+  "version": "6.0",
+  "updated": "2026-08-29",
+  "source": "official / partner official sources",
   "list": [
     {
       "id": "STAMP-PKCNTR-2026-SAPPORO",
@@ -15,14 +15,25 @@
       "pref": "北海道",
       "city": "札幌市",
       "address": "",
-      "coords": [],
+      "coords": [
+        43.0674691,
+        141.3492665
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心札幌",
+      "venueZh": "寶可夢中心札幌",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-TOHOKU",
@@ -36,14 +47,25 @@
       "pref": "宮城県",
       "city": "仙台市",
       "address": "",
-      "coords": [],
+      "coords": [
+        38.2621602,
+        140.8817018
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心東北",
+      "venueZh": "寶可夢中心東北",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-TOKYO-DX",
@@ -57,14 +79,25 @@
       "pref": "東京都",
       "city": "中央区",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.6802902,
+        139.7742695
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心東京DX",
+      "venueZh": "寶可夢中心東京DX",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-MEGA-TOKYO",
@@ -78,14 +111,25 @@
       "pref": "東京都",
       "city": "豊島区",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.7289056,
+        139.7193245
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心 Mega 東京",
+      "venueZh": "寶可夢中心 Mega 東京",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-GO-LAB",
@@ -99,14 +143,25 @@
       "pref": "東京都",
       "city": "豊島区",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.7289056,
+        139.7193245
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "Pokémon GO Lab.",
+      "venueZh": "Pokémon GO Lab.",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-SHIBUYA",
@@ -120,14 +175,25 @@
       "pref": "東京都",
       "city": "渋谷区",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.6619557,
+        139.6984408
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心澀谷",
+      "venueZh": "寶可夢中心澀谷",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-SKYTREE",
@@ -141,14 +207,25 @@
       "pref": "東京都",
       "city": "墨田区",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.7103448,
+        139.8126119
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心晴空塔城",
+      "venueZh": "寶可夢中心晴空塔城",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-TOKYO-BAY",
@@ -162,14 +239,25 @@
       "pref": "千葉県",
       "city": "船橋市",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.6866032,
+        139.9890362
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心東京灣",
+      "venueZh": "寶可夢中心東京灣",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-YOKOHAMA",
@@ -183,14 +271,25 @@
       "pref": "神奈川県",
       "city": "横浜市",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.4645717,
+        139.6244898
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心橫濱",
+      "venueZh": "寶可夢中心橫濱",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-NAGOYA",
@@ -204,14 +303,25 @@
       "pref": "愛知県",
       "city": "名古屋市",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.1636262,
+        136.90803
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心名古屋",
+      "venueZh": "寶可夢中心名古屋",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-KANAZAWA",
@@ -225,14 +335,25 @@
       "pref": "石川県",
       "city": "金沢市",
       "address": "",
-      "coords": [],
+      "coords": [
+        36.5791483,
+        136.6497543
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心金澤",
+      "venueZh": "寶可夢中心金澤",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-KYOTO",
@@ -246,14 +367,25 @@
       "pref": "京都府",
       "city": "京都市",
       "address": "",
-      "coords": [],
+      "coords": [
+        35.0034167,
+        135.7583839
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心京都",
+      "venueZh": "寶可夢中心京都",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-OSAKA-DX",
@@ -267,14 +399,25 @@
       "pref": "大阪府",
       "city": "大阪市",
       "address": "",
-      "coords": [],
+      "coords": [
+        34.6731719,
+        135.5007545
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心大阪DX",
+      "venueZh": "寶可夢中心大阪DX",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-OSAKA",
@@ -288,14 +431,25 @@
       "pref": "大阪府",
       "city": "大阪市",
       "address": "",
-      "coords": [],
+      "coords": [
+        34.7018525,
+        135.4965591
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心大阪",
+      "venueZh": "寶可夢中心大阪",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-HIROSHIMA",
@@ -309,14 +463,25 @@
       "pref": "広島県",
       "city": "広島市",
       "address": "",
-      "coords": [],
+      "coords": [
+        34.3986243,
+        132.4759743
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心廣島",
+      "venueZh": "寶可夢中心廣島",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-KAGAWA",
@@ -330,14 +495,25 @@
       "pref": "香川県",
       "city": "高松市",
       "address": "",
-      "coords": [],
+      "coords": [
+        34.3422817,
+        134.0500608
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心香川",
+      "venueZh": "寶可夢中心香川",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-FUKUOKA",
@@ -351,14 +527,25 @@
       "pref": "福岡県",
       "city": "福岡市",
       "address": "",
-      "coords": [],
+      "coords": [
+        33.5890033,
+        130.4192564
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心福岡",
+      "venueZh": "寶可夢中心福岡",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     },
     {
       "id": "STAMP-PKCNTR-2026-OKINAWA",
@@ -372,14 +559,26 @@
       "pref": "沖縄県",
       "city": "沖縄市",
       "address": "",
-      "coords": [],
+      "coords": [
+        26.3140852,
+        127.7962995
+      ],
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "stampImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "stampImage": "",
       "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
       "source": "Pokémon Center Official Website",
       "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
-      "official": true
+      "official": true,
+      "coordinatesOfficial": true,
+      "coordsSource": "Pokémon Center 官方店舖頁面的 Google Maps",
+      "eventZh": "寶可夢中心集章拉力賽 2026",
+      "eventNameZh": "Pokémon Center 集章拉力賽 2026",
+      "activityZh": "Pokémon GO 集章拉力賽",
+      "nameZh": "寶可夢中心沖繩",
+      "venueZh": "寶可夢中心沖繩",
+      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
     }
-  ]
+  ],
+  "groupBy": "event"
 }

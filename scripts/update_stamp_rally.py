@@ -1,17 +1,14 @@
 import hashlib
 import json
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
 
-
-# =========================================================
-# CONFIG
-# =========================================================
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -19,45 +16,51 @@ STAMP_FILE = ROOT / "svgstamp_rally.json"
 HISTORY_FILE = ROOT / "svgstamp_history.json"
 
 TIMEOUT = 30
+REQUEST_DELAY = 0.4
+MAX_DISCOVERED_URLS = 300
 
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 "
-        "(compatible; PokemonJapanCollectionUpdater/2.0; "
+        "(compatible; PokemonJapanCollectionUpdater/3.0; "
         "+https://github.com/h23456789/Pok-Lids)"
-    )
+    ),
+    "Accept-Language": "ja-JP,ja;q=0.9,en;q=0.8"
+}
+
+SESSION = requests.Session()
+SESSION.headers.update(HEADERS)
+
+
+OFFICIAL_DOMAINS = {
+    "pokemon.co.jp",
+    "www.pokemon.co.jp",
+    "shop.pokemon.co.jp"
 }
 
 
-# =========================================================
-# OFFICIAL SOURCES
-# =========================================================
-
-SEED_URLS = [
-    "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html"
-]
-
-
-OFFICIAL_INDEXES = [
+DISCOVERY_URLS = [
+    "https://www.pokemon.co.jp/",
+    "https://www.pokemon.co.jp/sitemap/",
+    "https://www.pokemon.co.jp/info/",
+    "https://www.pokemon.co.jp/event/",
+    "https://shop.pokemon.co.jp/ja/",
     "https://shop.pokemon.co.jp/ja/sitemap/",
-    "https://www.pokemon.co.jp/sitemap/"
+    "https://shop.pokemon.co.jp/ja/shop/common/events/"
 ]
 
 
-STAMP_KEYWORDS = (
+STAMP_KEYWORDS = [
     "スタンプラリー",
     "GOスタンプラリー",
+    "デジタルスタンプラリー",
     "STAMP RALLY",
     "Stamp Rally",
     "stamp rally"
-)
+]
 
 
-# =========================================================
-# PREFECTURE
-# =========================================================
-
-PREF_ALIAS = {
+PREF_ALIASES = {
     "北海道": "北海道",
     "青森": "青森県",
     "青森県": "青森県",
@@ -154,331 +157,373 @@ PREF_ALIAS = {
 }
 
 
-# =========================================================
-# KNOWN OFFICIAL CENTERS
-# =========================================================
+CENTER_TO_LOCATION = {
+    "ポケモンセンターサッポロ": ("北海道", "札幌市"),
+    "ポケモンセンタートウホク": ("宮城県", "仙台市"),
+    "ポケモンセンタートウキョーDX": ("東京都", "中央区"),
+    "ポケモンセンターメガトウキョー": ("東京都", "豊島区"),
+    "ポケモンセンターシブヤ": ("東京都", "渋谷区"),
+    "ポケモンセンタースカイツリータウン": ("東京都", "墨田区"),
+    "ポケモンセンタートウキョーベイ": ("千葉県", "船橋市"),
+    "ポケモンセンターヨコハマ": ("神奈川県", "横浜市"),
+    "ポケモンセンターナゴヤ": ("愛知県", "名古屋市"),
+    "ポケモンセンターカナザワ": ("石川県", "金沢市"),
+    "ポケモンセンターキョウト": ("京都府", "京都市"),
+    "ポケモンセンターオーサカDX": ("大阪府", "大阪市"),
+    "ポケモンセンターオーサカ": ("大阪府", "大阪市"),
+    "ポケモンセンターヒロシマ": ("広島県", "広島市"),
+    "ポケモンセンターカガワ": ("香川県", "高松市"),
+    "ポケモンセンターフクオカ": ("福岡県", "福岡市"),
+    "ポケモンセンターオキナワ": ("沖縄県", "沖縄市"),
+    "Pokémon GO Lab.": ("東京都", "豊島区")
+}
 
-KNOWN_CENTERS = [
-    ("ポケモンセンターサッポロ", "北海道", "札幌市"),
-    ("ポケモンセンタートウホク", "宮城県", "仙台市"),
-    ("ポケモンセンタートウキョーDX", "東京都", "中央区"),
-    ("ポケモンセンターメガトウキョー", "東京都", "豊島区"),
-    ("ポケモンセンターシブヤ", "東京都", "渋谷区"),
-    ("ポケモンセンタースカイツリータウン", "東京都", "墨田区"),
-    ("ポケモンセンタートウキョーベイ", "千葉県", "船橋市"),
-    ("ポケモンセンターヨコハマ", "神奈川県", "横浜市"),
-    ("ポケモンセンターナゴヤ", "愛知県", "名古屋市"),
-    ("ポケモンセンターカナザワ", "石川県", "金沢市"),
-    ("ポケモンセンターキョウト", "京都府", "京都市"),
-    ("ポケモンセンターオーサカDX", "大阪府", "大阪市"),
-    ("ポケモンセンターオーサカ", "大阪府", "大阪市"),
-    ("ポケモンセンターヒロシマ", "広島県", "広島市"),
-    ("ポケモンセンターカガワ", "香川県", "高松市"),
-    ("ポケモンセンターフクオカ", "福岡県", "福岡市"),
-    ("ポケモンセンターオキナワ", "沖縄県", "沖縄市")
-]
-
-
-# =========================================================
-# TEXT
-# =========================================================
 
 def normalize_text(value):
-    return re.sub(r"\s+", " ", str(value or "")).strip()
+    if value is None:
+        return ""
+    value = str(value)
+    value = value.replace("\u3000", " ")
+    value = re.sub(r"\s+", " ", value)
+    return value.strip()
 
 
-# =========================================================
-# HTTP
-# =========================================================
+def is_official_url(url):
+    try:
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https"):
+            return False
+        host = (parsed.hostname or "").lower()
+        return host in OFFICIAL_DOMAINS
+    except Exception:
+        return False
+
 
 def get_html(url):
-    response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
-    response.raise_for_status()
-    response.encoding = response.encoding or "utf-8"
-    return response.text
-
-
-# =========================================================
-# DATE
-# ==========================================================
-
-def parse_date(text):
-    if not text:
+    try:
+        response = SESSION.get(
+            url,
+            timeout=TIMEOUT,
+            allow_redirects=True
+        )
+        response.raise_for_status()
+        response.encoding = response.apparent_encoding or "utf-8"
+        return response.text
+    except Exception as error:
+        print("HTTP ERROR:", url, error)
         return ""
 
-    patterns = [
-        r"(20\d{2})年(\d{1,2})月(\d{1,2})日",
-        r"(20\d{2})[/-](\d{1,2})[/-](\d{1,2})"
-    ]
 
-    for pattern in patterns:
-        match = re.search(pattern, text)
-        if match:
-            year, month, day = match.groups()
-            return f"{year}-{int(month):02d}-{int(day):02d}"
+def parse_date(value):
+    if not value:
+        return ""
+    match = re.search(r"(20\d{2})年(\d{1,2})月(\d{1,2})日", value)
+    if match:
+        year, month, day = match.groups()
+        return f"{year}-{int(month):02d}-{int(day):02d}"
+
+    match = re.search(r"(20\d{2})[/-](\d{1,2})[/-](\d{1,2})", value)
+    if match:
+        year, month, day = match.groups()
+        return f"{year}-{int(month):02d}-{int(day):02d}"
 
     return ""
 
 
 def extract_dates(text):
     dates = []
-    for match in re.finditer(r"20\d{2}年\d{1,2}月\d{1,2}日", text or ""):
-        value = parse_date(match.group(0))
-        if value and value not in dates:
-            dates.append(value)
-    return dates
+    patterns = [
+        r"20\d{2}年\d{1,2}月\d{1,2}日",
+        r"20\d{2}[/-]\d{1,2}[/-]\d{1,2}"
+    ]
+    for pattern in patterns:
+        for raw in re.findall(pattern, text or ""):
+            parsed = parse_date(raw)
+            if parsed and parsed not in dates:
+                dates.append(parsed)
+    return sorted(dates)
 
 
-# =========================================================
-# ID
-# =========================================================
-
-def make_event_id(url, event):
-    raw = f"{url}|{event}"
-    return "STAMP-AUTO-" + hashlib.sha1(raw.encode("utf-8")).hexdigest()[:12].upper()
+def make_hash(*parts):
+    raw = "|".join(normalize_text(part) for part in parts)
+    return hashlib.sha1(raw.encode("utf-8")).hexdigest()[:12].upper()
 
 
-def make_item_id(event_id, venue):
-    raw = f"{event_id}|{venue}"
-    return event_id + "-" + hashlib.sha1(raw.encode("utf-8")).hexdigest()[:8].upper()
+def get_event_id(event, source_url, old_items):
+    for item in old_items:
+        if normalize_text(item.get("event")) == normalize_text(event):
+            old_url = normalize_text(item.get("sourceUrl", ""))
+            if old_url.rstrip("/") == source_url.rstrip("/"):
+                return item.get("eventId") or item.get("id")
+    return "STAMP-AUTO-" + make_hash(event, source_url)
 
 
-# =========================================================
-# PAGE INFO
-# =========================================================
+def get_item_id(event_id, venue):
+    return f"{event_id}-{make_hash(venue)[:8]}"
 
-def get_title(soup):
-    h1 = soup.find("h1")
-    if h1:
-        text = normalize_text(h1.get_text(" ", strip=True))
-        if text:
-            return text
+
+def extract_event_name(soup, page_text):
+    candidates = []
+    for tag in soup.find_all("h1"):
+        value = normalize_text(tag.get_text(" ", strip=True))
+        if value:
+            candidates.append(value)
+
+    for attrs in [{"property": "og:title"}, {"name": "twitter:title"}]:
+        meta = soup.find("meta", attrs=attrs)
+        if meta:
+            value = normalize_text(meta.get("content", ""))
+            if value:
+                candidates.append(value)
 
     if soup.title:
-        return normalize_text(soup.title.get_text(" ", strip=True))
+        value = normalize_text(soup.title.get_text(" ", strip=True))
+        if value:
+            candidates.append(value)
+
+    for value in candidates:
+        if "スタンプラリー" in value or "Stamp Rally" in value:
+            return value
+
+    match = re.search(r".{0,80}スタンプラリー.{0,120}", page_text or "")
+    if match:
+        return normalize_text(match.group(0))
+
+    if candidates:
+        return candidates[0]
 
     return "期間限定 Stamp Rally"
 
 
-def get_image(soup, base_url):
-    og = soup.find("meta", attrs={"property": "og:image"})
-    if og and og.get("content"):
-        return urljoin(base_url, og["content"])
+def extract_image(soup, base_url):
+    for attrs in [{"property": "og:image"}, {"name": "twitter:image"}]:
+        meta = soup.find("meta", attrs=attrs)
+        if meta:
+            source = normalize_text(meta.get("content", ""))
+            if source:
+                return urljoin(base_url, source)
 
-    image = soup.find("img", src=True)
-    if image:
-        return urljoin(base_url, image["src"])
+    for image in soup.find_all("img"):
+        source = image.get("src") or image.get("data-src") or image.get("data-lazy-src")
+        if not source:
+            continue
+        absolute = urljoin(base_url, source)
+        lower = absolute.lower()
+        if any(keyword in lower for keyword in ("stamp", "rally", "スタンプ")):
+            return absolute
 
     return ""
 
 
-# =========================================================
-# DISCOVERY
-# ==========================================================
-
-def discover_event_urls():
-    urls = set(SEED_URLS)
-
-    for source in OFFICIAL_INDEXES:
-        try:
-            html = get_html(source)
-            soup = BeautifulSoup(html, "html.parser")
-        except Exception as error:
-            print("INDEX ERROR:", source, error)
-            continue
-
-        for link in soup.find_all("a", href=True):
-            href = urljoin(source, link["href"])
-            text = normalize_text(link.get_text(" ", strip=True))
-            combined = text + " " + href
-
-            if not any(keyword in combined for keyword in STAMP_KEYWORDS):
-                continue
-
-            if href.startswith("https://shop.pokemon.co.jp/") or href.startswith("https://www.pokemon.co.jp/"):
-                urls.add(href.split("#", 1)[0])
-
-    return sorted(urls)
+def extract_reward(page_text):
+    for keyword in ("プレゼント内容", "プレゼント条件", "認定証", "コンプリート"):
+        position = page_text.find(keyword)
+        if position >= 0:
+            return normalize_text(page_text[position : position + 450])
+    return ""
 
 
-# =========================================================
-# VENUE DISCOVERY
-# ==========================================================
+def extract_activity(page_text):
+    if "GOスタンプラリー" in page_text:
+        return "Pokémon GO GOスタンプラリー"
+    if "デジタルスタンプラリー" in page_text:
+        return "デジタルスタンプラリー"
+    return "Stamp Rally"
 
-def extract_venues(soup, base_url, page_text):
-    venues = []
+
+def extract_center_links(soup, base_url):
+    results = []
     seen = set()
-
     for link in soup.find_all("a", href=True):
         name = normalize_text(link.get_text(" ", strip=True))
-
         if not name:
             continue
         if "ポケモンセンター" not in name:
             continue
-        if "サテライト" in name or "出張所" in name:
+        if "サテライト" in name or "出張所" in name or "カフェ" in name:
             continue
         if name in seen:
             continue
 
-        venues.append({
+        results.append({
             "name": name,
             "url": urljoin(base_url, link["href"])
         })
         seen.add(name)
-
-    if "Pokémon GO Lab." in page_text or "Pokémon GO Lab" in page_text:
-        if "Pokémon GO Lab." not in seen:
-            venues.append({
-                "name": "Pokémon GO Lab.",
-                "url": base_url
-            })
-
-    return venues
+    return results
 
 
-# =========================================================
-# KNOWN LOCATION
-# ==========================================================
+def get_official_center_list():
+    urls = ["https://shop.pokemon.co.jp/ja/sitemap/"]
+    centers = []
+    seen = set()
 
-def parse_location_from_name(name):
-    for center, pref, city in KNOWN_CENTERS:
-        if center == name:
-            return pref, city
-    return "", ""
-
-
-# =========================================================
-# STORE ADDRESS
-# ==========================================================
-
-def parse_address_from_store(url):
-    if not url:
-        return ""
-
-    try:
+    for url in urls:
         html = get_html(url)
+        if not html:
+            continue
         soup = BeautifulSoup(html, "html.parser")
-        text = normalize_text(soup.get_text(" ", strip=True))
-        match = re.search(r"〒\s*\d{3}-?\d{4}\s*([^|｜]{5,120})", text)
-        if match:
-            return normalize_text(match.group(1))
-    except Exception as error:
-        print("STORE ERROR:", url, error)
+        for item in extract_center_links(soup, url):
+            name = item["name"]
+            if name in seen:
+                continue
+            centers.append(item)
+            seen.add(name)
+        time.sleep(REQUEST_DELAY)
 
+    return centers
+
+
+def extract_prefecture(text):
+    text = normalize_text(text)
+    for alias, canonical in PREF_ALIASES.items():
+        if alias in text:
+            return canonical
     return ""
 
 
-# =========================================================
-# PARSE STAMP PAGE
-# ==========================================================
+def enrich_center(item, center_url):
+    html = get_html(center_url)
+    if not html:
+        return item
+    
+    soup = BeautifulSoup(html, "html.parser")
+    text = normalize_text(soup.get_text(" ", strip=True))
+    address = ""
+    patterns = [
+        r"〒\s*\d{3}-?\d{4}\s*([^|｜]{5,150})",
+        r"住所\s*[:：]?\s*([^|｜]{5,150})"
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            address = normalize_text(match.group(1))
+            break
 
-def parse_stamp_page(url):
+    pref = item.get("pref", "")
+    city = item.get("city", "")
+
+    if not pref:
+        pref = extract_prefecture(address)
+
+    known = CENTER_TO_LOCATION.get(item.get("name", ""))
+    if known:
+        known_pref, known_city = known
+        if not pref:
+            pref = known_pref
+        if not city:
+            city = known_city
+
+    item["address"] = address
+    item["pref"] = pref
+    item["city"] = city
+    item["venueSourceUrl"] = center_url
+    return item
+
+
+def parse_stamp_page(url, old_items, center_list):
     html = get_html(url)
+    if not html:
+        return []
+
     soup = BeautifulSoup(html, "html.parser")
     page_text = normalize_text(soup.get_text(" ", strip=True))
 
-    if not any(keyword in page_text for keyword in STAMP_KEYWORDS):
+    if not any(keyword.lower() in page_text.lower() for keyword in STAMP_KEYWORDS):
         return []
 
-    title = get_title(soup)
-    event = title
-    match = re.search(r"(ポケモン.{0,80}?スタンプラリー.{0,80})", page_text)
-    if match:
-        event = normalize_text(match.group(1))
-
+    event = extract_event_name(soup, page_text)
+    event_id = get_event_id(event, url, old_items)
     dates = extract_dates(page_text)
     start_date = dates[0] if dates else ""
-    end_date = dates[1] if len(dates) > 1 else ""
+    end_date = dates[1] if len(dates) >= 2 else ""
+    event_image = extract_image(soup, url)
+    reward = extract_reward(page_text)
+    activity = extract_activity(page_text)
+    centers = extract_center_links(soup, url)
 
-    event_id = make_event_id(url, event)
-    image_url = get_image(soup, url)
-
-    reward = ""
-    for keyword in ("プレゼント内容", "認定証", "コンプリート"):
-        position = page_text.find(keyword)
-        if position >= 0:
-            reward = page_text[position:position + 300]
-            break
-
-    venues = extract_venues(soup, url, page_text)
-
-    # 目前 Pokémon Center 官方 2026 頁面：
-    # 17 家 Pokémon Center + Pokémon GO Lab.
-    # 如果官方網站改版導致店舖連結抓不到，使用官方店舖名單作為保底。
-    if len(venues) < 2 and "ポケモンセンター" in page_text:
-        venues = [
-            {
-                "name": name,
-                "url": url
-            }
-            for name, _, _ in KNOWN_CENTERS
-        ]
-
-        if "Pokémon GO Lab." in page_text:
-            venues.append({
-                "name": "Pokémon GO Lab.",
-                "url": url
-            })
+    if len(centers) < 2 and "ポケモンセンター" in page_text:
+        centers = center_list
 
     items = []
 
-    for venue in venues:
-        name = venue["name"]
-        pref, city = parse_location_from_name(name)
-        address = parse_address_from_store(venue.get("url", ""))
+    if centers:
+        seen = set()
+        for center in centers:
+            name = center["name"]
+            if name in seen:
+                continue
+            seen.add(name)
 
-        if not pref and address:
-            for alias, canonical in PREF_ALIAS.items():
-                if alias in address:
-                    pref = canonical
-                    break
+            pref, city = CENTER_TO_LOCATION.get(name, ("", ""))
+            venue_type = "pokemon_go_lab" if "GO Lab" in name else "pokemon_center"
 
-        venue_type = "pokemon_go_lab" if "GO Lab" in name else "pokemon_center"
+            item = {
+                "id": get_item_id(event_id, name),
+                "eventId": event_id,
+                "event": event,
+                "eventName": event,
+                "activity": activity,
+                "venueType": venue_type,
+                "venue": name,
+                "name": name,
+                "pref": pref,
+                "city": city,
+                "address": "",
+                "coords": [],
+                "startDate": start_date,
+                "endDate": end_date,
+                "stampImage": event_image,
+                "reward": reward,
+                "source": (
+                    "Pokémon Center Official Website"
+                    if "shop.pokemon.co.jp" in url
+                    else "Pokémon Official Website"
+                ),
+                "sourceUrl": url,
+                "venueSourceUrl": center.get("url", ""),
+                "official": True
+            }
+
+            venue_url = center.get("url", "")
+            if venue_url and is_official_url(venue_url):
+                item = enrich_center(item, venue_url)
+                time.sleep(REQUEST_DELAY)
+
+            items.append(item)
+    else:
+        venue = ""
+        venue_type = "event"
+
+        if "Pokémon GO Lab" in page_text:
+            venue = "Pokémon GO Lab."
+            venue_type = "pokemon_go_lab"
+        elif "ポケモンセンター" in page_text:
+            venue = "全国のポケモンセンター"
+            venue_type = "pokemon_center"
 
         items.append({
-            "id": make_item_id(event_id, name),
+            "id": get_item_id(event_id, venue or event),
             "eventId": event_id,
             "event": event,
             "eventName": event,
-            "activity": "Pokémon GO GOスタンプラリー",
+            "activity": activity,
             "venueType": venue_type,
-            "venue": name,
-            "name": name,
-            "pref": pref,
-            "city": city,
-            "address": address,
-            "coords": [],
-            "startDate": start_date,
-            "endDate": end_date,
-            "stampImage": image_url,
-            "reward": reward,
-            "source": "Pokémon Center Official Website",
-            "sourceUrl": url,
-            "venueSourceUrl": venue.get("url", ""),
-            "official": True
-        })
-
-    # 官方頁如果完全沒有列出地點，還是保留一筆活動資料，避免活動因網站改版而整個消失。
-    if not items:
-        items.append({
-            "id": make_item_id(event_id, event),
-            "eventId": event_id,
-            "event": event,
-            "eventName": event,
-            "activity": "Stamp Rally",
-            "venueType": "event",
-            "venue": "官方活動頁",
-            "name": event,
+            "venue": venue,
+            "name": venue or event,
             "pref": "",
             "city": "",
             "address": "",
             "coords": [],
             "startDate": start_date,
             "endDate": end_date,
-            "stampImage": image_url,
+            "stampImage": event_image,
             "reward": reward,
-            "source": "Pokémon Official Website",
+            "source": (
+                "Pokémon Center Official Website"
+                if "shop.pokemon.co.jp" in url
+                else "Pokémon Official Website"
+            ),
             "sourceUrl": url,
             "official": True
         })
@@ -486,9 +531,46 @@ def parse_stamp_page(url):
     return items
 
 
-# =========================================================
-# JSON
-# ==========================================================
+def discover_urls():
+    discovered = set()
+    queue = list(DISCOVERY_URLS)
+    scanned = set()
+
+    while queue and len(scanned) < MAX_DISCOVERED_URLS:
+        url = queue.pop(0)
+        if url in scanned or not is_official_url(url):
+            continue
+
+        scanned.add(url)
+        print("DISCOVER:", url)
+
+        html = get_html(url)
+        if not html:
+            continue
+
+        soup = BeautifulSoup(html, "html.parser")
+        for link in soup.find_all("a", href=True):
+            href = urljoin(url, link["href"])
+            href = href.split("#", 1)[0]
+
+            if not is_official_url(href):
+                continue
+
+            text = normalize_text(link.get_text(" ", strip=True))
+            combined = f"{text} {href}"
+
+            if any(keyword.lower() in combined.lower() for keyword in STAMP_KEYWORDS):
+                discovered.add(href)
+
+            path = urlparse(href).path.lower()
+            if any(token in path for token in ("/info/", "/event/", "/events/", "/campaign/", "/common/events/")):
+                if href not in scanned and href not in queue:
+                    queue.append(href)
+
+        time.sleep(REQUEST_DELAY)
+
+    return sorted(discovered)
+
 
 def load_json(path, default):
     if not path.exists():
@@ -506,111 +588,141 @@ def write_json(path, data):
     )
 
 
-# =========================================================
-# MERGE
-# ==========================================================
-
-def merge_items(old_items, new_items):
+def merge_items(old_items, fresh_items):
     merged = {item.get("id"): item for item in old_items if item.get("id")}
-    for item in new_items:
+    concrete_event_ids = {
+        item.get("eventId") for item in fresh_items
+        if item.get("eventId") and item.get("pref")
+    }
+
+    for item_id, item in list(merged.items()):
+        if item.get("eventId") in concrete_event_ids and not item.get("pref"):
+            del merged[item_id]
+
+    for item in fresh_items:
         if item.get("id"):
             merged[item["id"]] = item
+
     return list(merged.values())
 
-
-# =========================================================
-# HISTORY COMPARE
-# ==========================================================
 
 def compare_items(old_items, new_items):
     old_map = {item.get("id"): item for item in old_items if item.get("id")}
     new_map = {item.get("id"): item for item in new_items if item.get("id")}
-
-    added = [key for key in new_map if key not in old_map]
-    removed = [key for key in old_map if key not in new_map]
-    changed = [key for key in new_map if key in old_map and old_map[key] != new_map[key]]
-
+    
+    added = [item_id for item_id in new_map if item_id not in old_map]
+    changed = [
+        item_id for item_id in new_map 
+        if item_id in old_map and old_map[item_id] != new_map[item_id]
+    ]
+    removed = [] 
+    
     return added, removed, changed
 
 
-# =========================================================
-# MAIN
-# ==========================================================
+def history_detail(item):
+    return {
+        "id": item.get("id", ""),
+        "event": item.get("event", ""),
+        "name": item.get("name", ""),
+        "pref": item.get("pref", ""),
+        "startDate": item.get("startDate", ""),
+        "endDate": item.get("endDate", ""),
+        "sourceUrl": item.get("sourceUrl", "")
+    }
+
 
 def main():
     print("========================================")
-    print("Pokémon Stamp Rally updater 2.0")
-    print("Official source only")
+    print("Pokémon Stamp Rally AUTO UPDATER")
+    print("Official-source discovery mode")
     print("========================================")
 
     old_data = load_json(STAMP_FILE, {"list": []})
     old_items = old_data.get("list", [])
+    print("Existing:", len(old_items))
 
-    urls = discover_event_urls()
+    center_list = get_official_center_list()
+    print("Official center candidates:", len(center_list))
+
+    urls = discover_urls()
     print("Discovered official URLs:", len(urls))
 
-    new_items = []
-    successful_pages = 0
+    fresh_items = []
 
     for url in urls:
-        print("Checking:", url)
+        print("CHECK:", url)
         try:
-            parsed = parse_stamp_page(url)
-            if parsed:
-                successful_pages += 1
-                new_items.extend(parsed)
-                print("  ->", len(parsed), "items")
+            items = parse_stamp_page(url, old_items, center_list)
+            if items:
+                print("  FOUND:", len(items))
+                fresh_items.extend(items)
         except Exception as error:
-            print("PARSE ERROR:", url, error)
+            print("  ERROR:", error)
+        time.sleep(REQUEST_DELAY)
 
-    if not new_items:
-        print("No official Stamp Rally data found.")
-        print("Existing JSON is kept.")
+    unique = {}
+    for item in fresh_items:
+        if item.get("id"):
+            unique[item["id"]] = item
+            
+    fresh_items = list(unique.values())
+
+    if not fresh_items:
+        print("No official Stamp Rally found.")
+        print("Existing data kept.")
         return
 
-    merged = merge_items(old_items, new_items)
+    merged = merge_items(old_items, fresh_items)
     merged.sort(key=lambda item: (
         item.get("startDate", ""),
         item.get("event", ""),
-        item.get("name", ""),
-        item.get("id", "")
+        item.get("pref", ""),
+        item.get("name", "")
     ))
 
-    now = datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M:%S")
+    added, removed, changed = compare_items(old_items, merged)
+    now = datetime.now(timezone.utc).astimezone()
+    updated = now.strftime("%Y-%m-%d %H:%M:%S")
 
     output = {
         "version": "3.0",
-        "updated": now,
+        "updated": updated,
         "source": "official",
         "list": merged
     }
 
-    added, removed, changed = compare_items(old_items, merged)
     write_json(STAMP_FILE, output)
 
-    history_data = load_json(HISTORY_FILE, {"history": []})
-    history = history_data.get("history", [])
+    history = load_json(HISTORY_FILE, {"history": []})
+    history_list = history.get("history", [])
+    new_map = {item.get("id"): item for item in merged if item.get("id")}
 
-    history.insert(0, {
-        "time": now,
+    history_list.insert(0, {
+        "time": updated,
         "type": "stamp",
         "event": "Automatic official Stamp Rally sync",
-        "source": "Pokémon Center Official Website",
-        "pages": successful_pages,
+        "source": "Pokémon Official Website / Pokémon Center Official Website",
         "total": len(merged),
         "added": added,
         "removed": removed,
-        "changed": changed
+        "changed": changed,
+        "addedItems": [
+            history_detail(new_map[item_id]) for item_id in added if item_id in new_map
+        ],
+        "changedItems": [
+            history_detail(new_map[item_id]) for item_id in changed if item_id in new_map
+        ]
     })
 
-    history_data["history"] = history[:100]
-    write_json(HISTORY_FILE, history_data)
+    history["history"] = history_list[:100]
+    write_json(HISTORY_FILE, history)
 
     print("========================================")
-    print("Updated:", len(merged))
+    print("Total:", len(merged))
     print("Added:", len(added))
-    print("Removed:", len(removed))
     print("Changed:", len(changed))
+    print("Removed:", len(removed))
     print("========================================")
 
 

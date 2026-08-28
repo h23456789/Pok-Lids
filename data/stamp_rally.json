@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "updated": "2026-08-28",
+  "list": [
+    {
+      "id": "STAMP-EXAMPLE-001",
+      "event": "活動名稱",
+      "startDate": "2026-09-01",
+      "endDate": "2026-09-30",
+      "pref": "13",
+      "name": "指定 PokéStop 名稱",
+      "city": "東京都",
+      "address": "地址",
+      "lat": 35.000000,
+      "lng": 139.000000,
+      "coords": [
+        35.000000,
+        139.000000
+      ],
+      "image": "images/stamp/example.png",
+      "stampImage": "images/stamp/example.png",
+      "reward": "完成活動後的獎勵",
+      "status": "active"
+    }
+  ]
+}

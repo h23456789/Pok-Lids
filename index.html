@@ -3791,6 +3791,122 @@ function updateOverall(){
 
 
 /* =========================================================
+   STAMP EVENTS
+   限時集章以「活動」為第一層，不再依縣市分組。
+========================================================= */
+
+function getStampEventGroups(){
+
+  const map = {};
+
+  for(const item of (dataSets.stamp || [])){
+
+    const eventId = item.eventId || item.event || item.eventZh || item.id;
+
+    if(!map[eventId]){
+      map[eventId] = {
+        eventId,
+        event: item.eventZh || item.eventNameZh || item.event || "集章活動",
+        eventOriginal: item.event || "",
+        activity: item.activityZh || item.activity || "Stamp Rally",
+        startDate: item.startDate || "",
+        endDate: item.endDate || "",
+        image: item.pointImage || item.stampImage || item.image || "",
+        reward: item.rewardZh || item.reward || "",
+        sourceUrl: item.sourceUrl || "",
+        items: []
+      };
+    }
+
+    map[eventId].items.push(item);
+
+    if(!map[eventId].image){
+      map[eventId].image = item.pointImage || item.stampImage || item.image || "";
+    }
+  }
+
+  return Object.values(map).sort((a,b) =>
+    String(a.startDate).localeCompare(String(b.startDate)) ||
+    String(a.event).localeCompare(String(b.event))
+  );
+}
+
+function renderStampEvents(){
+
+  const el = document.getElementById("regions");
+  const events = getStampEventGroups();
+
+  el.innerHTML = "";
+
+  if(!events.length){
+    el.innerHTML = `
+      <div class="error-box" style="grid-column:1/-1">
+        ⚠️ 目前沒有找到期間限定集章活動
+      </div>
+    `;
+    return;
+  }
+
+  for(const event of events){
+
+    const total = event.items.length;
+    const obtained = event.items.filter(item =>
+      obtainedIds.stamp.has(getItemId(item))
+    ).length;
+    const percent = total ? Math.round(obtained / total * 1000) / 10 : 0;
+    const sample = event.items.slice(0, 3);
+
+    const card = document.createElement("div");
+    card.className = "region-card";
+    card.onclick = () => openStampEvent(event.eventId);
+
+    const images = sample.map(item => {
+      const image = getItemImageUrl("stamp", item);
+      return image ? `
+        <img class="region-image" src="${escapeHtml(image)}" alt="" loading="lazy">
+      ` : "";
+    }).join("");
+
+    card.innerHTML = `
+      <div class="region-images">
+        ${images || `<div class="region-empty">🎟️</div>`}
+      </div>
+      <div class="region-info">
+        <div class="region-name">${escapeHtml(event.event)}</div>
+        <div style="font-size:13px;margin-top:4px;opacity:.8">${escapeHtml(event.activity)}</div>
+        <div class="region-count">${obtained} / ${total}</div>
+        <div class="region-percent">完成率 ${percent}%</div>
+      </div>
+    `;
+
+    el.appendChild(card);
+  }
+}
+
+function openStampEvent(eventId){
+
+  const event = getStampEventGroups().find(x => x.eventId === eventId);
+  if(!event) return;
+
+  currentRegion = null;
+  currentPrefecture = null;
+  currentCollectionItems = event.items || [];
+
+  document.getElementById("collectionTitle").textContent = event.event;
+  document.getElementById("collectionSummary").textContent =
+    `已收集 ${currentCollectionItems.filter(item => obtainedIds.stamp.has(getItemId(item))).length} / ${currentCollectionItems.length}`;
+
+  const backBtn = document.querySelector("#collectionPanel .back-btn");
+  if(backBtn) backBtn.textContent = "← 返回活動列表";
+
+  collectionType = "stamp";
+  renderCollectionGrid();
+
+  document.getElementById("collectionPanel").classList.add("show");
+  document.body.classList.add("no-scroll");
+}
+
+/* =========================================================
    REGION
 ========================================================= */
 
@@ -3806,6 +3922,12 @@ function renderRegions(){
     dataSets[
       collectionType
     ] || [];
+
+
+  if(collectionType === "stamp"){
+    renderStampEvents();
+    return;
+  }
 
 
   if(
@@ -4577,44 +4699,24 @@ function backToPrefectureList(){
 
   closeModal();
 
+  document.getElementById("collectionPanel").classList.remove("show");
 
-  document
-    .getElementById(
-      "collectionPanel"
-    )
-    .classList
-    .remove(
-      "show"
-    );
-
+  if(collectionType === "stamp"){
+    currentPrefecture = null;
+    currentCollectionItems = [];
+    const backBtn = document.querySelector("#collectionPanel .back-btn");
+    if(backBtn) backBtn.textContent = "← 返回縣列表";
+    document.body.classList.remove("no-scroll");
+    renderRegions();
+    return;
+  }
 
   renderPrefectureSummary();
-
   renderPrefectureGrid();
-
-
-  document
-    .getElementById(
-      "prefecturePanel"
-    )
-    .classList
-    .add(
-      "show"
-    );
-
-
-  document.body.classList.add(
-    "no-scroll"
-  );
-
-
-  currentPrefecture =
-    null;
-
-
-  currentCollectionItems =
-    [];
-
+  document.getElementById("prefecturePanel").classList.add("show");
+  document.body.classList.add("no-scroll");
+  currentPrefecture = null;
+  currentCollectionItems = [];
 }
 
 
@@ -4640,6 +4742,8 @@ function closeCollectionPanel(){
   currentCollectionItems =
     [];
 
+  const backBtn = document.querySelector("#collectionPanel .back-btn");
+  if(backBtn) backBtn.textContent = "← 返回縣列表";
 
   document.body.classList.remove(
     "no-scroll"

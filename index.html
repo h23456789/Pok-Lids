@@ -2357,51 +2357,38 @@ button{
 <script>
 
 /* =========================================================
-   DATA URL
+   DATA
 ========================================================= */
 
 const DATA_URLS = {
-
   lid:
     "data/data.json",
 
   center:
     "data/pokemon_center.json"
-
 };
 
 
-/*
- * GitHub Raw fallback
- *
- * 如果 GitHub Pages 暫時拿不到 JSON，
- * 自動從 main branch 讀取。
- */
-
 const RAW_DATA_URLS = {
-
   lid:
     "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/data/data.json",
 
   center:
     "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/data/pokemon_center.json"
-
 };
 
 
 const HISTORY_URLS = {
-
   lid:
     "history.json",
 
   center:
     "center_history.json"
-
 };
 
 
 /* =========================================================
-   PREF
+   PREFECTURES
 ========================================================= */
 
 const PREF = {
@@ -2463,8 +2450,153 @@ const PREF = {
 };
 
 
+const PREF_ALIAS = {
+
+  "北海道":1,
+
+  "青森":2,
+  "青森県":2,
+
+  "岩手":3,
+  "岩手県":3,
+
+  "宮城":4,
+  "宮城県":4,
+
+  "秋田":5,
+  "秋田県":5,
+
+  "山形":6,
+  "山形県":6,
+
+  "福島":7,
+  "福島県":7,
+
+  "茨城":8,
+  "茨城県":8,
+
+  "栃木":9,
+  "栃木県":9,
+
+  "群馬":10,
+  "群馬県":10,
+
+  "埼玉":11,
+  "埼玉県":11,
+
+  "千葉":12,
+  "千葉県":12,
+
+  "東京":13,
+  "東京都":13,
+
+  "神奈川":14,
+  "神奈川県":14,
+
+  "新潟":15,
+  "新潟県":15,
+
+  "富山":16,
+  "富山県":16,
+
+  "石川":17,
+  "石川県":17,
+
+  "福井":18,
+  "福井県":18,
+
+  "山梨":19,
+  "山梨県":19,
+
+  "長野":20,
+  "長野県":20,
+
+  "岐阜":21,
+  "岐阜県":21,
+
+  "静岡":22,
+  "静岡県":22,
+
+  "愛知":23,
+  "愛知県":23,
+
+  "三重":24,
+  "三重県":24,
+
+  "滋賀":25,
+  "滋賀県":25,
+
+  "京都":26,
+  "京都府":26,
+
+  "大阪":27,
+  "大阪府":27,
+
+  "兵庫":28,
+  "兵庫県":28,
+
+  "奈良":29,
+  "奈良県":29,
+
+  "和歌山":30,
+  "和歌山県":30,
+
+  "鳥取":31,
+  "鳥取県":31,
+
+  "島根":32,
+  "島根県":32,
+
+  "岡山":33,
+  "岡山県":33,
+
+  "広島":34,
+  "広島県":34,
+
+  "山口":35,
+  "山口県":35,
+
+  "徳島":36,
+  "徳島県":36,
+
+  "香川":37,
+  "香川県":37,
+
+  "愛媛":38,
+  "愛媛県":38,
+
+  "高知":39,
+  "高知県":39,
+
+  "福岡":40,
+  "福岡県":40,
+
+  "佐賀":41,
+  "佐賀県":41,
+
+  "長崎":42,
+  "長崎県":42,
+
+  "熊本":43,
+  "熊本県":43,
+
+  "大分":44,
+  "大分県":44,
+
+  "宮崎":45,
+  "宮崎県":45,
+
+  "鹿児島":46,
+  "鹿児島県":46,
+
+  "沖縄":47,
+  "沖縄県":47
+
+};
+
+
 /* =========================================================
-   REGIONS
+   REGION
 ========================================================= */
 
 const REGIONS = {
@@ -2518,61 +2650,45 @@ const REGIONS = {
 let collectionType =
   "lid";
 
-
 let dataSets = {
-
   lid:[],
   center:[]
-
 };
-
 
 let groups = {
-
   lid:{},
   center:{}
-
 };
-
 
 let obtainedIds = {
-
   lid:new Set(),
   center:new Set()
-
 };
-
 
 let currentRegion =
   null;
 
-
 let currentPrefecture =
   null;
-
 
 let currentCollectionItems =
   [];
 
-
 let currentItem =
   null;
-
 
 let currentItemType =
   "lid";
 
-
 let currentHistoryFilter =
   "all";
-
 
 let historyEntries =
   [];
 
 
 /* =========================================================
-   LOCAL STORAGE
+   STORAGE
 ========================================================= */
 
 const STORAGE_KEYS = {
@@ -2586,7 +2702,9 @@ const STORAGE_KEYS = {
 };
 
 
-function getItemId(item){
+function getItemId(
+  item
+){
 
   return String(
     item.id
@@ -2623,22 +2741,21 @@ function loadLocalCollection(
       );
 
 
-    if(
-      !Array.isArray(parsed)
-    ){
-
-      obtainedIds[type] =
-        new Set();
-
-      return;
-
-    }
-
-
     obtainedIds[type] =
+
+      Array.isArray(parsed)
+
+      ?
+
       new Set(
-        parsed.map(String)
-      );
+        parsed.map(
+          String
+        )
+      )
+
+      :
+
+      new Set();
 
   }catch(error){
 
@@ -2670,6 +2787,265 @@ function saveLocalCollection(
     )
 
   );
+
+}
+
+
+/* =========================================================
+   PREFECTURE RESOLVER
+========================================================= */
+
+function resolvePrefecture(
+  item
+){
+
+  /*
+   * 1. 直接使用 pref
+   */
+
+  const rawPref =
+    item?.pref;
+
+
+  if(
+    rawPref !== undefined &&
+    rawPref !== null &&
+    String(rawPref).trim() !== ""
+  ){
+
+    const text =
+      String(
+        rawPref
+      ).trim();
+
+
+    /*
+     * 數字
+     */
+
+    const number =
+      Number(
+        text
+      );
+
+
+    if(
+      Number.isInteger(number) &&
+      number >= 1 &&
+      number <= 47
+    ){
+
+      return number;
+
+    }
+
+
+    /*
+     * 中文名稱
+     */
+
+    if(
+      PREF_ALIAS[text]
+    ){
+
+      return PREF_ALIAS[text];
+
+    }
+
+
+    /*
+     * 包含縣市名稱
+     */
+
+    for(
+      const [
+        name,
+        code
+      ]
+      of Object.entries(
+        PREF_ALIAS
+      )
+    ){
+
+      if(
+        text.includes(name)
+      ){
+
+        return code;
+
+      }
+
+    }
+
+  }
+
+
+  /*
+   * 2. region
+   */
+
+  const regionText =
+    String(
+      item?.region ||
+      ""
+    );
+
+
+  /*
+   * 3. name
+   */
+
+  const nameText =
+    String(
+      item?.name ||
+      item?.title ||
+      item?.city ||
+      ""
+    );
+
+
+  /*
+   * 4. address
+   */
+
+  const addressText =
+    String(
+      item?.address ||
+      item?.location ||
+      ""
+    );
+
+
+  /*
+   * 全部文字一起判斷
+   */
+
+  const combined =
+
+    (
+      regionText +
+      " " +
+      nameText +
+      " " +
+      addressText
+    )
+    .toLowerCase();
+
+
+  /*
+   * 中文優先
+   */
+
+  for(
+    const [
+      name,
+      code
+    ]
+    of Object.entries(
+      PREF_ALIAS
+    )
+  ){
+
+    if(
+      combined.includes(
+        name.toLowerCase()
+      )
+    ){
+
+      return code;
+
+    }
+
+  }
+
+
+  /*
+   * 英文
+   */
+
+  const english = {
+
+    hokkaido:1,
+    aomori:2,
+    iwate:3,
+    miyagi:4,
+    akita:5,
+    yamagata:6,
+    fukushima:7,
+
+    ibaraki:8,
+    tochigi:9,
+    gunma:10,
+    saitama:11,
+    chiba:12,
+    tokyo:13,
+    kanagawa:14,
+
+    niigata:15,
+    toyama:16,
+    ishikawa:17,
+    fukui:18,
+    yamanashi:19,
+    nagano:20,
+    gifu:21,
+    shizuoka:22,
+    aichi:23,
+
+    mie:24,
+    shiga:25,
+    kyoto:26,
+    osaka:27,
+    hyogo:28,
+    nara:29,
+    wakayama:30,
+
+    tottori:31,
+    shimane:32,
+    okayama:33,
+    hiroshima:34,
+    yamaguchi:35,
+
+    tokushima:36,
+    kagawa:37,
+    ehime:38,
+    kochi:39,
+
+    fukuoka:40,
+    saga:41,
+    nagasaki:42,
+    kumamoto:43,
+    oita:44,
+    miyazaki:45,
+    kagoshima:46,
+    okinawa:47
+
+  };
+
+
+  for(
+    const [
+      keyword,
+      code
+    ]
+    of Object.entries(
+      english
+    )
+  ){
+
+    if(
+      combined.includes(
+        keyword
+      )
+    ){
+
+      return code;
+
+    }
+
+  }
+
+
+  return null;
 
 }
 
@@ -2722,9 +3098,11 @@ function getItemImageUrl(
     return (
 
       "https://pokefuta.yuki.games/images/pokefuta/" +
+
       encodeURIComponent(
         item.id
       ) +
+
       ".png"
 
     );
@@ -2741,27 +3119,32 @@ function getItemImageUrl(
 
 
 /* =========================================================
-   LOAD JSON
+   JSON LOAD
 ========================================================= */
 
 async function fetchJSON(
   url
 ){
 
+  const separator =
+    url.includes("?")
+    ?
+    "&"
+    :
+    "?";
+
+
   const response =
     await fetch(
 
       url +
-      (
-        url.includes("?")
-        ? "&"
-        : "?"
-      ) +
+      separator +
       "ts=" +
       Date.now(),
 
       {
-        cache:"no-store"
+        cache:
+          "no-store"
       }
 
     );
@@ -2772,7 +3155,7 @@ async function fetchJSON(
   ){
 
     throw new Error(
-      `HTTP ${response.status}: ${url}`
+      `HTTP ${response.status}`
     );
 
   }
@@ -2790,7 +3173,7 @@ async function fetchJSON(
   ){
 
     throw new Error(
-      `${url} 格式錯誤`
+      "JSON list 格式錯誤"
     );
 
   }
@@ -2801,31 +3184,20 @@ async function fetchJSON(
 }
 
 
-/*
- * 先讀 GitHub Pages。
- * 如果失敗，再讀 GitHub Raw。
- */
-
 async function loadDataSet(
   type
 ){
 
-  const urls = [
-
-    DATA_URLS[type],
-
-    RAW_DATA_URLS[type]
-
-  ];
-
-
-  let lastError =
-    null;
+  let errorMessage =
+    "";
 
 
   for(
     const url
-    of urls
+    of [
+      DATA_URLS[type],
+      RAW_DATA_URLS[type]
+    ]
   ){
 
     try{
@@ -2841,10 +3213,13 @@ async function loadDataSet(
 
 
       console.log(
-        `[${type}] loaded`,
-        dataSets[type].length,
-        "items from",
+        `[${type}] ${dataSets[type].length} items`,
         url
+      );
+
+
+      buildGroups(
+        type
       );
 
 
@@ -2852,11 +3227,11 @@ async function loadDataSet(
 
     }catch(error){
 
-      lastError =
-        error;
+      errorMessage =
+        error.message;
 
       console.warn(
-        `[${type}] failed`,
+        `[${type}]`,
         url,
         error
       );
@@ -2870,59 +3245,30 @@ async function loadDataSet(
     [];
 
 
-  console.error(
-    `[${type}] ALL DATA SOURCES FAILED`,
-    lastError
+  buildGroups(
+    type
   );
-
-
-  /*
-   * 不再讓錯誤完全無聲無息。
-   */
-
-  const regions =
-    document.getElementById(
-      "regions"
-    );
 
 
   if(
     type === collectionType
-    &&
-    regions
   ){
 
-    regions.innerHTML = `
+    document.getElementById(
+      "regions"
+    ).innerHTML = `
 
       <div
         class="error-box"
         style="grid-column:1/-1"
       >
 
-        <b>
-          ⚠️ ${type === "center"
-            ? "Pokémon Center"
-            : "Poké Lid"
-          } 資料載入失敗
-        </b>
+        ⚠️ 資料載入失敗
 
         <br><br>
-
-        ${
-          escapeHtml(
-            lastError?.message ||
-            "未知錯誤"
-          )
-        }
-
-        <br><br>
-
-        請確認：
-
-        <br>
 
         ${escapeHtml(
-          DATA_URLS[type]
+          errorMessage
         )}
 
       </div>
@@ -2931,13 +3277,12 @@ async function loadDataSet(
 
   }
 
-
-  buildGroups(
-    type
-  );
-
 }
 
+
+/* =========================================================
+   BUILD GROUPS
+========================================================= */
 
 function buildGroups(
   type
@@ -2947,28 +3292,81 @@ function buildGroups(
     {};
 
 
+  const unresolved = [];
+
+
   for(
     const item
     of dataSets[type]
   ){
 
-    const pref =
-      PREF[item.pref] ||
-      String(item.pref);
+    const prefCode =
+      resolvePrefecture(
+        item
+      );
+
+
+    /*
+     * 保存解析結果
+     */
+
+    item.__prefCode =
+      prefCode;
+
+
+    const prefName =
+      prefCode
+      ?
+      PREF[prefCode]
+      :
+      null;
+
+
+    if(!prefName){
+
+      unresolved.push(
+        item
+      );
+
+      continue;
+
+    }
 
 
     if(
-      !groups[type][pref]
+      !groups[type][prefName]
     ){
 
-      groups[type][pref] =
+      groups[type][prefName] =
         [];
 
     }
 
 
-    groups[type][pref].push(
+    groups[type][prefName].push(
       item
+    );
+
+  }
+
+
+  /*
+   * 除錯
+   */
+
+  console.log(
+    `[${type}] groups:`,
+    groups[type]
+  );
+
+
+  if(
+    unresolved.length
+  ){
+
+    console.warn(
+      `[${type}] 無法判斷縣市：`,
+      unresolved
     );
 
   }
@@ -3074,7 +3472,7 @@ function switchCollectionType(
 
 
 /* =========================================================
-   CLOSE PANELS
+   CLOSE
 ========================================================= */
 
 function closeAllPanels(){
@@ -3117,7 +3515,7 @@ function closeAllPanels(){
 
 
 /* =========================================================
-   PROGRESS
+   OVERALL
 ========================================================= */
 
 function updateOverall(){
@@ -3125,11 +3523,7 @@ function updateOverall(){
   const list =
     dataSets[
       collectionType
-    ];
-
-
-  const total =
-    list.length;
+    ] || [];
 
 
   const obtained =
@@ -3154,13 +3548,13 @@ function updateOverall(){
   document.getElementById(
     "totalCount"
   ).textContent =
-    total;
+    list.length;
 
 }
 
 
 /* =========================================================
-   REGION CARDS
+   REGION
 ========================================================= */
 
 function renderRegions(){
@@ -3174,12 +3568,36 @@ function renderRegions(){
   const list =
     dataSets[
       collectionType
-    ];
+    ] || [];
 
 
   if(
     !list.length
   ){
+
+    el.innerHTML = `
+
+      <div
+        class="error-box"
+        style="grid-column:1/-1"
+      >
+
+        ${
+          collectionType === "center"
+
+          ?
+
+          "⚠️ Pokémon Center 沒有資料"
+
+          :
+
+          "⚠️ Poké Lid 沒有資料"
+
+        }
+
+      </div>
+
+    `;
 
     return;
 
@@ -3205,7 +3623,9 @@ function renderRegions(){
 
         item =>
           region.prefs.includes(
-            Number(item.pref)
+            Number(
+              item.__prefCode
+            )
           )
 
       );
@@ -3230,17 +3650,13 @@ function renderRegions(){
 
     const percent =
       total
-
       ?
-
       Math.round(
         obtained /
         total *
         1000
       ) / 10
-
       :
-
       0;
 
 
@@ -3269,27 +3685,25 @@ function renderRegions(){
 
 
     const images =
-      sample
-        .map(
+      sample.map(
 
-          item => `
+        item => `
 
-            <img
-              class="region-image"
-              src="${escapeHtml(
-                getItemImageUrl(
-                  collectionType,
-                  item
-                )
-              )}"
-              alt=""
-              loading="lazy"
-            >
+          <img
+            class="region-image"
+            src="${escapeHtml(
+              getItemImageUrl(
+                collectionType,
+                item
+              )
+            )}"
+            alt=""
+            loading="lazy"
+          >
 
-          `
+        `
 
-        )
-        .join("");
+      ).join("");
 
 
     card.innerHTML = `
@@ -3322,14 +3736,17 @@ function renderRegions(){
 
         <div class="region-count">
 
-          ${obtained} / ${total}
+          ${obtained}
+          /
+          ${total}
 
         </div>
 
 
         <div class="region-percent">
 
-          完成率 ${percent}%
+          完成率
+          ${percent}%
 
         </div>
 
@@ -3389,15 +3806,6 @@ function openRegion(
 
 function renderPrefectureSummary(){
 
-  if(
-    !currentRegion
-  ){
-
-    return;
-
-  }
-
-
   const region =
     REGIONS[
       currentRegion
@@ -3415,7 +3823,9 @@ function renderPrefectureSummary(){
 
       item =>
         region.prefs.includes(
-          Number(item.pref)
+          Number(
+            item.__prefCode
+          )
         )
 
     );
@@ -3480,8 +3890,12 @@ function renderPrefectureGrid(){
       list.filter(
 
         item =>
-          Number(item.pref) ===
-          Number(prefCode)
+          Number(
+            item.__prefCode
+          ) ===
+          Number(
+            prefCode
+          )
 
       );
 
@@ -3529,6 +3943,11 @@ function renderPrefectureGrid(){
       "prefecture-card";
 
 
+    /*
+     * 即使 0 / 0 也可以點
+     * 進去後顯示該縣沒有資料
+     */
+
     card.onclick =
       () =>
         openPrefectureCollection(
@@ -3551,7 +3970,9 @@ function renderPrefectureGrid(){
 
         <div class="prefecture-count">
 
-          ${obtained} / ${total}
+          ${obtained}
+          /
+          ${total}
 
         </div>
 
@@ -3570,7 +3991,8 @@ function renderPrefectureGrid(){
 
       <div class="prefecture-percent">
 
-        完成率 ${percent}%
+        完成率
+        ${percent}%
 
       </div>
 
@@ -3628,7 +4050,7 @@ function prefectureOverlayClick(
 
 
 /* =========================================================
-   PREFECTURE → ITEMS
+   PREFECTURE → COLLECTION
 ========================================================= */
 
 function openPrefectureCollection(
@@ -3724,7 +4146,7 @@ function renderCollectionGrid(){
         style="grid-column:1/-1"
       >
 
-        此縣目前沒有資料。
+        這個縣目前沒有可顯示的資料。
 
       </div>
 
@@ -3790,7 +4212,9 @@ function renderCollectionGrid(){
 
     card.innerHTML = `
 
-      <div class="collection-image-wrap">
+      <div
+        class="collection-image-wrap"
+      >
 
         ${
           image
@@ -3803,9 +4227,6 @@ function renderCollectionGrid(){
               src="${escapeHtml(image)}"
               alt="${escapeHtml(title)}"
               loading="lazy"
-              onerror="
-                this.style.opacity='.25'
-              "
             >
           `
 
@@ -3979,8 +4400,12 @@ function openModalFromItem(
 
     item,
 
-    PREF[item.pref] ||
-    currentPrefecture ||
+    PREF[
+      item.__prefCode
+    ]
+    ||
+    currentPrefecture
+    ||
     "",
 
     lat,
@@ -4034,9 +4459,13 @@ function openModal(
   ).textContent =
 
     currentItemType === "lid"
+
     ?
+
     "🔴 Poké Lid"
+
     :
+
     "🟡 Pokémon Center";
 
 
@@ -4085,21 +4514,17 @@ function openModal(
     );
 
 
-  document.getElementById(
-    "copyHint"
-  ).classList.remove(
-    "show"
-  );
-
-
   updateModalObtained();
 
 
-  document.getElementById(
-    "modalOverlay"
-  ).classList.add(
-    "show"
-  );
+  document
+    .getElementById(
+      "modalOverlay"
+    )
+    .classList
+    .add(
+      "show"
+    );
 
 
   document.body.classList.add(
@@ -4223,7 +4648,7 @@ function toggleObtained(){
 
 
 /* =========================================================
-   APPLE MAPS
+   MAP LINKS
 ========================================================= */
 
 function openAppleMaps(
@@ -4313,10 +4738,6 @@ function openAppleMaps(
 }
 
 
-/* =========================================================
-   GOOGLE MAPS
-========================================================= */
-
 function openGoogleMaps(
   event
 ){
@@ -4404,11 +4825,12 @@ async function copyCoordinate(
 
 
   const text =
-    document.getElementById(
-      "modalCoordinate"
-    )
-    .textContent
-    .trim();
+    document
+      .getElementById(
+        "modalCoordinate"
+      )
+      .textContent
+      .trim();
 
 
   if(
@@ -4528,37 +4950,9 @@ function closeModal(
     );
 
 
-  if(
-    document
-      .getElementById(
-        "collectionPanel"
-      )
-      .classList
-      .contains(
-        "show"
-      )
-    ||
-    document
-      .getElementById(
-        "prefecturePanel"
-      )
-      .classList
-      .contains(
-        "show"
-      )
-  ){
-
-    document.body.classList.add(
-      "no-scroll"
-    );
-
-  }else{
-
-    document.body.classList.remove(
-      "no-scroll"
-    );
-
-  }
+  document.body.classList.add(
+    "no-scroll"
+  );
 
 }
 
@@ -4698,10 +5092,14 @@ function downloadAll(){
     ),
 
     collectionType === "lid"
-      ?
-      "poke_lid_2026.txt"
-      :
-      "pokemon_center_2026.txt"
+
+    ?
+
+    "poke_lid_2026.txt"
+
+    :
+
+    "pokemon_center_2026.txt"
 
   );
 
@@ -4740,10 +5138,12 @@ function downloadJSON(){
             ),
 
           lat:
-            item.coords?.[0] ?? "",
+            item.coords?.[0] ??
+            "",
 
           lng:
-            item.coords?.[1] ?? "",
+            item.coords?.[1] ??
+            "",
 
           address:
             item.address ||
@@ -4776,10 +5176,14 @@ function downloadJSON(){
     ),
 
     collectionType === "lid"
-      ?
-      "poke_lid_2026.json"
-      :
-      "pokemon_center_2026.json"
+
+    ?
+
+    "poke_lid_2026.json"
+
+    :
+
+    "pokemon_center_2026.json"
 
   );
 
@@ -4813,8 +5217,13 @@ function downloadCSV(){
 
       item.id,
 
-      PREF[item.pref] ||
-      item.pref,
+      PREF[
+        item.__prefCode
+      ]
+      ||
+      item.pref
+      ||
+      "",
 
       getItemTitle(
         collectionType,
@@ -4822,13 +5231,13 @@ function downloadCSV(){
       ),
 
       item.coords?.[0] ??
-        "",
+      "",
 
       item.coords?.[1] ??
-        "",
+      "",
 
       item.address ||
-        ""
+      ""
 
     ]);
 
@@ -4877,10 +5286,14 @@ function downloadCSV(){
     ),
 
     collectionType === "lid"
-      ?
-      "poke_lid_2026.csv"
-      :
-      "pokemon_center_2026.csv"
+
+    ?
+
+    "poke_lid_2026.csv"
+
+    :
+
+    "pokemon_center_2026.csv"
 
   );
 
@@ -5083,15 +5496,19 @@ function renderHistory(){
           <div class="history-card">
 
             <b>
+
               ${escapeHtml(
                 item.time ||
                 ""
               )}
+
             </b>
 
 
             <span
-              class="history-type ${item.type}"
+              class="history-type ${
+                item.type
+              }"
             >
 
               ${
@@ -5176,7 +5593,7 @@ function escapeHtml(
 
 
 /* =========================================================
-   ESC KEY
+   ESC
 ========================================================= */
 
 document.addEventListener(
@@ -5268,7 +5685,7 @@ async function start(){
 
 
   /*
-   * 先把資料讀完。
+   * 兩套資料一起載入。
    */
 
   await Promise.all([
@@ -5285,19 +5702,31 @@ async function start(){
 
 
   /*
-   * Center 如果成功取得，
-   * 這裡會直接顯示實際筆數。
+   * 這裡直接輸出數量，
+   * 開 F12 Console 可以確認。
    */
+
+  console.log(
+    "================================"
+  );
 
   console.log(
     "Poké Lid:",
     dataSets.lid.length
   );
 
-
   console.log(
     "Pokémon Center:",
     dataSets.center.length
+  );
+
+  console.log(
+    "Center groups:",
+    groups.center
+  );
+
+  console.log(
+    "================================"
   );
 
 

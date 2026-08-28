@@ -3870,11 +3870,15 @@ function renderPrefectureGrid(){
   const list =
     dataSets[
       collectionType
-    ];
+    ] || [];
 
 
   el.innerHTML =
     "";
+
+
+  let visibleCount =
+    0;
 
 
   for(
@@ -3900,6 +3904,22 @@ function renderPrefectureGrid(){
       );
 
 
+    /*
+     * 沒有資料的縣市直接跳過。
+     */
+
+    if(
+      items.length === 0
+    ){
+
+      continue;
+
+    }
+
+
+    visibleCount++;
+
+
     const obtained =
       items.filter(
 
@@ -3918,19 +3938,11 @@ function renderPrefectureGrid(){
 
 
     const percent =
-      total
-
-      ?
-
       Math.round(
         obtained /
         total *
         100
-      )
-
-      :
-
-      0;
+      );
 
 
     const card =
@@ -3942,11 +3954,6 @@ function renderPrefectureGrid(){
     card.className =
       "prefecture-card";
 
-
-    /*
-     * 即使 0 / 0 也可以點
-     * 進去後顯示該縣沒有資料
-     */
 
     card.onclick =
       () =>
@@ -4002,6 +4009,44 @@ function renderPrefectureGrid(){
     el.appendChild(
       card
     );
+
+  }
+
+
+  /*
+   * 理論上整個區域都沒有資料時，
+   * 顯示提示。
+   */
+
+  if(
+    visibleCount === 0
+  ){
+
+    el.innerHTML = `
+
+      <div
+        class="loading"
+        style="
+          grid-column:1/-1;
+        "
+      >
+
+        ${
+          collectionType === "center"
+
+          ?
+
+          "此區域目前沒有 Pokémon Center 資料。"
+
+          :
+
+          "此區域目前沒有 Poké Lid 資料。"
+
+        }
+
+      </div>
+
+    `;
 
   }
 

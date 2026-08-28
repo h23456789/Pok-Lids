@@ -3182,134 +3182,149 @@ async function fetchJSON(url){
 
   const separator =
     url.includes("?")
-    ?
-    "&"
-    :
-    "?";
+    ? "&"
+    : "?";
 
   const response =
     await fetch(
-
       url +
       separator +
       "ts=" +
       Date.now(),
-
       {
         cache:"no-store"
       }
-
     );
 
-  if(
-    !response.ok
-  ){
-
-    throw new Error(
-      `HTTP ${response.status}`
-    );
-
+  if(!response.ok){
+    throw new Error(`HTTP ${response.status}`);
   }
 
-  const json =
-    await response.json();
-
-  if(
-    !json ||
-    !Array.isArray(
-      json.list
-    )
-  ){
-
-    throw new Error(
-      "JSON list 格式錯誤"
-    );
-
-  }
-
-  return json;
-
+  return await response.json();
 }
 
+/* =========================================================
+   NORMALIZE DATA
+========================================================= */
+
+function normalizeDataList(json,type){
+
+  // 1. 最標準格式：{ list:[...] }
+  if(json && Array.isArray(json.list)){
+    return json.list;
+  }
+
+  // 2. 直接就是陣列：[...]
+  if(Array.isArray(json)){
+    return json;
+  }
+
+  if(!json || typeof json !== "object"){
+    return [];
+  }
+
+  // 3. 常見資料欄位：data / items / stamps / records / locations / results
+  const preferredKeys = [
+    "data",
+    "items",
+    "stamps",
+    "stampRally",
+    "stamp_rally",
+    "records",
+    "locations",
+    "results"
+  ];
+
+  for(const key of preferredKeys){
+    if(Array.isArray(json[key])){
+      return json[key];
+    }
+  }
+
+  // 4. 如果 JSON 是以活動名稱或地區名稱作 key，
+  //    將底下的陣列資料攤平成一個陣列。
+  const flattened = [];
+
+  function walk(value, parentKey=""){
+    if(Array.isArray(value)){
+      for(const item of value){
+        if(item && typeof item === "object" && !Array.isArray(item)){
+          const copy = {...item};
+          if(parentKey && !copy.event && !copy.eventName && type === "stamp"){
+            copy.event = parentKey;
+          }
+          flattened.push(copy);
+        }else if(item && typeof item === "object"){
+          walk(item,parentKey);
+        }
+      }
+      return;
+    }
+
+    if(value && typeof value === "object"){
+      for(const [key,child] of Object.entries(value)){
+        if(["meta","metadata","history","version","updatedAt","generatedAt"].includes(key)){
+          continue;
+        }
+        if(Array.isArray(child)){
+          walk(child,key);
+        }else if(child && typeof child === "object"){
+          // 只往下一層/數層找資料，不把純設定物件當成項目
+          walk(child,parentKey || key);
+        }
+      }
+    }
+  }
+
+  walk(json);
+
+  if(flattened.length){
+    return flattened;
+  }
+
+  return [];
+}
 
 async function loadDataSet(type){
 
-  let errorMessage =
-    "";
+  let errorMessage = "";
 
-  for(
-    const url
-    of [
-      DATA_URLS[type],
-      RAW_DATA_URLS[type]
-    ]
-  ){
+  for(const url of [
+    DATA_URLS[type],
+    RAW_DATA_URLS[type]
+  ]){
 
     try{
+      const json = await fetchJSON(url);
+      const list = normalizeDataList(json,type);
 
-      const json =
-        await fetchJSON(
-          url
-        );
+      if(!Array.isArray(list) || !list.length){
+        throw new Error("找不到可用的資料陣列");
+      }
 
-      dataSets[type] =
-        json.list;
+      dataSets[type] = list;
 
-      buildGroups(
-        type
-      );
-
+      buildGroups(type);
       return;
 
     }catch(error){
-
-      errorMessage =
-        error.message;
-
-      console.warn(
-        `[${type}]`,
-        url,
-        error
-      );
-
+      errorMessage = error.message;
+      console.warn(`[${type}]`,url,error);
     }
-
   }
 
-  dataSets[type] =
-    [];
+  dataSets[type] = [];
+  buildGroups(type);
 
-  buildGroups(
-    type
-  );
-
-  if(
-    type === collectionType
-  ){
-
-    document.getElementById(
-      "regions"
-    ).innerHTML = `
-
-      <div
-        class="error-box"
-        style="grid-column:1/-1"
-      >
-
+  if(type === collectionType){
+    document.getElementById("regions").innerHTML = `
+      <div class="error-box" style="grid-column:1/-1">
         ⚠️ 資料載入失敗
-
         <br><br>
-
-        ${escapeHtml(
-          errorMessage
-        )}
-
+        ${escapeHtml(errorMessage)}
       </div>
-
     `;
-
   }
-
 }
 
 

@@ -2543,9 +2543,7 @@ button{
   </div>
 
   <div id="history">
-
     載入中……
-
   </div>
 
 </div>
@@ -4140,10 +4138,6 @@ function renderRegions(){
       );
 
 
-    /*
-     * 沒有資料的區域不顯示
-     */
-
     if(
       !items.length
     ){
@@ -4320,10 +4314,6 @@ function renderStampEvents(){
 
   }
 
-
-  /*
-   * 依活動名稱分組
-   */
 
   const eventGroups = {};
 
@@ -4541,10 +4531,6 @@ function openStampEvent(
     "";
 
 
-  /*
-   * 依縣市分組
-   */
-
   const prefGroups = {};
 
 
@@ -4670,11 +4656,6 @@ function openStampEvent(
   );
 
 
-  /*
-   * Stamp 模式返回時，
-   * 需要知道目前活動
-   */
-
   panel.dataset.stampEvent =
     eventName;
 
@@ -4712,17 +4693,7 @@ function openStampPrefectureCollection(
     prefName;
 
 
-  document.getElementById(
-    "collectionSummary"
-  ).textContent =
-    `${eventName}｜已收集 ${
-      items.filter(
-        item =>
-          obtainedIds.stamp.has(
-            getItemId(item)
-          )
-      ).length
-    } / ${items.length}`;
+  updateCollectionSummary();
 
 
   renderCollectionGrid();
@@ -4786,10 +4757,17 @@ function renderPrefectureSummary(){
       currentRegion
     ];
 
+  if(!region){
+
+    return;
+
+  }
+
+
   const list =
     dataSets[
       collectionType
-    ];
+    ] || [];
 
 
   const items =
@@ -4833,6 +4811,13 @@ function renderPrefectureGrid(){
     REGIONS[
       currentRegion
     ];
+
+  if(!region){
+
+    return;
+
+  }
+
 
   const list =
     dataSets[
@@ -5245,6 +5230,126 @@ function renderCollectionGrid(){
 
 
     el.appendChild(card);
+
+  }
+
+}
+
+
+/* =========================================================
+   即時同步所有三層
+========================================================= */
+
+function refreshCollectionViews(){
+
+  /*
+   * 第 1 層：
+   * 整體進度 + 區域進度
+   */
+
+  updateOverall();
+
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    /*
+     * Stamp 第一層：
+     * 活動列表
+     */
+
+    renderStampEvents();
+
+
+    /*
+     * 如果活動的縣市層目前有開啟，
+     * 重新計算第二層
+     */
+
+    const prefecturePanel =
+      document.getElementById(
+        "prefecturePanel"
+      );
+
+    const eventName =
+      prefecturePanel.dataset.stampEvent;
+
+
+    if(
+      eventName &&
+      prefecturePanel.classList.contains(
+        "show"
+      )
+    ){
+
+      const eventItems =
+        dataSets.stamp.filter(
+          item =>
+            getStampEventName(item) ===
+            eventName
+        );
+
+
+      openStampEvent(
+        eventName,
+        eventItems
+      );
+
+    }
+
+  }else{
+
+    /*
+     * Lid / Center 第一層
+     */
+
+    if(
+      document.getElementById(
+        "regions"
+      ).style.display !== "none"
+    ){
+
+      renderRegions();
+
+    }
+
+
+    /*
+     * 如果第二層區域目前開啟，
+     * 立即重新計算縣市
+     */
+
+    if(
+      currentRegion &&
+      document.getElementById(
+        "prefecturePanel"
+      ).classList.contains(
+        "show"
+      )
+    ){
+
+      renderPrefectureSummary();
+
+      renderPrefectureGrid();
+
+    }
+
+  }
+
+
+  /*
+   * 第三層：
+   * 重新計算目前縣市／活動的圖章
+   */
+
+  if(
+    currentCollectionItems.length
+  ){
+
+    updateCollectionSummary();
+
+    renderCollectionGrid();
 
   }
 
@@ -5717,6 +5822,10 @@ function updateModalObtained(){
 }
 
 
+/* =========================================================
+   已獲得切換
+========================================================= */
+
 function toggleObtained(){
 
   if(
@@ -5744,6 +5853,10 @@ function toggleObtained(){
     );
 
 
+  /*
+   * 更新使用者自己的收集狀態
+   */
+
   if(value){
 
     obtainedIds[type].add(
@@ -5759,10 +5872,18 @@ function toggleObtained(){
   }
 
 
+  /*
+   * 儲存到 LocalStorage
+   */
+
   saveLocalCollection(
     type
   );
 
+
+  /*
+   * Modal 本身立即更新
+   */
 
   document.getElementById(
     "saveStatus"
@@ -5774,47 +5895,12 @@ function toggleObtained(){
     "已取消";
 
 
-  updateOverall();
-
-
   /*
-   * 即時更新目前畫面
+   * ⭐ 核心：
+   * 一次同步第一層、第二層、第三層
    */
 
-  if(
-    collectionType === "stamp"
-  ){
-
-    const eventName =
-      document.getElementById(
-        "prefecturePanel"
-      ).dataset.stampEvent;
-
-
-    if(
-      eventName &&
-      !document.getElementById(
-        "collectionPanel"
-      ).classList.contains(
-        "show"
-      )
-    ){
-
-      const items =
-        dataSets.stamp.filter(
-          item =>
-            getStampEventName(item) ===
-            eventName
-        );
-
-      openStampEvent(
-        eventName,
-        items
-      );
-
-    }
-
-  }
+  refreshCollectionViews();
 
 }
 
@@ -6089,9 +6175,36 @@ function closeModal(event){
   );
 
 
-  document.body.classList.remove(
-    "no-scroll"
-  );
+  /*
+   * 如果第三層仍然開啟，
+   * 不要解除整個 no-scroll。
+   */
+
+  if(
+    document.getElementById(
+      "collectionPanel"
+    ).classList.contains(
+      "show"
+    )
+    ||
+    document.getElementById(
+      "prefecturePanel"
+    ).classList.contains(
+      "show"
+    )
+  ){
+
+    document.body.classList.add(
+      "no-scroll"
+    );
+
+  }else{
+
+    document.body.classList.remove(
+      "no-scroll"
+    );
+
+  }
 
 }
 
@@ -6976,4 +7089,3 @@ start();
 </body>
 
 </html>
-```

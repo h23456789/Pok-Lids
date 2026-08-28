@@ -250,8 +250,7 @@ def parse_stamp_page(url):
 
     if stamp_match:
 
-        event =
-            normalize_text(
+        event = normalize_text(
                 stamp_match.group(1)
             )
 
@@ -275,16 +274,14 @@ def parse_stamp_page(url):
 
     if len(dates) >= 1:
 
-        start_date =
-            parse_japanese_date(
+        start_date = parse_japanese_date(
                 dates[0]
             )
 
 
     if len(dates) >= 2:
 
-        end_date =
-            parse_japanese_date(
+        end_date = parse_japanese_date(
                 dates[1]
             )
 
@@ -306,8 +303,7 @@ def parse_stamp_page(url):
 
     if og_image:
 
-        image_url =
-            urljoin(
+        image_url = urljoin(
                 url,
                 og_image.get(
                     "content",
@@ -324,8 +320,7 @@ def parse_stamp_page(url):
 
         if image:
 
-            image_url =
-                urljoin(
+            image_url = urljoin(
                     url,
                     image.get(
                         "src",
@@ -371,8 +366,7 @@ def parse_stamp_page(url):
         in page_text
     ):
 
-        venue_type =
-            "pokemon_center"
+        venue_type = "pokemon_center"
 
 
     elif "ポケモンストア" in page_text:
@@ -408,8 +402,7 @@ def parse_stamp_page(url):
 
         if position >= 0:
 
-            reward =
-                page_text[
+            reward = page_text[
                     position:
                     position + 300
                 ]
@@ -493,8 +486,7 @@ def discover_urls():
 
         try:
 
-            html =
-                get_html(
+            html = get_html(
                     source
                 )
 
@@ -509,8 +501,7 @@ def discover_urls():
             continue
 
 
-        soup =
-            BeautifulSoup(
+        soup = BeautifulSoup(
                 html,
                 "html.parser"
             )
@@ -521,21 +512,18 @@ def discover_urls():
             href=True
         ):
 
-            href =
-                link.get(
+            href = link.get(
                     "href"
                 )
 
 
-            absolute =
-                urljoin(
+            absolute = urljoin(
                     source,
                     href
                 )
 
 
-            text =
-                normalize_text(
+            text = normalize_text(
                     link.get_text(
                         " ",
                         strip=True
@@ -612,8 +600,7 @@ def load_old():
             encoding="utf-8"
         ) as file:
 
-            data =
-                json.load(
+            data = json.load(
                     file
                 )
 
@@ -645,8 +632,7 @@ def merge_items(old_items, new_items):
 
     for item in new_items:
 
-        item_id =
-            item.get(
+        item_id = item.get(
                 "id"
             )
 
@@ -781,12 +767,10 @@ def main():
     )
 
 
-    old_items =
-        load_old()
+    old_items = load_old()
 
 
-    urls =
-        discover_urls()
+    urls = discover_urls()
 
 
     print(
@@ -808,8 +792,7 @@ def main():
 
         try:
 
-            items =
-                parse_stamp_page(
+            items = parse_stamp_page(
                     url
                 )
 
@@ -844,8 +827,7 @@ def main():
         return
 
 
-    merged =
-        merge_items(
+    merged = merge_items(
             old_items,
             new_items
         )
@@ -872,14 +854,12 @@ def main():
     )
 
 
-    now =
-        datetime.now(
+    now = datetime.now(
             timezone.utc
         ).astimezone()
 
 
-    updated =
-        now.strftime(
+    updated = now.strftime(
             "%Y-%m-%d %H:%M:%S"
         )
 
@@ -931,8 +911,7 @@ def main():
                 encoding="utf-8"
             ) as file:
 
-                history =
-                    json.load(
+                history = json.load(
                         file
                     )
 

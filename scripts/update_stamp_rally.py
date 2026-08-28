@@ -18,13 +18,18 @@ TIMEOUT = 30
 REQUEST_DELAY = 0.35
 MAX_DISCOVERY_PAGES = 80
 MAX_SITEMAP_URLS = 4000
+API_URLS = [
+    "https://www.pokemon.co.jp/api/info_goods/calender/",
+    "https://www.pokemon.co.jp/api/info_goods/calender_top/",
+]
+DISCOVERED_EVENT_META = {}
 
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/151.0 Safari/537.36 "
-        "PokemonJapanCollectionUpdater/4.0"
+        "PokemonJapanCollectionUpdater/5.0"
     ),
     "Accept-Language": "ja-JP,ja;q=0.9,en;q=0.8",
 }
@@ -36,6 +41,7 @@ OFFICIAL_DOMAINS = {
     "pokemon.co.jp",
     "www.pokemon.co.jp",
     "shop.pokemon.co.jp",
+    "voice.pokemon.co.jp",
 }
 
 DISCOVERY_URLS = [
@@ -44,15 +50,18 @@ DISCOVERY_URLS = [
     "https://www.pokemon.co.jp/event/",
     "https://shop.pokemon.co.jp/ja/",
     "https://shop.pokemon.co.jp/ja/shop/common/events/",
+    "https://voice.pokemon.co.jp/stv/",
 ]
 
 STAMP_KEYWORDS = [
     "スタンプラリー",
     "GOスタンプラリー",
     "デジタルスタンプラリー",
+    "ビンゴラリー",
     "STAMP RALLY",
     "Stamp Rally",
     "stamp rally",
+    "bingo rally",
 ]
 
 PREF_ALIASES = [
@@ -218,6 +227,144 @@ def extract_dates(text):
     return sorted(values)
 
 
+
+# =========================================================
+# TRANSLATION / COORDINATES
+# =========================================================
+TRANSLATE_CACHE = {}
+
+
+def translate_ja_to_zh_tw(text):
+    text = normalize_text(text)
+    if not text:
+        return ""
+    if text in TRANSLATE_CACHE:
+        return TRANSLATE_CACHE[text]
+    if not re.search(r"[ぁ-んァ-ン一-龯]", text):
+        TRANSLATE_CACHE[text] = text
+        return text
+    try:
+        response = SESSION.get(
+            "https://translate.googleapis.com/translate_a/single",
+            params={
+                "client": "gtx", "sl": "ja", "tl": "zh-TW",
+                "dt": "t", "q": text[:4500],
+            },
+            timeout=20,
+        )
+        response.raise_for_status()
+        data = response.json()
+        translated = "".join(part[0] for part in data[0] if part and part[0]).strip()
+        if translated:
+            TRANSLATE_CACHE[text] = translated
+            return translated
+    except Exception as error:
+        print("TRANSLATE ERROR:", error)
+    TRANSLATE_CACHE[text] = text
+    return text
+
+
+def extract_coords_from_url(url):
+    if not url:
+        return []
+    patterns = [
+        (r"!2d(-?\d+(?:\.\d+)?)!3d(-?\d+(?:\.\d+)?)", True),
+        (r"[?&](?:q|query|destination)=(-?\d+(?:\.\d+)?)[, ](-?\d+(?:\.\d+)?)", False),
+        (r"@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)", False),
+    ]
+    for pattern, lng_first in patterns:
+        match = re.search(pattern, url)
+        if not match:
+            continue
+        try:
+            a, b = float(match.group(1)), float(match.group(2))
+            lat, lng = (b, a) if lng_first else (a, b)
+            if -90 <= lat <= 90 and -180 <= lng <= 180:
+                return [round(lat, 7), round(lng, 7)]
+        except ValueError:
+            pass
+    return []
+
+
+def extract_coords(soup, base_url):
+    candidates = []
+    for tag in soup.find_all("a", href=True):
+        candidates.append(urljoin(base_url, tag.get("href", "")))
+    for tag in soup.find_all("iframe", src=True):
+        candidates.append(urljoin(base_url, tag.get("src", "")))
+    for candidate in candidates:
+        coords = extract_coords_from_url(candidate)
+        if coords:
+            return coords
+    html = str(soup)
+    for pattern in (
+        r"!2d(-?\d+(?:\.\d+)?)!3d(-?\d+(?:\.\d+)?)",
+        r"(?:latitude|lat)[\"'= :]+(-?\d+(?:\.\d+)?).{0,100}(?:longitude|lng|lon)[\"'= :]+(-?\d+(?:\.\d+)?)",
+    ):
+        match = re.search(pattern, html, re.I | re.S)
+        if match:
+            try:
+                if "!2d" in pattern:
+                    lat, lng = float(match.group(2)), float(match.group(1))
+                else:
+                    lat, lng = float(match.group(1)), float(match.group(2))
+                if -90 <= lat <= 90 and -180 <= lng <= 180:
+                    return [round(lat, 7), round(lng, 7)]
+            except ValueError:
+                pass
+    return []
+
+
+CENTER_SLUGS = {
+    "ポケモンセンターサッポロ": "pokemoncenter-sapporo",
+    "ポケモンセンタートウホク": "pokemoncenter-tohoku",
+    "ポケモンセンタートウキョーDX": "pokemoncenter-tokyodx",
+    "ポケモンセンターメガトウキョー": "pokemoncenter-megatokyo",
+    "ポケモンセンターシブヤ": "pokemoncenter-shibuya",
+    "ポケモンセンタースカイツリータウン": "pokemoncenter-skytree",
+    "ポケモンセンタートウキョーベイ": "pokemoncenter-tokyobay",
+    "ポケモンセンターヨコハマ": "pokemoncenter-yokohama",
+    "ポケモンセンターナゴヤ": "pokemoncenter-nagoya",
+    "ポケモンセンターカナザワ": "pokemoncenter-kanazawa",
+    "ポケモンセンターキョウト": "pokemoncenter-kyoto",
+    "ポケモンセンターオーサカDX": "pokemoncenter-osakadx",
+    "ポケモンセンターオーサカ": "pokemoncenter-osaka",
+    "ポケモンセンターヒロシマ": "pokemoncenter-hiroshima",
+    "ポケモンセンターカガワ": "pokemoncenter-kagawa",
+    "ポケモンセンターフクオカ": "pokemoncenter-fukuoka",
+    "ポケモンセンターオキナワ": "pokemoncenter-okinawa",
+}
+
+
+def center_url(name):
+    slug = CENTER_SLUGS.get(name)
+    return (
+        "https://shop.pokemon.co.jp/ja/shop/" + slug + "/"
+        if slug else ""
+    )
+
+
+def infer_center_from_url(url):
+    path = urlparse(url).path.lower()
+    for name, slug in CENTER_SLUGS.items():
+        if slug in path:
+            return name
+    return ""
+
+
+def translate_item_fields(item):
+    for source_key, target_key in {
+        "event": "eventZh", "eventName": "eventNameZh",
+        "activity": "activityZh", "venue": "venueZh",
+        "name": "nameZh", "address": "addressZh",
+        "reward": "rewardZh", "description": "descriptionZh",
+    }.items():
+        value = item.get(source_key, "")
+        if value:
+            item[target_key] = translate_ja_to_zh_tw(value)
+    return item
+
+
 def extract_event_name(soup, page_text):
     candidates = []
 
@@ -242,11 +389,11 @@ def extract_event_name(soup, page_text):
             candidates.append(text)
 
     for text in candidates:
-        if "スタンプラリー" in text or "Stamp Rally" in text:
+        if "スタンプラリー" in text or "ビンゴラリー" in text or "Stamp Rally" in text or "Bingo Rally" in text:
             return text
 
     match = re.search(
-        r".{0,80}スタンプラリー.{0,120}",
+        r".{0,80}(?:スタンプラリー|ビンゴラリー).{0,120}",
         page_text or "",
     )
     if match:
@@ -302,7 +449,11 @@ def extract_activity(page_text):
         return "Pokémon GO GOスタンプラリー"
     if "デジタルスタンプラリー" in page_text:
         return "デジタルスタンプラリー"
-    return "Stamp Rally"
+    if "ビンゴラリー" in page_text:
+        return "ビンゴラリー"
+    if "スタンプラリー" in page_text:
+        return "スタンプラリー"
+    return "Rally"
 
 
 def extract_prefecture(text):
@@ -419,8 +570,64 @@ def parse_sitemap(url, visited=None, url_limit=MAX_SITEMAP_URLS):
     return found
 
 
+def discover_api_urls():
+    """Use Pokémon's official event JSON feed as a fast discovery layer.
+
+    The API is official-site data, not a hard-coded event list.  It is used
+    only to discover official event pages and their current metadata.
+    """
+    candidates = set()
+
+    for api_url in API_URLS:
+        html = get_html(api_url)
+        if not html:
+            continue
+
+        try:
+            payload = json.loads(html)
+        except Exception:
+            continue
+
+        rows = payload.get("results", []) if isinstance(payload, dict) else []
+        if not isinstance(rows, list):
+            continue
+
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+
+            title = normalize_text(
+                row.get("title") or row.get("event_title") or ""
+            )
+            full_url = normalize_text(
+                row.get("full_uniq") or row.get("uniq") or ""
+            )
+            combined = f"{title} {normalize_text(row.get('txt_1', ''))}"
+
+            if not is_official_url(full_url):
+                continue
+            if not any(
+                keyword.lower() in combined.lower()
+                for keyword in STAMP_KEYWORDS
+            ):
+                continue
+
+            candidates.add(full_url)
+            DISCOVERED_EVENT_META[full_url] = {
+                "title": title,
+                "startDate": normalize_text(row.get("event_date_start", "")),
+                "endDate": normalize_text(row.get("event_date_end", "")),
+                "image": normalize_text(row.get("img_1", "")),
+            }
+
+    return candidates
+
+
 def discover_urls(old_items):
     candidates = set()
+
+    # 官方事件 JSON API：優先取得目前官方站上可見的 Stamp Rally 活動。
+    candidates.update(discover_api_urls())
 
     # 既有資料的官方來源也作為更新入口。
     # 這不是寫死活動網址；只會更新已存在的官方來源。
@@ -483,6 +690,7 @@ def discover_urls(old_items):
                     "/events/",
                     "/campaign/",
                     "/common/events/",
+                    "/stv/",
                 )
             ):
                 if absolute not in visited and absolute not in queue:
@@ -504,6 +712,7 @@ def discover_urls(old_items):
                     "info",
                     "stamp",
                     "rally",
+                    "bingo",
                 )
             ):
                 candidates.add(url)
@@ -582,6 +791,43 @@ def enrich_location(item, venue_url):
 
     item["address"] = address
 
+    # 優先從官方頁面的 JSON-LD / meta 取得座標。
+    lat = None
+    lng = None
+    for script in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(script.string or script.get_text())
+        except Exception:
+            continue
+
+        stack = data if isinstance(data, list) else [data]
+        for node in stack:
+            if not isinstance(node, dict):
+                continue
+            geo = node.get("geo")
+            if isinstance(geo, dict):
+                try:
+                    lat = float(geo.get("latitude"))
+                    lng = float(geo.get("longitude"))
+                    break
+                except (TypeError, ValueError):
+                    pass
+        if lat is not None and lng is not None:
+            break
+
+    if lat is None or lng is None:
+        lat_match = re.search(r'(?:latitude|lat)\s*[=:]\s*["\']?([0-9]+(?:\.[0-9]+)?)', html, re.I)
+        lng_match = re.search(r'(?:longitude|lng|lon)\s*[=:]\s*["\']?([0-9]+(?:\.[0-9]+)?)', html, re.I)
+        if lat_match and lng_match:
+            try:
+                lat = float(lat_match.group(1))
+                lng = float(lng_match.group(1))
+            except ValueError:
+                pass
+
+    if lat is not None and lng is not None:
+        item["coords"] = [lat, lng]
+
     if not item.get("pref"):
         item["pref"] = extract_prefecture(address)
 
@@ -617,9 +863,11 @@ def parse_stamp_page(url, old_items):
     ):
         return []
 
-    event = extract_event_name(
-        soup,
-        page_text
+    meta = DISCOVERED_EVENT_META.get(url, {})
+
+    event = (
+        normalize_text(meta.get("title"))
+        or extract_event_name(soup, page_text)
     )
 
     event_id = get_event_id(
@@ -629,12 +877,19 @@ def parse_stamp_page(url, old_items):
     )
 
     dates = extract_dates(page_text)
-    start_date = dates[0] if dates else ""
-    end_date = dates[1] if len(dates) >= 2 else ""
+    start_date = (
+        parse_date(meta.get("startDate"))
+        or (dates[0] if dates else "")
+    )
+    end_date = (
+        parse_date(meta.get("endDate"))
+        or (dates[1] if len(dates) >= 2 else "")
+    )
 
-    image_url = extract_image(
-        soup,
-        url
+    image_url = (
+        urljoin(url, meta.get("image", ""))
+        if meta.get("image")
+        else extract_image(soup, url)
     )
 
     reward = extract_reward(
@@ -649,6 +904,16 @@ def parse_stamp_page(url, old_items):
         soup,
         url
     )
+
+    inferred_center = infer_center_from_url(url)
+    if inferred_center:
+        # Store-specific event pages contain the entire global store menu.
+        # Never mistake that navigation menu for event locations.
+        centers = [{"name": inferred_center, "url": center_url(inferred_center)}]
+    elif not centers:
+        centers = []
+
+    page_coords = extract_coords(soup, url)
 
     items = []
 
@@ -695,7 +960,7 @@ def parse_stamp_page(url, old_items):
                 "pref": known[0],
                 "city": known[1],
                 "address": "",
-                "coords": [],
+                "coords": page_coords.copy(),
                 "startDate": start_date,
                 "endDate": end_date,
                 "stampImage": image_url,
@@ -718,6 +983,7 @@ def parse_stamp_page(url, old_items):
                 )
                 time.sleep(REQUEST_DELAY)
 
+            item = translate_item_fields(item)
             items.append(item)
 
     else:
@@ -739,7 +1005,7 @@ def parse_stamp_page(url, old_items):
             old_items
         )
 
-        items.append({
+        fallback_item = {
             "id": existing_id or get_item_id(event_id, venue or event),
             "eventId": event_id,
             "event": event,
@@ -751,7 +1017,7 @@ def parse_stamp_page(url, old_items):
             "pref": extract_prefecture(page_text),
             "city": "",
             "address": "",
-            "coords": [],
+            "coords": page_coords.copy(),
             "startDate": start_date,
             "endDate": end_date,
             "stampImage": image_url,
@@ -763,7 +1029,8 @@ def parse_stamp_page(url, old_items):
             ),
             "sourceUrl": url,
             "official": True,
-        })
+        }
+        items.append(translate_item_fields(fallback_item))
 
     return items
 
@@ -831,9 +1098,9 @@ def compare_items(old_items, new_items):
 def history_detail(item):
     return {
         "id": item.get("id", ""),
-        "event": item.get("event", ""),
-        "name": item.get("name", ""),
-        "venue": item.get("venue", ""),
+        "event": item.get("eventZh") or item.get("event", ""),
+        "name": item.get("nameZh") or item.get("name", ""),
+        "venue": item.get("venueZh") or item.get("venue", ""),
         "pref": item.get("pref", ""),
         "city": item.get("city", ""),
         "startDate": item.get("startDate", ""),
@@ -965,7 +1232,7 @@ def main():
     write_json(
         STAMP_FILE,
         {
-            "version": "4.0",
+            "version": "5.0",
             "updated": updated,
             "source": "official",
             "list": merged,
@@ -996,7 +1263,8 @@ def main():
             {
                 "time": updated,
                 "type": "stamp",
-                "event": "Automatic official Stamp Rally sync",
+                "event": "官方集章活動自動同步",
+                "eventJa": "Automatic official Stamp Rally sync",
                 "source": (
                     "Pokémon Official Website / "
                     "Pokémon Center Official Website"

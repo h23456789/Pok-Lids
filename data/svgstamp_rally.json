@@ -1,0 +1,26 @@
+{
+  "version": "2.0",
+  "updated": "2026-08-28",
+  "source": "official",
+  "list": [
+    {
+      "id": "STAMP-PKCNTR-2026",
+      "event": "ポケモンセンタースタンプラリー2026",
+      "eventName": "Pokémon Center Stamp Rally 2026",
+      "activity": "Pokémon GO GOスタンプラリー",
+      "venueType": "pokemon_center",
+      "venue": "全国のポケモンセンター・Pokémon GO Lab.",
+      "pref": "",
+      "city": "",
+      "address": "全国のポケモンセンター・Pokémon GO Lab.",
+      "coords": [],
+      "startDate": "2026-07-01",
+      "endDate": "2027-08-31",
+      "stampImage": "",
+      "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
+      "source": "Pokémon Center Official Website",
+      "sourceUrl": "https://shop.pokemon.co.jp/ja/shop/common/events/202606/000336.html",
+      "official": true
+    }
+  ]
+}

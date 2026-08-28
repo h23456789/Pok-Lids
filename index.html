@@ -3175,27 +3175,57 @@ function getItemImageUrl(
   item
 ){
 
-  if(
-    type === "lid"
-  ){
-
+  if(type === "lid"){
     return (
       "https://pokefuta.yuki.games/images/pokefuta/" +
-      encodeURIComponent(
-        item.id
-      ) +
+      encodeURIComponent(item.id) +
       ".png"
     );
-
   }
 
+  /*
+   * Pokémon Center GO 集章趣：
+   * 使用原本 Pokémon Center 資料的圖示，
+   * 不使用活動 Banner 假裝成圖章。
+   */
+  if(type === "stamp" && String(item.venueType || "") === "pokemon_center"){
+    const target = String(
+      item.name || item.venue || item.nameZh || ""
+    ).trim();
+
+    const centerItem = (dataSets.center || []).find(c => {
+      const names = [
+        c.name, c.title, c.centerName, c.nameZh,
+        c.venue, c.storeName, c.city
+      ].filter(Boolean).map(v => String(v).trim());
+
+      return names.some(n =>
+        n === target ||
+        target.includes(n) ||
+        n.includes(target)
+      );
+    });
+
+    if(centerItem){
+      const centerImage =
+        centerItem.image ||
+        centerItem.icon ||
+        centerItem.logo ||
+        centerItem.stampImage ||
+        "";
+
+      if(centerImage) return centerImage;
+    }
+
+    return item.centerIcon || item.pokemonCenterIcon || "";
+  }
+
+  /* 其他 GO 集章趣：只使用真正標記為官方圖章的圖片。 */
   return (
-    item.image ||
     item.stampImage ||
-    item.icon ||
+    item.pointImage ||
     ""
   );
-
 }
 
 
@@ -3657,7 +3687,7 @@ function switchCollectionType(
 
 
     stamp:
-      "🎟️ 限時 Stamp Rally 蒐集進度"
+      "🎟️ GO 集章趣蒐集進度"
 
   };
 
@@ -3669,7 +3699,7 @@ function switchCollectionType(
 
 
     stamp:
-      "Stamp Rally 已收集："
+      "GO 集章趣已收集："
 
   };
 
@@ -3791,8 +3821,8 @@ function updateOverall(){
 
 
 /* =========================================================
-   STAMP EVENTS
-   限時集章以「活動」為第一層，不再依縣市分組。
+   GO 集章趣 EVENTS
+   第一層一定是「活動」，不是縣市。
 ========================================================= */
 
 function getStampEventGroups(){
@@ -3801,27 +3831,38 @@ function getStampEventGroups(){
 
   for(const item of (dataSets.stamp || [])){
 
-    const eventId = item.eventId || item.event || item.eventZh || item.id;
+    const eventId = String(
+      item.eventId || item.event || item.id
+    );
 
     if(!map[eventId]){
       map[eventId] = {
         eventId,
-        event: item.eventZh || item.eventNameZh || item.event || "集章活動",
+        event: item.eventZh || item.eventNameZh || item.event || "GO 集章趣",
         eventOriginal: item.event || "",
-        activity: item.activityZh || item.activity || "Stamp Rally",
+        activity: item.activityZh || item.activity || "GO 集章趣",
         startDate: item.startDate || "",
         endDate: item.endDate || "",
-        image: item.pointImage || item.stampImage || item.image || "",
+        image: item.eventImage || "",
         reward: item.rewardZh || item.reward || "",
         sourceUrl: item.sourceUrl || "",
+        officialPointCount: Number(item.eventPointCount || item.officialPointCount || 0),
         items: []
       };
     }
 
     map[eventId].items.push(item);
 
-    if(!map[eventId].image){
-      map[eventId].image = item.pointImage || item.stampImage || item.image || "";
+    if(Number(item.eventPointCount || item.officialPointCount || 0) > map[eventId].officialPointCount){
+      map[eventId].officialPointCount = Number(item.eventPointCount || item.officialPointCount);
+    }
+
+    if(!map[eventId].image && item.eventImage){
+      map[eventId].image = item.eventImage;
+    }
+
+    if(!map[eventId].sourceUrl && item.sourceUrl){
+      map[eventId].sourceUrl = item.sourceUrl;
     }
   }
 
@@ -3841,7 +3882,7 @@ function renderStampEvents(){
   if(!events.length){
     el.innerHTML = `
       <div class="error-box" style="grid-column:1/-1">
-        ⚠️ 目前沒有找到期間限定集章活動
+        ⚠️ 目前沒有找到 Pokémon GO「GO 集章趣」活動
       </div>
     `;
     return;
@@ -3849,17 +3890,20 @@ function renderStampEvents(){
 
   for(const event of events){
 
-    const total = event.items.length;
-    const obtained = event.items.filter(item =>
+    const realItems = event.items.filter(item => !item.eventIndexOnly);
+    const total = realItems.length;
+    const officialTotal = event.officialPointCount || total;
+    const obtained = realItems.filter(item =>
       obtainedIds.stamp.has(getItemId(item))
     ).length;
     const percent = total ? Math.round(obtained / total * 1000) / 10 : 0;
-    const sample = event.items.slice(0, 3);
 
     const card = document.createElement("div");
-    card.className = "region-card";
+    card.className = "region-card stamp-event-card";
+    card.dataset.eventId = event.eventId;
     card.onclick = () => openStampEvent(event.eventId);
 
+    const sample = realItems.slice(0, 3);
     const images = sample.map(item => {
       const image = getItemImageUrl("stamp", item);
       return image ? `
@@ -3867,15 +3911,36 @@ function renderStampEvents(){
       ` : "";
     }).join("");
 
+    const countText =
+      officialTotal > total
+      ? `${obtained} / ${total}（已公布 ${total} / ${officialTotal}）`
+      : `${obtained} / ${total}`;
+
     card.innerHTML = `
       <div class="region-images">
-        ${images || `<div class="region-empty">🎟️</div>`}
+        ${images || `
+          <div class="region-empty">
+            GO 集章趣
+          </div>
+        `}
       </div>
+
       <div class="region-info">
-        <div class="region-name">${escapeHtml(event.event)}</div>
-        <div style="font-size:13px;margin-top:4px;opacity:.8">${escapeHtml(event.activity)}</div>
-        <div class="region-count">${obtained} / ${total}</div>
-        <div class="region-percent">完成率 ${percent}%</div>
+        <div class="region-name">
+          ${escapeHtml(event.event)}
+        </div>
+
+        <div class="region-count">
+          ${escapeHtml(countText)}
+        </div>
+
+        <div class="region-percent">
+          ${total ? `完成率 ${percent}%` : "官方資料同步中"}
+        </div>
+
+        <div class="prefecture-progress" style="margin-top:8px">
+          <div class="prefecture-progress-bar" style="width:${percent}%"></div>
+        </div>
       </div>
     `;
 
@@ -3890,20 +3955,40 @@ function openStampEvent(eventId){
 
   currentRegion = null;
   currentPrefecture = null;
-  currentCollectionItems = event.items || [];
+  currentCollectionItems = event.items.filter(item => !item.eventIndexOnly);
 
   document.getElementById("collectionTitle").textContent = event.event;
   document.getElementById("collectionSummary").textContent =
     `已收集 ${currentCollectionItems.filter(item => obtainedIds.stamp.has(getItemId(item))).length} / ${currentCollectionItems.length}`;
 
   const backBtn = document.querySelector("#collectionPanel .back-btn");
-  if(backBtn) backBtn.textContent = "← 返回活動列表";
+  if(backBtn) backBtn.textContent = "← 返回 GO 集章趣活動";
 
   collectionType = "stamp";
   renderCollectionGrid();
 
   document.getElementById("collectionPanel").classList.add("show");
   document.body.classList.add("no-scroll");
+}
+
+function refreshStampEventUI(){
+
+  if(collectionType === "stamp"){
+    updateCollectionSummary();
+  }
+
+  renderStampEvents();
+
+  if(collectionType === "stamp" && currentCollectionItems.length){
+    renderCollectionGrid();
+  }
+
+  updateOverall();
+
+  requestAnimationFrame(() => {
+    updateModalObtained();
+    if(collectionType === "stamp") updateCollectionSummary();
+  });
 }
 
 /* =========================================================
@@ -3946,7 +4031,7 @@ function renderRegions(){
 
           ?
 
-          "⚠️ 限時 Stamp Rally 沒有資料"
+          "⚠️ Pokémon GO「GO 集章趣」沒有資料"
 
           :
 
@@ -4558,7 +4643,7 @@ function renderCollectionGrid(){
         style="grid-column:1/-1"
       >
 
-        這個縣目前沒有可顯示的資料。
+        這個活動目前沒有可顯示的 GO 集章點。
 
       </div>
 
@@ -4856,7 +4941,7 @@ function openModal(
       "🟡 Pokémon Center",
 
     stamp:
-      "🎟️ Pokémon GO Stamp Rally"
+      "🎟️ Pokémon GO｜GO 集章趣"
 
   };
 
@@ -5053,74 +5138,47 @@ function updateModalObtained(){
 
 function toggleObtained(){
 
-  if(
-    !currentItem
-  ){
-
+  if(!currentItem){
     return;
-
   }
 
-
-  const value =
-    document.getElementById(
-      "obtainedCheckbox"
-    ).checked;
-
-
-  const type =
-    currentItemType;
-
-
-  const id =
-    getItemId(
-      currentItem
-    );
-
+  const checkbox = document.getElementById("obtainedCheckbox");
+  const value = !!checkbox.checked;
+  const type = currentItemType;
+  const id = getItemId(currentItem);
 
   if(value){
-
-    obtainedIds[type].add(
-      id
-    );
-
+    obtainedIds[type].add(id);
   }else{
-
-    obtainedIds[type].delete(
-      id
-    );
-
+    obtainedIds[type].delete(id);
   }
 
+  saveLocalCollection(type);
 
-  saveLocalCollection(
-    type
-  );
+  document.getElementById("saveStatus").textContent =
+    value ? "✓ 已獲得" : "已取消";
 
+  /* 先更新目前 Modal。 */
+  updateModalObtained();
 
-  document.getElementById(
-    "saveStatus"
-  ).textContent =
-
-    value
-    ?
-    "✓ 已獲得"
-    :
-    "已取消";
-
-
-  updateOverall();
-
-  renderRegions();
-
-  renderPrefectureSummary();
-
-  renderPrefectureGrid();
-
-  updateCollectionSummary();
-
-  renderCollectionGrid();
-
+  /*
+   * 立即刷新：
+   * 1. 集章點卡片綠色狀態
+   * 2. 活動內進度
+   * 3. 活動列表進度
+   * 4. 全站總進度
+   * 不關閉 Modal、不重新進入活動。
+   */
+  if(type === "stamp"){
+    refreshStampEventUI();
+  }else{
+    renderCollectionGrid();
+    renderRegions();
+    renderPrefectureSummary();
+    renderPrefectureGrid();
+    updateOverall();
+    requestAnimationFrame(updateModalObtained);
+  }
 }
 
 

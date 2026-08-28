@@ -157,7 +157,7 @@ button{
   display:grid;
 
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(2, 1fr);
 
   gap:14px;
 
@@ -1959,26 +1959,6 @@ button{
 
 
   <button
-    id="tabCenter"
-    class="main-tab"
-    onclick="switchCollectionType('center')"
-  >
-
-    <div class="main-tab-icon">
-      🟡
-    </div>
-
-    <div class="main-tab-title">
-      Pokémon Center
-    </div>
-
-    <div class="main-tab-sub">
-      日本寶可夢中心
-    </div>
-
-  </button>
-
-  <button
     id="tabStamp"
     class="main-tab"
     onclick="switchCollectionType('stamp')"
@@ -2117,13 +2097,6 @@ button{
       🔴 Poké Lid
     </button>
 
-
-    <button
-      id="historyCenter"
-      onclick="setHistoryFilter('center')"
-    >
-      🟡 Pokémon Center
-    </button>
 
     <button
       id="historyStamp"
@@ -3629,16 +3602,6 @@ function switchCollectionType(
     );
 
 
-  document
-    .getElementById(
-      "tabCenter"
-    )
-    .classList
-    .toggle(
-      "active",
-      type === "center"
-    );
-
 
   document
     .getElementById(
@@ -3656,8 +3619,6 @@ function switchCollectionType(
     lid:
       "🔴 Poké Lid 蒐集進度",
 
-    center:
-      "🟡 Pokémon Center 蒐集進度",
 
     stamp:
       "🎟️ 限時 Stamp Rally 蒐集進度"
@@ -3670,8 +3631,6 @@ function switchCollectionType(
     lid:
       "Poké Lid 已收集：",
 
-    center:
-      "Pokémon Center 已收集：",
 
     stamp:
       "Stamp Rally 已收集："
@@ -3825,6 +3784,14 @@ function renderRegions(){
       >
 
         ${
+          collectionType === "stamp"
+
+          ?
+
+          "⚠️ 限時 Stamp Rally 沒有資料"
+
+          :
+
           collectionType === "center"
 
           ?
@@ -5885,15 +5852,6 @@ function setHistoryFilter(
   );
 
 
-  document.getElementById(
-    "historyCenter"
-  )
-  .classList
-  .toggle(
-    "active",
-    filter === "center"
-  );
-
 
   document.getElementById(
     "historyStamp"
@@ -6176,10 +6134,6 @@ async function start(){
   );
 
 
-  loadLocalCollection(
-    "center"
-  );
-
 
   loadLocalCollection(
     "stamp"
@@ -6194,10 +6148,6 @@ async function start(){
 
     loadDataSet(
       "lid"
-    ),
-
-    loadDataSet(
-      "center"
     ),
 
     loadDataSet(
@@ -6221,20 +6171,12 @@ async function start(){
     dataSets.lid.length
   );
 
-  console.log(
-    "Pokémon Center:",
-    dataSets.center.length
-  );
 
   console.log(
     "Stamp Rally:",
     dataSets.stamp.length
   );
 
-  console.log(
-    "Center groups:",
-    groups.center
-  );
 
   console.log(
     "Stamp groups:",

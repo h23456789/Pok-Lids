@@ -144,8 +144,7 @@ main{
 }
 
 .tab{
-  flex:
-    0 0 auto;
+  flex:0 0 auto;
 
   border:1px solid #d5e0e4;
   background:#fff;
@@ -160,8 +159,7 @@ main{
 
   font-weight:700;
 
-  transition:
-    .2s ease;
+  transition:.2s ease;
 }
 
 .tab:hover{
@@ -357,8 +355,7 @@ main{
     transform .25s ease;
 }
 
-.panel.show
-.panel-content{
+.panel.show .panel-content{
   transform:translateX(0);
 }
 
@@ -914,9 +911,164 @@ main{
 
 }
 
+/* =========================================================
+   MOBILE SMALL
+========================================================= */
+
+@media(max-width:420px){
+
+  #regions{
+    grid-template-columns:
+      repeat(2,1fr);
+    gap:10px;
+  }
+
+  .region-images{
+    height:95px;
+  }
+
+  .region-info{
+    padding:11px;
+  }
+
+  .region-name{
+    font-size:15px;
+  }
+
+  .region-count{
+    font-size:17px;
+  }
+
+  .summary{
+    gap:8px;
+  }
+
+  .summary-card{
+    min-width:100px;
+    padding:12px;
+  }
+
+  .summary-value{
+    font-size:20px;
+  }
+
+  #collectionGrid{
+    gap:10px;
+  }
+
+}
+
+/* =========================================================
+   COLLECTION CHECK
+========================================================= */
+
+.collection-check{
+  position:absolute;
+
+  top:8px;
+  right:8px;
+
+  width:30px;
+  height:30px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(255,255,255,.92);
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.12);
+
+  font-size:16px;
+}
+
+.collection-item.obtained
+.collection-check{
+  background:#74b99f;
+  color:#fff;
+}
+
+.collection-item.not-obtained
+.collection-check{
+  color:#90a4ae;
+}
+
+/* =========================================================
+   STAMP EVENT
+========================================================= */
+
+.stamp-event-meta{
+  margin-top:10px;
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:6px;
+}
+
+.stamp-event-location{
+  font-size:12px;
+
+  color:#607d8b;
+}
+
+.stamp-event-count{
+  margin-top:10px;
+
+  font-size:13px;
+
+  color:#607d8b;
+}
+
+/* =========================================================
+   EMPTY REGION
+========================================================= */
+
+.empty-region-message{
+  background:#fff;
+
+  border:
+    1px solid #dce5e8;
+
+  border-radius:16px;
+
+  padding:25px;
+
+  text-align:center;
+
+  color:#78909c;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#cbd8dc;
+  border-radius:999px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:#aebfc4;
+}
+
 </style>
 
 </head>
+
 
 <body>
 
@@ -942,6 +1094,10 @@ main{
 
 
 <main>
+
+  <!-- =====================================================
+       TABS
+  ====================================================== -->
 
   <div class="tabs">
 
@@ -972,12 +1128,20 @@ main{
   </div>
 
 
-  <div class="section-title"
-       id="sectionTitle">
+  <!-- =====================================================
+       TITLE
+  ====================================================== -->
+
+  <div
+    class="section-title"
+    id="sectionTitle"
+  >
     🔴 Poké Lid 蒐集進度
   </div>
 
+
   <div class="section-description">
+
     <span id="progressLabel">
       Poké Lid 已收集：
     </span>
@@ -991,8 +1155,13 @@ main{
     <span id="totalCount">
       0
     </span>
+
   </div>
 
+
+  <!-- =====================================================
+       SUMMARY
+  ====================================================== -->
 
   <div
     class="summary"
@@ -1014,6 +1183,7 @@ main{
 
     </div>
 
+
     <div class="summary-card">
 
       <div class="summary-label">
@@ -1028,6 +1198,7 @@ main{
       </div>
 
     </div>
+
 
     <div class="summary-card">
 
@@ -1047,16 +1218,23 @@ main{
   </div>
 
 
+  <!-- =====================================================
+       REGION
+  ====================================================== -->
+
   <div id="regions"></div>
 
 
-  <section
-    style="margin-top:40px"
-  >
+  <!-- =====================================================
+       HISTORY
+  ====================================================== -->
+
+  <section style="margin-top:40px">
 
     <div class="section-title">
       更新紀錄
     </div>
+
 
     <div class="history-filter">
 
@@ -1091,6 +1269,7 @@ main{
 
     </div>
 
+
     <div id="history"></div>
 
   </section>
@@ -1119,6 +1298,7 @@ main{
         ←
       </button>
 
+
       <div
         id="prefectureTitle"
         class="panel-title"
@@ -1128,6 +1308,7 @@ main{
 
     </div>
 
+
     <div class="panel-body">
 
       <div
@@ -1136,6 +1317,7 @@ main{
       >
         已收集 0 / 0
       </div>
+
 
       <div id="prefectureGrid"></div>
 
@@ -1166,6 +1348,7 @@ main{
         ←
       </button>
 
+
       <div
         id="collectionTitle"
         class="panel-title"
@@ -1175,6 +1358,7 @@ main{
 
     </div>
 
+
     <div class="panel-body">
 
       <div
@@ -1183,6 +1367,7 @@ main{
       >
         已收集 0 / 0
       </div>
+
 
       <div id="collectionGrid"></div>
 
@@ -1204,9 +1389,7 @@ main{
 
   <div class="modal">
 
-    <div
-      id="modalContent"
-    ></div>
+    <div id="modalContent"></div>
 
   </div>
 
@@ -1325,7 +1508,7 @@ const REGIONS = {
     prefs:[2,3,4,5,6,7]
   },
 
-  "関東":{
+  "關東":{
     prefs:[8,9,10,11,12,13,14]
   },
 
@@ -1337,15 +1520,15 @@ const REGIONS = {
     prefs:[24,25,26,27,28,29,30]
   },
 
-  "中国":{
+  "中國":{
     prefs:[31,32,33,34,35]
   },
 
-  "四国":{
+  "四國":{
     prefs:[36,37,38,39]
   },
 
-  "九州・沖縄":{
+  "九州・沖繩":{
     prefs:[40,41,42,43,44,45,46,47]
   }
 
@@ -1359,20 +1542,26 @@ const REGIONS = {
 let collectionType =
   "lid";
 
+
 let currentRegion =
   null;
+
 
 let currentPrefecture =
   null;
 
+
 let currentCollectionItems =
   [];
+
 
 let currentItem =
   null;
 
+
 let historyEntries =
   [];
+
 
 let currentHistoryFilter =
   "all";
@@ -1429,13 +1618,17 @@ async function fetchJSON(url){
       Date.now()
     );
 
+
   if(
     !response.ok
   ){
+
     throw new Error(
       `${response.status} ${response.statusText}`
     );
+
   }
+
 
   return response.json();
 
@@ -1451,26 +1644,38 @@ function normalizeList(json){
   if(
     Array.isArray(json)
   ){
+
     return json;
+
   }
+
 
   if(
     Array.isArray(json.list)
   ){
+
     return json.list;
+
   }
+
 
   if(
     Array.isArray(json.data)
   ){
+
     return json.data;
+
   }
+
 
   if(
     Array.isArray(json.items)
   ){
+
     return json.items;
+
   }
+
 
   return [];
 
@@ -1484,12 +1689,14 @@ function normalizeList(json){
 function getItemId(item){
 
   return String(
+
     item.id ??
     item.ID ??
     item.key ??
     item.name ??
     item.title ??
     JSON.stringify(item)
+
   );
 
 }
@@ -1519,6 +1726,7 @@ function getPrefCode(item){
 
   ];
 
+
   for(
     const value
     of candidates
@@ -1529,22 +1737,30 @@ function getPrefCode(item){
       value === null ||
       value === ""
     ){
+
       continue;
+
     }
+
 
     const n =
       Number(value);
+
 
     if(
       Number.isFinite(n) &&
       PREF[n]
     ){
+
       return n;
+
     }
+
 
     const text =
       String(value)
         .trim();
+
 
     for(
       const [
@@ -1558,12 +1774,15 @@ function getPrefCode(item){
         text === name ||
         text.includes(name)
       ){
+
         return Number(code);
+
       }
 
     }
 
   }
+
 
   return null;
 
@@ -1584,33 +1803,41 @@ function getItemTitle(
   ){
 
     return String(
+
       item.name ??
       item.location ??
       item.title ??
       item.city ??
       "Stamp Rally"
+
     );
 
   }
+
 
   if(
     type === "center"
   ){
 
     return String(
+
       item.name ??
       item.title ??
       item.city ??
       "Pokémon Center"
+
     );
 
   }
 
+
   return String(
+
     item.name ??
     item.title ??
     item.city ??
     "Poké Lid"
+
   );
 
 }
@@ -1637,6 +1864,7 @@ function getItemImageUrl(
     item.photo ??
     "";
 
+
   return String(
     value || ""
   );
@@ -1661,6 +1889,7 @@ function getStampStatus(
         item.status
       ).toLowerCase();
 
+
     if(
       [
         "active",
@@ -1668,13 +1897,17 @@ function getStampStatus(
         "ended"
       ].includes(value)
     ){
+
       return value;
+
     }
 
   }
 
+
   const now =
     new Date();
+
 
   const start =
     item.startDate
@@ -1682,6 +1915,7 @@ function getStampStatus(
           item.startDate
         )
       : null;
+
 
   const end =
     item.endDate
@@ -1691,19 +1925,26 @@ function getStampStatus(
         )
       : null;
 
+
   if(
     start &&
     now < start
   ){
+
     return "upcoming";
+
   }
+
 
   if(
     end &&
     now > end
   ){
+
     return "ended";
+
   }
+
 
   return "active";
 
@@ -1737,14 +1978,19 @@ function loadLocalCollection(
         storageKey(type)
       );
 
+
     if(
       !raw
     ){
+
       return;
+
     }
+
 
     const parsed =
       JSON.parse(raw);
+
 
     if(
       Array.isArray(parsed)
@@ -1775,17 +2021,28 @@ function saveLocalCollection(
   type
 ){
 
-  localStorage.setItem(
+  try{
 
-    storageKey(type),
+    localStorage.setItem(
 
-    JSON.stringify(
-      [
-        ...obtainedIds[type]
-      ]
-    )
+      storageKey(type),
 
-  );
+      JSON.stringify(
+        [
+          ...obtainedIds[type]
+        ]
+      )
+
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Local collection save error:",
+      error
+    );
+
+  }
 
 }
 
@@ -1805,10 +2062,12 @@ async function loadDataSet(
         DATA_URLS[type]
       );
 
+
     const list =
       normalizeList(
         json
       );
+
 
     dataSets[type] =
       list.map(
@@ -1819,15 +2078,18 @@ async function loadDataSet(
               ...item
             };
 
+
           copy.__prefCode =
             getPrefCode(
               copy
             );
 
+
           return copy;
 
         }
       );
+
 
     buildGroups(
       type
@@ -1840,8 +2102,10 @@ async function loadDataSet(
       error
     );
 
+
     dataSets[type] =
       [];
+
 
     groups[type] =
       {};
@@ -1862,6 +2126,7 @@ function buildGroups(
   groups[type] =
     {};
 
+
   for(
     const item
     of dataSets[type]
@@ -1872,21 +2137,29 @@ function buildGroups(
         item.__prefCode
       );
 
+
     const prefName =
       PREF[code];
+
 
     if(
       !prefName
     ){
+
       continue;
+
     }
+
 
     if(
       !groups[type][prefName]
     ){
+
       groups[type][prefName] =
         [];
+
     }
+
 
     groups[type][prefName]
       .push(item);
@@ -1911,7 +2184,9 @@ function switchCollectionType(
       "stamp"
     ].includes(type)
   ){
+
     return;
+
   }
 
 
@@ -1955,6 +2230,7 @@ function switchCollectionType(
   let title = "";
 
   let label = "";
+
 
   if(
     type === "lid"
@@ -2003,14 +2279,18 @@ function switchCollectionType(
 
   closeAllPanels();
 
+
   currentRegion =
     null;
+
 
   currentPrefecture =
     null;
 
+
   currentCollectionItems =
     [];
+
 
   currentItem =
     null;
@@ -2213,7 +2493,9 @@ function renderRegions(){
     if(
       !items.length
     ){
+
       continue;
+
     }
 
 
@@ -2279,10 +2561,13 @@ function renderRegions(){
                 item
               );
 
+
             return image
+
               ?
 
               `
+
                 <img
                   class="region-image"
                   src="${escapeHtml(
@@ -2291,11 +2576,13 @@ function renderRegions(){
                   alt=""
                   loading="lazy"
                 >
+
               `
 
               :
 
               `
+
                 <div
                   class="region-image"
                   style="
@@ -2305,6 +2592,7 @@ function renderRegions(){
                     font-size:36px;
                   "
                 >
+
                   ${
                     collectionType === "stamp"
                       ? "🎟️"
@@ -2314,7 +2602,9 @@ function renderRegions(){
                       :
                       "🔴"
                   }
+
                 </div>
+
               `;
 
           }
@@ -2422,10 +2712,19 @@ function renderPrefectureSummary(){
     ];
 
 
+  if(
+    !region
+  ){
+
+    return;
+
+  }
+
+
   const list =
     dataSets[
       collectionType
-    ];
+    ] || [];
 
 
   const items =
@@ -2473,6 +2772,18 @@ function renderPrefectureGrid(){
     ];
 
 
+  if(
+    !region
+  ){
+
+    el.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
   const list =
     dataSets[
       collectionType
@@ -2509,13 +2820,15 @@ function renderPrefectureGrid(){
 
 
     /*
-     * 沒有資料的縣市直接跳過。
+     * 沒有資料的縣市直接跳過
      */
 
     if(
       items.length === 0
     ){
+
       continue;
+
     }
 
 
@@ -2538,11 +2851,15 @@ function renderPrefectureGrid(){
 
 
     const percent =
-      Math.round(
-        obtained /
-        total *
-        100
-      );
+      total
+        ?
+        Math.round(
+          obtained /
+          total *
+          100
+        )
+        :
+        0;
 
 
     const card =
@@ -2622,7 +2939,7 @@ function renderPrefectureGrid(){
     el.innerHTML = `
 
       <div
-        class="loading"
+        class="empty-region-message"
         style="
           grid-column:1/-1;
         "
@@ -2860,16 +3177,20 @@ function renderCollectionGrid(){
     if(
       collectionType === "center"
     ){
+
       fallbackIcon =
         "🏬";
+
     }
 
 
     if(
       collectionType === "stamp"
     ){
+
       fallbackIcon =
         "🎟️";
+
     }
 
 
@@ -2885,6 +3206,7 @@ function renderCollectionGrid(){
           ?
 
           `
+
             <img
               class="collection-image"
               src="${escapeHtml(
@@ -2895,20 +3217,38 @@ function renderCollectionGrid(){
               )}"
               loading="lazy"
             >
+
           `
 
           :
 
           `
+
             <div
               style="
                 font-size:42px;
               "
             >
+
               ${fallbackIcon}
+
             </div>
+
           `
         }
+
+
+        <div class="collection-check">
+
+          ${
+            obtained
+              ?
+              "✓"
+              :
+              "○"
+          }
+
+        </div>
 
       </div>
 
@@ -3043,6 +3383,10 @@ function openModalFromItem(
   `;
 
 
+  /* =======================================================
+     STAMP
+  ====================================================== */
+
   if(
     type === "stamp"
   ){
@@ -3066,6 +3410,7 @@ function openModalFromItem(
         "🟡 即將開始"
 
         :
+
         "⚫ 已結束";
 
 
@@ -3180,6 +3525,10 @@ function openModalFromItem(
   }
 
 
+  /* =======================================================
+     CITY / LOCATION
+  ====================================================== */
+
   const city =
     item.city ??
     item.location ??
@@ -3214,6 +3563,42 @@ function openModalFromItem(
   }
 
 
+  /* =======================================================
+     ADDRESS
+  ====================================================== */
+
+  if(
+    item.address &&
+    item.address !== city
+  ){
+
+    html += `
+
+      <div class="modal-row">
+
+        <div class="modal-label">
+          地址
+        </div>
+
+        <div class="modal-value">
+
+          ${escapeHtml(
+            item.address
+          )}
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  /* =======================================================
+     COORDINATES
+  ====================================================== */
+
   const lat =
     item.lat ??
     (
@@ -3243,7 +3628,9 @@ function openModalFromItem(
 
   if(
     lat !== null &&
-    lng !== null
+    lng !== null &&
+    lat !== "" &&
+    lng !== ""
   ){
 
     html += `
@@ -3273,6 +3660,37 @@ function openModalFromItem(
   }
 
 
+  /* =======================================================
+     EXTRA INFORMATION
+  ====================================================== */
+
+  if(
+    item.description
+  ){
+
+    html += `
+
+      <div class="modal-row">
+
+        <div class="modal-label">
+          說明
+        </div>
+
+        <div class="modal-value">
+
+          ${escapeHtml(
+            item.description
+          )}
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
   html += `
 
     </div>
@@ -3281,6 +3699,10 @@ function openModalFromItem(
 
   `;
 
+
+  /* =======================================================
+     COLLECTION BUTTON
+  ====================================================== */
 
   html += `
 
@@ -3308,9 +3730,17 @@ function openModalFromItem(
   `;
 
 
+  /* =======================================================
+     MAP BUTTONS
+  ====================================================== */
+
   if(
     lat !== null &&
-    lng !== null
+    lng !== null &&
+    lat !== "" &&
+    lng !== "" &&
+    Number.isFinite(Number(lat)) &&
+    Number.isFinite(Number(lng))
   ){
 
     html += `
@@ -3370,6 +3800,10 @@ function openModalFromItem(
 }
 
 
+/* =========================================================
+   TOGGLE OBTAINED
+========================================================= */
+
 function toggleObtained(
   id
 ){
@@ -3380,20 +3814,24 @@ function toggleObtained(
     ];
 
 
+  const normalizedId =
+    String(id);
+
+
   if(
     set.has(
-      String(id)
+      normalizedId
     )
   ){
 
     set.delete(
-      String(id)
+      normalizedId
     );
 
   }else{
 
     set.add(
-      String(id)
+      normalizedId
     );
 
   }
@@ -3432,6 +3870,7 @@ function toggleObtained(
       ] ||
       [];
 
+
     updateCollectionSummary();
 
     renderCollectionGrid();
@@ -3451,6 +3890,10 @@ function toggleObtained(
 
 }
 
+
+/* =========================================================
+   MODAL CLOSE
+========================================================= */
 
 function closeModal(){
 
@@ -3484,6 +3927,10 @@ function modalOverlayClick(
 }
 
 
+/* =========================================================
+   GOOGLE MAPS
+========================================================= */
+
 function openGoogleMaps(
   lat,
   lng
@@ -3499,6 +3946,10 @@ function openGoogleMaps(
 
 }
 
+
+/* =========================================================
+   APPLE MAPS
+========================================================= */
 
 function openAppleMaps(
   lat,
@@ -3553,7 +4004,7 @@ function backToPrefectureList(){
 
 
 /* =========================================================
-   HISTORY
+   HISTORY FILE
 ========================================================= */
 
 async function loadHistoryFile(
@@ -3585,7 +4036,13 @@ async function loadHistoryFile(
 
     );
 
-  }catch{
+  }catch(error){
+
+    console.warn(
+      `${type} history load failed:`,
+      error
+    );
+
 
     return [];
 
@@ -3593,6 +4050,10 @@ async function loadHistoryFile(
 
 }
 
+
+/* =========================================================
+   LOAD HISTORY
+========================================================= */
 
 async function loadHistory(){
 
@@ -3652,6 +4113,10 @@ async function loadHistory(){
 }
 
 
+/* =========================================================
+   HISTORY FILTER
+========================================================= */
+
 function setHistoryFilter(
   filter
 ){
@@ -3672,34 +4137,52 @@ function setHistoryFilter(
         "history" +
         name;
 
+
       const el =
         document.getElementById(
           id
         );
 
+
       if(
         el
       ){
+
+        let mappedFilter =
+          "all";
+
+
+        if(
+          name === "Lid"
+        ){
+
+          mappedFilter =
+            "lid";
+
+        }
+        else if(
+          name === "Center"
+        ){
+
+          mappedFilter =
+            "center";
+
+        }
+        else if(
+          name === "Stamp"
+        ){
+
+          mappedFilter =
+            "stamp";
+
+        }
+
 
         el.classList.toggle(
 
           "active",
 
-          (
-            name === "All"
-              ?
-              "all"
-              :
-            name === "Lid"
-              ?
-              "lid"
-              :
-            name === "Center"
-              ?
-              "center"
-              :
-              "stamp"
-          ) ===
+          mappedFilter ===
           filter
 
         );
@@ -3714,6 +4197,10 @@ function setHistoryFilter(
 
 }
 
+
+/* =========================================================
+   HISTORY RENDER
+========================================================= */
 
 function renderHistory(){
 
@@ -3774,6 +4261,7 @@ function renderHistory(){
 
           let typeName = "";
 
+
           if(
             item.type === "lid"
           ){
@@ -3830,7 +4318,7 @@ function renderHistory(){
 
                 版本：
                 ${escapeHtml(
-                  item.total ??
+                  item.total ?? 
                   ""
                 )}
                 筆
@@ -3850,7 +4338,7 @@ function renderHistory(){
               }
 
 
-             　
+              　
 
 
               🔴 移除
@@ -3862,7 +4350,7 @@ function renderHistory(){
               }
 
 
-             　
+              　
 
 
               🟡 修改
@@ -3886,7 +4374,7 @@ function renderHistory(){
 
 
 /* =========================================================
-   ESCAPE
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHtml(
@@ -3915,7 +4403,7 @@ function escapeHtml(
 
 
 /* =========================================================
-   ESC
+   ESC KEY
 ========================================================= */
 
 document.addEventListener(
@@ -3927,7 +4415,9 @@ document.addEventListener(
       event.key !==
       "Escape"
     ){
+
       return;
+
     }
 
 

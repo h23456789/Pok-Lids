@@ -371,8 +371,7 @@ def parse_stamp_page(url):
 
     elif "ポケモンストア" in page_text:
 
-        venue_type =
-            "pokemon_store"
+        venue_type = "pokemon_store"
 
 
     # -----------------------------------------------------

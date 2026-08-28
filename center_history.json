@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-08-28T02:11:32.441Z",
+  "last_sync": "2026-08-28T18:44:30.700Z",
   "total": 18,
   "history": [
     {
@@ -154,6 +154,23 @@
       ],
       "removed": [],
       "changed": []
+    },
+    {
+      "time": "2026-08-28T18:44:30.700Z",
+      "type": "center",
+      "total": 18,
+      "added": [],
+      "removed": [],
+      "changed": [
+        {
+          "id": "pokemon-center-308d733e61c4",
+          "prefecture": 13,
+          "title": "Pokémon Center MEGA TOKYO",
+          "lat": 35.7289056,
+          "lng": 139.7193245,
+          "address": "Sunshine City alpa 2F3-1-2 Higashi-Ikebukuro, Toshima-ku, Tokyo170-6002"
+        }
+      ]
     }
   ]
 }

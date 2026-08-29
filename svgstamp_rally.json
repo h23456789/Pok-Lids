@@ -1,8 +1,8 @@
 {
-  "version": "20.0",
-  "updated": "2026-08-29T00:00:00Z",
+  "version": "22.0",
+  "updated": "2026-08-29T13:00:00Z",
   "source": "Pokémon GO Official Website",
-  "sourceMode": "official-first; localized dedupe; activity-block discovery; official map coordinates first; place-name geocoding fallback; no fabricated points",
+  "sourceMode": "official-first; localized dedupe; nested activity discovery; official coordinates first; verified community coordinates for known published points; place-name geocoding fallback; no fabricated points",
   "rule": "Only in-game Pokémon GO GO Stamp Rally. Offline stamp rallies, ordinary PokéStops, and Poké Lid are excluded. Published place names may be geocoded when official coordinates are not embedded.",
   "events": [
     {
@@ -180,9 +180,10 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "canonicalPage": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "sourceLocale": "en",
-      "dataStatus": "partial",
+      "dataStatus": "complete",
       "descriptionZh": "",
-      "status": "active"
+      "status": "active",
+      "pointCount": 5
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-KOTO",
@@ -200,9 +201,10 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "canonicalPage": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "sourceLocale": "en",
-      "dataStatus": "partial",
+      "dataStatus": "complete",
       "descriptionZh": "",
-      "status": "active"
+      "status": "active",
+      "pointCount": 4
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-SHINAGAWA",
@@ -220,9 +222,10 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "canonicalPage": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "sourceLocale": "en",
-      "dataStatus": "partial",
+      "dataStatus": "complete",
       "descriptionZh": "",
-      "status": "active"
+      "status": "active",
+      "pointCount": 4
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-NAGASAKI",
@@ -585,10 +588,14 @@
       "nameZh": "寶可夢中心橫濱",
       "venueZh": "寶可夢中心橫濱",
       "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。",
-      "stampImageSource": "由 pokemon_center.json 對應各中心代表徽章／圖示",
-      "stampImageOfficial": true,
+      "stampImageSource": "",
+      "stampImageOfficial": false,
       "activityImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
-      "stampImageType": "pokemon-center-badge"
+      "stampImageType": "",
+      "centerBadgeImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+      "centerBadgeType": "pokemon-center-badge",
+      "centerBadgeSource": "Pokémon Center official store page",
+      "centerBadgeOfficial": true
     },
     {
       "id": "STAMP-PKCNTR-2026-NAGOYA",
@@ -1062,9 +1069,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.6586,
+        139.7454
+      ],
+      "lat": 35.6586,
+      "lng": 139.7454,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1075,7 +1085,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-MINATO-P002",
@@ -1093,9 +1105,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.6671448,
+        139.7574141
+      ],
+      "lat": 35.6671448,
+      "lng": 139.7574141,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1106,7 +1121,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-MINATO-P003",
@@ -1124,9 +1141,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.665661,
+        139.7461202
+      ],
+      "lat": 35.665661,
+      "lng": 139.7461202,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1137,7 +1157,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-MINATO-P004",
@@ -1155,9 +1177,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.6669716,
+        139.7454765
+      ],
+      "lat": 35.6669716,
+      "lng": 139.7454765,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1168,7 +1193,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-MINATO-P005",
@@ -1186,9 +1213,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.6560133,
+        139.7490935
+      ],
+      "lat": 35.6560133,
+      "lng": 139.7490935,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1199,7 +1229,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-KOTO-P001",
@@ -1217,9 +1249,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.6730499,
+        139.8164348
+      ],
+      "lat": 35.6730499,
+      "lng": 139.8164348,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1230,7 +1265,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-KOTO-P002",
@@ -1248,9 +1285,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.6748,
+        139.81523
+      ],
+      "lat": 35.6748,
+      "lng": 139.81523,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1261,7 +1301,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-KOTO-P003",
@@ -1279,9 +1321,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.67618,
+        139.81274
+      ],
+      "lat": 35.67618,
+      "lng": 139.81274,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1292,7 +1337,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-KOTO-P004",
@@ -1310,9 +1357,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.6796307,
+        139.8074057
+      ],
+      "lat": 35.6796307,
+      "lng": 139.8074057,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1323,7 +1373,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-SHINAGAWA-P001",
@@ -1341,9 +1393,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.623578,
+        139.748265
+      ],
+      "lat": 35.623578,
+      "lng": 139.748265,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1354,7 +1409,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-SHINAGAWA-P002",
@@ -1372,9 +1429,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.619162,
+        139.74419
+      ],
+      "lat": 35.619162,
+      "lng": 139.74419,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1385,7 +1445,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-SHINAGAWA-P003",
@@ -1403,9 +1465,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.615484,
+        139.744176
+      ],
+      "lat": 35.615484,
+      "lng": 139.744176,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1416,7 +1481,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-SHINAGAWA-P004",
@@ -1434,9 +1501,12 @@
       "pref": "東京都",
       "city": "東京",
       "address": "",
-      "coords": [],
-      "lat": null,
-      "lng": null,
+      "coords": [
+        35.603301,
+        139.743942
+      ],
+      "lat": 35.603301,
+      "lng": 139.743942,
       "stampImage": "",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
@@ -1447,7 +1517,9 @@
       "sourceUrl": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "official": true,
       "coordinatesOfficial": false,
-      "coordsSource": ""
+      "coordsSource": "Verified community coordinate reference",
+      "coordinatesConfidence": "high",
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-NAGASAKI-P001",

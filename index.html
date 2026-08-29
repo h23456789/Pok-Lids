@@ -2519,14 +2519,11 @@ function findCenterRecord(item){
 
 function getItemImageUrl(type,item){
   if(type==="lid") return "https://pokefuta.yuki.games/images/pokefuta/"+encodeURIComponent(item.id)+".png";
-  if(String(item?.venueType||"")==="pokemon_center" || String(item?.venueType||"")==="pokemon_go_lab"){
-    const center=findCenterRecord(item);
-    if(center){
-      const centerIcon=center.pokemonCenterIcon || center.centerIcon || center.icon || center.image || center.logo || center.photo || "";
-      if(centerIcon) return centerIcon;
-    }
-  }
-  return item?.stampImage || item?.pointImage || item?.image || item?.icon || "";
+  /*
+   * GO 集章趣的卡片只使用「實際圖章」圖片。
+   * 活動 Banner 僅用於第一層活動卡，不在這裡 fallback。
+   */
+  return item?.stampImage || item?.pointImage || "";
 }
 
 function getItemLatLng(item){
@@ -2658,14 +2655,45 @@ function renderRegions(){
 
 function renderStampEvents(el){
   const events=getStampEvents();
-  if(!events.length){ el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。<br><br>資料由 GitHub Actions 自動同步 Pokémon GO 官方網站。</div>`; return; }
+
+  if(!events.length){
+    el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。<br><br>資料由 GitHub Actions 自動同步 Pokémon GO 官方網站。</div>`;
+    return;
+  }
+
   el.innerHTML="";
+
   for(const event of events){
-    const items=event.items||[]; const obtained=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length; const total=items.length||Number(event.expectedStamps||0); const percent=total?Math.round(obtained/total*1000)/10:0;
-    const card=document.createElement("div"); card.className="region-card"; card.onclick=()=>openStampEvent(event.id);
-    const samples=items.slice(0,3).map(item=>{const img=getItemImageUrl("stamp",item);return img?`<img class="region-image" src="${escapeHtml(img)}" alt="" loading="lazy">`:"";}).join("");
-    const date=event.startDate?`${escapeHtml(event.startDate)}${event.endDate?" ～ "+escapeHtml(event.endDate):""}`:"官方活動";
-    card.innerHTML=`<div class="region-images">${samples||(event.activityImage?`<img class="region-image" src="${escapeHtml(event.activityImage)}" alt="" loading="lazy">`:`<div class="region-empty">🎟️</div>`)}</div><div class="region-info"><div class="region-name">${escapeHtml(event.eventZh||event.event)}</div><div class="region-count">${total?`${obtained} / ${total}`:"待官方公布集章點"}</div><div class="region-percent">${date}<br>${total?`完成率 ${percent}%`:"集章點資料尚待官方公布"}</div></div>`;
+    const items=event.items||[];
+    const obtained=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
+    const total=Number(event.expectedStamps||0) || items.length;
+    const percent=total?Math.round(obtained/total*1000)/10:0;
+    const card=document.createElement("div");
+    card.className="region-card stamp-event-card";
+    card.onclick=()=>openStampEvent(event.id);
+
+    const banner=event.activityImage || event.image || "";
+    const date=event.startDate
+      ? `${escapeHtml(event.startDate)}${event.endDate?" ～ "+escapeHtml(event.endDate):""}`
+      : "官方活動";
+
+    card.innerHTML=`
+      <div class="region-images stamp-event-banner-wrap">
+        ${banner
+          ? `<img class="stamp-event-banner" src="${escapeHtml(banner)}" alt="${escapeHtml(event.eventZh||event.event||"GO 集章趣")}" loading="lazy">`
+          : `<div class="region-empty">🎟️</div>`
+        }
+      </div>
+      <div class="region-info">
+        <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
+        <div class="region-count">${total?`${obtained} / ${total}`:"待官方公布集章點"}</div>
+        <div class="region-percent">
+          ${date}<br>
+          ${total?`完成率 ${percent}%`:"集章點資料尚待官方公布"}
+        </div>
+      </div>
+    `;
+
     el.appendChild(card);
   }
 }
@@ -2691,11 +2719,37 @@ function updateCollectionSummary(){ const obtained=currentCollectionItems.filter
 function updateStampEventSummary(){ if(!currentStampEventId)return; const event=getStampEvents().find(x=>String(x.id)===String(currentStampEventId)); if(!event)return; currentCollectionItems=event.items||[]; const obtained=currentCollectionItems.filter(x=>obtainedIds.stamp.has(getItemId(x))).length; const total=currentCollectionItems.length||Number(event.expectedStamps||0); document.getElementById("collectionSummary").textContent=total?`已收集 ${obtained} / ${total}`:"官方集章點資料尚待公布"; }
 
 function renderCollectionGrid(){
-  const el=document.getElementById("collectionGrid"); el.innerHTML="";
-  if(!currentCollectionItems.length){ el.innerHTML=`<div class="loading" style="grid-column:1/-1">目前沒有可顯示的集章點資料。</div>`; return; }
+  const el=document.getElementById("collectionGrid");
+  el.innerHTML="";
+
+  if(!currentCollectionItems.length){
+    el.innerHTML=`<div class="loading" style="grid-column:1/-1">目前官方尚未公開可取得的單一圖章圖片／集章點資料。<br>活動仍保留，待官方資料更新後會自動補上。</div>`;
+    return;
+  }
+
   for(const item of currentCollectionItems){
-    const obtained=obtainedIds[collectionType].has(getItemId(item)); const title=getItemTitle(collectionType,item); const image=getItemImageUrl(collectionType,item); const card=document.createElement("div"); card.className="collection-item "+(obtained?"obtained":"not-obtained"); card.onclick=()=>openModalFromItem(item);
-    card.innerHTML=`<div class="collection-image-wrap">${image?`<img class="collection-image" src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy">`:`<div style="font-size:42px;color:#397b83">🎟️</div>`}</div><div class="collection-city">${escapeHtml(title)}</div>${collectionType==="stamp"?`<div style="margin-top:3px;color:#7b999d;font-size:10px;line-height:1.35">${escapeHtml(getStampEventName(item))}</div>`:""}<div class="collection-status">${obtained?"● 已收集":"● 未收集"}</div>`;
+    const obtained=obtainedIds[collectionType].has(getItemId(item));
+    const title=getItemTitle(collectionType,item);
+    const image=getItemImageUrl(collectionType,item);
+    const card=document.createElement("div");
+    card.className="collection-item "+(obtained?"obtained":"not-obtained");
+    card.onclick=()=>openModalFromItem(item);
+
+    card.innerHTML=`
+      <div class="collection-image-wrap">
+        ${image
+          ? `<img class="collection-image" src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy">`
+          : `<div style="font-size:42px;color:#397b83">◎</div>`
+        }
+      </div>
+      <div class="collection-city">${escapeHtml(item.nameZh||item.venueZh||title)}</div>
+      ${item.countryZh||item.cityZh
+        ? `<div style="margin-top:3px;color:#7b999d;font-size:10px;line-height:1.35">${escapeHtml(item.cityZh||item.countryZh||"")}</div>`
+        : ""
+      }
+      <div class="collection-status">${obtained?"● 已收集":"● 未收集"}</div>
+    `;
+
     el.appendChild(card);
   }
 }
@@ -2712,12 +2766,16 @@ function collectionOverlayClick(event){ if(event.target===document.getElementByI
 
 function openModalFromItem(item){ const {lat,lng}=getItemLatLng(item); const pref=collectionType==="stamp"?(item.countryZh||item.cityZh||item.city||item.pref||""):(PREF[item.__prefCode]||currentPrefecture||""); openModal(item,pref,lat,lng); }
 function openModal(item,pref,lat,lng){
-  currentItem=item; currentItemType=collectionType; const title=getItemTitle(currentItemType,item); const image=getItemImageUrl(currentItemType,item); document.getElementById("modalImage").src=image; document.getElementById("modalImage").alt=title;
+  currentItem=item; currentItemType=collectionType; const title=getItemTitle(currentItemType,item); const image=getItemImageUrl(currentItemType,item);
+  const modalImage=document.getElementById("modalImage");
+  modalImage.src=image || "";
+  modalImage.alt=title;
+  modalImage.style.display=image ? "block" : "none";
   document.getElementById("modalType").textContent=currentItemType==="lid"?"🔴 Poké Lid":"🎟️ Pokémon GO GO 集章趣"; document.getElementById("modalPref").textContent=pref; document.getElementById("modalCity").textContent=title; document.getElementById("modalAddress").textContent=item.addressZh||item.address||item.location||item.venueZh||item.venue||"";
   const valid=Number.isFinite(lat)&&Number.isFinite(lng); document.getElementById("modalCoordinate").textContent=valid?`${lat}, ${lng}`:"無座標資料";
   const details=document.getElementById("stampDetails");
   if(currentItemType==="stamp"){
-    details.innerHTML=`<div class="stamp-event">🎟️ ${escapeHtml(getStampEventName(item))}</div>${item.venueZh&&item.venueZh!==title?`<div class="stamp-venue">📍 ${escapeHtml(item.venueZh)}</div>`:""}${getStampDates(item)?`<div class="stamp-dates">📅 ${escapeHtml(getStampDates(item))}</div>`:""}<span class="stamp-status">${escapeHtml(getStampStatus(item))}</span>${item.rewardZh||item.reward?`<div class="stamp-reward">🎁 ${escapeHtml(item.rewardZh||item.reward)}</div>`:""}${item.sourceUrl?`<div class="stamp-source"><a href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">🔗 官方活動頁</a></div>`:""}`; details.style.display="block";
+    details.innerHTML=`<div class="stamp-event">🎟️ ${escapeHtml(getStampEventName(item))}</div>${item.venueZh&&item.venueZh!==title?`<div class="stamp-venue">📍 ${escapeHtml(item.venueZh)}</div>`:""}${getStampDates(item)?`<div class="stamp-dates">📅 ${escapeHtml(getStampDates(item))}</div>`:""}<span class="stamp-status">${escapeHtml(getStampStatus(item))}</span>${item.rewardZh||item.reward?`<div class="stamp-reward">🎁 ${escapeHtml(item.rewardZh||item.reward)}</div>`:""}${item.stampImageSource?`<div class="stamp-source">圖片來源：${escapeHtml(item.stampImageSource)}</div>`:""}${item.sourceUrl?`<div class="stamp-source"><a href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">🔗 官方活動頁</a></div>`:""}`; details.style.display="block";
   }else{ details.innerHTML=""; details.style.display="none"; }
   updateModalObtained(); document.getElementById("modalOverlay").classList.add("show"); document.body.classList.add("no-scroll");
 }

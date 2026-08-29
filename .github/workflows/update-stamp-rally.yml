@@ -4,10 +4,6 @@ on:
   schedule:
     - cron: "0 22 * * *"
   workflow_dispatch:
-  push:
-    paths:
-      - "update_stamp_rally.py"
-      - ".github/workflows/update-stamp-rally.yml"
 
 permissions:
   contents: write
@@ -53,5 +49,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add svgstamp_rally.json svgstamp_history.json
-          git commit -m "chore: auto update Pokémon GO GO 集章趣 data"
-          git push
+          git diff --cached --quiet || git commit -m "chore: auto update Pokémon GO GO 集章趣 data"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main

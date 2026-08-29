@@ -2585,11 +2585,23 @@ button{
 ========================================================= */
 
 const OFFICIAL_CENTER_BADGES = {
+  "寶可夢中心札幌": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-sapporo.webp",
+  "寶可夢中心東北": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tohoku.webp",
+  "寶可夢中心東京DX": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyodx.webp",
+  "寶可夢中心Mega東京": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
+  "寶可夢中心澀谷": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-shibuya.webp",
+  "寶可夢中心晴空塔城": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-skytreetown.webp",
+  "寶可夢中心東京灣": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyobay.webp",
   "寶可夢中心橫濱": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
-  "pokemoncenteryokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
-  "pokémoncenteryokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
-  "ポケモンセンターヨコハマ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
-  "pokemon center yokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp"
+  "寶可夢中心名古屋": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-nagoya.webp",
+  "寶可夢中心金澤": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kanazawa.webp",
+  "寶可夢中心京都": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kyoto.webp",
+  "寶可夢中心大阪DX": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osakadx.webp",
+  "寶可夢中心大阪": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osaka.webp",
+  "寶可夢中心廣島": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-hiroshima.webp",
+  "寶可夢中心香川": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kagawa.webp",
+  "寶可夢中心福岡": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-fukuoka.webp",
+  "寶可夢中心沖繩": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp"
 };
 
 const DATA_URLS = {
@@ -2682,7 +2694,7 @@ function getItemTitle(type,item){
 
 function normalizeKey(value){ return String(value??"").toLowerCase().replace(/\s+/g,"").replace(/[‐‑–—ー・.]/g,""); }
 
-function centerNameVariants(value){ const key=normalizeKey(value); const aliases={"yokohama":"寶可夢中心橫濱","pokemoncenteryokohama":"寶可夢中心橫濱","ポケモンセンターヨコハマ":"寶可夢中心橫濱","寶可夢中心橫濱":"寶可夢中心橫濱"}; return [key,normalizeKey(aliases[key]||""),String(value??"")].filter(Boolean); }
+function centerNameVariants(value){ const key=normalizeKey(value); const aliases={"yokohama":"寶可夢中心橫濱","pokemoncenteryokohama":"寶可夢中心橫濱","ポケモンセンターヨコハマ":"寶可夢中心橫濱","寶可夢中心橫濱":"寶可夢中心橫濱","sapporo":"寶可夢中心札幌","pokemoncentersapporo":"寶可夢中心札幌","tohoku":"寶可夢中心東北","pokemontohoku":"寶可夢中心東北","tokyodx":"寶可夢中心東京DX","pokemoncentertokyodx":"寶可夢中心東京DX","megatokyo":"寶可夢中心Mega東京","pokemoncentermegatokyo":"寶可夢中心Mega東京","shibuya":"寶可夢中心澀谷","skytree":"寶可夢中心晴空塔城","tokyobay":"寶可夢中心東京灣","kanazawa":"寶可夢中心金澤","nagoya":"寶可夢中心名古屋","kyoto":"寶可夢中心京都","osakadx":"寶可夢中心大阪DX","osaka":"寶可夢中心大阪","hiroshima":"寶可夢中心廣島","kagawa":"寶可夢中心香川","fukuoka":"寶可夢中心福岡","okinawa":"寶可夢中心沖繩"}; return [key,normalizeKey(aliases[key]||""),String(value??"")].filter(Boolean); }
 
 function findCenterRecord(item){
   const list=dataSets.center||[];
@@ -2701,22 +2713,79 @@ function getItemImageUrl(type,item){
 
   /*
    * Pokémon Center GO 集章趣：
-   * 優先使用既有 pokemon_center.json 中「該中心自己的代表徽章／圖示」。
-   * 活動 Banner 永遠不在這裡 fallback。
+   * 這裡顯示的是「各 Pokémon Center 自己的代表徽章」，
+   * 不是活動 Banner，也不是一般 GO Stamp 圖片。
+   *
+   * 不只依賴 venueType，因為舊版／同步暫存資料可能沒有正確寫入 venueType。
+   * 只要名稱辨識出 Pokémon Center，就強制走 Center Badge。
    */
-  if(String(item?.venueType||"")==="pokemon_center" || String(item?.venueType||"")==="pokemon_go_lab"){
-    const center=findCenterRecord(item);
-    const centerImage=center?.pokemonCenterBadge || center?.pokemonCenterIcon || center?.centerBadge || center?.centerIcon || center?.badge || center?.logo || "";
+  const rawNames=[
+    item?.nameZh, item?.venueZh, item?.name, item?.venue,
+    item?.centerNameZh, item?.centerName
+  ].filter(Boolean).map(String);
+
+  const joinedNames=rawNames.join(" ").toLowerCase();
+  const isPokemonCenter=
+    String(item?.venueType||"")==="pokemon_center" ||
+    String(item?.venueType||"")==="pokemon_go_lab" ||
+    rawNames.some(name=>{
+      const low=name.toLowerCase();
+      return low.includes("pokemon center") ||
+             low.includes("pokémon center") ||
+             low.includes("ポケモンセンター") ||
+             name.includes("寶可夢中心");
+    });
+
+  if(isPokemonCenter){
+    /* ① 同步器已經解析好的該中心徽章：最高優先 */
     if(item?.centerBadgeImage) return item.centerBadgeImage;
-    if(centerImage) return centerImage;
-    const fallbackKey=normalizeKey(item?.nameZh||item?.name||item?.venueZh||item?.venue||"");
-    const officialBadge=OFFICIAL_CENTER_BADGES[fallbackKey] || OFFICIAL_CENTER_BADGES[String(item?.nameZh||"")];
-    if(officialBadge) return officialBadge;
+
+    /* ② 既有 pokemon_center.json 的徽章欄位 */
+    const center=findCenterRecord(item);
+    const centerImage=item?.centerBadgeImage || center?.pokemonCenterBadge ||
+                       center?.pokemonCenterIcon ||
+                       center?.centerBadge ||
+                       center?.centerIcon ||
+                       center?.badge ||
+                       center?.logo || "";
+    if(centerImage && !String(centerImage).toLowerCase().includes("/mv/")) return centerImage;
+
+    /* ③ 官方已知徽章：用正規化名稱比對 */
+    for(const name of rawNames){
+      const variants=centerNameVariants(name);
+      for(const v of variants){
+        const badge=OFFICIAL_CENTER_BADGES[v] || OFFICIAL_CENTER_BADGES[String(v).trim()];
+        if(badge) return badge;
+      }
+    }
+
+    /* ④ Mega Tokyo 強制官方 fallback，避免舊資料名稱造成漏配 */
+    if(joinedNames.includes("megatokyo") ||
+       joinedNames.includes("mega東京") ||
+       joinedNames.includes("mega 東京") ||
+       joinedNames.includes("メガトウキョー") ||
+       joinedNames.includes("mega tokyo")){
+      return "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp";
+    }
   }
 
   return item?.stampImage || item?.pointImage || "";
 }
 
+const KNOWN_STAMP_COORDINATES_V26 = {"寶可夢中心札幌":[43.0674691,141.3492665],"ポケモンセンターサッポロ":[43.0674691,141.3492665],"寶可夢中心東北":[38.2621602,140.8817018],"ポケモンセンタートウホク":[38.2621602,140.8817018],"寶可夢中心東京DX":[35.6802902,139.7742695],"ポケモンセンタートウキョーDX":[35.6802902,139.7742695],"寶可夢中心 Mega 東京":[35.7289056,139.7193245],"ポケモンセンターメガトウキョー":[35.7289056,139.7193245],"Pokémon GO Lab.":[35.7289056,139.7193245],"寶可夢中心澀谷":[35.6619557,139.6984408],"ポケモンセンターシブヤ":[35.6619557,139.6984408],"寶可夢中心晴空塔城":[35.7103448,139.8126119],"ポケモンセンタースカイツリータウン":[35.7103448,139.8126119],"寶可夢中心東京灣":[35.6866032,139.9890362],"ポケモンセンタートウキョーベイ":[35.6866032,139.9890362],"寶可夢中心橫濱":[35.4645717,139.6244898],"ポケモンセンターヨコハマ":[35.4645717,139.6244898],"寶可夢中心名古屋":[35.1636262,136.90803],"ポケモンセンターナゴヤ":[35.1636262,136.90803],"寶可夢中心金澤":[36.5791483,136.6497543],"ポケモンセンターカナザワ":[36.5791483,136.6497543],"寶可夢中心京都":[35.0034167,135.7583839],"ポケモンセンターキョウト":[35.0034167,135.7583839],"寶可夢中心大阪DX":[34.6731719,135.5007545],"ポケモンセンターオーサカDX":[34.6731719,135.5007545],"寶可夢中心大阪":[34.7018525,135.4965591],"ポケモンセンターオーサカ":[34.7018525,135.4965591],"寶可夢中心廣島":[34.3986243,132.4759743],"ポケモンセンターヒロシマ":[34.3986243,132.4759743],"寶可夢中心香川":[34.3422817,134.0500608],"ポケモンセンターカガワ":[34.3422817,134.0500608],"寶可夢中心福岡":[33.5890033,130.4192564],"ポケモンセンターフクオカ":[33.5890033,130.4192564],"寶可夢中心沖繩":[26.3140852,127.7962995],"ポケモンセンターオキナワ":[26.3140852,127.7962995],"Kuala Lumpur":[3.155558,101.714787],"馬來西亞吉隆坡・KLCC Park Esplanade 前":[3.155558,101.714787],"Taipei":[25.037245,121.566986],"台灣台北・香堤大道":[25.037245,121.566986],"Singapore":[1.356355,103.986511],"新加坡・樟宜機場第三航廈出境大廳":[1.356355,103.986511],"Manila":[14.534429,120.980263],"菲律賓馬尼拉・SM Mall of Asia MOA Sky":[14.534429,120.980263],"東京鐵塔":[35.6586,139.7454],"SL廣場 C11 292":[35.6671448,139.7574141],"原芝浦小學校紀念碑":[35.665661,139.7461202],"江戶坂":[35.6669716,139.7454765],"芝公園 Gym Statue":[35.6560133,139.7490935],"江東區役所":[35.6730499,139.8164348],"東陽21 Goddess Fountain":[35.6748,139.81523],"仙台堀公園 嬰兒噴泉":[35.67618,139.81274],"東京都現代美術館 Like a Snail B":[35.6796307,139.8074057],"天王洲 Isle 第四公園":[35.623578,139.748265],"聖蹟公園":[35.619162,139.74419],"街道松廣場":[35.615484,139.744176],"鮫洲入江廣場":[35.603301,139.743942],"長崎站（海鷗廣場）":[32.7521119,129.8687391],"長崎漁港尾上地區防災綠地（尾上之丘）":[32.7489722,129.8685],"原長崎縣廳所在地":[32.7496274,129.8674379],"長崎中華街（新地橋廣場）":[32.74301,129.8751],"長崎市役所／社區中心":[32.7494464,129.8798385],"長崎歷史文化博物館":[32.752846,129.879495],"長崎水濱森林公園":[32.740778,129.868361],"長崎體育城":[32.758806,129.8644224],"江坂公園":[34.756812,135.527394],"万博記念公園":[34.759428,135.500232],"千里南公園":[34.796386,135.50757],"桃山公園":[34.825308,135.509497],"佐井寺公園":[34.806184,135.532263]};
+function normalizePointKey(value){
+  return String(value??"").toLowerCase().replace(/[\s・･,，.。:：()（）「」『』【】]/g,"");
+}
+function knownCoordinateForItem(item){
+  const values=[item?.nameZh,item?.name,item?.venueZh,item?.venue].filter(Boolean);
+  for(const value of values){
+    const key=normalizePointKey(value);
+    for(const [name,coords] of Object.entries(KNOWN_STAMP_COORDINATES_V26)){
+      if(normalizePointKey(name)===key) return coords;
+    }
+  }
+  return null;
+}
 function getItemLatLng(item){
   let lat=Number(item?.coords?.[0] ?? item?.lat);
   let lng=Number(item?.coords?.[1] ?? item?.lng);
@@ -2928,7 +2997,7 @@ function renderStampEvents(el){
         <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
         <div class="region-count">${countText}</div>
         <div class="stamp-event-live-status ${statusKey}">${escapeHtml(status)}</div><div class="stamp-event-date">${escapeHtml(getStampEventDateText(event))}</div>
-        <div class="region-percent">${total?`完成率 ${percent}%`:`資料待官方公布`}${note}</div>
+        <div class="region-percent">${total?`完成率 ${percent}%`:`資料待官方公布`}${note}${known?`<br>📍 座標資料 ${items.filter(item=>{const p=getItemLatLng(item);return Number.isFinite(p.lat)&&Number.isFinite(p.lng);}).length} / ${known}`:""}</div>
         <div class="download-subbox">
           <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','txt')">TXT</button>
           <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','json')">JSON</button>

@@ -19,7 +19,7 @@ TIMEOUT = 35
 REQUEST_DELAY = 0.25
 GEOCODE_DELAY = 1.10
 GEOCODER_EMAIL = ""  # Optional: set to a contact email in CI if desired.
-GEOCODER_USER_AGENT = "Pok-Lids-GOStampSync/22.0 (+https://github.com/h23456789/Pok-Lids)"
+GEOCODER_USER_AGENT = "Pok-Lids-GOStampSync/26.0 (+https://github.com/h23456789/Pok-Lids)"
 MAX_DISCOVERED_PAGES = 220
 MAX_LINK_DEPTH = 3
 MAX_POINTS_PER_EVENT = 100
@@ -31,7 +31,7 @@ HEADERS = {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/151.0 Safari/537.36 "
-        "Pok-Lids-GOStampSync/20.0"
+        "Pok-Lids-GOStampSync/26.0"
     ),
     "Accept-Language": "zh-TW,zh;q=0.95,en;q=0.9,ja;q=0.8",
 }
@@ -175,13 +175,71 @@ VERIFIED_STAMP_COORDS = {
     "街道松の広場": [35.615484, 139.744176],
     "鮫洲入江廣場": [35.603301, 139.743942],
     "鮫洲入江広場": [35.603301, 139.743942],
+
+    # Nagasaki GO Stamp Rally (published locations; place-level coordinates)
+    "長崎站（海鷗廣場）": [32.7521119, 129.8687391],
+    "長崎駅（かもめ広場）": [32.7521119, 129.8687391],
+    "長崎駅": [32.7521119, 129.8687391],
+    "長崎漁港尾上地區防災綠地（尾上之丘）": [32.7489722, 129.8685],
+    "長崎漁港尾上地区防災緑地（おのうえの丘）": [32.7489722, 129.8685],
+    "おのうえの丘": [32.7489722, 129.8685],
+    "原長崎縣廳所在地": [32.7496274, 129.8674379],
+    "旧長崎県庁舎跡地": [32.7496274, 129.8674379],
+    "長崎中華街（新地橋廣場）": [32.74301, 129.8751],
+    "長崎新地中華街（新地橋広場）": [32.74301, 129.8751],
+    "新地橋広場": [32.74301, 129.8751],
+    "長崎市役所／社區中心": [32.7494464, 129.8798385],
+    "長崎市役所／コミュニティセンター": [32.7494464, 129.8798385],
+    "長崎市役所": [32.7494464, 129.8798385],
+    "長崎歷史文化博物館": [32.752846, 129.879495],
+    "長崎歴史文化博物館": [32.752846, 129.879495],
+    "長崎水濱森林公園": [32.740778, 129.868361],
+    "長崎水辺の森公園": [32.740778, 129.868361],
+    "長崎體育城": [32.758806, 129.8644224],
+    "長崎スタジアムシティ": [32.758806, 129.8644224],
 }
 
 OFFICIAL_CENTER_BADGE_FALLBACKS = {
+    "ポケモンセンターサッポロ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-sapporo.webp",
+    "寶可夢中心札幌": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-sapporo.webp",
+    "ポケモンセンタートウホク": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tohoku.webp",
+    "寶可夢中心東北": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tohoku.webp",
+    "ポケモンセンタートウキョーDX": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyodx.webp",
+    "寶可夢中心東京DX": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyodx.webp",
+    "ポケモンセンターメガトウキョー": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
+    "寶可夢中心Mega東京": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
+    "寶可夢中心 Mega 東京": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
+    "Pokémon Center MEGA TOKYO": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
+    "ポケモンセンターシブヤ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-shibuya.webp",
+    "寶可夢中心澀谷": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-shibuya.webp",
+    "ポケモンセンタースカイツリータウン": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-skytreetown.webp",
+    "寶可夢中心晴空塔城": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-skytreetown.webp",
+    "寶可夢中心晴空塔": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-skytreetown.webp",
+    "ポケモンセンタートウキョーベイ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyobay.webp",
+    "寶可夢中心東京灣": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyobay.webp",
     "ポケモンセンターヨコハマ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
     "寶可夢中心橫濱": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
     "Pokemon Center Yokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+    "ポケモンセンターカナザワ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kanazawa.webp",
+    "寶可夢中心金澤": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kanazawa.webp",
+    "ポケモンセンターナゴヤ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-nagoya.webp",
+    "寶可夢中心名古屋": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-nagoya.webp",
+    "ポケモンセンターキョウト": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kyoto.webp",
+    "寶可夢中心京都": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kyoto.webp",
+    "ポケモンセンターオーサカ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osaka.webp",
+    "寶可夢中心大阪": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osaka.webp",
+    "ポケモンセンターオーサカDX": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osakadx.webp",
+    "寶可夢中心大阪DX": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osakadx.webp",
+    "ポケモンセンターヒロシマ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-hiroshima.webp",
+    "寶可夢中心廣島": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-hiroshima.webp",
+    "ポケモンセンターカガワ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kagawa.webp",
+    "寶可夢中心香川": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kagawa.webp",
+    "ポケモンセンターフクオカ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-fukuoka.webp",
+    "寶可夢中心福岡": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-fukuoka.webp",
+    "ポケモンセンターオキナワ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp",
+    "寶可夢中心沖繩": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp",
 }
+
 
 def norm(value):
     return re.sub(r"\s+", " ", str(value or "").replace("\u3000", " ")).strip()
@@ -658,6 +716,41 @@ def discover_center_badge_from_official(name, centers):
     return ""
 
 def find_center_icon(name, centers):
+    """Return the center's own official representative badge, never the activity banner."""
+    c = find_center_record(name, centers)
+    target_strings = [norm(name)]
+    if c:
+        target_strings.extend(norm(c.get(k)) for k in ("name", "nameZh", "venue", "venueZh", "title") if c.get(k))
+    for target in target_strings:
+        # Exact / normalized mapping first.
+        for key, url in OFFICIAL_CENTER_BADGE_FALLBACKS.items():
+            if normalize_center_name(target) == normalize_center_name(key):
+                return url
+    # Conservative substring match for English/Japanese variants.
+    joined = " ".join(target_strings).lower()
+    aliases = (
+        ("sapporo", "ポケモンセンターサッポロ"),
+        ("tohoku", "ポケモンセンタートウホク"),
+        ("tokyo dx", "ポケモンセンタートウキョーDX"),
+        ("mega tokyo", "ポケモンセンターメガトウキョー"),
+        ("shibuya", "ポケモンセンターシブヤ"),
+        ("skytree", "ポケモンセンタースカイツリータウン"),
+        ("tokyo-bay", "ポケモンセンタートウキョーベイ"),
+        ("yokohama", "ポケモンセンターヨコハマ"),
+        ("kanazawa", "ポケモンセンターカナザワ"),
+        ("nagoya", "ポケモンセンターナゴヤ"),
+        ("kyoto", "ポケモンセンターキョウト"),
+        ("osaka dx", "ポケモンセンターオーサカDX"),
+        ("osaka", "ポケモンセンターオーサカ"),
+        ("hiroshima", "ポケモンセンターヒロシマ"),
+        ("kagawa", "ポケモンセンターカガワ"),
+        ("fukuoka", "ポケモンセンターフクオカ"),
+        ("okinawa", "ポケモンセンターオキナワ"),
+    )
+    for token, key in aliases:
+        if token in joined:
+            return OFFICIAL_CENTER_BADGE_FALLBACKS[key]
+    # Fall back to official store-page discovery for future centers.
     return discover_center_badge_from_official(name, centers)
 
 
@@ -734,13 +827,16 @@ def geocode_place(query):
 
 
 def build_geocode_queries(point_name, context, address=""):
-    """Generate conservative Japanese place-name queries from most specific to broad."""
+    """Generate increasingly broad place-name queries, keeping event/city context."""
     queries = []
-    for value in (
-        f"{point_name}, {address}, Japan",
+    context = norm(context)
+    # Prefer Japanese place text and the activity context before falling back to a bare name.
+    variants = (
+        f"{point_name}, {address}, {context}, Japan",
         f"{point_name}, {context}, Japan",
         f"{point_name}, Japan",
-    ):
+    )
+    for value in variants:
         value = re.sub(r"\s+,", ",", norm(value))
         value = re.sub(r",\s*,", ",", value)
         if value and value not in queries:
@@ -753,6 +849,15 @@ def enrich_points_with_coordinates(points, context):
     enriched = []
     for point in points:
         p = dict(point)
+        if not p.get("coords"):
+            known = verified_coords_for_name(p.get("name", ""))
+            if known:
+                p["coords"] = known
+                p["lat"], p["lng"] = known
+                p["coordinatesOfficial"] = False
+                p["coordinatesConfidence"] = "high"
+                p["coordsSource"] = "Verified coordinate cache"
+                p["coordinatesSourceUrl"] = "community-verified reference"
         if not p.get("coords"):
             address = p.get("address", "")
             found = None
@@ -807,46 +912,51 @@ def verified_coords_for_name(name):
 
 
 def enrich_known_points(points, context=""):
-    """Fill missing coordinates for existing points: verified cache, then geocoding by place name."""
-    enriched=[]
+    """Fill missing coordinates: verified cache first, then place-name geocoding with fallbacks."""
+    enriched = []
     for p in points:
-        q=dict(p)
-        coords=q.get("coords") or []
-        valid=False
-        if len(coords)>=2:
+        q = dict(p)
+        coords = q.get("coords") or []
+        valid = False
+        if len(coords) >= 2:
             try:
-                lat=float(coords[0]); lng=float(coords[1])
-                valid=(-90<=lat<=90 and -180<=lng<=180)
+                lat, lng = float(coords[0]), float(coords[1])
+                valid = (-90 <= lat <= 90 and -180 <= lng <= 180)
             except Exception:
-                valid=False
+                valid = False
         if not valid:
-            known=verified_coords_for_name(q.get("name", ""))
+            known = verified_coords_for_name(q.get("name", ""))
             if known:
-                q["coords"]=known
-                q["coordinatesOfficial"]=False
-                q["coordinatesConfidence"]="high"
-                q["coordsSource"]="Verified community coordinate reference"
-                q["coordinatesSourceUrl"]="https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
-                valid=True
+                q["coords"] = known
+                q["lat"], q["lng"] = known
+                q["coordinatesOfficial"] = False
+                q["coordinatesConfidence"] = "high"
+                q["coordsSource"] = "Verified place coordinate reference"
+                q["coordinatesSourceUrl"] = "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
+                valid = True
         if not valid:
-            name=norm(q.get("name"))
-            address=norm(q.get("address"))
-            queries=build_geocode_queries(name, context, address)
+            name = norm(q.get("name") or q.get("nameZh") or q.get("venue") or q.get("venueZh"))
+            address = norm(q.get("address") or q.get("location") or q.get("venueAddress"))
+            queries = build_geocode_queries(name, context, address)
             for query in queries:
-                found=geocode_place(query)
+                found = geocode_place(query)
                 if found:
-                    q["coords"]=found["coords"]
-                    q["lat"],q["lng"]=found["coords"]
-                    q["coordinatesOfficial"]=False
-                    q["coordinatesConfidence"]="medium"
-                    q["coordsSource"]="Nominatim geocoding from published place name"
-                    q["geocodeQuery"]=query
-                    q["geocodeDisplayName"]=found.get("displayName","")
-                    valid=True
+                    q["coords"] = found["coords"]
+                    q["lat"], q["lng"] = found["coords"]
+                    q["coordinatesOfficial"] = False
+                    q["coordinatesConfidence"] = "medium"
+                    q["coordsSource"] = "Nominatim geocoding from published place name"
+                    q["geocodeQuery"] = query
+                    q["geocodeDisplayName"] = found.get("displayName", "")
+                    print("GEOCODED:", name, "->", q["coords"])
+                    valid = True
                     break
                 time.sleep(GEOCODE_DELAY)
-        if valid and len(q.get("coords") or [])>=2:
-            q["lat"],q["lng"]=q["coords"][:2]
+        if not valid:
+            q["coords"] = q.get("coords") or []
+            if len(q["coords"]) < 2:
+                q["lat"] = q.get("lat") if q.get("lat") is not None else None
+                q["lng"] = q.get("lng") if q.get("lng") is not None else None
         enriched.append(q)
     return enriched
 
@@ -1084,7 +1194,7 @@ def build_history(old, new_events, new_items):
 
 def main():
     print("=" * 60)
-    print("Pokémon GO GO 集章趣 AUTO SYNC v22")
+    print("Pokémon GO GO 集章趣 AUTO SYNC v26")
     print("Official discovery + locale dedupe + activity blocks + no fabricated points")
     print("No hard-coded activity catalog")
     print("=" * 60)
@@ -1095,7 +1205,7 @@ def main():
 
     events, items = build_from_discovery(discovered, old)
     new = {
-        "version": "22.0",
+        "version": "26.0",
         "updated": datetime.now(timezone.utc).isoformat(),
         "source": "Pokémon GO Official Website",
         "sourceMode": "official-first; localized dedupe; activity-block discovery; official map coords first; place-name geocoding fallback; no fabricated points",

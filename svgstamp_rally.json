@@ -1,9 +1,9 @@
 {
-  "version": "11.0",
+  "version": "12.0",
   "updated": "2026-08-29",
   "source": "Pokémon GO Official Website",
   "sourceMode": "automatic-discovery-cache",
-  "rule": "僅收錄 Pokémon GO 遊戲內 GO 集章趣；排除 Poké Lid 與一般線下 Stamp Rally",
+  "rule": "僅收錄 Pokémon GO 遊戲內 GO 集章趣；活動由官方頁面自動發現；Poké Lid 與一般線下 Stamp Rally 排除",
   "events": [
     {
       "eventId": "STAMP-PKCNTR-2026",

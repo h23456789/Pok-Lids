@@ -22,6 +22,10 @@ MAX_NEWS_PAGES = 12
 MAX_DISCOVERED_PAGES = 180
 MAX_POINTS_PER_EVENT = 100
 
+# 同一活動若同時有繁中／日文／英文官方頁，只採用一個版本。
+# 優先順序：繁體中文 > 日文 > 英文。
+LOCALE_PRIORITY = {"zh-hant": 0, "zh_hant": 0, "ja": 1, "en": 2}
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -169,6 +173,14 @@ CENTER_ALIASES = {
 
 # 實際 GO 圖章圖片的可靠公開索引（不是活動清單）；
 # 活動本身仍由 Pokémon GO 官方網站自動發現。
+OFFICIAL_CENTER_BADGE_FALLBACKS = {
+    "ポケモンセンターヨコハマ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+    "寶可夢中心橫濱": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+    "Pokemon Center Yokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+    "YOKOHAMA": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+}
+
+
 SEREBII_CENTER_STAMP_IMAGES = {
     "ポケモンセンターフクオカ": "https://www.serebii.net/pokemongo/stamps/145.png",
     "Pokémon GO Lab.": "https://www.serebii.net/pokemongo/stamps/146.png",
@@ -212,6 +224,46 @@ def is_center_url(url):
 def canonical_url(url):
     parsed = urlparse(url)
     return urlunparse((parsed.scheme, parsed.netloc, parsed.path.rstrip("/"), "", "", ""))
+
+
+def canonical_page_key(url):
+    """把 Pokémon GO 官方不同語言 URL 正規化為同一個頁面 key。"""
+    parsed = urlparse(canonical_url(url))
+    path = re.sub(r"^/(?:zh-Hant|zh_Hant|zh|ja|en)(?=/|$)", "", parsed.path, flags=re.I)
+    path = re.sub(r"/+$", "", path) or "/"
+    return (parsed.netloc.lower(), path.lower())
+
+
+def url_locale(url):
+    path = urlparse(url).path.lower()
+    m = re.match(r"^/(zh-hant|zh_hant|zh|ja|en)(?:/|$)", path)
+    if m:
+        return m.group(1)
+    return "en"
+
+
+def choose_preferred_locale_url(urls):
+    """同一 canonical page 只選一個官方語言版本。"""
+    return sorted(
+        urls,
+        key=lambda u: (LOCALE_PRIORITY.get(url_locale(u), 99), len(u)),
+    )[0]
+
+
+def dedupe_localized_pages(urls):
+    groups = {}
+    for url in urls:
+        groups.setdefault(canonical_page_key(url), []).append(url)
+
+    selected = []
+    for key, variants in groups.items():
+        chosen = choose_preferred_locale_url(variants)
+        selected.append(chosen)
+        if len(variants) > 1:
+            labels = ", ".join(f"{url_locale(u)}:{u}" for u in sorted(variants))
+            print("LANGUAGE DEDUPE:", key[1], "->", url_locale(chosen), "|", labels)
+
+    return sorted(selected)
 
 
 def get(url):
@@ -674,16 +726,46 @@ def find_center_record(name, records):
 
 
 def find_center_icon(item, records):
+    raw_names = [item.get("venue"), item.get("name"), item.get("venueZh"), item.get("nameZh"), item.get("centerName"), item.get("centerNameZh")]
+    target_strings = [norm(x) for x in raw_names if x]
+
+    # 先嘗試既有 pokemon_center.json。
     center = find_center_record(item.get("venue") or item.get("name") or item.get("nameZh"), records)
-    if not center:
-        return ""
-    return (
-        center.get("pokemonCenterIcon")
-        or center.get("centerIcon")
-        or center.get("icon")
-        or center.get("image")
-        or ""
-    )
+
+    # 針對 Yokohama 額外以日／中／英名稱強制匹配，避免資料使用 YOKOHAMA 而漏配。
+    if not center and any(("yokohama" in x.lower()) or ("橫濱" in x) or ("横浜" in x) or ("ヨコハマ" in x) for x in target_strings):
+        for record in records:
+            names = [record.get("name"), record.get("title"), record.get("city"), record.get("venue"), record.get("nameZh"), record.get("venueZh"), record.get("centerName"), record.get("centerNameZh"), record.get("shopName"), record.get("shopNameZh")]
+            joined = " ".join(norm(x).lower() for x in names if x)
+            if any(k in joined for k in ("yokohama", "橫濱", "横浜", "ヨコハマ")):
+                center = record
+                break
+
+    if center:
+        image = (
+            center.get("pokemonCenterBadge")
+            or center.get("pokemonCenterIcon")
+            or center.get("centerBadge")
+            or center.get("centerIcon")
+            or center.get("badge")
+            or center.get("icon")
+            or center.get("image")
+            or center.get("imageUrl")
+            or center.get("logo")
+            or ""
+        )
+        if image:
+            return image
+
+    # 官方 Pokémon Center Yokohama 官方頁直接提供店舖代表 Logo。
+    for name in target_strings:
+        if name in OFFICIAL_CENTER_BADGE_FALLBACKS:
+            return OFFICIAL_CENTER_BADGE_FALLBACKS[name]
+        low = name.lower()
+        if "yokohama" in low or "橫濱" in name or "横浜" in name or "ヨコハマ" in name:
+            return OFFICIAL_CENTER_BADGE_FALLBACKS["ポケモンセンターヨコハマ"]
+
+    return ""
 
 
 def find_center_coords(item, records):
@@ -712,8 +794,10 @@ def extract_prefecture(text):
     return ""
 
 
-def event_identity(title, url):
-    return "GO-STAMP-" + sha(title, canonical_url(url))
+def event_identity(title, url, section_title=""):
+    # 同一活動的不同語言頁在 canonical_page_key 下共用同一 eventId。
+    # section_title 保留，用於同一篇官方文章內有多個不同 GO Stamp Rally。
+    return "GO-STAMP-" + sha(canonical_page_key(url), title, section_title)
 
 
 def point_identity(event_id, name, index):
@@ -922,7 +1006,11 @@ def extract_center_points_from_official_page(go_url, go_soup, event_id, event_ti
             if center_badge:
                 item["stampImage"] = center_badge
                 item["stampImageOfficial"] = True
-                item["stampImageSource"] = "既有 pokemon_center.json 的 Pokémon Center 代表徽章／圖示"
+                item["stampImageType"] = "pokemon-center-badge"
+                if "yokohama" in normalize_center_name(name) or "橫濱" in CENTER_ALIASES.get(name, name) or "横浜" in name or "ヨコハマ" in name:
+                    item["stampImageSource"] = "Pokémon Center Yokohama 官方店舖代表徽章"
+                else:
+                    item["stampImageSource"] = "既有 pokemon_center.json 的 Pokémon Center 代表徽章／圖示"
             item["pref"] = center.get("pref", "") or center.get("prefecture", "")
             item["city"] = center.get("city", "")
             item["address"] = center.get("address", "")
@@ -1069,7 +1157,7 @@ def extract_event_payload(url, soup, localized_soup=None, old_items=None):
             if "集章" in heading_zh or "Stamp Rally" in heading_zh or "スタンプラリー" in heading_zh:
                 event_title_zh = heading_zh
         event_title_original = rally_name_original
-        event_id = event_identity(event_title_original + "|" + payload["heading"], url)
+        event_id = event_identity(event_title_original, url, payload["heading"])
         all_dates = payload["dates"] or extract_dates(original_text)
         start_date = all_dates[0] if all_dates else ""
         end_date = all_dates[-1] if len(all_dates) >= 2 else ""
@@ -1191,21 +1279,25 @@ def extract_event_payload(url, soup, localized_soup=None, old_items=None):
                 source_soup, url, point_name, payload.get("nodes") or []
             )
 
-            # Pokémon Center 的實際 GO 圖章目前有可靠的公開逐點圖片索引。
+            # Pokémon Center GO 集章趣的卡片圖示依需求使用「各中心代表徽章／Logo」，
+            # 不用 Serebii 的實際遊戲印章圖，也不拿活動 Banner 冒充。
             if not point_specific_image and (
                 "ポケモンセンター" in point_name
                 or "Pokémon Center" in point_name
                 or "pokemon center" in point_name.lower()
                 or "Pokémon GO Lab." in point_name
             ):
-                point_specific_image = get_known_stamp_asset(point_name)
+                point_specific_image = find_center_icon({"venue": point_name, "name": point_name, "nameZh": CENTER_ALIASES.get(point_name, point_name)}, centers)
                 if point_specific_image:
-                    point["stampImageSource"] = "Serebii Pokémon GO Stamp Rally 資料（實際遊戲圖章圖片）"
+                    point["stampImageSource"] = "Pokémon Center 官方店舖代表徽章／Logo"
+                    point["stampImageType"] = "pokemon-center-badge"
+                    point["stampImageOfficial"] = True
 
             if point_specific_image:
                 point["stampImage"] = point_specific_image
-                point["stampImageOfficial"] = True
-                point["stampImageSource"] = "Pokémon GO 官方頁面：集章點對應圖片"
+                if point.get("stampImageType") != "pokemon-center-badge":
+                    point["stampImageOfficial"] = True
+                    point["stampImageSource"] = "官方頁面：集章點對應圖片"
 
             points.append(point)
 
@@ -1241,6 +1333,8 @@ def extract_event_payload(url, soup, localized_soup=None, old_items=None):
             "descriptionZh": description_zh,
             "source": "Pokémon GO Official Website",
             "sourceUrl": url,
+            "sourceLocale": url_locale(url),
+            "canonicalPage": canonical_page_key(url)[1],
             "official": True,
             "points": points,
             "activityImage": activity_image,
@@ -1465,8 +1559,10 @@ def main():
     old_data = load_json(STAMP_FILE, {"list": []})
     old_items = old_data.get("list", []) if isinstance(old_data, dict) else []
 
-    official_pages = discover_official_stamp_pages()
-    print("Official GO Stamp Rally pages:", len(official_pages))
+    discovered_pages = discover_official_stamp_pages()
+    print("Official GO Stamp Rally pages (raw):", len(discovered_pages))
+    official_pages = dedupe_localized_pages(discovered_pages)
+    print("Official GO Stamp Rally pages (after language dedupe):", len(official_pages))
 
     fresh_events = []
     fresh_items = []
@@ -1502,6 +1598,28 @@ def main():
         except Exception as exc:
             print("  PARSE ERROR:", exc)
         time.sleep(REQUEST_DELAY)
+
+    # 同一活動只保留一份；若同一活動因不同頁面再次出現，以較完整資料優先。
+    event_map = {}
+    for event in fresh_events:
+        eid = str(event.get("eventId") or "")
+        if not eid:
+            continue
+        existing = event_map.get(eid)
+        if existing is None:
+            event_map[eid] = event
+            continue
+        # 保留 points 較多、Banner 非空、中文名稱較完整的版本。
+        def score(ev):
+            return (
+                len(ev.get("points") or []),
+                1 if ev.get("activityImage") or ev.get("eventImage") else 0,
+                1 if ev.get("eventZh") else 0,
+            )
+        if score(event) > score(existing):
+            event_map[eid] = event
+    fresh_events = list(event_map.values())
+    fresh_items = flatten_events(fresh_events)
 
     # 去重
     unique_items = {}
@@ -1560,11 +1678,11 @@ def main():
     save_json(
         STAMP_FILE,
         {
-            "version": "13.0",
+            "version": "14.0",
             "updated": timestamp,
             "source": "Pokémon GO Official Website",
             "sourceMode": "automatic-discovery",
-            "rule": "Pokémon GO GO 集章趣 only; Poké Lid and offline stamp rallies excluded",
+            "rule": "Pokémon GO GO 集章趣 only; Poké Lid and offline stamp rallies excluded; same activity different language pages are deduplicated (zh-Hant > ja > en)",
             "events": event_meta,
             "list": merged,
         },

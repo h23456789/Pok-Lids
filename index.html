@@ -1662,6 +1662,68 @@ button{
   font-weight:800;
 }
 
+.download-subbox{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+  margin-top:9px;
+}
+
+.download-subbtn{
+  border:0;
+  border-radius:999px;
+  padding:6px 10px;
+  background:#edf5f5;
+  color:#397b83;
+  cursor:pointer;
+  font-size:11px;
+  font-weight:900;
+}
+
+.download-subbtn:hover{
+  background:#dfeeee;
+}
+
+.stamp-all-download-box{
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+}
+
+.stamp-all-download-btn{
+  border:0;
+  border-radius:999px;
+  padding:7px 12px;
+  background:#f0eaff;
+  color:#6f4bb8;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:900;
+}
+
+.stamp-all-download-btn:hover{
+  background:#e7dcff;
+}
+
+.stamp-event-card .region-info{
+  padding-bottom:12px;
+}
+
+@media(max-width:700px){
+  .download-subbtn{
+    font-size:10px;
+    padding:6px 8px;
+  }
+
+  .stamp-all-download-btn{
+    font-size:11px;
+    padding:7px 9px;
+  }
+}
+
 
 /* =========================================================
    LOADING / ERROR
@@ -2121,31 +2183,57 @@ button{
      DOWNLOAD
 ========================================================= -->
 
-<div class="download-box">
+<div class="download-box" id="mainDownloadBox">
 
   <button
     class="download-btn"
     onclick="downloadAll()"
+    title="下載目前類別全部資料"
   >
     TXT
   </button>
 
-
   <button
     class="download-btn"
     onclick="downloadJSON()"
+    title="下載目前類別全部資料"
   >
     JSON
   </button>
 
-
   <button
     class="download-btn"
     onclick="downloadCSV()"
+    title="下載目前類別全部資料"
   >
     CSV
   </button>
 
+</div>
+
+<div
+  id="stampAllDownloadBox"
+  class="stamp-all-download-box"
+  style="display:none;"
+>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('txt')"
+  >
+    🎟️ 所有圖章 TXT
+  </button>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('json')"
+  >
+    🎟️ 所有圖章 JSON
+  </button>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('csv')"
+  >
+    🎟️ 所有圖章 CSV
+  </button>
 </div>
 
 
@@ -2752,6 +2840,7 @@ function switchCollectionType(type){
   document.getElementById("sectionTitle").textContent=type==="lid"?"🔴 Poké Lid 蒐集進度":"🎟️ GO 集章趣 蒐集進度";
   document.getElementById("progressLabel").textContent=type==="lid"?"Poké Lid 已收集：":"GO 集章趣 已收集：";
   closeAllPanels(); currentRegion=null; currentPrefecture=null; currentStampEventId=null; currentCollectionItems=[]; currentItem=null;
+  document.getElementById("stampAllDownloadBox").style.display = type === "stamp" ? "flex" : "none";
   renderRegions(); updateOverall();
 }
 function closeAllPanels(){ for(const id of ["prefecturePanel","collectionPanel","modalOverlay"]) document.getElementById(id).classList.remove("show"); document.body.classList.remove("no-scroll"); }
@@ -2780,7 +2869,7 @@ function renderRegions(){
     const total=items.length; const percent=total?Math.round(obtained/total*1000)/10:0;
     const sample=items.slice(0,3); const card=document.createElement("div"); card.className="region-card"; card.onclick=()=>openRegion(regionName);
     const images=sample.map(item=>{const image=getItemImageUrl("lid",item);return image?`<img class="region-image" src="${escapeHtml(image)}" alt="" loading="lazy">`:"";}).join("");
-    card.innerHTML=`<div class="region-images">${images||`<div class="region-empty">尚無資料</div>`}</div><div class="region-info"><div class="region-name">${escapeHtml(regionName)}</div><div class="region-count">${obtained} / ${total}</div><div class="region-percent">完成率 ${percent}%</div></div>`;
+    card.innerHTML=`<div class="region-images">${images||`<div class="region-empty">尚無資料</div>`}</div><div class="region-info"><div class="region-name">${escapeHtml(regionName)}</div><div class="region-count">${obtained} / ${total}</div><div class="region-percent">完成率 ${percent}%</div><div class="download-subbox"><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','txt')">TXT</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','json')">JSON</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','csv')">CSV</button></div></div>`;
     el.appendChild(card);
   }
 }
@@ -2840,6 +2929,11 @@ function renderStampEvents(el){
         <div class="region-count">${countText}</div>
         <div class="stamp-event-live-status ${statusKey}">${escapeHtml(status)}</div><div class="stamp-event-date">${escapeHtml(getStampEventDateText(event))}</div>
         <div class="region-percent">${total?`完成率 ${percent}%`:`資料待官方公布`}${note}</div>
+        <div class="download-subbox">
+          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','txt')">TXT</button>
+          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','json')">JSON</button>
+          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','csv')">CSV</button>
+        </div>
       </div>`;
     el.appendChild(card);
   }
@@ -2960,10 +3054,154 @@ async function copyCoordinate(event){ if(event)event.stopPropagation();const tex
 function closeModal(event){if(event)event.stopPropagation();document.getElementById("modalOverlay").classList.remove("show");if(!document.getElementById("collectionPanel").classList.contains("show")&&!document.getElementById("prefecturePanel").classList.contains("show"))document.body.classList.remove("no-scroll");}
 function overlayClick(event){if(event.target===document.getElementById("modalOverlay"))closeModal();}
 
+function escapeJs(value){
+  return String(value??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\r?\n/g," ");
+}
+
+function getStampDownloadGroups(){
+  const output={};
+  for(const event of getStampEvents()){
+    const title=String(event.eventZh||event.event||"GO 集章趣").trim() || "GO 集章趣";
+    if(!output[title]) output[title]=[];
+    for(const item of (event.items||[])){
+      const {lat,lng}=getItemLatLng(item);
+      output[title].push({
+        title:getItemTitle("stamp",item),
+        lat:Number.isFinite(lat)?String(lat):"",
+        lng:Number.isFinite(lng)?String(lng):""
+      });
+    }
+  }
+  return output;
+}
+
+function sanitizeFilename(value){
+  return String(value??"").replace(/[\\/:*?"<>|]/g,"_").trim() || "download";
+}
+
+function buildGroupedJson(groupsObject){
+  return JSON.stringify(groupsObject,null,2);
+}
+
+function buildGroupedCsv(groupsObject){
+  const rows=[["group","title","lat","lng"]];
+  for(const [group,items] of Object.entries(groupsObject)){
+    for(const item of items){
+      rows.push([group,item.title,item.lat,item.lng]);
+    }
+  }
+  return rows.map(row=>row.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\n");
+}
+
+function buildGroupedTxt(groupsObject){
+  const lines=[];
+  for(const [group,items] of Object.entries(groupsObject)){
+    lines.push(`# ===== ${group} (${items.length}) =====`);
+    if(!items.length){
+      lines.push("(目前沒有可下載的集章點資料)");
+    }else{
+      for(const item of items){
+        lines.push(`${item.title}`);
+        lines.push(`${item.lat},${item.lng}`);
+        lines.push("");
+      }
+    }
+    lines.push("");
+  }
+  return lines.join("\n");
+}
+
+function downloadGroupedData(groupsObject,scope,format,filenameBase){
+  let content="";
+  let mime="text/plain;charset=utf-8";
+  let ext="txt";
+  if(format==="json"){
+    content=buildGroupedJson(groupsObject);
+    mime="application/json;charset=utf-8";
+    ext="json";
+  }else if(format==="csv"){
+    content="\ufeff"+buildGroupedCsv(groupsObject);
+    mime="text/csv;charset=utf-8";
+    ext="csv";
+  }else{
+    content="\ufeff"+buildGroupedTxt(groupsObject);
+  }
+  downloadBlob(new Blob([content],{type:mime}),`${sanitizeFilename(filenameBase)}.${ext}`);
+}
+
+function downloadAllStampPoints(format){
+  const groupsObject=getStampDownloadGroups();
+  downloadGroupedData(groupsObject,"stamp-all-points",format,"go_stamp_all_points");
+}
+
+function downloadStampEvent(eventId,format){
+  const event=getStampEvents().find(x=>String(x.id)===String(eventId));
+  if(!event)return;
+  const groupName=String(event.eventZh||event.event||"GO 集章趣").trim() || "GO 集章趣";
+  const items=(event.items||[]).map(item=>{
+    const {lat,lng}=getItemLatLng(item);
+    return {
+      title:getItemTitle("stamp",item),
+      lat:Number.isFinite(lat)?String(lat):"",
+      lng:Number.isFinite(lng)?String(lng):""
+    };
+  });
+  const obj={[groupName]:items};
+  downloadGroupedData(obj,eventId,format,`go_stamp_${groupName}`);
+}
+
+function getLidDownloadGroups(){
+  const output={};
+  for(const [region,items] of Object.entries(groups.lid).sort()){
+    output[region]=items.map(item=>{
+      const {lat,lng}=getItemLatLng(item);
+      return {
+        title:getItemTitle("lid",item),
+        lat:Number.isFinite(lat)?String(lat):"",
+        lng:Number.isFinite(lng)?String(lng):""
+      };
+    });
+  }
+  return output;
+}
+
+function downloadLidGroup(regionName,format){
+  const items=(groups.lid[regionName]||[]).map(item=>{
+    const {lat,lng}=getItemLatLng(item);
+    return {
+      title:getItemTitle("lid",item),
+      lat:Number.isFinite(lat)?String(lat):"",
+      lng:Number.isFinite(lng)?String(lng):""
+    };
+  });
+  const obj={[regionName]:items};
+  downloadGroupedData(obj,regionName,format,`poke_lid_${regionName}`);
+}
+
 function downloadBlob(blob,filename){const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-function downloadAll(){const lines=[];if(collectionType==="stamp"){for(const event of getStampEvents()){lines.push(`# ===== ${event.eventZh||event.event} (${event.items.length}) =====`);for(const item of event.items){const {lat,lng}=getItemLatLng(item);lines.push(`${Number.isFinite(lat)?lat:""},${Number.isFinite(lng)?lng:""},${getItemTitle("stamp",item)}`);}lines.push("");}}else{for(const [pref,items] of Object.entries(groups.lid).sort()){lines.push(`# ===== ${pref} (${items.length}) =====`);for(const item of items){const {lat,lng}=getItemLatLng(item);lines.push(`${Number.isFinite(lat)?lat:""},${Number.isFinite(lng)?lng:""},${getItemTitle("lid",item)}`);}lines.push("");}}downloadBlob(new Blob(["\ufeff",lines.join("\n")],{type:"text/plain;charset=utf-8"}),collectionType==="lid"?"poke_lid_2026.txt":"go_stamp_rally.txt");}
-function downloadJSON(){const output=collectionType==="stamp"?{events:getStampEvents()}:dataSets.lid;downloadBlob(new Blob([JSON.stringify(output,null,2)],{type:"application/json;charset=utf-8"}),collectionType==="lid"?"poke_lid_2026.json":"go_stamp_rally.json");}
-function downloadCSV(){const rows=[["id","event","name","lat","lng","address","image","sourceUrl"]];for(const item of dataSets[collectionType]){const {lat,lng}=getItemLatLng(item);rows.push([item.id,collectionType==="stamp"?getStampEventName(item):"",getItemTitle(collectionType,item),Number.isFinite(lat)?lat:"",Number.isFinite(lng)?lng:"",item.addressZh||item.address||"",getItemImageUrl(collectionType,item),item.sourceUrl||""]);}const csv=rows.map(row=>row.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\n");downloadBlob(new Blob(["﻿",csv],{type:"text/csv;charset=utf-8"}),collectionType==="lid"?"poke_lid_2026.csv":"go_stamp_rally.csv");}
+function downloadAll(){
+  if(collectionType==="stamp"){
+    downloadGroupedData(getStampDownloadGroups(),"stamp-all", "txt", "go_stamp_all");
+    return;
+  }
+  downloadGroupedData(getLidDownloadGroups(),"lid-all", "txt", "poke_lid_all");
+}
+
+function downloadJSON(){
+  if(collectionType==="stamp"){
+    downloadGroupedData(getStampDownloadGroups(),"stamp-all", "json", "go_stamp_all");
+    return;
+  }
+  downloadGroupedData(getLidDownloadGroups(),"lid-all", "json", "poke_lid_all");
+}
+
+function downloadCSV(){
+  if(collectionType==="stamp"){
+    downloadGroupedData(getStampDownloadGroups(),"stamp-all", "csv", "go_stamp_all");
+    return;
+  }
+  downloadGroupedData(getLidDownloadGroups(),"lid-all", "csv", "poke_lid_all");
+}
 
 async function loadHistoryFile(type){try{const json=await fetchJSON(HISTORY_URLS[type]);return(json.history||[]).map(entry=>({...entry,type}));}catch{return[];}}
 async function loadHistory(){const [lidHistory,stampHistory]=await Promise.all([loadHistoryFile("lid"),loadHistoryFile("stamp")]);historyEntries=[...lidHistory,...stampHistory].sort((a,b)=>new Date(b.time||0)-new Date(a.time||0));renderHistory();}

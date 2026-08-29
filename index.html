@@ -2499,7 +2499,9 @@ button{
 const OFFICIAL_CENTER_BADGES = {
   "寶可夢中心橫濱": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
   "pokemoncenteryokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
-  "pokémoncenteryokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp"
+  "pokémoncenteryokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+  "ポケモンセンターヨコハマ": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+  "pokemon center yokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp"
 };
 
 const DATA_URLS = {
@@ -2616,7 +2618,8 @@ function getItemImageUrl(type,item){
    */
   if(String(item?.venueType||"")==="pokemon_center" || String(item?.venueType||"")==="pokemon_go_lab"){
     const center=findCenterRecord(item);
-    const centerImage=center?.pokemonCenterBadge || center?.pokemonCenterIcon || center?.centerBadge || center?.centerIcon || center?.badge || center?.icon || center?.image || center?.imageUrl || center?.logo || "";
+    const centerImage=center?.pokemonCenterBadge || center?.pokemonCenterIcon || center?.centerBadge || center?.centerIcon || center?.badge || center?.logo || "";
+    if(item?.centerBadgeImage) return item.centerBadgeImage;
     if(centerImage) return centerImage;
     const fallbackKey=normalizeKey(item?.nameZh||item?.name||item?.venueZh||item?.venue||"");
     const officialBadge=OFFICIAL_CENTER_BADGES[fallbackKey] || OFFICIAL_CENTER_BADGES[String(item?.nameZh||"")];

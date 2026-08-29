@@ -1,6 +1,34 @@
 {
   "history": [
     {
+      "time": "2026-08-29T23:48:09.305922+00:00",
+      "event": "Pokémon GO GO 集章趣 AUTO SYNC",
+      "eventZh": "Pokémon GO GO 集章趣自動同步",
+      "total": 48,
+      "added": [],
+      "removed": [],
+      "changed": [
+        "STAMP-PKCNTR-2026-SAPPORO",
+        "STAMP-PKCNTR-2026-OKINAWA",
+        "STAMP-PKCNTR-2026-SHIBUYA",
+        "STAMP-PKCNTR-2026-HIROSHIMA",
+        "STAMP-PKCNTR-2026-FUKUOKA",
+        "STAMP-PKCNTR-2026-SKYTREE",
+        "STAMP-PKCNTR-2026-KAGAWA",
+        "STAMP-PKCNTR-2026-YOKOHAMA",
+        "STAMP-PKCNTR-2026-TOKYO-DX",
+        "STAMP-PKCNTR-2026-MEGA-TOKYO",
+        "STAMP-PKCNTR-2026-KYOTO",
+        "STAMP-PKCNTR-2026-NAGOYA",
+        "STAMP-PKCNTR-2026-OSAKA",
+        "STAMP-PKCNTR-2026-TOKYO-BAY",
+        "STAMP-PKCNTR-2026-KANAZAWA",
+        "STAMP-PKCNTR-2026-GO-LAB",
+        "STAMP-PKCNTR-2026-OSAKA-DX",
+        "STAMP-PKCNTR-2026-TOHOKU"
+      ]
+    },
+    {
       "time": "2026-08-29 03:28:17",
       "type": "stamp",
       "event": "Automatic Stamp Rally sync",

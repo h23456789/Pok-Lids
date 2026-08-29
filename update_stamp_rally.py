@@ -27,7 +27,7 @@ HEADERS = {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/151.0 Safari/537.36 "
-        "PokemonJapanCollection-GOStampSync/12.0"
+        "PokemonJapanCollection-GOStampSync/13.0"
     ),
     "Accept-Language": "zh-TW,zh;q=0.95,en;q=0.8,ja;q=0.7",
 }
@@ -164,6 +164,29 @@ CENTER_ALIASES = {
     "ポケモンセンターフクオカ": "寶可夢中心福岡",
     "ポケモンセンターオキナワ": "寶可夢中心沖繩",
     "Pokémon GO Lab.": "Pokémon GO Lab.",
+}
+
+
+# 實際 GO 圖章圖片的可靠公開索引（不是活動清單）；
+# 活動本身仍由 Pokémon GO 官方網站自動發現。
+SEREBII_CENTER_STAMP_IMAGES = {
+    "ポケモンセンターフクオカ": "https://www.serebii.net/pokemongo/stamps/145.png",
+    "Pokémon GO Lab.": "https://www.serebii.net/pokemongo/stamps/146.png",
+    "ポケモンセンターヒロシマ": "https://www.serebii.net/pokemongo/stamps/147.png",
+    "ポケモンセンターカガワ": "https://www.serebii.net/pokemongo/stamps/148.png",
+    "ポケモンセンターカナザワ": "https://www.serebii.net/pokemongo/stamps/149.png",
+    "ポケモンセンターキョウト": "https://www.serebii.net/pokemongo/stamps/150.png",
+    "ポケモンセンターメガトウキョー": "https://www.serebii.net/pokemongo/stamps/151.png",
+    "ポケモンセンターナゴヤ": "https://www.serebii.net/pokemongo/stamps/152.png",
+    "ポケモンセンターオキナワ": "https://www.serebii.net/pokemongo/stamps/153.png",
+    "ポケモンセンターオーサカDX": "https://www.serebii.net/pokemongo/stamps/154.png",
+    "ポケモンセンターオーサカ": "https://www.serebii.net/pokemongo/stamps/155.png",
+    "ポケモンセンターサッポロ": "https://www.serebii.net/pokemongo/stamps/156.png",
+    "ポケモンセンターシブヤ": "https://www.serebii.net/pokemongo/stamps/157.png",
+    "ポケモンセンタースカイツリータウン": "https://www.serebii.net/pokemongo/stamps/158.png",
+    "ポケモンセンタートウホク": "https://www.serebii.net/pokemongo/stamps/159.png",
+    "ポケモンセンタートウキョーベイ": "https://www.serebii.net/pokemongo/stamps/160.png",
+    "ポケモンセンタートウキョーDX": "https://www.serebii.net/pokemongo/stamps/161.png",
 }
 
 
@@ -364,32 +387,64 @@ def extract_stamp_image_candidates(soup, base_url, section_nodes):
 
 
 def extract_activity_image(soup, base_url, section_nodes=None):
-    """Prefer the official article hero/OG image for the activity banner."""
-    for attrs in (
-        {"property": "og:image"},
-        {"name": "twitter:image"},
-    ):
-        meta = soup.find("meta", attrs=attrs)
-        if meta and meta.get("content"):
-            return urljoin(base_url, norm(meta.get("content")))
+    """取得活動 Banner。優先官方 OG/Twitter 圖，避免把單一 Stamp 當 Banner。"""
+    pools = [soup]
+    for node in (section_nodes or []):
+        pools.append(node)
 
-    # Fallback: first reasonably large image from the section/page.
-    pools = []
-    if section_nodes:
-        pools.extend(section_nodes)
-    pools.extend(soup.find_all("img"))
-    for node in pools:
-        img = node if getattr(node, "name", None) == "img" else None
-        if img is None and hasattr(node, "find"):
-            img = node.find("img")
-        if not img:
+    # 1. Open Graph / Twitter
+    for container in pools:
+        if not hasattr(container, "find"):
             continue
-        src = img.get("src") or img.get("data-src") or img.get("data-lazy-src") or ""
+        for attrs in (
+            {"property": "og:image"},
+            {"name": "og:image"},
+            {"name": "twitter:image"},
+        ):
+            meta = container.find("meta", attrs=attrs)
+            if meta and meta.get("content"):
+                value = urljoin(base_url, norm(meta.get("content")))
+                if value:
+                    return value
+
+    # 2. preload / link image
+    for link in soup.find_all("link"):
+        rel = " ".join(link.get("rel", [])) if isinstance(link.get("rel"), list) else norm(link.get("rel"))
+        if "image" not in rel.lower() and link.get("as") != "image":
+            continue
+        href = link.get("href") or ""
+        if href:
+            return urljoin(base_url, norm(href))
+
+    # 3. JSON-LD image
+    for obj in extract_jsonld_objects(soup):
+        if isinstance(obj, dict):
+            image = obj.get("image")
+            if isinstance(image, str) and image:
+                return urljoin(base_url, image)
+            if isinstance(image, list) and image:
+                return urljoin(base_url, str(image[0]))
+
+    # 4. fallback to the first image that does not obviously look like a stamp icon
+    candidates = []
+    for img in soup.find_all("img"):
+        src = img.get("src") or img.get("data-src") or img.get("data-lazy-src") or img.get("data-original") or ""
         if not src:
             continue
-        return urljoin(base_url, src)
+        absolute = urljoin(base_url, src)
+        alt = norm(img.get("alt", ""))
+        probe = f"{absolute} {alt}".lower()
+        if any(token in probe for token in ("stamp", "スタンプ", "icon", "logo")):
+            score = -5
+        else:
+            score = 1
+        if any(token in probe for token in ("banner", "hero", "kv", "main")):
+            score += 4
+        candidates.append((score, absolute))
+    if candidates:
+        candidates.sort(key=lambda x: x[0], reverse=True)
+        return candidates[0][1]
     return ""
-
 
 def find_point_specific_image(soup, base_url, point_name, section_nodes):
     """Find an official image explicitly associated with one named point.
@@ -751,6 +806,11 @@ def extract_address(soup):
             return norm(m.group(1))
     return ""
 
+def get_known_stamp_asset(point_name):
+    name = norm(point_name)
+    return SEREBII_CENTER_STAMP_IMAGES.get(name, "")
+
+
 def extract_center_points_from_official_page(go_url, go_soup, event_id, event_title, event_title_zh, start_date, end_date, old_items=None):
     points = []
     seen = set()
@@ -857,8 +917,12 @@ def extract_center_points_from_official_page(go_url, go_soup, event_id, event_ti
                 item["lat"], item["lng"] = coords
                 item["coordinatesOfficial"] = True
                 item["coordsSource"] = "既有 Pokémon Center 官方資料"
-            # 注意：GO 集章趣內頁必須使用「實際遊戲圖章」，
-            # 不把 Pokémon Center Logo / 店舖圖示當成 Stamp。
+            # Pokémon Center 活動的集章卡，依需求使用各中心既有的代表徽章／圖示。
+            center_badge = find_center_icon(item, centers)
+            if center_badge:
+                item["stampImage"] = center_badge
+                item["stampImageOfficial"] = True
+                item["stampImageSource"] = "既有 pokemon_center.json 的 Pokémon Center 代表徽章／圖示"
             item["pref"] = center.get("pref", "") or center.get("prefecture", "")
             item["city"] = center.get("city", "")
             item["address"] = center.get("address", "")
@@ -1126,6 +1190,18 @@ def extract_event_payload(url, soup, localized_soup=None, old_items=None):
             point_specific_image = find_point_specific_image(
                 source_soup, url, point_name, payload.get("nodes") or []
             )
+
+            # Pokémon Center 的實際 GO 圖章目前有可靠的公開逐點圖片索引。
+            if not point_specific_image and (
+                "ポケモンセンター" in point_name
+                or "Pokémon Center" in point_name
+                or "pokemon center" in point_name.lower()
+                or "Pokémon GO Lab." in point_name
+            ):
+                point_specific_image = get_known_stamp_asset(point_name)
+                if point_specific_image:
+                    point["stampImageSource"] = "Serebii Pokémon GO Stamp Rally 資料（實際遊戲圖章圖片）"
+
             if point_specific_image:
                 point["stampImage"] = point_specific_image
                 point["stampImageOfficial"] = True
@@ -1434,7 +1510,7 @@ def main():
             unique_items[item["id"]] = item
     fresh_items = list(unique_items.values())
 
-    if not fresh_items:
+    if not fresh_events and not fresh_items:
         print("No fresh official GO Stamp Rally data found.")
         print("Existing official cache kept unchanged.")
         return
@@ -1452,6 +1528,8 @@ def main():
             if event.get("eventId"):
                 old_event_meta[event["eventId"]] = event
     for event in fresh_events:
+        previous = old_event_meta.get(event.get("eventId"), {})
+        fresh_activity_image = event.get("activityImage", "") or previous.get("activityImage", "")
         old_event_meta[event["eventId"]] = {
             "eventId": event.get("eventId"),
             "event": event.get("event", ""),
@@ -1467,7 +1545,8 @@ def main():
             "source": "Pokémon GO Official Website",
             "sourceUrl": event.get("sourceUrl", ""),
             "official": True,
-            "activityImage": event.get("activityImage", ""),
+            "activityImage": fresh_activity_image,
+            "eventImage": fresh_activity_image,
         }
     event_meta = list(old_event_meta.values())
     point_count = {}
@@ -1481,7 +1560,7 @@ def main():
     save_json(
         STAMP_FILE,
         {
-            "version": "12.0",
+            "version": "13.0",
             "updated": timestamp,
             "source": "Pokémon GO Official Website",
             "sourceMode": "automatic-discovery",

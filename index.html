@@ -1982,6 +1982,9 @@ button{
 
 .stamp-event-data-status{margin-top:7px;display:inline-block;padding:4px 9px;border-radius:999px;background:#f2f6f6;color:#5b7f84;font-size:11px;font-weight:900;}
 .stamp-event-data-status.incomplete{background:#fff5df;color:#8a6816;}
+.stamp-event-live-status{margin-top:6px;display:inline-block;padding:4px 9px;border-radius:999px;background:#eaf7ed;color:#2d8b50;font-size:11px;font-weight:900;}
+.stamp-event-live-status.upcoming{background:#eef4ff;color:#42689a;}
+.stamp-event-live-status.ended{background:#f0f0f0;color:#777;}
 </style>
 
 </head>
@@ -2815,7 +2818,8 @@ function renderStampEvents(el){
     const card=document.createElement("div");
     card.className="region-card stamp-event-card";
     card.onclick=()=>openStampEvent(event.id);
-    const statusOverlay=(status==="活動尚未開始"||status==="活動已結束")
+    const statusKey=status==="活動尚未開始"?"upcoming":(status==="活動已結束"?"ended":"active");
+    const statusOverlay=(statusKey!=="active")
       ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
     const countText=total?`${obtained} / ${total}`:(known?`${obtained} / ${known}`:"尚待官方公布");
     const note=(total && known<total)
@@ -2831,7 +2835,7 @@ function renderStampEvents(el){
       <div class="region-info">
         <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
         <div class="region-count">${countText}</div>
-        <div class="stamp-event-date">${escapeHtml(getStampEventDateText(event))}</div>
+        <div class="stamp-event-live-status ${statusKey}">${escapeHtml(status)}</div><div class="stamp-event-date">${escapeHtml(getStampEventDateText(event))}</div>
         <div class="region-percent">${total?`完成率 ${percent}%`:`資料待官方公布`}${note}</div>
       </div>`;
     el.appendChild(card);
@@ -2932,7 +2936,7 @@ function openModal(item,pref,lat,lng){
   const valid=Number.isFinite(lat)&&Number.isFinite(lng); document.getElementById("modalCoordinate").textContent=valid?`${lat}, ${lng}`:"無座標資料";
   const details=document.getElementById("stampDetails");
   if(currentItemType==="stamp"){
-    details.innerHTML=`<div class="stamp-event">🎟️ ${escapeHtml(getStampEventName(item))}</div>${item.venueZh&&item.venueZh!==title?`<div class="stamp-venue">📍 ${escapeHtml(item.venueZh)}</div>`:""}${getStampDates(item)?`<div class="stamp-dates">📅 ${escapeHtml(getStampDates(item))}</div>`:""}<span class="stamp-status">${escapeHtml(getStampStatus(item))}</span>${item.rewardZh||item.reward?`<div class="stamp-reward">🎁 ${escapeHtml(item.rewardZh||item.reward)}</div>`:""}${item.stampImageSource?`<div class="stamp-source">圖片來源：${escapeHtml(item.stampImageSource)}</div>`:""}${item.sourceUrl?`<div class="stamp-source"><a href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">🔗 官方活動頁</a></div>`:""}`; details.style.display="block";
+    details.innerHTML=`<div class="stamp-event">🎟️ ${escapeHtml(getStampEventName(item))}</div>${item.venueZh&&item.venueZh!==title?`<div class="stamp-venue">📍 ${escapeHtml(item.venueZh)}</div>`:""}${getStampDates(item)?`<div class="stamp-dates">📅 ${escapeHtml(getStampDates(item))}</div>`:""}<span class="stamp-status">${escapeHtml(getStampStatus(item))}</span>${item.rewardZh||item.reward?`<div class="stamp-reward">🎁 ${escapeHtml(item.rewardZh||item.reward)}</div>`:""}${item.stampImageSource?`<div class="stamp-source">圖片來源：${escapeHtml(item.stampImageSource)}</div>`:""}`; details.style.display="block";
   }else{ details.innerHTML=""; details.style.display="none"; }
   updateModalObtained(); document.getElementById("modalOverlay").classList.add("show"); document.body.classList.add("no-scroll");
 }

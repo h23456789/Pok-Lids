@@ -27,7 +27,7 @@ HEADERS = {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/151.0 Safari/537.36 "
-        "PokemonJapanCollection-GOStampSync/8.0"
+        "PokemonJapanCollection-GOStampSync/12.0"
     ),
     "Accept-Language": "zh-TW,zh;q=0.95,en;q=0.8,ja;q=0.7",
 }
@@ -362,6 +362,79 @@ def extract_stamp_image_candidates(soup, base_url, section_nodes):
         result.append({"url": url, "score": score})
     return result
 
+
+def extract_activity_image(soup, base_url, section_nodes=None):
+    """Prefer the official article hero/OG image for the activity banner."""
+    for attrs in (
+        {"property": "og:image"},
+        {"name": "twitter:image"},
+    ):
+        meta = soup.find("meta", attrs=attrs)
+        if meta and meta.get("content"):
+            return urljoin(base_url, norm(meta.get("content")))
+
+    # Fallback: first reasonably large image from the section/page.
+    pools = []
+    if section_nodes:
+        pools.extend(section_nodes)
+    pools.extend(soup.find_all("img"))
+    for node in pools:
+        img = node if getattr(node, "name", None) == "img" else None
+        if img is None and hasattr(node, "find"):
+            img = node.find("img")
+        if not img:
+            continue
+        src = img.get("src") or img.get("data-src") or img.get("data-lazy-src") or ""
+        if not src:
+            continue
+        return urljoin(base_url, src)
+    return ""
+
+
+def find_point_specific_image(soup, base_url, point_name, section_nodes):
+    """Find an official image explicitly associated with one named point.
+
+    Never returns the article hero/banner merely because it is on the same page.
+    """
+    target = norm(point_name).lower()
+    if not target:
+        return ""
+
+    candidates = []
+    nodes = []
+    nodes.extend(section_nodes or [])
+    nodes.extend(soup.find_all(["figure", "li", "p", "a"]))
+
+    seen_nodes = set()
+    for node in nodes:
+        ident = id(node)
+        if ident in seen_nodes:
+            continue
+        seen_nodes.add(ident)
+        text = norm(node.get_text(" ", strip=True)) if hasattr(node, "get_text") else ""
+        if not text:
+            continue
+        low = text.lower()
+        if target not in low and low not in target:
+            continue
+        for img in node.find_all("img") if hasattr(node, "find_all") else []:
+            src = img.get("src") or img.get("data-src") or img.get("data-lazy-src") or ""
+            if not src:
+                continue
+            absolute = urljoin(base_url, src)
+            alt = norm(img.get("alt", ""))
+            probe = f"{text} {alt} {absolute}".lower()
+            if any(bad in probe for bad in ("banner", "hero", "header", "kv")):
+                continue
+            score = 0
+            if target in probe:
+                score += 20
+            if "stamp" in probe or "スタンプ" in probe or "圖章" in probe:
+                score += 10
+            candidates.append((score, absolute))
+
+    candidates.sort(key=lambda x: x[0], reverse=True)
+    return candidates[0][1] if candidates and candidates[0][0] >= 20 else ""
 
 def extract_jsonld_objects(soup):
     objects = []
@@ -784,16 +857,8 @@ def extract_center_points_from_official_page(go_url, go_soup, event_id, event_ti
                 item["lat"], item["lng"] = coords
                 item["coordinatesOfficial"] = True
                 item["coordsSource"] = "既有 Pokémon Center 官方資料"
-            item["stampImage"] = (
-                center.get("pokemonCenterIcon")
-                or center.get("centerIcon")
-                or center.get("icon")
-                or center.get("image")
-                or ""
-            )
-            if item["stampImage"]:
-                item["stampImageOfficial"] = True
-                item["stampImageSource"] = "既有 Pokémon Center 官方圖示"
+            # 注意：GO 集章趣內頁必須使用「實際遊戲圖章」，
+            # 不把 Pokémon Center Logo / 店舖圖示當成 Stamp。
             item["pref"] = center.get("pref", "") or center.get("prefecture", "")
             item["city"] = center.get("city", "")
             item["address"] = center.get("address", "")
@@ -950,7 +1015,7 @@ def extract_event_payload(url, soup, localized_soup=None, old_items=None):
         point_names = payload["points"]
         map_links = extract_map_links(source_soup, url)
         event_country = extract_location_country(text + " " + original_text)
-        activity_image = payload["images"][0]["url"] if payload["images"] else ""
+        activity_image = extract_activity_image(source_soup, url, payload.get("nodes") or [])
 
         # If the official section explicitly contains Pokémon Center locations,
         # enrich them from the existing official Center dataset. The activity
@@ -1006,16 +1071,11 @@ def extract_event_payload(url, soup, localized_soup=None, old_items=None):
             if "ポケモンセンター" in point_name or "Pokémon Center" in point_name or "pokemon center" in point_name.lower():
                 centers = center_records()
                 center_coords = find_center_coords(point, centers)
-                center_icon = find_center_icon(point, centers)
                 if center_coords:
                     point["coords"] = center_coords
                     point["lat"], point["lng"] = center_coords
                     point["coordinatesOfficial"] = True
                     point["coordsSource"] = "Pokémon Center 官方資料"
-                if center_icon:
-                    point["stampImage"] = center_icon
-                    point["stampImageOfficial"] = True
-                    point["stampImageSource"] = "既有 Pokémon Center 官方圖示"
 
             # 2) 嘗試附近文字鏈結的 Google Maps 座標。
             if not point["coords"]:
@@ -1061,15 +1121,16 @@ def extract_event_payload(url, soup, localized_soup=None, old_items=None):
                     point["coordinatesOfficial"] = False
                     point["coordsSource"] = "OpenStreetMap Nominatim（地理編碼 fallback）"
 
-            # 5) 圖章圖片：優先用 GO 集章趣 section 的圖片。
-            if not point["stampImage"]:
-                stamp_images = [x["url"] for x in payload["images"] if x.get("score", 0) >= 8]
-                if stamp_images:
-                    point["stampImage"] = stamp_images[0]
-                    point["stampImageOfficial"] = True
-                    point["stampImageSource"] = "Pokémon GO 官方活動頁"
+            # 5) 圖章圖片：只接受「與此集章點有明確關聯」的官方圖片。
+            # 活動 Banner 絕不直接當成單一 Stamp。
+            point_specific_image = find_point_specific_image(
+                source_soup, url, point_name, payload.get("nodes") or []
+            )
+            if point_specific_image:
+                point["stampImage"] = point_specific_image
+                point["stampImageOfficial"] = True
+                point["stampImageSource"] = "Pokémon GO 官方頁面：集章點對應圖片"
 
-            # 不把 Banner 當成 stampImage；沒有就留空。
             points.append(point)
 
         # 如果官方只公布了活動總枚數而未公開點名，仍保留活動本身。
@@ -1234,10 +1295,11 @@ def legacy_is_allowed(item):
     is_go_source = is_go_url(source)
     has_go_term = any(term.lower() in text for term in GO_STAMP_TERMS)
     has_gameplay = any(term.lower() in text for term in GAMEPLAY_TERMS)
-    excluded = any(term.lower() in text for term in EXCLUDE_TERMS[:3])
+    excluded = any(term.lower() in text for term in EXCLUDE_TERMS)
     if excluded:
         return False
-    return is_go_source and (has_go_term or has_gameplay)
+    # 既有資料若是由 Pokémon Center 官方頁補充而來，仍必須有 GO 集章趣語境。
+    return (is_go_source or is_center_url(source)) and (has_go_term or has_gameplay)
 
 
 def merge_preserving(old_items, fresh_items):
@@ -1419,7 +1481,7 @@ def main():
     save_json(
         STAMP_FILE,
         {
-            "version": "8.0",
+            "version": "12.0",
             "updated": timestamp,
             "source": "Pokémon GO Official Website",
             "sourceMode": "automatic-discovery",

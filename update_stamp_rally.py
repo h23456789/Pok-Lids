@@ -19,7 +19,7 @@ TIMEOUT = 35
 REQUEST_DELAY = 0.25
 GEOCODE_DELAY = 1.10
 GEOCODER_EMAIL = ""  # Optional: set to a contact email in CI if desired.
-GEOCODER_USER_AGENT = "Pok-Lids-GOStampSync/20.0 (+https://github.com/h23456789/Pok-Lids)"
+GEOCODER_USER_AGENT = "Pok-Lids-GOStampSync/22.0 (+https://github.com/h23456789/Pok-Lids)"
 MAX_DISCOVERED_PAGES = 220
 MAX_LINK_DEPTH = 3
 MAX_POINTS_PER_EVENT = 100
@@ -138,6 +138,43 @@ CENTER_ALIASES = {
     "ポケモンセンターフクオカ": "寶可夢中心福岡",
     "ポケモンセンターオキナワ": "寶可夢中心沖繩",
     "Pokémon GO Lab.": "Pokémon GO Lab.",
+}
+
+
+
+# 已由玩家/攻略網站公開並可交叉驗證的「實際 GO 集章趣」座標。
+# 這不是活動清單，而是點位座標快取；未來新增點仍會走官方座標／地名地理編碼流程。
+# 東京 2026 GO Fest 三區座標來源：Margxt / Reddit 玩家座標整理。
+VERIFIED_STAMP_COORDS = {
+    # Tokyo / Minato
+    "東京鐵塔": [35.6586, 139.7454],
+    "SL廣場 C11 292": [35.6671448, 139.7574141],
+    "SL広場 C11 292号": [35.6671448, 139.7574141],
+    "原芝浦小學校紀念碑": [35.665661, 139.7461202],
+    "港區立鞆絵小学校校舎跡": [35.665661, 139.7461202],
+    "江戶坂": [35.6669716, 139.7454765],
+    "江戸見坂": [35.6669716, 139.7454765],
+    "芝公園 Gym Statue": [35.6560133, 139.7490935],
+    "芝公園 Gym Statue(▶︎Googleマップ)": [35.6560133, 139.7490935],
+
+    # Tokyo / Koto
+    "江東區役所": [35.6730499, 139.8164348],
+    "江東区役所": [35.6730499, 139.8164348],
+    "東陽21 Goddess Fountain": [35.6748, 139.81523],
+    "イースト21 女神の噴水": [35.6748, 139.81523],
+    "仙台堀公園 嬰兒噴泉": [35.676180, 139.812740],
+    "仙台堀川公園 赤ちゃん噴水池": [35.676180, 139.812740],
+    "東京都現代美術館 Like a Snail B": [35.6796307, 139.8074057],
+    "東京都現代美術館 かたつむりのようにB": [35.6796307, 139.8074057],
+
+    # Tokyo / Shinagawa
+    "天王洲 Isle 第四公園": [35.623578, 139.748265],
+    "天王洲アイル第4公園": [35.623578, 139.748265],
+    "聖蹟公園": [35.619162, 139.74419],
+    "街道松廣場": [35.615484, 139.744176],
+    "街道松の広場": [35.615484, 139.744176],
+    "鮫洲入江廣場": [35.603301, 139.743942],
+    "鮫洲入江広場": [35.603301, 139.743942],
 }
 
 OFFICIAL_CENTER_BADGE_FALLBACKS = {
@@ -569,17 +606,59 @@ def find_center_record(name, centers):
     return None
 
 
-def find_center_icon(name, centers):
+def _looks_like_center_badge(url: str) -> bool:
+    u = str(url or "").lower()
+    if not u or u.endswith((".svg", ".json")):
+        return False
+    if any(token in u for token in ("mv/", "/mv", "mainvisual", "hero", "banner", "news", "event", "ogp")):
+        return False
+    return any(token in u for token in ("logo", "badge", "mark", "symbol", "emblem", "shop-logo", "shop_logo"))
+
+def discover_center_badge_from_official(name, centers):
+    # Prefer a badge/logo already stored in pokemon_center.json.
     c = find_center_record(name, centers)
     if c:
-        image = next((c.get(k) for k in (
-            "pokemonCenterBadge","pokemonCenterIcon","centerBadge","centerIcon","badge","icon","image","imageUrl","logo"
-        ) if c.get(k)), "")
-        if image: return image
+        for key in ("pokemonCenterBadge","pokemonCenterIcon","centerBadge","centerIcon","badge","logo"):
+            value = c.get(key)
+            if value and _looks_like_center_badge(value):
+                return value
+    # Known official Yokohama logo asset.
     lower = normalize_center_name(name)
     if "yokohama" in lower or "橫濱" in name or "横浜" in name or "ヨコハマ" in name:
         return OFFICIAL_CENTER_BADGE_FALLBACKS["ポケモンセンターヨコハマ"]
+    # Discover from the official store page.
+    official_url = c.get("official_url") if c else ""
+    if official_url:
+        html = get(official_url)
+        if html:
+            soup = BeautifulSoup(html, "html.parser")
+            candidates = []
+            for tag in soup.find_all("img"):
+                for attr in ("src", "data-src", "data-lazy-src", "srcset"):
+                    raw = tag.get(attr)
+                    if not raw:
+                        continue
+                    values = str(raw).split(",") if attr == "srcset" else [raw]
+                    for value in values:
+                        value = value.strip().split(" ")[0]
+                        full = urljoin(official_url, value)
+                        if _looks_like_center_badge(full):
+                            candidates.append(full)
+            for tag in soup.find_all(["meta","link"]):
+                raw = tag.get("content") or tag.get("href") or ""
+                full = urljoin(official_url, str(raw))
+                if _looks_like_center_badge(full):
+                    candidates.append(full)
+            # Prefer URLs whose filename is explicitly logo/mark/badge.
+            for candidate in candidates:
+                if any(k in candidate.lower() for k in ("logo", "badge", "mark", "emblem")):
+                    return candidate
+            if candidates:
+                return candidates[0]
     return ""
+
+def find_center_icon(name, centers):
+    return discover_center_badge_from_official(name, centers)
 
 
 def coords_from_center(name, centers):
@@ -708,6 +787,70 @@ def merge_location_data(point, node):
     return merged
 
 
+
+def verified_coords_for_name(name):
+    """Return a known verified community coordinate for a published stamp point name."""
+    target = norm(name).lower()
+    if not target:
+        return None
+    # Exact match first.
+    for key, coords in VERIFIED_STAMP_COORDS.items():
+        if norm(key).lower() == target:
+            return list(coords)
+    # Conservative fuzzy match, useful for Japanese/Chinese punctuation variations.
+    compact = re.sub(r"[\s・･,，.。()（）]+", "", target)
+    for key, coords in VERIFIED_STAMP_COORDS.items():
+        k = re.sub(r"[\s・･,，.。()（）]+", "", norm(key).lower())
+        if compact == k or (len(k) >= 5 and (k in compact or compact in k)):
+            return list(coords)
+    return None
+
+
+def enrich_known_points(points, context=""):
+    """Fill missing coordinates for existing points: verified cache, then geocoding by place name."""
+    enriched=[]
+    for p in points:
+        q=dict(p)
+        coords=q.get("coords") or []
+        valid=False
+        if len(coords)>=2:
+            try:
+                lat=float(coords[0]); lng=float(coords[1])
+                valid=(-90<=lat<=90 and -180<=lng<=180)
+            except Exception:
+                valid=False
+        if not valid:
+            known=verified_coords_for_name(q.get("name", ""))
+            if known:
+                q["coords"]=known
+                q["coordinatesOfficial"]=False
+                q["coordinatesConfidence"]="high"
+                q["coordsSource"]="Verified community coordinate reference"
+                q["coordinatesSourceUrl"]="https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
+                valid=True
+        if not valid:
+            name=norm(q.get("name"))
+            address=norm(q.get("address"))
+            queries=build_geocode_queries(name, context, address)
+            for query in queries:
+                found=geocode_place(query)
+                if found:
+                    q["coords"]=found["coords"]
+                    q["lat"],q["lng"]=found["coords"]
+                    q["coordinatesOfficial"]=False
+                    q["coordinatesConfidence"]="medium"
+                    q["coordsSource"]="Nominatim geocoding from published place name"
+                    q["geocodeQuery"]=query
+                    q["geocodeDisplayName"]=found.get("displayName","")
+                    valid=True
+                    break
+                time.sleep(GEOCODE_DELAY)
+        if valid and len(q.get("coords") or [])>=2:
+            q["lat"],q["lng"]=q["coords"][:2]
+        enriched.append(q)
+    return enriched
+
+
 def event_status(start_date, end_date):
     """Return a snapshot status for JSON/history; frontend recalculates this live."""
     try:
@@ -775,11 +918,16 @@ def merge_points(old_items, new_items, event_id):
         old_match=old_by_name.get(name.lower(),[None])[0]
         item=dict(old_match or {})
         item.update(new)
-        if old_match and not new.get("stampImage") and old_match.get("stampImage"):
+        if old_match and not new.get("stampImage") and old_match.get("stampImage") and item.get("venueType") != "pokemon_center":
             item["stampImage"]=old_match["stampImage"]
             item["stampImageType"]=old_match.get("stampImageType","actual-stamp")
             item["stampImageSource"]=old_match.get("stampImageSource","")
             item["stampImageOfficial"]=old_match.get("stampImageOfficial",False)
+        if old_match and not new.get("centerBadgeImage") and old_match.get("centerBadgeImage"):
+            item["centerBadgeImage"]=old_match["centerBadgeImage"]
+            item["centerBadgeType"]=old_match.get("centerBadgeType","pokemon-center-badge")
+            item["centerBadgeSource"]=old_match.get("centerBadgeSource","")
+            item["centerBadgeOfficial"]=old_match.get("centerBadgeOfficial",False)
         if old_match and not new.get("coords") and old_match.get("coords"):
             item["coords"]=old_match["coords"]
             item["lat"],item["lng"]=old_match["coords"]
@@ -869,7 +1017,12 @@ def build_from_discovery(discovered, old_data):
                 low=name.lower()
                 if any(x in low for x in ("ポケモンセンター","pokemon center","pokémon center","寶可夢中心")):
                     item["venueType"]="pokemon_center"; icon=find_center_icon(name,centers)
-                    if icon: item["stampImage"]=icon; item["stampImageType"]="pokemon-center-badge"; item["stampImageSource"]="pokemon_center.json / official store badge"; item["stampImageOfficial"]=True
+                    if icon:
+                        item["centerBadgeImage"]=icon
+                        item["centerBadgeType"]="pokemon-center-badge"
+                        item["centerBadgeSource"]="Pokémon Center official store page / pokemon_center.json"
+                        item["centerBadgeOfficial"]=True
+                        # Legacy compatibility: keep stampImage empty for Center because this is a site display badge, not a GO stamp.
                     cc=coords_from_center(name,centers)
                     if cc: item["coords"]=cc; item["lat"],item["lng"]=cc; item["coordinatesOfficial"]=True; item["coordsSource"]="pokemon_center.json"
                 new_items.append(item)
@@ -889,10 +1042,16 @@ def build_from_discovery(discovered, old_data):
     final_items=[]
     for event in final_events:
         eid=event["eventId"]; seen=set()
-        for item in items_by_event.get(eid,[]):
+        raw_items=items_by_event.get(eid,[])
+        context=f"{event.get('eventZh') or event.get('event') or ''} {event.get('canonicalPage') or event.get('sourceUrl') or ''}"
+        raw_items=enrich_known_points(raw_items, context)
+        for item in raw_items:
             key=normalize_item_key(item)
             if key in seen: continue
             seen.add(key); item["eventId"]=eid; item["event"]=event.get("event",item.get("event","GO Stamp Rally")); item["eventZh"]=event.get("eventZh",item.get("eventZh","GO 集章趣")); item["startDate"]=event.get("startDate",item.get("startDate","")); item["endDate"]=event.get("endDate",item.get("endDate","")); final_items.append(item)
+        exp=event.get("expectedStamps")
+        event["pointCount"]=sum(1 for x in final_items if x.get("eventId")==eid)
+        event["dataStatus"]="complete" if exp and event["pointCount"]>=int(exp) else ("partial" if event["pointCount"] else "announced-only")
     return final_events,final_items
 
 def signature(x):
@@ -925,7 +1084,7 @@ def build_history(old, new_events, new_items):
 
 def main():
     print("=" * 60)
-    print("Pokémon GO GO 集章趣 AUTO SYNC v20")
+    print("Pokémon GO GO 集章趣 AUTO SYNC v22")
     print("Official discovery + locale dedupe + activity blocks + no fabricated points")
     print("No hard-coded activity catalog")
     print("=" * 60)
@@ -936,7 +1095,7 @@ def main():
 
     events, items = build_from_discovery(discovered, old)
     new = {
-        "version": "20.0",
+        "version": "22.0",
         "updated": datetime.now(timezone.utc).isoformat(),
         "source": "Pokémon GO Official Website",
         "sourceMode": "official-first; localized dedupe; activity-block discovery; official map coords first; place-name geocoding fallback; no fabricated points",

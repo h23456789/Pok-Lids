@@ -1919,6 +1919,40 @@ button{
   display:block;
 }
 
+
+.stamp-event-status-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(20,55,60,.42);
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+  text-shadow:0 2px 5px rgba(0,0,0,.35);
+  z-index:2;
+}
+.stamp-event-date{
+  margin-top:5px;
+  color:#6f8f94;
+  font-size:12px;
+  line-height:1.5;
+}
+.stamp-event-data-note{
+  margin-top:5px;
+  color:#9a7b28;
+  font-size:11px;
+  line-height:1.5;
+}
+.stamp-event-card .region-images{
+  position:relative;
+}
+.stamp-event-card .stamp-event-banner{
+  position:relative;
+  z-index:1;
+}
+
 .stamp-event-banner-fallback{
   width:100%;
   height:100%;
@@ -1945,6 +1979,9 @@ button{
   line-height:1.5;
 }
 
+
+.stamp-event-data-status{margin-top:7px;display:inline-block;padding:4px 9px;border-radius:999px;background:#f2f6f6;color:#5b7f84;font-size:11px;font-weight:900;}
+.stamp-event-data-status.incomplete{background:#fff5df;color:#8a6816;}
 </style>
 
 </head>
@@ -2552,7 +2589,7 @@ function getItemTitle(type,item){
 
 function normalizeKey(value){ return String(value??"").toLowerCase().replace(/\s+/g,"").replace(/[‐‑–—ー・.]/g,""); }
 
-function centerNameVariants(value){ const key=normalizeKey(value); const aliases={"yokohama":"寶可夢中心橫濱","pokemoncenteryokohama":"寶可夢中心橫濱","ポケモンセンターヨコハマ":"寶可夢中心橫濱","寶可夢中心橫濱":"寶可夢中心橫濱"}; return [key,normalizeKey(aliases[key]||"")].filter(Boolean); }
+function centerNameVariants(value){ const key=normalizeKey(value); const aliases={"yokohama":"寶可夢中心橫濱","pokemoncenteryokohama":"寶可夢中心橫濱","ポケモンセンターヨコハマ":"寶可夢中心橫濱","寶可夢中心橫濱":"寶可夢中心橫濱"}; return [key,normalizeKey(aliases[key]||""),String(value??"")].filter(Boolean); }
 
 function findCenterRecord(item){
   const list=dataSets.center||[];
@@ -2690,7 +2727,7 @@ function getStampEvents(){
     const titleOriginal=item?.name||item?.venue||item?.event||"";
     const looksLikePlaceholder=!item?.stampImage&&!item?.lat&&!item?.lng&&String(titleOriginal)===String(event.event);
     if(looksLikePlaceholder) continue;
-    event.items.push(item);
+    if(!event.items.some(x=>getItemId(x)===getItemId(item))){ event.items.push(item); }
     if(!event.startDate || (item.startDate && item.startDate<event.startDate)) event.startDate=item.startDate;
     if(!event.endDate || (item.endDate && item.endDate>event.endDate)) event.endDate=item.endDate;
     if(!event.sourceUrl && item.sourceUrl) event.sourceUrl=item.sourceUrl;
@@ -2742,6 +2779,24 @@ function renderRegions(){
   }
 }
 
+function getStampEventStatus(event){
+  const now=new Date();
+  const start=event?.startDate?new Date(`${event.startDate}T00:00:00`):null;
+  const end=event?.endDate?new Date(`${event.endDate}T23:59:59`):null;
+  if(start && now<start)return "活動尚未開始";
+  if(end && now>end)return "活動已結束";
+  return "進行中";
+}
+
+function getStampEventDateText(event){
+  const s=event?.startDate||"";
+  const e=event?.endDate||"";
+  if(s&&e)return `開始：${s}　結束：${e}`;
+  if(s)return `開始：${s}　結束：無期限`;
+  if(e)return `結束：${e}`;
+  return "日期尚待官方公布";
+}
+
 function renderStampEvents(el){
   const events=getStampEvents();
   if(!events.length){
@@ -2752,27 +2807,32 @@ function renderStampEvents(el){
   for(const event of events){
     const items=event.items||[];
     const obtained=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
-    const total=Number(event.expectedStamps||0) || items.length;
+    const total=Number(event.expectedStamps||0)||items.length;
     const percent=total?Math.round(obtained/total*1000)/10:0;
     const known=items.length;
+    const status=getStampEventStatus(event);
+    const banner=event.activityImage || event.eventImage || event.image || "";
     const card=document.createElement("div");
     card.className="region-card stamp-event-card";
     card.onclick=()=>openStampEvent(event.id);
-    const banner=event.activityImage || event.eventImage || event.image || "";
-    const date=event.startDate ? `${escapeHtml(event.startDate)}${event.endDate?" ～ "+escapeHtml(event.endDate):""}` : "官方活動";
-    const countText=total?`${obtained} / ${total}`:"待官方公布集章數";
-    const pointText=(known<total && total)?`已取得 ${known} 個集章點`:`集章點 ${known} 個`;
+    const statusOverlay=(status==="活動尚未開始"||status==="活動已結束")
+      ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
+    const countText=total?`${obtained} / ${total}`:(known?`${obtained} / ${known}`:"尚待官方公布");
+    const note=(total && known<total)
+      ? `<div class="stamp-event-data-note">目前已取得 ${known} / ${total} 個官方集章點資料</div>` : "";
     card.innerHTML=`
       <div class="region-images stamp-event-banner-wrap">
         ${banner
           ? `<img class="stamp-event-banner" src="${escapeHtml(banner)}" alt="${escapeHtml(event.eventZh||event.event||"GO 集章趣")}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"> <div class="stamp-event-banner-fallback" style="display:none">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
           : `<div class="stamp-event-banner-fallback">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
         }
+        ${statusOverlay}
       </div>
       <div class="region-info">
         <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
         <div class="region-count">${countText}</div>
-        <div class="region-percent">${date}<br>${total?`完成率 ${percent}%　｜　${pointText}`:pointText}</div>
+        <div class="stamp-event-date">${escapeHtml(getStampEventDateText(event))}</div>
+        <div class="region-percent">${total?`完成率 ${percent}%`:`資料待官方公布`}${note}</div>
       </div>`;
     el.appendChild(card);
   }

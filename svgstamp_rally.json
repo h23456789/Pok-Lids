@@ -1,9 +1,9 @@
 {
-  "version": "18.0-cache",
+  "version": "20.0",
   "updated": "2026-08-29T00:00:00Z",
   "source": "Pokémon GO Official Website",
-  "sourceMode": "current cache; rebuilt by update_stamp_rally.py on next Actions run",
-  "rule": "Only in-game Pokémon GO GO Stamp Rally. Offline stamp rallies, Poké Lid, ordinary PokéStops and non-rally events are excluded.",
+  "sourceMode": "official-first; localized dedupe; activity-block discovery; official map coordinates first; place-name geocoding fallback; no fabricated points",
+  "rule": "Only in-game Pokémon GO GO Stamp Rally. Offline stamp rallies, ordinary PokéStops, and Poké Lid are excluded. Published place names may be geocoded when official coordinates are not embedded.",
   "events": [
     {
       "eventId": "STAMP-PKCNTR-2026",
@@ -21,7 +21,8 @@
       "sourceUrl": "https://www.pokemon.co.jp/info/2026/06/260626_e01.html",
       "official": true,
       "activityImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
-      "eventImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg"
+      "eventImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
+      "status": "active"
     },
     {
       "eventId": "GO-XCITING-CROSS-2026",
@@ -39,7 +40,8 @@
       "sourceUrl": "https://pokemongo.com/en/news/event-apac-stamp-rally-2026",
       "official": true,
       "activityImage": "https://lh3.googleusercontent.com/nqJ9X06yWs01-pPsSB7I2KTTvPsVMwMW0VZqaJCU9jVUb6E45970crW3-rVyQWufr_esZMy3uqzvHwQDbryqqPxhFNhwx8o_8jXEB1TUoN8%3Ds0-e365",
-      "eventImage": "https://lh3.googleusercontent.com/nqJ9X06yWs01-pPsSB7I2KTTvPsVMwMW0VZqaJCU9jVUb6E45970crW3-rVyQWufr_esZMy3uqzvHwQDbryqqPxhFNhwx8o_8jXEB1TUoN8%3Ds0-e365"
+      "eventImage": "https://lh3.googleusercontent.com/nqJ9X06yWs01-pPsSB7I2KTTvPsVMwMW0VZqaJCU9jVUb6E45970crW3-rVyQWufr_esZMy3uqzvHwQDbryqqPxhFNhwx8o_8jXEB1TUoN8%3Ds0-e365",
+      "status": "upcoming"
     },
     {
       "eventId": "GO-XCITING-KLCC-2026",
@@ -57,7 +59,8 @@
       "sourceUrl": "https://pokemongo.com/news/event-kuala-lumpur-30th-anniversary-2026",
       "official": true,
       "activityImage": "https://lh3.googleusercontent.com/v4ipgzZkv2FsEUCH_7xW6ecciRiBHgddJfqQmhhXT9hWXsWbkWmW2e-RGhUm6n2_ve6U6Jipmeutbq8AVIDhKCaHHYjJRL8HxOvzRmEw26s%3Ds0-e365",
-      "eventImage": "https://lh3.googleusercontent.com/v4ipgzZkv2FsEUCH_7xW6ecciRiBHgddJfqQmhhXT9hWXsWbkWmW2e-RGhUm6n2_ve6U6Jipmeutbq8AVIDhKCaHHYjJRL8HxOvzRmEw26s%3Ds0-e365"
+      "eventImage": "https://lh3.googleusercontent.com/v4ipgzZkv2FsEUCH_7xW6ecciRiBHgddJfqQmhhXT9hWXsWbkWmW2e-RGhUm6n2_ve6U6Jipmeutbq8AVIDhKCaHHYjJRL8HxOvzRmEw26s%3Ds0-e365",
+      "status": "upcoming"
     },
     {
       "eventId": "GO-CITYSAFARI-2026-BOSTON",
@@ -73,7 +76,8 @@
       "pointCount": 0,
       "source": "Pokémon GO Official Website",
       "sourceUrl": "https://pokemongo.com/featured-in-person-events/citysafari/boston",
-      "official": true
+      "official": true,
+      "status": "upcoming"
     },
     {
       "eventId": "GO-CITYSAFARI-2026-BRISBANE",
@@ -89,7 +93,8 @@
       "pointCount": 0,
       "source": "Pokémon GO Official Website",
       "sourceUrl": "https://pokemongo.com/featured-in-person-events/citysafari/brisbane",
-      "official": true
+      "official": true,
+      "status": "upcoming"
     },
     {
       "eventId": "GO-CITYSAFARI-2026-LISBON",
@@ -105,7 +110,8 @@
       "pointCount": 0,
       "source": "Pokémon GO Official Website",
       "sourceUrl": "https://pokemongo.com/featured-in-person-events/citysafari/lisbon",
-      "official": true
+      "official": true,
+      "status": "upcoming"
     },
     {
       "eventId": "GO-CITYSAFARI-2026-MARSEILLE",
@@ -121,7 +127,8 @@
       "pointCount": 0,
       "source": "Pokémon GO Official Website",
       "sourceUrl": "https://pokemongo.com/featured-in-person-events/citysafari/marseille",
-      "official": true
+      "official": true,
+      "status": "upcoming"
     },
     {
       "eventId": "GO-CITYSAFARI-2026-MUNICH",
@@ -137,7 +144,8 @@
       "pointCount": 0,
       "source": "Pokémon GO Official Website",
       "sourceUrl": "https://pokemongo.com/featured-in-person-events/citysafari/munich",
-      "official": true
+      "official": true,
+      "status": "upcoming"
     },
     {
       "eventId": "GO-CITYSAFARI-2026-RIO-DE-JANEIRO",
@@ -153,7 +161,8 @@
       "pointCount": 0,
       "source": "Pokémon GO Official Website",
       "sourceUrl": "https://pokemongo.com/featured-in-person-events/citysafari/rio-de-janeiro",
-      "official": true
+      "official": true,
+      "status": "upcoming"
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-MINATO",
@@ -172,7 +181,8 @@
       "canonicalPage": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "sourceLocale": "en",
       "dataStatus": "partial",
-      "descriptionZh": ""
+      "descriptionZh": "",
+      "status": "active"
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-KOTO",
@@ -191,7 +201,8 @@
       "canonicalPage": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "sourceLocale": "en",
       "dataStatus": "partial",
-      "descriptionZh": ""
+      "descriptionZh": "",
+      "status": "active"
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-SHINAGAWA",
@@ -210,7 +221,8 @@
       "canonicalPage": "https://pokemongo.com/gofest/tokyo/in-person-experiences",
       "sourceLocale": "en",
       "dataStatus": "partial",
-      "descriptionZh": ""
+      "descriptionZh": "",
+      "status": "active"
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-NAGASAKI",
@@ -229,7 +241,8 @@
       "canonicalPage": "https://pokemongo.com/zh-Hant/news/stamp-rally-nagasaki",
       "sourceLocale": "en",
       "dataStatus": "partial",
-      "descriptionZh": ""
+      "descriptionZh": "",
+      "status": "active"
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-SUITA",
@@ -248,7 +261,8 @@
       "canonicalPage": "https://pokemongo.com/gofest/osaka/features",
       "sourceLocale": "en",
       "dataStatus": "partial",
-      "descriptionZh": ""
+      "descriptionZh": "",
+      "status": "active"
     }
   ],
   "list": [

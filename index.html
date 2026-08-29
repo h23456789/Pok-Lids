@@ -1904,6 +1904,47 @@ button{
 
 }
 
+
+
+/* GO 集章趣：活動 Banner */
+.stamp-event-banner-wrap{
+  height:185px;
+  padding:0;
+}
+
+.stamp-event-banner{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.stamp-event-banner-fallback{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  text-align:center;
+  color:#397b83;
+  background:#c8edf5;
+  font-weight:900;
+}
+
+.stamp-missing-image{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:12px;
+  color:#7b999d;
+  font-size:12px;
+  line-height:1.5;
+}
+
 </style>
 
 </head>
@@ -2519,10 +2560,18 @@ function findCenterRecord(item){
 
 function getItemImageUrl(type,item){
   if(type==="lid") return "https://pokefuta.yuki.games/images/pokefuta/"+encodeURIComponent(item.id)+".png";
+
   /*
-   * GO 集章趣的卡片只使用「實際圖章」圖片。
-   * 活動 Banner 僅用於第一層活動卡，不在這裡 fallback。
+   * Pokémon Center GO 集章趣：
+   * 優先使用既有 pokemon_center.json 中「該中心自己的代表徽章／圖示」。
+   * 活動 Banner 永遠不在這裡 fallback。
    */
+  if(String(item?.venueType||"")==="pokemon_center" || String(item?.venueType||"")==="pokemon_go_lab"){
+    const center=findCenterRecord(item);
+    const centerImage=center?.pokemonCenterBadge || center?.pokemonCenterIcon || center?.centerBadge || center?.centerIcon || center?.badge || center?.icon || center?.image || "";
+    if(centerImage) return centerImage;
+  }
+
   return item?.stampImage || item?.pointImage || "";
 }
 
@@ -2607,17 +2656,35 @@ function getStampEvents(){
   const map=new Map();
   const ensure=(meta)=>{
     const id=String(meta?.eventId||meta?.id||meta?.event||"GO-STAMP-UNKNOWN");
-    if(!map.has(id)) map.set(id,{id,event:meta?.event||meta?.eventName||"GO 集章趣",eventZh:meta?.eventZh||meta?.eventNameZh||meta?.event||"GO 集章趣",startDate:meta?.startDate||"",endDate:meta?.endDate||"",sourceUrl:meta?.sourceUrl||"",activityImage:meta?.activityImage||meta?.image||"",expectedStamps:Number.isFinite(Number(meta?.expectedStamps))?Number(meta.expectedStamps):null,descriptionZh:meta?.descriptionZh||"",items:[]});
+    if(!map.has(id)){
+      map.set(id,{
+        id,
+        event:meta?.event||meta?.eventName||"GO 集章趣",
+        eventZh:meta?.eventZh||meta?.eventNameZh||meta?.event||"GO 集章趣",
+        startDate:meta?.startDate||"",
+        endDate:meta?.endDate||"",
+        sourceUrl:meta?.sourceUrl||"",
+        activityImage:meta?.activityImage||meta?.eventImage||meta?.image||"",
+        eventImage:meta?.eventImage||meta?.activityImage||meta?.image||"",
+        expectedStamps:Number.isFinite(Number(meta?.expectedStamps))?Number(meta.expectedStamps):null,
+        descriptionZh:meta?.descriptionZh||"",
+        items:[]
+      });
+    }
     return map.get(id);
   };
   for(const meta of stampEventsMeta) ensure(meta);
   for(const item of dataSets.stamp){
     const event=ensure(item);
+    const titleOriginal=item?.name||item?.venue||item?.event||"";
+    const looksLikePlaceholder=!item?.stampImage&&!item?.lat&&!item?.lng&&String(titleOriginal)===String(event.event);
+    if(looksLikePlaceholder) continue;
     event.items.push(item);
     if(!event.startDate || (item.startDate && item.startDate<event.startDate)) event.startDate=item.startDate;
     if(!event.endDate || (item.endDate && item.endDate>event.endDate)) event.endDate=item.endDate;
     if(!event.sourceUrl && item.sourceUrl) event.sourceUrl=item.sourceUrl;
     if(!event.activityImage && item.activityImage) event.activityImage=item.activityImage;
+    if(!event.eventImage && (item.eventImage||item.activityImage)) event.eventImage=item.eventImage||item.activityImage;
     if(event.expectedStamps==null && Number.isFinite(Number(item.expectedStamps))) event.expectedStamps=Number(item.expectedStamps);
   }
   return [...map.values()].sort((a,b)=>(a.startDate||"9999").localeCompare(b.startDate||"9999") || (a.eventZh||a.event).localeCompare(b.eventZh||b.event));
@@ -2634,7 +2701,18 @@ function switchCollectionType(type){
   renderRegions(); updateOverall();
 }
 function closeAllPanels(){ for(const id of ["prefecturePanel","collectionPanel","modalOverlay"]) document.getElementById(id).classList.remove("show"); document.body.classList.remove("no-scroll"); }
-function updateOverall(){ const list=dataSets[collectionType]||[]; const obtained=list.filter(item=>obtainedIds[collectionType].has(getItemId(item))).length; document.getElementById("totalObtained").textContent=obtained; document.getElementById("totalCount").textContent=list.length; }
+function updateOverall(){
+  if(collectionType==="stamp"){
+    const events=getStampEvents(); let total=0,obtained=0;
+    for(const event of events){ const items=event.items||[]; const eventTotal=Number(event.expectedStamps||0)||items.length; total+=eventTotal; obtained+=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length; }
+    document.getElementById("totalObtained").textContent=obtained;
+    document.getElementById("totalCount").textContent=total;
+    return;
+  }
+  const list=dataSets.lid||[]; const obtained=list.filter(item=>obtainedIds.lid.has(getItemId(item))).length;
+  document.getElementById("totalObtained").textContent=obtained;
+  document.getElementById("totalCount").textContent=list.length;
+}
 
 function renderRegions(){
   const el=document.getElementById("regions");
@@ -2655,45 +2733,36 @@ function renderRegions(){
 
 function renderStampEvents(el){
   const events=getStampEvents();
-
   if(!events.length){
     el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。<br><br>資料由 GitHub Actions 自動同步 Pokémon GO 官方網站。</div>`;
     return;
   }
-
   el.innerHTML="";
-
   for(const event of events){
     const items=event.items||[];
     const obtained=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
     const total=Number(event.expectedStamps||0) || items.length;
     const percent=total?Math.round(obtained/total*1000)/10:0;
+    const known=items.length;
     const card=document.createElement("div");
     card.className="region-card stamp-event-card";
     card.onclick=()=>openStampEvent(event.id);
-
-    const banner=event.activityImage || event.image || "";
-    const date=event.startDate
-      ? `${escapeHtml(event.startDate)}${event.endDate?" ～ "+escapeHtml(event.endDate):""}`
-      : "官方活動";
-
+    const banner=event.activityImage || event.eventImage || event.image || "";
+    const date=event.startDate ? `${escapeHtml(event.startDate)}${event.endDate?" ～ "+escapeHtml(event.endDate):""}` : "官方活動";
+    const countText=total?`${obtained} / ${total}`:"待官方公布集章數";
+    const pointText=(known<total && total)?`已取得 ${known} 個集章點`:`集章點 ${known} 個`;
     card.innerHTML=`
       <div class="region-images stamp-event-banner-wrap">
         ${banner
-          ? `<img class="stamp-event-banner" src="${escapeHtml(banner)}" alt="${escapeHtml(event.eventZh||event.event||"GO 集章趣")}" loading="lazy">`
-          : `<div class="region-empty">🎟️</div>`
+          ? `<img class="stamp-event-banner" src="${escapeHtml(banner)}" alt="${escapeHtml(event.eventZh||event.event||"GO 集章趣")}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"> <div class="stamp-event-banner-fallback" style="display:none">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
+          : `<div class="stamp-event-banner-fallback">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
         }
       </div>
       <div class="region-info">
         <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
-        <div class="region-count">${total?`${obtained} / ${total}`:"待官方公布集章點"}</div>
-        <div class="region-percent">
-          ${date}<br>
-          ${total?`完成率 ${percent}%`:"集章點資料尚待官方公布"}
-        </div>
-      </div>
-    `;
-
+        <div class="region-count">${countText}</div>
+        <div class="region-percent">${date}<br>${total?`完成率 ${percent}%　｜　${pointText}`:pointText}</div>
+      </div>`;
     el.appendChild(card);
   }
 }
@@ -2712,11 +2781,28 @@ function openPrefectureCollection(prefName){
   currentPrefecture=prefName; currentCollectionItems=groups.lid[prefName]||[]; document.getElementById("collectionTitle").textContent=prefName; document.querySelector(".back-btn").textContent="← 返回縣列表"; updateCollectionSummary(); renderCollectionGrid(); document.getElementById("collectionPanel").classList.add("show"); document.body.classList.add("no-scroll");
 }
 function openStampEvent(eventId){
-  const event=getStampEvents().find(x=>String(x.id)===String(eventId)); if(!event)return;
-  currentStampEventId=event.id; currentCollectionItems=event.items||[]; document.getElementById("collectionTitle").textContent=event.eventZh||event.event; const total=currentCollectionItems.length||Number(event.expectedStamps||0); const obtained=currentCollectionItems.filter(x=>obtainedIds.stamp.has(getItemId(x))).length; document.getElementById("collectionSummary").textContent=total?`已收集 ${obtained} / ${total}`:"官方集章點資料尚待公布"; document.querySelector(".back-btn").textContent="← 返回活動列表"; renderCollectionGrid(); document.getElementById("collectionPanel").classList.add("show"); document.body.classList.add("no-scroll");
+  const event=getStampEvents().find(x=>String(x.id)===String(eventId));
+  if(!event)return;
+  currentStampEventId=event.id;
+  currentCollectionItems=event.items||[];
+  document.getElementById("collectionTitle").textContent=event.eventZh||event.event;
+  const total=Number(event.expectedStamps||0) || currentCollectionItems.length;
+  const obtained=currentCollectionItems.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
+  document.getElementById("collectionSummary").textContent=total?`已收集 ${obtained} / ${total}${currentCollectionItems.length<total?`　（目前已取得 ${currentCollectionItems.length} 個集章點資料）`:""}`:"官方集章點資料尚待公布";
+  document.querySelector(".back-btn").textContent="← 返回活動列表";
+  renderCollectionGrid();
+  document.getElementById("collectionPanel").classList.add("show");
+  document.body.classList.add("no-scroll");
 }
 function updateCollectionSummary(){ const obtained=currentCollectionItems.filter(item=>obtainedIds.lid.has(getItemId(item))).length; document.getElementById("collectionSummary").textContent=`已收集 ${obtained} / ${currentCollectionItems.length}`; }
-function updateStampEventSummary(){ if(!currentStampEventId)return; const event=getStampEvents().find(x=>String(x.id)===String(currentStampEventId)); if(!event)return; currentCollectionItems=event.items||[]; const obtained=currentCollectionItems.filter(x=>obtainedIds.stamp.has(getItemId(x))).length; const total=currentCollectionItems.length||Number(event.expectedStamps||0); document.getElementById("collectionSummary").textContent=total?`已收集 ${obtained} / ${total}`:"官方集章點資料尚待公布"; }
+function updateStampEventSummary(){
+  if(!currentStampEventId)return;
+  const event=getStampEvents().find(x=>String(x.id)===String(currentStampEventId)); if(!event)return;
+  currentCollectionItems=event.items||[];
+  const obtained=currentCollectionItems.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
+  const total=Number(event.expectedStamps||0)||currentCollectionItems.length;
+  document.getElementById("collectionSummary").textContent=total?`已收集 ${obtained} / ${total}${currentCollectionItems.length<total?`　（目前已取得 ${currentCollectionItems.length} 個集章點資料）`:""}`:"官方集章點資料尚待公布";
+}
 
 function renderCollectionGrid(){
   const el=document.getElementById("collectionGrid");
@@ -2739,7 +2825,7 @@ function renderCollectionGrid(){
       <div class="collection-image-wrap">
         ${image
           ? `<img class="collection-image" src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy">`
-          : `<div style="font-size:42px;color:#397b83">◎</div>`
+          : `<div class="stamp-missing-image">目前尚未取得這個 GO 集章的實際圖片<br>官方資料更新後會自動補上</div>`
         }
       </div>
       <div class="collection-city">${escapeHtml(item.nameZh||item.venueZh||title)}</div>

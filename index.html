@@ -3127,9 +3127,12 @@ function escapeJs(value){
   return String(value??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\r?\n/g," ");
 }
 
-function getStampDownloadGroups(){
+function getStampDownloadGroups(includeUpcoming=false){
   const output={};
   for(const event of getStampEvents()){
+    // 「全部 GO 集章趣／所有圖章」下載：未開始活動不納入。
+    // 單一活動下載則由 downloadStampEvent() 直接處理，不受此篩選影響。
+    if(!includeUpcoming && getStampEventStatus(event)==="活動尚未開始") continue;
     const title=String(event.eventZh||event.event||"GO 集章趣").trim() || "GO 集章趣";
     if(!output[title]) output[title]=[];
     for(const item of (event.items||[])){

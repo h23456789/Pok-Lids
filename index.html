@@ -2456,6 +2456,12 @@ button{
    DATA
 ========================================================= */
 
+const OFFICIAL_CENTER_BADGES = {
+  "寶可夢中心橫濱": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+  "pokemoncenteryokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+  "pokémoncenteryokohama": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp"
+};
+
 const DATA_URLS = {
   lid: "data/data.json",
   center: "data/pokemon_center.json",
@@ -2546,6 +2552,8 @@ function getItemTitle(type,item){
 
 function normalizeKey(value){ return String(value??"").toLowerCase().replace(/\s+/g,"").replace(/[‐‑–—ー・.]/g,""); }
 
+function centerNameVariants(value){ const key=normalizeKey(value); const aliases={"yokohama":"寶可夢中心橫濱","pokemoncenteryokohama":"寶可夢中心橫濱","ポケモンセンターヨコハマ":"寶可夢中心橫濱","寶可夢中心橫濱":"寶可夢中心橫濱"}; return [key,normalizeKey(aliases[key]||"")].filter(Boolean); }
+
 function findCenterRecord(item){
   const list=dataSets.center||[];
   const candidates=[item?.venue,item?.name,item?.venueZh,item?.nameZh,item?.centerName,item?.centerNameZh].filter(Boolean).map(normalizeKey);
@@ -2568,8 +2576,11 @@ function getItemImageUrl(type,item){
    */
   if(String(item?.venueType||"")==="pokemon_center" || String(item?.venueType||"")==="pokemon_go_lab"){
     const center=findCenterRecord(item);
-    const centerImage=center?.pokemonCenterBadge || center?.pokemonCenterIcon || center?.centerBadge || center?.centerIcon || center?.badge || center?.icon || center?.image || "";
+    const centerImage=center?.pokemonCenterBadge || center?.pokemonCenterIcon || center?.centerBadge || center?.centerIcon || center?.badge || center?.icon || center?.image || center?.imageUrl || center?.logo || "";
     if(centerImage) return centerImage;
+    const fallbackKey=normalizeKey(item?.nameZh||item?.name||item?.venueZh||item?.venue||"");
+    const officialBadge=OFFICIAL_CENTER_BADGES[fallbackKey] || OFFICIAL_CENTER_BADGES[String(item?.nameZh||"")];
+    if(officialBadge) return officialBadge;
   }
 
   return item?.stampImage || item?.pointImage || "";

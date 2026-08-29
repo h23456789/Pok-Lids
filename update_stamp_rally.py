@@ -18,6 +18,8 @@ CENTER_FILE = ROOT / "data" / "pokemon_center.json"
 TIMEOUT = 35
 REQUEST_DELAY = 0.25
 GEOCODE_DELAY = 1.10
+GEOCODER_EMAIL = ""  # Optional: set to a contact email in CI if desired.
+GEOCODER_USER_AGENT = "Pok-Lids-GOStampSync/20.0 (+https://github.com/h23456789/Pok-Lids)"
 MAX_DISCOVERED_PAGES = 220
 MAX_LINK_DEPTH = 3
 MAX_POINTS_PER_EVENT = 100
@@ -29,7 +31,7 @@ HEADERS = {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/151.0 Safari/537.36 "
-        "Pok-Lids-GOStampSync/18.0"
+        "Pok-Lids-GOStampSync/20.0"
     ),
     "Accept-Language": "zh-TW,zh;q=0.95,en;q=0.9,ja;q=0.8",
 }
@@ -422,21 +424,34 @@ def looks_like_point(text):
 
 def parse_points_from_container(container):
     points=[]; seen=set()
-    def add_point(name, coords=None, image="", source_url=""):
+    def add_point(name, coords=None, image="", source_url="", address=""):
         name=clean_point(name)
         if not looks_like_point(name): return
         low=name.lower()
         if any(x in low for x in ("pokéstop","pokestop","stamp rally","digital stamp","圖章","集章趣","collect stamps","how do","more details")): return
         key=re.sub(r"[^a-z0-9一-龥ぁ-んァ-ン]+","",low)
         if not key or key in seen: return
-        seen.add(key); points.append({"name":name,"coords":coords or [],"sourceUrl":source_url,"image":image})
+        seen.add(key); points.append({"name":name,"coords":coords or [],"sourceUrl":source_url,"image":image,"address":norm(address)})
     for node in container.find_all(["li","dt"]):
         text=norm(node.get_text(" ",strip=True))
         if not text: continue
         maps=extract_map_links(node,"https://pokemongo.com/")
         coords=maps[0][2] if maps and maps[0][2] else []
         source_url=maps[0][1] if maps else ""
-        add_point(text,coords,"",source_url)
+        add_point(text,coords,"",source_url, extract_location_context(text))
+
+    # Some official pages render location cards as div/p elements rather than list items.
+    for node in container.find_all(["p","div"]):
+        text=norm(node.get_text(" ",strip=True))
+        if not text or len(text) > 100: continue
+        if len(node.find_all(recursive=False)) > 12: continue
+        low=text.lower()
+        if any(token in low for token in ("stamp rally","collect stamps","開始挑戰","蒐集圖章","please be aware","more details","how do")): continue
+        maps=extract_map_links(node,"https://pokemongo.com/")
+        if maps:
+            coords=maps[0][2] or []
+            source_url=maps[0][1]
+            add_point(text,coords,"",source_url, extract_location_context(text))
     for a in container.find_all("a",href=True):
         href=urljoin("https://pokemongo.com/",a["href"])
         if not any(x in href.lower() for x in ("google.com/maps","maps.google","maps.app.goo.gl")): continue
@@ -493,6 +508,15 @@ def parse_activity_blocks(soup, page_url):
         points = []
         for node in nodes:
             points.extend(parse_points_from_container(node))
+        # If the official page exposes actual stamp images, pair them with point order.
+        stamp_images = extract_point_images(soup, page_url)
+        for idx, point in enumerate(points):
+            if not point.get("image") and idx < len(stamp_images):
+                point["image"] = stamp_images[idx]
+                point["imageSource"] = "Pokémon GO official page"
+        # If a published place has no map coordinates, resolve its name to a Japan coordinate.
+        context = f"{block_title} {page_title}"
+        points = enrich_points_with_coordinates(points, context)
         # Deduplicate names within the block.
         dedup = []
         seen = set()
@@ -572,6 +596,141 @@ def extract_prefecture(text):
     for alias, canon in PREF_ALIASES:
         if alias in norm(text): return canon
     return ""
+
+
+
+def extract_location_context(text):
+    """Return useful location fragments from activity text for geocoding."""
+    text = norm(text)
+    # Japanese addresses / postal codes
+    postal = re.search(r"〒?\s*\d{3}-\d{4}[^。\n]{0,80}", text)
+    if postal:
+        return norm(postal.group(0))
+    return ""
+
+
+def geocode_place(query):
+    """Geocode a place name in Japan using public Nominatim.
+
+    This is intentionally a fallback only. Official coordinates / map links always win.
+    """
+    query = norm(query)
+    if not query:
+        return None
+    params = {
+        "q": query,
+        "format": "jsonv2",
+        "limit": 3,
+        "countrycodes": "jp",
+        "accept-language": "ja,en",
+    }
+    headers = {
+        "User-Agent": GEOCODER_USER_AGENT,
+    }
+    if GEOCODER_EMAIL:
+        params["email"] = GEOCODER_EMAIL
+    try:
+        r = requests.get(
+            "https://nominatim.openstreetmap.org/search",
+            params=params,
+            headers=headers,
+            timeout=TIMEOUT,
+        )
+        r.raise_for_status()
+        rows = r.json()
+        if not isinstance(rows, list):
+            return None
+        for row in rows:
+            lat = float(row.get("lat"))
+            lng = float(row.get("lon"))
+            if -90 <= lat <= 90 and -180 <= lng <= 180:
+                return {
+                    "coords": [lat, lng],
+                    "displayName": norm(row.get("display_name", "")),
+                    "osmType": row.get("type", ""),
+                }
+    except Exception as exc:
+        print("GEOCODE ERROR:", query, exc)
+    return None
+
+
+def build_geocode_queries(point_name, context, address=""):
+    """Generate conservative Japanese place-name queries from most specific to broad."""
+    queries = []
+    for value in (
+        f"{point_name}, {address}, Japan",
+        f"{point_name}, {context}, Japan",
+        f"{point_name}, Japan",
+    ):
+        value = re.sub(r"\s+,", ",", norm(value))
+        value = re.sub(r",\s*,", ",", value)
+        if value and value not in queries:
+            queries.append(value)
+    return queries
+
+
+def enrich_points_with_coordinates(points, context):
+    """Fill missing coordinates from published place names; never overwrite official coords."""
+    enriched = []
+    for point in points:
+        p = dict(point)
+        if not p.get("coords"):
+            address = p.get("address", "")
+            found = None
+            used_query = ""
+            for query in build_geocode_queries(p.get("name", ""), context, address):
+                found = geocode_place(query)
+                time.sleep(GEOCODE_DELAY)
+                if found:
+                    used_query = query
+                    break
+            if found:
+                p["coords"] = found["coords"]
+                p["coordsSource"] = "Nominatim geocoding from published place name"
+                p["coordinatesOfficial"] = False
+                p["coordinatesConfidence"] = "medium"
+                p["geocodeQuery"] = used_query
+                p["geocodeDisplayName"] = found["displayName"]
+                print("GEOCODED:", p.get("name"), "->", p["coords"])
+            else:
+                p["coordsSource"] = p.get("coordsSource", "")
+                p["coordinatesOfficial"] = bool(p.get("coords"))
+        enriched.append(p)
+    return enriched
+
+
+def merge_location_data(point, node):
+    """Keep human-readable address from map-link/list context without inventing it."""
+    merged = dict(point)
+    for key in ("address", "location", "venue"):
+        if not merged.get(key) and node.get(key):
+            merged[key] = node[key]
+    return merged
+
+
+def event_status(start_date, end_date):
+    """Return a snapshot status for JSON/history; frontend recalculates this live."""
+    try:
+        today = datetime.now(timezone.utc).date()
+    except Exception:
+        today = datetime.utcnow().date()
+    start = None
+    end = None
+    if start_date:
+        try:
+            start = datetime.strptime(start_date, "%Y-%m-%d").date()
+        except ValueError:
+            pass
+    if end_date:
+        try:
+            end = datetime.strptime(end_date, "%Y-%m-%d").date()
+        except ValueError:
+            pass
+    if start and today < start:
+        return "upcoming"
+    if end and today > end:
+        return "ended"
+    return "active"
 
 
 def event_id_for(page_key, section):
@@ -685,11 +844,12 @@ def build_from_discovery(discovered, old_data):
                    "activity":"GO Stamp Rally","activityZh":"GO 集章趣","startDate":activity.get("startDate") or "","endDate":activity.get("endDate") or "",
                    "expectedStamps":activity.get("expectedStamps"),"eventImage":activity.get("banner") or "","activityImage":activity.get("banner") or "",
                    "sourceUrl":activity.get("pageUrl") or page_url,"canonicalPage":canonical_url(activity.get("pageUrl") or page_url),
-                   "sourceLocale":url_locale(activity.get("pageUrl") or page_url),"descriptionZh":activity.get("description") or ""}
+                   "sourceLocale":url_locale(activity.get("pageUrl") or page_url),"descriptionZh":activity.get("description") or "","status":event_status(activity.get("startDate") or "", activity.get("endDate") or "")}
             if old_event:
                 event=merge_event_meta(old_event,event)
                 if activity.get("banner"): event["eventImage"]=event["activityImage"]=activity["banner"]
                 if activity.get("pageUrl"): event["sourceUrl"]=activity["pageUrl"]; event["sourceLocale"]=url_locale(activity["pageUrl"])
+            event["status"]=event_status(event.get("startDate") or "", event.get("endDate") or "")
             new_items=[]
             for idx,point in enumerate(activity.get("points",[]),1):
                 name=norm(point.get("name"));
@@ -697,12 +857,15 @@ def build_from_discovery(discovered, old_data):
                 coords=point.get("coords") or []
                 item={"id":point_id(event_id,name,idx),"eventId":event_id,"event":event_en,"eventZh":event_zh,"eventName":event_en,"eventNameZh":event_zh,
                       "activity":"GO Stamp Rally","activityZh":"GO 集章趣","venueType":"go_stamp_point","venue":name,"name":name,"nameZh":name,
-                      "pref":extract_prefecture(name+" "+event_zh),"city":"","address":"","coords":coords,
+                      "pref":extract_prefecture(name+" "+event_zh),"city":"","address":point.get("address") or "","coords":coords,
                       "lat":coords[0] if len(coords)>=2 else None,"lng":coords[1] if len(coords)>=2 else None,
                       "stampImage":point.get("image") or "","stampImageType":"actual-stamp" if point.get("image") else "",
-                      "stampImageSource":"Pokémon GO official page" if point.get("image") else "","stampImageOfficial":bool(point.get("image")),
+                      "stampImageSource":point.get("imageSource") or ("Pokémon GO official page" if point.get("image") else ""),"stampImageOfficial":bool(point.get("image")),
                       "startDate":event["startDate"],"endDate":event["endDate"],"source":"Pokémon GO Official","sourceUrl":point.get("sourceUrl") or event["sourceUrl"],
-                      "official":True,"coordinatesOfficial":bool(len(coords)>=2),"coordsSource":"official map link" if len(coords)>=2 else ""}
+                      "official":True,"coordinatesOfficial":bool(point.get("coordinatesOfficial") or len(coords)>=2),
+                      "coordinatesConfidence":point.get("coordinatesConfidence", "high" if len(coords)>=2 and point.get("coordinatesOfficial") else ("medium" if len(coords)>=2 else "low")),
+                      "coordsSource":point.get("coordsSource") or ("official map link" if len(coords)>=2 else "")
+                  }
                 low=name.lower()
                 if any(x in low for x in ("ポケモンセンター","pokemon center","pokémon center","寶可夢中心")):
                     item["venueType"]="pokemon_center"; icon=find_center_icon(name,centers)
@@ -713,6 +876,15 @@ def build_from_discovery(discovered, old_data):
             merged=merge_points(old_items_by_event.get(event_id,[]),new_items,event_id)
             events_by_id[event_id]=event; items_by_event[event_id]=merged
             exp=event.get("expectedStamps"); event["dataStatus"]="complete" if exp and len(merged)>=int(exp) else ("partial" if merged else "announced-only")
+    # Preserve previously known activities when an official page is temporarily unavailable.
+    # Their status is recomputed from dates; this prevents a transient 429/5xx from deleting history.
+    for eid, old_event in old_by_event.items():
+        if eid not in events_by_id:
+            preserved = dict(old_event)
+            preserved["status"] = event_status(preserved.get("startDate") or "", preserved.get("endDate") or "")
+            events_by_id[eid] = preserved
+            items_by_event[eid] = [dict(x) for x in old_items_by_event.get(eid, [])]
+
     final_events=sorted(events_by_id.values(),key=lambda e:(e.get("startDate") or "9999-99-99",e.get("eventZh") or e.get("event") or ""))
     final_items=[]
     for event in final_events:
@@ -753,7 +925,7 @@ def build_history(old, new_events, new_items):
 
 def main():
     print("=" * 60)
-    print("Pokémon GO GO 集章趣 AUTO SYNC v18")
+    print("Pokémon GO GO 集章趣 AUTO SYNC v20")
     print("Official discovery + locale dedupe + activity blocks + no fabricated points")
     print("No hard-coded activity catalog")
     print("=" * 60)
@@ -764,11 +936,11 @@ def main():
 
     events, items = build_from_discovery(discovered, old)
     new = {
-        "version": "18.0",
+        "version": "20.0",
         "updated": datetime.now(timezone.utc).isoformat(),
         "source": "Pokémon GO Official Website",
-        "sourceMode": "official-first; localized dedupe; activity-block discovery; official-only point data; no fabricated coordinates",
-        "rule": "Only in-game Pokémon GO GO Stamp Rally. Offline stamp rallies and Poké Lid are excluded.",
+        "sourceMode": "official-first; localized dedupe; activity-block discovery; official map coords first; place-name geocoding fallback; no fabricated points",
+        "rule": "Only in-game Pokémon GO GO Stamp Rally. Offline stamp rallies, ordinary PokéStops, and Poké Lid are excluded. Published place names may be geocoded when official coordinates are not embedded.",
         "events": events,
         "list": items,
     }

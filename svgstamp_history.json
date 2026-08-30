@@ -1,6 +1,56 @@
 {
   "history": [
     {
+      "time": "2026-08-30 15:53:40",
+      "type": "stamp",
+      "event": "Automatic official Stamp Rally sync",
+      "source": "Pokémon Official Website / Pokémon Center Official Website",
+      "total": 51,
+      "added": [
+        "STAMP-POINT-64B4A0F22F73",
+        "STAMP-POINT-02F94E6354DA",
+        "STAMP-POINT-089DEA02D1F0"
+      ],
+      "removed": [],
+      "changed": [],
+      "addedItems": [
+        {
+          "id": "STAMP-POINT-64B4A0F22F73",
+          "event": "PokéXciting! cross-region GO Stamp Rally—get ready to explore the Asia-Pacific region! — Pokémon GO",
+          "name": "PokéXciting! cross-region GO Stamp Rally—get ready to explore the Asia-Pacific region! — Pokémon GO",
+          "venue": "",
+          "pref": "",
+          "city": "",
+          "startDate": "",
+          "endDate": "",
+          "sourceUrl": "https://pokemongo.com/en/news/event-apac-stamp-rally-2026"
+        },
+        {
+          "id": "STAMP-POINT-02F94E6354DA",
+          "event": "「PokéXciting!」イベントの地域横断「GOスタンプラリー」で、アジア太平洋地域をめぐる冒険に出発！ — Pokémon GO",
+          "name": "「PokéXciting!」イベントの地域横断「GOスタンプラリー」で、アジア太平洋地域をめぐる冒険に出発！ — Pokémon GO",
+          "venue": "",
+          "pref": "",
+          "city": "",
+          "startDate": "2026-09-12",
+          "endDate": "2029-09-11",
+          "sourceUrl": "https://pokemongo.com/ja/news/event-apac-stamp-rally-2026"
+        },
+        {
+          "id": "STAMP-POINT-089DEA02D1F0",
+          "event": "「PokéXciting!」イベントの地域横断「GOスタンプラリー」で、アジア太平洋地域をめぐる冒険に出発！ — Pokémon GO",
+          "name": "「PokéXciting!」イベントの地域横断「GOスタンプラリー」で、アジア太平洋地域をめぐる冒険に出発！ — Pokémon GO",
+          "venue": "",
+          "pref": "",
+          "city": "",
+          "startDate": "2026-09-12",
+          "endDate": "2029-09-11",
+          "sourceUrl": "https://pokemongo.com/news/event-apac-stamp-rally-2026"
+        }
+      ],
+      "changedItems": []
+    },
+    {
       "time": "2026-08-29T23:48:09.305922+00:00",
       "event": "Pokémon GO GO 集章趣 AUTO SYNC",
       "eventZh": "Pokémon GO GO 集章趣自動同步",

@@ -1,4 +1,4 @@
-<!doctype html> 
+<!doctype html>
 <html lang="zh-Hant">
 
 <head>
@@ -329,6 +329,8 @@ button{
   cursor:pointer;
 
   transition:.18s;
+
+  position:relative;
 }
 
 .region-card:hover{
@@ -957,6 +959,8 @@ button{
   text-align:center;
 
   transition:.18s;
+
+  position:relative;
 }
 
 .collection-item:hover{
@@ -1097,6 +1101,80 @@ button{
 .collection-item.not-obtained
 .collection-status{
   color:#ef4b55;
+}
+
+
+/* =========================================================
+   INLINE OBTAINED
+========================================================= */
+
+.stamp-inline-obtain{
+  margin-top:8px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:6px;
+
+  color:#397b83;
+
+  font-size:11px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+  user-select:none;
+}
+
+.stamp-inline-obtain input{
+  appearance:none;
+
+  width:19px;
+  height:19px;
+
+  border:
+    2px solid
+    #b8cdcf;
+
+  border-radius:6px;
+
+  background:#fff;
+
+  position:relative;
+
+  cursor:pointer;
+
+  flex:0 0 auto;
+}
+
+.stamp-inline-obtain input:checked{
+  background:#27c978;
+
+  border-color:#27c978;
+}
+
+.stamp-inline-obtain input:checked:after{
+  content:"✓";
+
+  position:absolute;
+
+  left:2px;
+
+  top:-3px;
+
+  color:#fff;
+
+  font-size:15px;
+
+  font-weight:900;
+}
+
+.stamp-inline-obtain:hover{
+  color:#27bd7a;
 }
 
 
@@ -1339,50 +1417,337 @@ button{
 
 .stamp-event{
   margin-top:6px;
+
   color:#397b83;
+
   font-size:14px;
+
   font-weight:900;
+
   line-height:1.45;
+}
+
+.stamp-venue{
+  margin-top:6px;
+
+  color:#4d858c;
+
+  font-size:13px;
+
+  font-weight:800;
 }
 
 .stamp-dates{
   margin-top:4px;
+
   color:#7b999d;
+
   font-size:12px;
+}
+
+.stamp-source{
+  margin-top:8px;
+
+  font-size:11px;
+}
+
+.stamp-source a{
+  color:#397b83;
+
+  text-decoration:none;
+
+  font-weight:800;
 }
 
 .stamp-reward{
   margin-top:10px;
-  padding:10px 12px;
+
+  padding:
+    10px
+    12px;
+
   border-radius:12px;
+
   background:#fff7df;
+
   color:#8a6a13;
+
   font-size:13px;
+
   line-height:1.5;
 }
 
 .stamp-status{
   display:inline-block;
+
   margin-top:8px;
-  padding:4px 9px;
+
+  padding:
+    4px
+    9px;
+
   border-radius:999px;
+
   background:#edf5f5;
+
   color:#397b83;
+
   font-size:11px;
+
   font-weight:900;
 }
 
 .history-type.stamp{
   background:#e9e1ff;
+
   color:#6f4bb8;
 }
 
-@media(max-width:700px){
-  .main-tabs{
-    grid-template-columns:
-      repeat(3, 1fr);
-  }
+.stamp-event-banner-wrap{
+  position:relative;
+
+  height:185px;
 }
+
+.stamp-event-banner{
+  width:100%;
+
+  height:100%;
+
+  object-fit:cover;
+
+  position:relative;
+
+  z-index:1;
+
+  display:block;
+}
+
+.stamp-event-banner-fallback{
+  position:relative;
+
+  z-index:1;
+
+  width:100%;
+
+  height:100%;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  color:#397b83;
+
+  font-size:21px;
+
+  font-weight:900;
+
+  text-align:center;
+
+  line-height:1.45;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d7f6ec,
+      #a9e1d3
+    );
+}
+
+.stamp-event-status-overlay{
+  position:absolute;
+
+  inset:0;
+
+  z-index:3;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:
+    rgba(
+      35,
+      78,
+      82,
+      .52
+    );
+
+  color:#fff;
+
+  font-size:28px;
+
+  font-weight:900;
+
+  text-align:center;
+
+  text-shadow:
+    0
+    2px
+    8px
+    rgba(
+      0,
+      0,
+      0,
+      .35
+    );
+}
+
+.collection-complete-stamp{
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  z-index:4;
+
+  transform:
+    translate(-50%,-50%)
+    rotate(-12deg);
+
+  width:145px;
+  height:145px;
+
+  border:
+    7px solid
+    rgba(
+      39,
+      201,
+      120,
+      .94
+    );
+
+  border-radius:50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .82
+    );
+
+  color:#27bd7a;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  font-size:30px;
+
+  font-weight:1000;
+
+  box-shadow:
+    0
+    0
+    0
+    5px
+    rgba(
+      255,
+      255,
+      255,
+      .55
+    ),
+    0
+    7px
+    24px
+    rgba(
+      39,
+      201,
+      120,
+      .35
+    );
+
+  pointer-events:none;
+}
+
+.collection-complete-stamp small{
+  display:block;
+
+  margin-top:-2px;
+
+  font-size:13px;
+
+  letter-spacing:2px;
+}
+
+.stamp-event-live-status{
+  margin-top:7px;
+
+  display:inline-block;
+
+  padding:
+    4px
+    10px;
+
+  border-radius:999px;
+
+  font-size:11px;
+
+  font-weight:900;
+}
+
+.stamp-event-live-status.active{
+  background:#dcf8e8;
+
+  color:#20a963;
+}
+
+.stamp-event-live-status.upcoming{
+  background:#fff0cf;
+
+  color:#9a7118;
+}
+
+.stamp-event-live-status.ended{
+  background:#edf0f1;
+
+  color:#75868b;
+}
+
+.stamp-event-date{
+  margin-top:5px;
+
+  color:#789499;
+
+  font-size:11px;
+}
+
+.stamp-event-data-note{
+  margin-top:4px;
+
+  color:#b07b2f;
+
+  font-size:11px;
+}
+
+.stamp-missing-image{
+  width:100%;
+
+  padding:
+    18px
+    10px;
+
+  color:#739195;
+
+  font-size:11px;
+
+  line-height:1.55;
+
+  text-align:center;
+}
+
 
 /* =========================================================
    NAVIGATION
@@ -1621,10 +1986,10 @@ button{
   color:#df4a52;
 }
 
-.history-type.center{
-  background:#fff3ce;
+.history-type.stamp{
+  background:#e9e1ff;
 
-  color:#b68100;
+  color:#6f4bb8;
 }
 
 
@@ -1663,65 +2028,41 @@ button{
 }
 
 .download-subbox{
+  margin-top:10px;
+
   display:flex;
-  flex-wrap:wrap;
+
   justify-content:center;
-  gap:6px;
-  margin-top:9px;
+
+  flex-wrap:wrap;
+
+  gap:5px;
 }
 
 .download-subbtn{
   border:0;
+
   border-radius:999px;
-  padding:6px 10px;
+
+  padding:
+    5px
+    8px;
+
   background:#edf5f5;
+
   color:#397b83;
-  cursor:pointer;
-  font-size:11px;
+
+  font-size:10px;
+
   font-weight:900;
+
+  cursor:pointer;
+
+  transition:.15s;
 }
 
 .download-subbtn:hover{
-  background:#dfeeee;
-}
-
-.stamp-all-download-box{
-  margin-top:8px;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:6px;
-}
-
-.stamp-all-download-btn{
-  border:0;
-  border-radius:999px;
-  padding:7px 12px;
-  background:#f0eaff;
-  color:#6f4bb8;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:900;
-}
-
-.stamp-all-download-btn:hover{
-  background:#e7dcff;
-}
-
-.stamp-event-card .region-info{
-  padding-bottom:12px;
-}
-
-@media(max-width:700px){
-  .download-subbtn{
-    font-size:10px;
-    padding:6px 8px;
-  }
-
-  .stamp-all-download-btn{
-    font-size:11px;
-    padding:7px 9px;
-  }
+  background:#d8eeec;
 }
 
 
@@ -1749,6 +2090,10 @@ button{
   font-size:14px;
 
   line-height:1.7;
+}
+
+.muted{
+  color:#839da0;
 }
 
 
@@ -1964,133 +2309,25 @@ button{
     font-size:22px;
   }
 
+  .stamp-event-status-overlay{
+    font-size:21px;
+  }
+
+  .collection-complete-stamp{
+    width:110px;
+    height:110px;
+
+    font-size:23px;
+
+    border-width:5px;
+  }
+
+  .collection-complete-stamp small{
+    font-size:10px;
+  }
+
 }
 
-
-
-/* GO 集章趣：活動 Banner */
-.stamp-event-banner-wrap{
-  height:185px;
-  padding:0;
-}
-
-.stamp-event-banner{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-
-.stamp-event-status-overlay{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(20,55,60,.42);
-  color:#fff;
-  font-size:22px;
-  font-weight:900;
-  text-shadow:0 2px 5px rgba(0,0,0,.35);
-  z-index:2;
-}
-
-/* 100% 完成印章：蓋在區塊 Banner 上，不影響 Banner 本身 */
-.collection-complete-stamp{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) rotate(-10deg);
-  width:118px;
-  height:118px;
-  border:6px solid rgba(190,38,38,.92);
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:rgba(190,38,38,.96);
-  background:rgba(255,255,255,.18);
-  box-shadow:0 0 0 3px rgba(255,255,255,.55), 0 3px 12px rgba(0,0,0,.22);
-  font-size:21px;
-  line-height:1.15;
-  font-weight:1000;
-  letter-spacing:2px;
-  z-index:5;
-  pointer-events:none;
-  text-shadow:0 1px 0 rgba(255,255,255,.65);
-}
-.collection-complete-stamp::before,
-.collection-complete-stamp::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  width:72%;
-  height:2px;
-  background:rgba(190,38,38,.75);
-  transform:translateX(-50%);
-}
-.collection-complete-stamp::before{top:27px;}
-.collection-complete-stamp::after{bottom:27px;}
-.collection-complete-stamp small{
-  display:block;
-  font-size:10px;
-  letter-spacing:1px;
-  margin-top:4px;
-}
-.stamp-event-date{
-  margin-top:5px;
-  color:#6f8f94;
-  font-size:12px;
-  line-height:1.5;
-}
-.stamp-event-data-note{
-  margin-top:5px;
-  color:#9a7b28;
-  font-size:11px;
-  line-height:1.5;
-}
-.stamp-event-card .region-images{
-  position:relative;
-}
-.stamp-event-card .stamp-event-banner{
-  position:relative;
-  z-index:1;
-}
-
-.stamp-event-banner-fallback{
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  text-align:center;
-  color:#397b83;
-  background:#c8edf5;
-  font-weight:900;
-}
-
-.stamp-missing-image{
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:12px;
-  color:#7b999d;
-  font-size:12px;
-  line-height:1.5;
-}
-
-
-.stamp-event-data-status{margin-top:7px;display:inline-block;padding:4px 9px;border-radius:999px;background:#f2f6f6;color:#5b7f84;font-size:11px;font-weight:900;}
-.stamp-event-data-status.incomplete{background:#fff5df;color:#8a6816;}
-.stamp-event-live-status{margin-top:6px;display:inline-block;padding:4px 9px;border-radius:999px;background:#eaf7ed;color:#2d8b50;font-size:11px;font-weight:900;}
-.stamp-event-live-status.upcoming{background:#eef4ff;color:#42689a;}
-.stamp-event-live-status.ended{background:#f0f0f0;color:#777;}
 </style>
 
 </head>
@@ -2160,7 +2397,7 @@ button{
     </div>
 
     <div class="main-tab-sub">
-      限時活動圖章
+      GO 集章趣
     </div>
 
   </button>
@@ -2224,60 +2461,68 @@ button{
 
 
 <!-- =========================================================
-     DOWNLOAD
+     STAMP ALL DOWNLOAD
 ========================================================= -->
-
-<div class="download-box" id="mainDownloadBox">
-
-  <button
-    class="download-btn"
-    onclick="downloadAll()"
-    title="下載目前類別全部資料"
-  >
-    TXT
-  </button>
-
-  <button
-    class="download-btn"
-    onclick="downloadJSON()"
-    title="下載目前類別全部資料"
-  >
-    JSON
-  </button>
-
-  <button
-    class="download-btn"
-    onclick="downloadCSV()"
-    title="下載目前類別全部資料"
-  >
-    CSV
-  </button>
-
-</div>
 
 <div
   id="stampAllDownloadBox"
-  class="stamp-all-download-box"
+  class="download-box"
   style="display:none;"
 >
+
   <button
-    class="stamp-all-download-btn"
+    class="download-btn"
     onclick="downloadAllStampPoints('txt')"
   >
     🎟️ 所有圖章 TXT
   </button>
+
   <button
-    class="stamp-all-download-btn"
+    class="download-btn"
     onclick="downloadAllStampPoints('json')"
   >
     🎟️ 所有圖章 JSON
   </button>
+
   <button
-    class="stamp-all-download-btn"
+    class="download-btn"
     onclick="downloadAllStampPoints('csv')"
   >
     🎟️ 所有圖章 CSV
   </button>
+
+</div>
+
+
+<!-- =========================================================
+     DOWNLOAD
+========================================================= -->
+
+<div class="download-box">
+
+  <button
+    class="download-btn"
+    onclick="downloadAll()"
+  >
+    TXT
+  </button>
+
+
+  <button
+    class="download-btn"
+    onclick="downloadJSON()"
+  >
+    JSON
+  </button>
+
+
+  <button
+    class="download-btn"
+    onclick="downloadCSV()"
+  >
+    CSV
+  </button>
+
 </div>
 
 
@@ -2315,7 +2560,7 @@ button{
       id="historyStamp"
       onclick="setHistoryFilter('stamp')"
     >
-      🎟️ Stamp Rally
+      🎟️ GO 集章趣
     </button>
 
   </div>
@@ -2629,715 +2874,6928 @@ button{
 ========================================================= */
 
 const OFFICIAL_CENTER_BADGES = {
-  "寶可夢中心札幌": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-sapporo.webp",
-  "寶可夢中心東北": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tohoku.webp",
-  "寶可夢中心東京DX": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyodx.webp",
-  "寶可夢中心Mega東京": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
-  "寶可夢中心澀谷": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-shibuya.webp",
-  "寶可夢中心晴空塔城": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-skytreetown.webp",
-  "寶可夢中心東京灣": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyobay.webp",
-  "寶可夢中心橫濱": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
-  "寶可夢中心名古屋": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-nagoya.webp",
-  "寶可夢中心金澤": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kanazawa.webp",
-  "寶可夢中心京都": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kyoto.webp",
-  "寶可夢中心大阪DX": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osakadx.webp",
-  "寶可夢中心大阪": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osaka.webp",
-  "寶可夢中心廣島": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-hiroshima.webp",
-  "寶可夢中心香川": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kagawa.webp",
-  "寶可夢中心福岡": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-fukuoka.webp",
-  "寶可夢中心沖繩": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp"
+
+  "寶可夢中心札幌":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-sapporo.webp",
+
+  "寶可夢中心東北":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tohoku.webp",
+
+  "寶可夢中心東京DX":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyodx.webp",
+
+  "寶可夢中心Mega東京":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
+
+  "寶可夢中心澀谷":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-shibuya.webp",
+
+  "寶可夢中心晴空塔城":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-skytreetown.webp",
+
+  "寶可夢中心東京灣":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyobay.webp",
+
+  "寶可夢中心橫濱":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+
+  "寶可夢中心名古屋":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-nagoya.webp",
+
+  "寶可夢中心金澤":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kanazawa.webp",
+
+  "寶可夢中心京都":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kyoto.webp",
+
+  "寶可夢中心大阪DX":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osakadx.webp",
+
+  "寶可夢中心大阪":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osaka.webp",
+
+  "寶可夢中心廣島":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-hiroshima.webp",
+
+  "寶可夢中心香川":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kagawa.webp",
+
+  "寶可夢中心福岡":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-fukuoka.webp",
+
+  "寶可夢中心沖繩":
+    "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp"
 };
+
 
 const DATA_URLS = {
-  lid: "data/data.json",
-  center: "data/pokemon_center.json",
-  stamp: "svgstamp_rally.json"
+
+  lid:
+    "data/data.json",
+
+  center:
+    "data/pokemon_center.json",
+
+  stamp:
+    "svgstamp_rally.json"
 };
+
 
 const RAW_DATA_URLS = {
-  lid: "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/data/data.json",
-  center: "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/data/pokemon_center.json",
-  stamp: "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/svgstamp_rally.json"
+
+  lid:
+    "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/data/data.json",
+
+  center:
+    "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/data/pokemon_center.json",
+
+  stamp:
+    "https://raw.githubusercontent.com/h23456789/Pok-Lids/main/svgstamp_rally.json"
 };
+
 
 const HISTORY_URLS = {
-  lid: "history.json",
-  stamp: "svgstamp_history.json"
+
+  lid:
+    "history.json",
+
+  stamp:
+    "svgstamp_history.json"
 };
+
+
+/* =========================================================
+   PREFECTURE
+========================================================= */
 
 const PREF = {
-  1:"北海道",2:"青森県",3:"岩手県",4:"宮城県",5:"秋田県",6:"山形県",7:"福島県",
-  8:"茨城県",9:"栃木県",10:"群馬県",11:"埼玉県",12:"千葉県",13:"東京都",14:"神奈川県",
-  15:"新潟県",16:"富山県",17:"石川県",18:"福井県",19:"山梨県",20:"長野県",21:"岐阜県",22:"静岡県",23:"愛知県",
-  24:"三重県",25:"滋賀県",26:"京都府",27:"大阪府",28:"兵庫県",29:"奈良県",30:"和歌山県",
-  31:"鳥取県",32:"島根県",33:"岡山県",34:"広島県",35:"山口県",36:"徳島県",37:"香川県",38:"愛媛県",39:"高知県",
-  40:"福岡県",41:"佐賀県",42:"長崎県",43:"熊本県",44:"大分県",45:"宮崎県",46:"鹿児島県",47:"沖縄県"
+
+  1:"北海道",
+  2:"青森県",
+  3:"岩手県",
+  4:"宮城県",
+  5:"秋田県",
+  6:"山形県",
+  7:"福島県",
+
+  8:"茨城県",
+  9:"栃木県",
+  10:"群馬県",
+  11:"埼玉県",
+  12:"千葉県",
+  13:"東京都",
+  14:"神奈川県",
+
+  15:"新潟県",
+  16:"富山県",
+  17:"石川県",
+  18:"福井県",
+  19:"山梨県",
+  20:"長野県",
+  21:"岐阜県",
+  22:"静岡県",
+  23:"愛知県",
+
+  24:"三重県",
+  25:"滋賀県",
+  26:"京都府",
+  27:"大阪府",
+  28:"兵庫県",
+  29:"奈良県",
+  30:"和歌山県",
+
+  31:"鳥取県",
+  32:"島根県",
+  33:"岡山県",
+  34:"広島県",
+  35:"山口県",
+
+  36:"徳島県",
+  37:"香川県",
+  38:"愛媛県",
+  39:"高知県",
+
+  40:"福岡県",
+  41:"佐賀県",
+  42:"長崎県",
+  43:"熊本県",
+  44:"大分県",
+  45:"宮崎県",
+  46:"鹿児島県",
+  47:"沖縄県"
+
 };
+
 
 const PREF_ALIAS = {};
-for(const [code,name] of Object.entries(PREF)){
-  PREF_ALIAS[name]=Number(code);
-  PREF_ALIAS[name.replace(/県$|府$/,'')]=Number(code);
+
+for(
+  const [code,name]
+  of Object.entries(PREF)
+){
+
+  PREF_ALIAS[name] =
+    Number(code);
+
+  PREF_ALIAS[
+    name.replace(
+      /県$|府$/,
+      ""
+    )
+  ] =
+    Number(code);
 }
+
+
+/* =========================================================
+   REGION
+========================================================= */
 
 const REGIONS = {
-  "北海道・東北":{prefs:[1,2,3,4,5,6,7]},
-  "關東":{prefs:[8,9,10,11,12,13,14]},
-  "中部":{prefs:[15,16,17,18,19,20,21,22,23]},
-  "近畿":{prefs:[24,25,26,27,28,29,30]},
-  "中國・四國":{prefs:[31,32,33,34,35,36,37,38,39]},
-  "九州・沖繩":{prefs:[40,41,42,43,44,45,46,47]}
+
+  "北海道・東北":{
+    prefs:[1,2,3,4,5,6,7]
+  },
+
+  "關東":{
+    prefs:[8,9,10,11,12,13,14]
+  },
+
+  "中部":{
+    prefs:[15,16,17,18,19,20,21,22,23]
+  },
+
+  "近畿":{
+    prefs:[24,25,26,27,28,29,30]
+  },
+
+  "中國・四國":{
+    prefs:[31,32,33,34,35,36,37,38,39]
+  },
+
+  "九州・沖繩":{
+    prefs:[40,41,42,43,44,45,46,47]
+  }
+
 };
 
-let collectionType = "lid";
-let dataSets = {lid:[], center:[], stamp:[]};
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let collectionType =
+  "lid";
+
+let dataSets = {
+  lid:[],
+  center:[],
+  stamp:[]
+};
+
 let stampEventsMeta = [];
-let groups = {lid:{}, center:{}};
-let obtainedIds = {lid:new Set(), stamp:new Set()};
-let currentRegion = null;
-let currentPrefecture = null;
-let currentCollectionItems = [];
-let currentStampEventId = null;
-let currentItem = null;
-let currentItemType = "lid";
-let currentHistoryFilter = "all";
-let historyEntries = [];
+
+let groups = {
+  lid:{},
+  center:{}
+};
+
+let obtainedIds = {
+  lid:new Set(),
+  stamp:new Set()
+};
+
+let currentRegion =
+  null;
+
+let currentPrefecture =
+  null;
+
+let currentCollectionItems =
+  [];
+
+let currentStampEventId =
+  null;
+
+let currentItem =
+  null;
+
+let currentItemType =
+  "lid";
+
+let currentHistoryFilter =
+  "all";
+
+let historyEntries =
+  [];
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
 
 const STORAGE_KEYS = {
-  lid:"pokemonJapanCollection_lid",
-  stamp:"pokemonJapanCollection_stamp"
+
+  lid:
+    "pokemonJapanCollection_lid",
+
+  stamp:
+    "pokemonJapanCollection_stamp"
 };
 
-function getItemId(item){ return String(item?.id ?? ""); }
-function loadLocalCollection(type){
+const STAMP_IDENTITY_MAP_KEY =
+  "pokemonJapanCollection_stamp_identity_v2";
+
+
+function getItemId(item){
+
+  return String(
+    item?.id ?? ""
+  );
+
+}
+
+
+function saveLocalCollection(
+  type
+){
+
   try{
-    const raw=localStorage.getItem(STORAGE_KEYS[type]);
-    const parsed=raw?JSON.parse(raw):[];
-    obtainedIds[type]=Array.isArray(parsed)?new Set(parsed.map(String)):new Set();
-  }catch{ obtainedIds[type]=new Set(); }
-}
-function saveLocalCollection(type){ localStorage.setItem(STORAGE_KEYS[type],JSON.stringify([...obtainedIds[type]])); }
 
-function resolvePrefecture(item){
-  const raw=String(item?.pref??"").trim();
-  if(raw){
-    const n=Number(raw);
-    if(Number.isInteger(n)&&n>=1&&n<=47)return n;
-    if(PREF_ALIAS[raw])return PREF_ALIAS[raw];
-    for(const [name,code] of Object.entries(PREF_ALIAS)) if(raw.includes(name)) return code;
+    localStorage.setItem(
+
+      STORAGE_KEYS[type],
+
+      JSON.stringify(
+        [
+          ...obtainedIds[type]
+        ]
+      )
+
+    );
+
+  }catch(error){
+
+    console.warn(
+      "saveLocalCollection:",
+      error
+    );
+
   }
-  const combined=[item?.region,item?.name,item?.title,item?.city,item?.address,item?.location,item?.venue].filter(Boolean).join(" ").toLowerCase();
-  for(const [name,code] of Object.entries(PREF_ALIAS)) if(combined.includes(name.toLowerCase())) return code;
-  return null;
+
 }
 
-function getItemTitle(type,item){
-  if(type==="stamp") return item?.nameZh || item?.venueZh || item?.name || item?.venue || item?.location || item?.cityZh || item?.city || item?.title || "GO 集章趣";
-  return item?.city || item?.title || item?.name || "Poké Lid";
-}
 
-function normalizeKey(value){ return String(value??"").toLowerCase().replace(/\s+/g,"").replace(/[‐‑–—ー・.]/g,""); }
+function loadLocalCollection(
+  type
+){
 
-function centerNameVariants(value){ const key=normalizeKey(value); const aliases={"yokohama":"寶可夢中心橫濱","pokemoncenteryokohama":"寶可夢中心橫濱","ポケモンセンターヨコハマ":"寶可夢中心橫濱","寶可夢中心橫濱":"寶可夢中心橫濱","sapporo":"寶可夢中心札幌","pokemoncentersapporo":"寶可夢中心札幌","tohoku":"寶可夢中心東北","pokemontohoku":"寶可夢中心東北","tokyodx":"寶可夢中心東京DX","pokemoncentertokyodx":"寶可夢中心東京DX","megatokyo":"寶可夢中心Mega東京","pokemoncentermegatokyo":"寶可夢中心Mega東京","shibuya":"寶可夢中心澀谷","skytree":"寶可夢中心晴空塔城","tokyobay":"寶可夢中心東京灣","kanazawa":"寶可夢中心金澤","nagoya":"寶可夢中心名古屋","kyoto":"寶可夢中心京都","osakadx":"寶可夢中心大阪DX","osaka":"寶可夢中心大阪","hiroshima":"寶可夢中心廣島","kagawa":"寶可夢中心香川","fukuoka":"寶可夢中心福岡","okinawa":"寶可夢中心沖繩"}; return [key,normalizeKey(aliases[key]||""),String(value??"")].filter(Boolean); }
+  try{
 
-function findCenterRecord(item){
-  const list=dataSets.center||[];
-  const candidates=[item?.venue,item?.name,item?.venueZh,item?.nameZh,item?.centerName,item?.centerNameZh].filter(Boolean).map(normalizeKey);
-  for(const c of candidates){
-    for(const record of list){
-      const names=[record?.name,record?.title,record?.city,record?.venue,record?.nameZh,record?.venueZh].filter(Boolean).map(normalizeKey);
-      if(names.some(n=>n===c || (n.length>4 && (n.includes(c)||c.includes(n))))) return record;
-    }
+    const raw =
+      localStorage.getItem(
+        STORAGE_KEYS[type]
+      );
+
+    const parsed =
+      raw
+      ?
+      JSON.parse(raw)
+      :
+      [];
+
+    obtainedIds[type] =
+
+      Array.isArray(
+        parsed
+      )
+
+      ?
+
+      new Set(
+        parsed.map(
+          String
+        )
+      )
+
+      :
+
+      new Set();
+
+  }catch{
+
+    obtainedIds[type] =
+      new Set();
+
   }
-  return null;
+
 }
 
-function getItemImageUrl(type,item){
-  if(type==="lid") return "https://pokefuta.yuki.games/images/pokefuta/"+encodeURIComponent(item.id)+".png";
 
-  /*
-   * Pokémon Center GO 集章趣：
-   * 這裡顯示的是「各 Pokémon Center 自己的代表徽章」，
-   * 不是活動 Banner，也不是一般 GO Stamp 圖片。
-   *
-   * 不只依賴 venueType，因為舊版／同步暫存資料可能沒有正確寫入 venueType。
-   * 只要名稱辨識出 Pokémon Center，就強制走 Center Badge。
-   */
-  const rawNames=[
-    item?.nameZh, item?.venueZh, item?.name, item?.venue,
-    item?.centerNameZh, item?.centerName
-  ].filter(Boolean).map(String);
+/* =========================================================
+   STABLE STAMP IDENTITY
+========================================================= */
 
-  const joinedNames=rawNames.join(" ").toLowerCase();
-  const isPokemonCenter=
-    String(item?.venueType||"")==="pokemon_center" ||
-    String(item?.venueType||"")==="pokemon_go_lab" ||
-    rawNames.some(name=>{
-      const low=name.toLowerCase();
-      return low.includes("pokemon center") ||
-             low.includes("pokémon center") ||
-             low.includes("ポケモンセンター") ||
-             name.includes("寶可夢中心");
-    });
+function stampIdentityKey(
+  item
+){
 
-  if(isPokemonCenter){
-    /* ① 同步器已經解析好的該中心徽章：最高優先 */
-    if(item?.centerBadgeImage) return item.centerBadgeImage;
+  const event =
+    String(
+      item?.eventId
+      ||
+      item?.event
+      ||
+      item?.eventName
+      ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
 
-    /* ② 既有 pokemon_center.json 的徽章欄位 */
-    const center=findCenterRecord(item);
-    const centerImage=item?.centerBadgeImage || center?.pokemonCenterBadge ||
-                       center?.pokemonCenterIcon ||
-                       center?.centerBadge ||
-                       center?.centerIcon ||
-                       center?.badge ||
-                       center?.logo || "";
-    if(centerImage && !String(centerImage).toLowerCase().includes("/mv/")) return centerImage;
+  const venue =
+    String(
+      item?.venue
+      ||
+      item?.name
+      ||
+      item?.venueZh
+      ||
+      item?.nameZh
+      ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
 
-    /* ③ 官方已知徽章：用正規化名稱比對 */
-    for(const name of rawNames){
-      const variants=centerNameVariants(name);
-      for(const v of variants){
-        const badge=OFFICIAL_CENTER_BADGES[v] || OFFICIAL_CENTER_BADGES[String(v).trim()];
-        if(badge) return badge;
+  return (
+    event
+    +
+    "|"
+    +
+    venue
+  )
+  .replace(
+    /\s+/g,
+    ""
+  );
+
+}
+
+
+function migrateStampObtainedData(){
+
+  try{
+
+    const currentMap = {};
+
+    for(
+      const item
+      of (
+        dataSets.stamp
+        || []
+      )
+    ){
+
+      const identity =
+        stampIdentityKey(
+          item
+        );
+
+      if(
+        identity
+        &&
+        item?.id
+      ){
+
+        currentMap[
+          identity
+        ] =
+          String(
+            item.id
+          );
+
       }
+
     }
 
-    /* ④ Mega Tokyo 強制官方 fallback，避免舊資料名稱造成漏配 */
-    if(joinedNames.includes("megatokyo") ||
-       joinedNames.includes("mega東京") ||
-       joinedNames.includes("mega 東京") ||
-       joinedNames.includes("メガトウキョー") ||
-       joinedNames.includes("mega tokyo")){
-      return "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp";
-    }
-  }
 
-  return item?.stampImage || item?.pointImage || "";
-}
+    let oldMap = {};
 
-const KNOWN_STAMP_COORDINATES_V26 = {"寶可夢中心札幌":[43.0674691,141.3492665],"ポケモンセンターサッポロ":[43.0674691,141.3492665],"寶可夢中心東北":[38.2621602,140.8817018],"ポケモンセンタートウホク":[38.2621602,140.8817018],"寶可夢中心東京DX":[35.6802902,139.7742695],"ポケモンセンタートウキョーDX":[35.6802902,139.7742695],"寶可夢中心 Mega 東京":[35.7289056,139.7193245],"ポケモンセンターメガトウキョー":[35.7289056,139.7193245],"Pokémon GO Lab.":[35.7289056,139.7193245],"寶可夢中心澀谷":[35.6619557,139.6984408],"ポケモンセンターシブヤ":[35.6619557,139.6984408],"寶可夢中心晴空塔城":[35.7103448,139.8126119],"ポケモンセンタースカイツリータウン":[35.7103448,139.8126119],"寶可夢中心東京灣":[35.6866032,139.9890362],"ポケモンセンタートウキョーベイ":[35.6866032,139.9890362],"寶可夢中心橫濱":[35.4645717,139.6244898],"ポケモンセンターヨコハマ":[35.4645717,139.6244898],"寶可夢中心名古屋":[35.1636262,136.90803],"ポケモンセンターナゴヤ":[35.1636262,136.90803],"寶可夢中心金澤":[36.5791483,136.6497543],"ポケモンセンターカナザワ":[36.5791483,136.6497543],"寶可夢中心京都":[35.0034167,135.7583839],"ポケモンセンターキョウト":[35.0034167,135.7583839],"寶可夢中心大阪DX":[34.6731719,135.5007545],"ポケモンセンターオーサカDX":[34.6731719,135.5007545],"寶可夢中心大阪":[34.7018525,135.4965591],"ポケモンセンターオーサカ":[34.7018525,135.4965591],"寶可夢中心廣島":[34.3986243,132.4759743],"ポケモンセンターヒロシマ":[34.3986243,132.4759743],"寶可夢中心香川":[34.3422817,134.0500608],"ポケモンセンターカガワ":[34.3422817,134.0500608],"寶可夢中心福岡":[33.5890033,130.4192564],"ポケモンセンターフクオカ":[33.5890033,130.4192564],"寶可夢中心沖繩":[26.3140852,127.7962995],"ポケモンセンターオキナワ":[26.3140852,127.7962995],"Kuala Lumpur":[3.155558,101.714787],"馬來西亞吉隆坡・KLCC Park Esplanade 前":[3.155558,101.714787],"Taipei":[25.037245,121.566986],"台灣台北・香堤大道":[25.037245,121.566986],"Singapore":[1.356355,103.986511],"新加坡・樟宜機場第三航廈出境大廳":[1.356355,103.986511],"Manila":[14.534429,120.980263],"菲律賓馬尼拉・SM Mall of Asia MOA Sky":[14.534429,120.980263],"東京鐵塔":[35.6586,139.7454],"SL廣場 C11 292":[35.6671448,139.7574141],"原芝浦小學校紀念碑":[35.665661,139.7461202],"江戶坂":[35.6669716,139.7454765],"芝公園 Gym Statue":[35.6560133,139.7490935],"江東區役所":[35.6730499,139.8164348],"東陽21 Goddess Fountain":[35.6748,139.81523],"仙台堀公園 嬰兒噴泉":[35.67618,139.81274],"東京都現代美術館 Like a Snail B":[35.6796307,139.8074057],"天王洲 Isle 第四公園":[35.623578,139.748265],"聖蹟公園":[35.619162,139.74419],"街道松廣場":[35.615484,139.744176],"鮫洲入江廣場":[35.603301,139.743942],"長崎站（海鷗廣場）":[32.7521119,129.8687391],"長崎漁港尾上地區防災綠地（尾上之丘）":[32.7489722,129.8685],"原長崎縣廳所在地":[32.7496274,129.8674379],"長崎中華街（新地橋廣場）":[32.74301,129.8751],"長崎市役所／社區中心":[32.7494464,129.8798385],"長崎歷史文化博物館":[32.752846,129.879495],"長崎水濱森林公園":[32.740778,129.868361],"長崎體育城":[32.758806,129.8644224],"江坂公園":[34.756812,135.527394],"万博記念公園":[34.759428,135.500232],"千里南公園":[34.796386,135.50757],"桃山公園":[34.825308,135.509497],"佐井寺公園":[34.806184,135.532263]};
-function normalizePointKey(value){
-  return String(value??"").toLowerCase().replace(/[\s・･,，.。:：()（）「」『』【】]/g,"");
-}
-function knownCoordinateForItem(item){
-  const values=[item?.nameZh,item?.name,item?.venueZh,item?.venue].filter(Boolean);
-  for(const value of values){
-    const key=normalizePointKey(value);
-    for(const [name,coords] of Object.entries(KNOWN_STAMP_COORDINATES_V26)){
-      if(normalizePointKey(name)===key) return coords;
-    }
-  }
-  return null;
-}
-function getItemLatLng(item){
-  let lat=Number(item?.coords?.[0] ?? item?.lat);
-  let lng=Number(item?.coords?.[1] ?? item?.lng);
-  if((!Number.isFinite(lat)||!Number.isFinite(lng)) && String(item?.venueType||"")==="pokemon_center"){
-    const center=findCenterRecord(item);
-    if(center){
-      lat=Number(center?.coords?.[0] ?? center?.lat);
-      lng=Number(center?.coords?.[1] ?? center?.lng);
-    }
-  }
-  return {lat,lng};
-}
-
-function getStampStatus(item){
-  const now=new Date();
-  const start=item?.startDate?new Date(item.startDate):null;
-  const end=item?.endDate?new Date(item.endDate+"T23:59:59"):null;
-  if(start&&now<start)return "即將開始";
-  if(end&&now>end)return "已結束";
-  return "進行中";
-}
-function getStampEventName(item){ return item?.eventZh || item?.eventNameZh || item?.event || item?.eventName || item?.activityZh || item?.activity || "GO 集章趣"; }
-function getStampDates(item){ const s=item?.startDate||"",e=item?.endDate||""; return s&&e?`${s} ～ ${e}`:s?`${s} ～`:""; }
-
-async function fetchJSON(url){
-  const sep=url.includes("?")?"&":"?";
-  const response=await fetch(url+sep+"ts="+Date.now(),{cache:"no-store"});
-  if(!response.ok) throw new Error(`HTTP ${response.status}`);
-  return await response.json();
-}
-
-function normalizeDataList(json,type){
-  if(type==="stamp" && Array.isArray(json?.list)) return json.list;
-  if(Array.isArray(json?.list)) return json.list;
-  if(Array.isArray(json)) return json;
-  if(type==="stamp" && Array.isArray(json?.events)){
-    const flat=[];
-    for(const event of json.events){
-      const points=Array.isArray(event.stamps)?event.stamps:[];
-      for(const p of points) flat.push({...event,...p,eventId:p.eventId||event.eventId||event.id});
-    }
-    return flat;
-  }
-  for(const key of ["data","items","stamps","records","locations","results"]){ if(Array.isArray(json?.[key])) return json[key]; }
-  return [];
-}
-
-async function loadDataSet(type){
-  let lastError="";
-  for(const url of [DATA_URLS[type],RAW_DATA_URLS[type]]){
     try{
-      const json=await fetchJSON(url);
-      if(type==="stamp") stampEventsMeta=Array.isArray(json?.events)?json.events:[];
-      const list=normalizeDataList(json,type);
-      if(!Array.isArray(list)) throw new Error("資料格式錯誤");
-      dataSets[type]=list;
-      buildGroups(type);
-      return true;
-    }catch(error){ lastError=error.message; console.warn(`[${type}]`,url,error); }
-  }
-  dataSets[type]=[];
-  if(type==="stamp") stampEventsMeta=[];
-  buildGroups(type);
-  if(type===collectionType) document.getElementById("regions").innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 資料載入失敗<br><br>${escapeHtml(lastError)}</div>`;
-  return false;
-}
 
-function buildGroups(type){
-  groups[type]={};
-  if(type==="stamp") return;
-  for(const item of dataSets[type]){
-    item.__prefCode=resolvePrefecture(item);
-    const pref=item.__prefCode?PREF[item.__prefCode]:null;
-    if(pref) (groups[type][pref] ||= []).push(item);
-  }
-}
+      oldMap =
+        JSON.parse(
+          localStorage.getItem(
+            STAMP_IDENTITY_MAP_KEY
+          )
+          ||
+          "{}"
+        );
 
-function getStampEvents(){
-  const map=new Map();
-  const ensure=(meta)=>{
-    const id=String(meta?.eventId||meta?.id||meta?.event||"GO-STAMP-UNKNOWN");
-    if(!map.has(id)){
-      map.set(id,{
-        id,
-        event:meta?.event||meta?.eventName||"GO 集章趣",
-        eventZh:meta?.eventZh||meta?.eventNameZh||meta?.event||"GO 集章趣",
-        startDate:meta?.startDate||"",
-        endDate:meta?.endDate||"",
-        sourceUrl:meta?.sourceUrl||"",
-        activityImage:meta?.activityImage||meta?.eventImage||meta?.image||"",
-        eventImage:meta?.eventImage||meta?.activityImage||meta?.image||"",
-        expectedStamps:Number.isFinite(Number(meta?.expectedStamps))?Number(meta.expectedStamps):null,
-        descriptionZh:meta?.descriptionZh||"",
-        items:[]
-      });
+    }catch{
+
+      oldMap = {};
+
     }
-    return map.get(id);
-  };
-  for(const meta of stampEventsMeta) ensure(meta);
-  for(const item of dataSets.stamp){
-    const event=ensure(item);
-    const titleOriginal=item?.name||item?.venue||item?.event||"";
-    const looksLikePlaceholder=!item?.stampImage&&!item?.lat&&!item?.lng&&String(titleOriginal)===String(event.event);
-    if(looksLikePlaceholder) continue;
-    if(!event.items.some(x=>getItemId(x)===getItemId(item))){ event.items.push(item); }
-    if(!event.startDate || (item.startDate && item.startDate<event.startDate)) event.startDate=item.startDate;
-    if(!event.endDate || (item.endDate && item.endDate>event.endDate)) event.endDate=item.endDate;
-    if(!event.sourceUrl && item.sourceUrl) event.sourceUrl=item.sourceUrl;
-    if(!event.activityImage && item.activityImage) event.activityImage=item.activityImage;
-    if(!event.eventImage && (item.eventImage||item.activityImage)) event.eventImage=item.eventImage||item.activityImage;
-    if(event.expectedStamps==null && Number.isFinite(Number(item.expectedStamps))) event.expectedStamps=Number(item.expectedStamps);
-  }
-  return [...map.values()].sort((a,b)=>(a.startDate||"9999").localeCompare(b.startDate||"9999") || (a.eventZh||a.event).localeCompare(b.eventZh||b.event));
-}
 
-function switchCollectionType(type){
-  if(!["lid","stamp"].includes(type)) return;
-  collectionType=type;
-  document.getElementById("tabLid").classList.toggle("active",type==="lid");
-  document.getElementById("tabStamp").classList.toggle("active",type==="stamp");
-  document.getElementById("sectionTitle").textContent=type==="lid"?"🔴 Poké Lid 蒐集進度":"🎟️ GO 集章趣 蒐集進度";
-  document.getElementById("progressLabel").textContent=type==="lid"?"Poké Lid 已收集：":"GO 集章趣 已收集：";
-  closeAllPanels(); currentRegion=null; currentPrefecture=null; currentStampEventId=null; currentCollectionItems=[]; currentItem=null;
-  document.getElementById("stampAllDownloadBox").style.display = type === "stamp" ? "flex" : "none";
-  renderRegions(); updateOverall();
-}
-function closeAllPanels(){ for(const id of ["prefecturePanel","collectionPanel","modalOverlay"]) document.getElementById(id).classList.remove("show"); document.body.classList.remove("no-scroll"); }
-function updateOverall(){
-  if(collectionType==="stamp"){
-    const events=getStampEvents(); let total=0,obtained=0;
-    for(const event of events){ const items=event.items||[]; const eventTotal=Number(event.expectedStamps||0)||items.length; total+=eventTotal; obtained+=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length; }
-    document.getElementById("totalObtained").textContent=obtained;
-    document.getElementById("totalCount").textContent=total;
-    return;
-  }
-  const list=dataSets.lid||[]; const obtained=list.filter(item=>obtainedIds.lid.has(getItemId(item))).length;
-  document.getElementById("totalObtained").textContent=obtained;
-  document.getElementById("totalCount").textContent=list.length;
-}
 
-function renderRegions(){
-  const el=document.getElementById("regions");
-  if(collectionType==="stamp") return renderStampEvents(el);
-  const list=dataSets.lid||[];
-  if(!list.length){ el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ Poké Lid 沒有資料</div>`; return; }
-  el.innerHTML="";
-  for(const [regionName,region] of Object.entries(REGIONS)){
-    const items=list.filter(item=>region.prefs.includes(Number(item.__prefCode)));
-    const obtained=items.filter(item=>obtainedIds.lid.has(getItemId(item))).length;
-    const total=items.length; const percent=total?Math.round(obtained/total*1000)/10:0;
-    const sample=items.slice(0,3); const card=document.createElement("div"); card.className="region-card"; card.onclick=()=>openRegion(regionName);
-    const images=sample.map(item=>{const image=getItemImageUrl("lid",item);return image?`<img class="region-image" src="${escapeHtml(image)}" alt="" loading="lazy">`:"";}).join("");
-    const completeStamp=(total>0 && obtained>=total)
-      ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
-      : "";
-    card.innerHTML=`<div class="region-images">${images||`<div class="region-empty">尚無資料</div>`}${completeStamp}</div><div class="region-info"><div class="region-name">${escapeHtml(regionName)}</div><div class="region-count">${obtained} / ${total}</div><div class="region-percent">完成率 ${percent}%</div><div class="download-subbox"><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','txt')">TXT</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','json')">JSON</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','csv')">CSV</button></div></div>`;
-    el.appendChild(card);
-  }
-}
+    let changed =
+      false;
 
-function getStampEventStatus(event){
-  const now=new Date();
-  const start=event?.startDate?new Date(`${event.startDate}T00:00:00`):null;
-  const end=event?.endDate?new Date(`${event.endDate}T23:59:59`):null;
-  if(start && now<start)return "活動尚未開始";
-  if(end && now>end)return "活動已結束";
-  return "進行中";
-}
 
-function getStampEventDateText(event){
-  const s=event?.startDate||"";
-  const e=event?.endDate||"";
-  if(s&&e)return `開始：${s}　結束：${e}`;
-  if(s)return `開始：${s}　結束：無期限`;
-  if(e)return `結束：${e}`;
-  return "日期尚待官方公布";
-}
+    for(
+      const [
+        identity,
+        newId
+      ]
+      of Object.entries(
+        currentMap
+      )
+    ){
 
-function renderStampEvents(el){
-  const events=getStampEvents();
-  if(!events.length){
-    el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。<br><br>資料由 GitHub Actions 自動同步 Pokémon GO 官方網站。</div>`;
-    return;
-  }
-  el.innerHTML="";
-  for(const event of events){
-    const items=event.items||[];
-    const obtained=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
-    const total=Number(event.expectedStamps||0)||items.length;
-    const percent=total?Math.round(obtained/total*1000)/10:0;
-    const known=items.length;
-    const status=getStampEventStatus(event);
-    const banner=event.activityImage || event.eventImage || event.image || "";
-    const card=document.createElement("div");
-    card.className="region-card stamp-event-card";
-    card.onclick=()=>openStampEvent(event.id);
-    const statusKey=status==="活動尚未開始"?"upcoming":(status==="活動已結束"?"ended":"active");
-    const statusOverlay=(statusKey!=="active")
-      ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
-    const completeStamp=(total>0 && obtained>=total)
-      ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
-      : "";
-    const countText=total?`${obtained} / ${total}`:(known?`${obtained} / ${known}`:"尚待官方公布");
-    const note=(total && known<total)
-      ? `<div class="stamp-event-data-note">目前已取得 ${known} / ${total} 個官方集章點資料</div>` : "";
-    card.innerHTML=`
-      <div class="region-images stamp-event-banner-wrap">
-        ${banner
-          ? `<img class="stamp-event-banner" src="${escapeHtml(banner)}" alt="${escapeHtml(event.eventZh||event.event||"GO 集章趣")}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"> <div class="stamp-event-banner-fallback" style="display:none">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
-          : `<div class="stamp-event-banner-fallback">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
-        }
-        ${statusOverlay}
-        ${completeStamp}
-      </div>
-      <div class="region-info">
-        <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
-        <div class="region-count">${countText}</div>
-        <div class="stamp-event-live-status ${statusKey}">${escapeHtml(status)}</div><div class="stamp-event-date">${escapeHtml(getStampEventDateText(event))}</div>
-        <div class="region-percent">${total?`完成率 ${percent}%`:`資料待官方公布`}${note}${known?`<br>📍 座標資料 ${items.filter(item=>{const p=getItemLatLng(item);return Number.isFinite(p.lat)&&Number.isFinite(p.lng);}).length} / ${known}`:""}</div>
-        <div class="download-subbox">
-          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','txt')">TXT</button>
-          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','json')">JSON</button>
-          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','csv')">CSV</button>
-        </div>
-      </div>`;
-    el.appendChild(card);
-  }
-}
+      const oldId =
+        oldMap[
+          identity
+        ];
 
-function openRegion(regionName){
-  if(collectionType==="stamp") return;
-  currentRegion=regionName; document.getElementById("prefectureTitle").textContent=regionName; renderPrefectureSummary(); renderPrefectureGrid(); document.getElementById("prefecturePanel").classList.add("show"); document.body.classList.add("no-scroll");
-}
-function renderPrefectureSummary(){ if(!currentRegion)return; const region=REGIONS[currentRegion]; const items=(dataSets.lid||[]).filter(item=>region.prefs.includes(Number(item.__prefCode))); const obtained=items.filter(item=>obtainedIds.lid.has(getItemId(item))).length; document.getElementById("prefectureSummary").textContent=`已收集 ${obtained} / ${items.length}`; }
-function renderPrefectureGrid(){ const el=document.getElementById("prefectureGrid"); const region=REGIONS[currentRegion]; const list=dataSets.lid||[]; el.innerHTML=""; for(const prefCode of region.prefs){ const prefName=PREF[prefCode]; const items=list.filter(item=>Number(item.__prefCode)===Number(prefCode)); if(!items.length)continue; const obtained=items.filter(item=>obtainedIds.lid.has(getItemId(item))).length; const total=items.length; const percent=Math.round(obtained/total*100); const card=document.createElement("div"); card.className="prefecture-card"; card.onclick=()=>openPrefectureCollection(prefName); card.innerHTML=`<div class="prefecture-card-top"><div class="prefecture-name">${escapeHtml(prefName)}</div><div class="prefecture-count">${obtained} / ${total}</div></div><div class="prefecture-progress"><div class="prefecture-progress-bar" style="width:${percent}%"></div></div><div class="prefecture-percent">完成率 ${percent}%</div>`; el.appendChild(card); } if(!el.children.length)el.innerHTML=`<div class="loading" style="grid-column:1/-1">此區域目前沒有 Poké Lid 資料。</div>`; }
-function closePrefecturePanel(){ document.getElementById("prefecturePanel").classList.remove("show"); currentRegion=null; document.body.classList.remove("no-scroll"); }
-function prefectureOverlayClick(event){ if(event.target===document.getElementById("prefecturePanel"))closePrefecturePanel(); }
+      if(
+        oldId
+        &&
+        obtainedIds.stamp.has(
+          String(oldId)
+        )
+        &&
+        !obtainedIds.stamp.has(
+          newId
+        )
+      ){
 
-function openPrefectureCollection(prefName){
-  if(collectionType==="stamp") return;
-  currentPrefecture=prefName; currentCollectionItems=groups.lid[prefName]||[]; document.getElementById("collectionTitle").textContent=prefName; document.querySelector(".back-btn").textContent="← 返回縣列表"; updateCollectionSummary(); renderCollectionGrid(); document.getElementById("collectionPanel").classList.add("show"); document.body.classList.add("no-scroll");
-}
-function openStampEvent(eventId){
-  const event=getStampEvents().find(x=>String(x.id)===String(eventId));
-  if(!event)return;
-  currentStampEventId=event.id;
-  currentCollectionItems=event.items||[];
-  document.getElementById("collectionTitle").textContent=event.eventZh||event.event;
-  const total=Number(event.expectedStamps||0) || currentCollectionItems.length;
-  const obtained=currentCollectionItems.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
-  document.getElementById("collectionSummary").textContent=total?`已收集 ${obtained} / ${total}${currentCollectionItems.length<total?`　（目前已取得 ${currentCollectionItems.length} 個集章點資料）`:""}`:"官方集章點資料尚待公布";
-  document.querySelector(".back-btn").textContent="← 返回活動列表";
-  renderCollectionGrid();
-  document.getElementById("collectionPanel").classList.add("show");
-  document.body.classList.add("no-scroll");
-}
-function updateCollectionSummary(){ const obtained=currentCollectionItems.filter(item=>obtainedIds.lid.has(getItemId(item))).length; document.getElementById("collectionSummary").textContent=`已收集 ${obtained} / ${currentCollectionItems.length}`; }
-function updateStampEventSummary(){
-  if(!currentStampEventId)return;
-  const event=getStampEvents().find(x=>String(x.id)===String(currentStampEventId)); if(!event)return;
-  currentCollectionItems=event.items||[];
-  const obtained=currentCollectionItems.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
-  const total=Number(event.expectedStamps||0)||currentCollectionItems.length;
-  document.getElementById("collectionSummary").textContent=total?`已收集 ${obtained} / ${total}${currentCollectionItems.length<total?`　（目前已取得 ${currentCollectionItems.length} 個集章點資料）`:""}`:"官方集章點資料尚待公布";
-}
+        obtainedIds.stamp.add(
+          newId
+        );
 
-function renderCollectionGrid(){
-  const el=document.getElementById("collectionGrid");
-  el.innerHTML="";
+        changed = true;
 
-  if(!currentCollectionItems.length){
-    el.innerHTML=`<div class="loading" style="grid-column:1/-1">目前官方尚未公開可取得的單一圖章圖片／集章點資料。<br>活動仍保留，待官方資料更新後會自動補上。</div>`;
-    return;
-  }
-
-  for(const item of currentCollectionItems){
-    const obtained=obtainedIds[collectionType].has(getItemId(item));
-    const title=getItemTitle(collectionType,item);
-    const image=getItemImageUrl(collectionType,item);
-    const card=document.createElement("div");
-    card.className="collection-item "+(obtained?"obtained":"not-obtained");
-    card.onclick=()=>openModalFromItem(item);
-
-    card.innerHTML=`
-      <div class="collection-image-wrap">
-        ${image
-          ? `<img class="collection-image" src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy">`
-          : `<div class="stamp-missing-image">目前尚未取得這個 GO 集章的實際圖片<br>官方資料更新後會自動補上</div>`
-        }
-      </div>
-      <div class="collection-city">${escapeHtml(item.nameZh||item.venueZh||title)}</div>
-      ${item.countryZh||item.cityZh
-        ? `<div style="margin-top:3px;color:#7b999d;font-size:10px;line-height:1.35">${escapeHtml(item.cityZh||item.countryZh||"")}</div>`
-        : ""
       }
-      <div class="collection-status">${obtained?"● 已收集":"● 未收集"}</div>
+
+    }
+
+
+    if(changed){
+
+      saveLocalCollection(
+        "stamp"
+      );
+
+    }
+
+
+    localStorage.setItem(
+
+      STAMP_IDENTITY_MAP_KEY,
+
+      JSON.stringify(
+        currentMap
+      )
+
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Stamp identity migration failed:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   PREFECTURE
+========================================================= */
+
+function resolvePrefecture(
+  item
+){
+
+  const raw =
+    String(
+      item?.pref
+      ??
+      ""
+    )
+    .trim();
+
+  if(raw){
+
+    const n =
+      Number(raw);
+
+    if(
+      Number.isInteger(n)
+      &&
+      n >= 1
+      &&
+      n <= 47
+    ){
+
+      return n;
+
+    }
+
+    if(
+      PREF_ALIAS[raw]
+    ){
+
+      return PREF_ALIAS[
+        raw
+      ];
+
+    }
+
+    for(
+      const [
+        name,
+        code
+      ]
+      of Object.entries(
+        PREF_ALIAS
+      )
+    ){
+
+      if(
+        raw.includes(
+          name
+        )
+      ){
+
+        return code;
+
+      }
+
+    }
+
+  }
+
+
+  const combined = [
+
+    item?.region,
+    item?.name,
+    item?.title,
+    item?.city,
+    item?.address,
+    item?.location,
+    item?.venue
+
+  ]
+  .filter(Boolean)
+  .join(" ")
+  .toLowerCase();
+
+
+  for(
+    const [
+      name,
+      code
+    ]
+    of Object.entries(
+      PREF_ALIAS
+    )
+  ){
+
+    if(
+      combined.includes(
+        name.toLowerCase()
+      )
+    ){
+
+      return code;
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+function getItemTitle(
+  type,
+  item
+){
+
+  if(
+    type === "stamp"
+  ){
+
+    return (
+
+      item?.nameZh
+      ||
+      item?.venueZh
+      ||
+      item?.name
+      ||
+      item?.venue
+      ||
+      item?.location
+      ||
+      item?.cityZh
+      ||
+      item?.city
+      ||
+      item?.title
+      ||
+      "GO 集章趣"
+
+    );
+
+  }
+
+
+  return (
+
+    item?.city
+    ||
+    item?.title
+    ||
+    item?.name
+    ||
+    "Poké Lid"
+
+  );
+
+}
+
+
+/* =========================================================
+   CENTER
+========================================================= */
+
+function normalizeKey(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+  .toLowerCase()
+  .replace(
+    /\s+/g,
+    ""
+  )
+  .replace(
+    /[‐-–—ー・.]/g,
+    ""
+  );
+
+}
+
+
+function centerNameVariants(
+  value
+){
+
+  const key =
+    normalizeKey(
+      value
+    );
+
+  const aliases = {
+
+    "yokohama":
+      "寶可夢中心橫濱",
+
+    "pokemoncenteryokohama":
+      "寶可夢中心橫濱",
+
+    "ポケモンセンターヨコハマ":
+      "寶可夢中心橫濱",
+
+    "寶可夢中心橫濱":
+      "寶可夢中心橫濱",
+
+    "sapporo":
+      "寶可夢中心札幌",
+
+    "pokemoncentersapporo":
+      "寶可夢中心札幌",
+
+    "tohoku":
+      "寶可夢中心東北",
+
+    "pokemontohoku":
+      "寶可夢中心東北",
+
+    "tokyodx":
+      "寶可夢中心東京DX",
+
+    "pokemoncentertokyodx":
+      "寶可夢中心東京DX",
+
+    "megatokyo":
+      "寶可夢中心Mega東京",
+
+    "pokemoncentermegatokyo":
+      "寶可夢中心Mega東京",
+
+    "shibuya":
+      "寶可夢中心澀谷",
+
+    "skytree":
+      "寶可夢中心晴空塔城",
+
+    "tokyobay":
+      "寶可夢中心東京灣",
+
+    "kanazawa":
+      "寶可夢中心金澤",
+
+    "nagoya":
+      "寶可夢中心名古屋",
+
+    "kyoto":
+      "寶可夢中心京都",
+
+    "osakadx":
+      "寶可夢中心大阪DX",
+
+    "osaka":
+      "寶可夢中心大阪",
+
+    "hiroshima":
+      "寶可夢中心廣島",
+
+    "kagawa":
+      "寶可夢中心香川",
+
+    "fukuoka":
+      "寶可夢中心福岡",
+
+    "okinawa":
+      "寶可夢中心沖繩"
+
+  };
+
+  return [
+
+    key,
+
+    normalizeKey(
+      aliases[key]
+      ||
+      ""
+    ),
+
+    String(
+      value ?? ""
+    )
+
+  ]
+  .filter(Boolean);
+
+}
+
+
+function findCenterRecord(
+  item
+){
+
+  const list =
+    dataSets.center
+    ||
+    [];
+
+  const candidates = [
+
+    item?.venue,
+    item?.name,
+    item?.venueZh,
+    item?.nameZh,
+    item?.centerName,
+    item?.centerNameZh
+
+  ]
+  .filter(Boolean)
+  .map(
+    normalizeKey
+  );
+
+
+  for(
+    const c
+    of candidates
+  ){
+
+    for(
+      const record
+      of list
+    ){
+
+      const names = [
+
+        record?.name,
+        record?.title,
+        record?.city,
+        record?.venue,
+        record?.nameZh,
+        record?.venueZh
+
+      ]
+      .filter(Boolean)
+      .map(
+        normalizeKey
+      );
+
+
+      if(
+        names.some(
+          n =>
+            n === c
+            ||
+            (
+              n.length > 4
+              &&
+              (
+                n.includes(c)
+                ||
+                c.includes(n)
+              )
+            )
+        )
+      ){
+
+        return record;
+
+      }
+
+    }
+
+  }
+
+  return null;
+
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+function getItemImageUrl(
+  type,
+  item
+){
+
+  if(
+    type === "lid"
+  ){
+
+    return (
+      "https://pokefuta.yuki.games/images/pokefuta/"
+      +
+      encodeURIComponent(
+        item.id
+      )
+      +
+      ".png"
+    );
+
+  }
+
+
+  const rawNames = [
+
+    item?.nameZh,
+    item?.venueZh,
+    item?.name,
+    item?.venue,
+    item?.centerNameZh,
+    item?.centerName
+
+  ]
+  .filter(Boolean)
+  .map(
+    String
+  );
+
+
+  const joinedNames =
+    rawNames
+      .join(" ")
+      .toLowerCase();
+
+
+  const isPokemonCenter =
+
+    String(
+      item?.venueType
+      ||
+      ""
+    ) ===
+    "pokemon_center"
+
+    ||
+
+    String(
+      item?.venueType
+      ||
+      ""
+    ) ===
+    "pokemon_go_lab"
+
+    ||
+
+    rawNames.some(
+      name => {
+
+        const low =
+          name.toLowerCase();
+
+        return (
+
+          low.includes(
+            "pokemon center"
+          )
+
+          ||
+
+          low.includes(
+            "pokémon center"
+          )
+
+          ||
+
+          low.includes(
+            "ポケモンセンター"
+          )
+
+          ||
+
+          name.includes(
+            "寶可夢中心"
+          )
+
+        );
+
+      }
+    );
+
+
+  if(
+    isPokemonCenter
+  ){
+
+    /* ① 手動 / 同步器指定徽章 */
+
+    if(
+      item?.centerBadgeImage
+    ){
+
+      return (
+        item.centerBadgeImage
+      );
+
+    }
+
+
+    /* ② pokemon_center.json */
+
+    const center =
+      findCenterRecord(
+        item
+      );
+
+
+    const centerImage =
+
+      center?.pokemonCenterBadge
+
+      ||
+
+      center?.pokemonCenterIcon
+
+      ||
+
+      center?.centerBadge
+
+      ||
+
+      center?.centerIcon
+
+      ||
+
+      center?.badge
+
+      ||
+
+      center?.logo
+
+      ||
+
+      "";
+
+
+    if(
+      centerImage
+      &&
+      !String(
+        centerImage
+      )
+      .toLowerCase()
+      .includes(
+        "/mv/"
+      )
+    ){
+
+      return centerImage;
+
+    }
+
+
+    /* ③ 官方徽章 */
+
+    for(
+      const name
+      of rawNames
+    ){
+
+      const variants =
+        centerNameVariants(
+          name
+        );
+
+      for(
+        const v
+        of variants
+      ){
+
+        const badge =
+          OFFICIAL_CENTER_BADGES[
+            v
+          ]
+          ||
+          OFFICIAL_CENTER_BADGES[
+            String(v).trim()
+          ];
+
+        if(
+          badge
+        ){
+
+          return badge;
+
+        }
+
+      }
+
+    }
+
+
+    /* ④ Mega Tokyo */
+
+    if(
+
+      joinedNames.includes(
+        "megatokyo"
+      )
+
+      ||
+
+      joinedNames.includes(
+        "mega東京"
+      )
+
+      ||
+
+      joinedNames.includes(
+        "mega 東京"
+      )
+
+      ||
+
+      joinedNames.includes(
+        "メガトウキョー"
+      )
+
+      ||
+
+      joinedNames.includes(
+        "mega tokyo"
+      )
+
+    ){
+
+      return (
+        "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp"
+      );
+
+    }
+
+  }
+
+
+  return (
+
+    item?.stampImage
+
+    ||
+
+    item?.pointImage
+
+    ||
+
+    ""
+
+  );
+
+}
+
+
+/* =========================================================
+   COORDINATES
+========================================================= */
+
+const KNOWN_STAMP_COORDINATES = {
+
+  "寶可夢中心札幌":
+    [
+      43.0674691,
+      141.3492665
+    ],
+
+  "ポケモンセンターサッポロ":
+    [
+      43.0674691,
+      141.3492665
+    ],
+
+  "寶可夢中心東北":
+    [
+      38.2621602,
+      140.8817018
+    ],
+
+  "ポケモンセンタートウホク":
+    [
+      38.2621602,
+      140.8817018
+    ],
+
+  "寶可夢中心東京DX":
+    [
+      35.6802902,
+      139.7742695
+    ],
+
+  "ポケモンセンタートウキョーDX":
+    [
+      35.6802902,
+      139.7742695
+    ],
+
+  "寶可夢中心Mega東京":
+    [
+      35.7289056,
+      139.7193245
+    ],
+
+  "寶可夢中心 Mega 東京":
+    [
+      35.7289056,
+      139.7193245
+    ],
+
+  "ポケモンセンターメガトウキョー":
+    [
+      35.7289056,
+      139.7193245
+    ],
+
+  "Pokémon GO Lab.":
+    [
+      35.7289056,
+      139.7193245
+    ],
+
+  "寶可夢中心澀谷":
+    [
+      35.6619557,
+      139.6984408
+    ],
+
+  "ポケモンセンターシブヤ":
+    [
+      35.6619557,
+      139.6984408
+    ],
+
+  "寶可夢中心晴空塔城":
+    [
+      35.7103448,
+      139.8126119
+    ],
+
+  "ポケモンセンタースカイツリータウン":
+    [
+      35.7103448,
+      139.8126119
+    ],
+
+  "寶可夢中心東京灣":
+    [
+      35.6866032,
+      139.9890362
+    ],
+
+  "ポケモンセンタートウキョーベイ":
+    [
+      35.6866032,
+      139.9890362
+    ],
+
+  "寶可夢中心橫濱":
+    [
+      35.4645717,
+      139.6244898
+    ],
+
+  "ポケモンセンターヨコハマ":
+    [
+      35.4645717,
+      139.6244898
+    ],
+
+  "寶可夢中心名古屋":
+    [
+      35.1636262,
+      136.90803
+    ],
+
+  "ポケモンセンターナゴヤ":
+    [
+      35.1636262,
+      136.90803
+    ],
+
+  "寶可夢中心金澤":
+    [
+      36.5791483,
+      136.6497543
+    ],
+
+  "ポケモンセンターカナザワ":
+    [
+      36.5791483,
+      136.6497543
+    ],
+
+  "寶可夢中心京都":
+    [
+      35.0034167,
+      135.7583839
+    ],
+
+  "ポケモンセンターキョウト":
+    [
+      35.0034167,
+      135.7583839
+    ],
+
+  "寶可夢中心大阪DX":
+    [
+      34.6731719,
+      135.5007545
+    ],
+
+  "ポケモンセンターオーサカDX":
+    [
+      34.6731719,
+      135.5007545
+    ],
+
+  "寶可夢中心大阪":
+    [
+      34.7018525,
+      135.4965591
+    ],
+
+  "ポケモンセンターオーサカ":
+    [
+      34.7018525,
+      135.4965591
+    ],
+
+  "寶可夢中心廣島":
+    [
+      34.3986243,
+      132.4759743
+    ],
+
+  "ポケモンセンターヒロシマ":
+    [
+      34.3986243,
+      132.4759743
+    ],
+
+  "寶可夢中心香川":
+    [
+      34.3422817,
+      134.0500608
+    ],
+
+  "ポケモンセンターカガワ":
+    [
+      34.3422817,
+      134.0500608
+    ],
+
+  "寶可夢中心福岡":
+    [
+      33.5890033,
+      130.4192564
+    ],
+
+  "ポケモンセンターフクオカ":
+    [
+      33.5890033,
+      130.4192564
+    ],
+
+  "寶可夢中心沖繩":
+    [
+      26.3140852,
+      127.7962995
+    ],
+
+  "ポケモンセンターオキナワ":
+    [
+      26.3140852,
+      127.7962995
+    ],
+
+  "東京鐵塔":
+    [
+      35.6586,
+      139.7454
+    ],
+
+  "SL廣場 C11 292":
+    [
+      35.6671448,
+      139.7574141
+    ],
+
+  "原芝浦小學校紀念碑":
+    [
+      35.665661,
+      139.74612
+    ],
+
+  "江戶坂":
+    [
+      35.6669716,
+      139.7454765
+    ],
+
+  "芝公園 Gym Statue":
+    [
+      35.6560133,
+      139.7490935
+    ],
+
+  "江東區役所":
+    [
+      35.6730499,
+      139.8164348
+    ],
+
+  "東陽21 Goddess Fountain":
+    [
+      35.6748,
+      139.81523
+    ],
+
+  "仙台堀公園 嬰兒噴泉":
+    [
+      35.67618,
+      139.81274
+    ],
+
+  "東京都現代美術館 Like a Snail B":
+    [
+      35.6796307,
+      139.8074057
+    ],
+
+  "天王洲 Isle 第四公園":
+    [
+      35.623578,
+      139.748265
+    ],
+
+  "聖蹟公園":
+    [
+      35.619162,
+      139.74419
+    ],
+
+  "街道松廣場":
+    [
+      35.615484,
+      139.744176
+    ],
+
+  "鮫洲入江廣場":
+    [
+      35.603301,
+      139.743942
+    ],
+
+  "江坂公園":
+    [
+      34.756812,
+      135.527394
+    ],
+
+  "万博記念公園":
+    [
+      34.759428,
+      135.500232
+    ],
+
+  "千里南公園":
+    [
+      34.796386,
+      135.50757
+    ],
+
+  "桃山公園":
+    [
+      34.825308,
+      135.509497
+    ],
+
+  "佐井寺公園":
+    [
+      34.806184,
+      135.532263
+    ],
+
+  "Kuala Lumpur":
+    [
+      3.155558,
+      101.714787
+    ],
+
+  "Taipei":
+    [
+      25.037245,
+      121.566986
+    ],
+
+  "Singapore":
+    [
+      1.356355,
+      103.986511
+    ],
+
+  "Manila":
+    [
+      14.534429,
+      120.980263
+    ]
+
+};
+
+
+function normalizePointKey(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+  .toLowerCase()
+  .replace(
+    /[\s・･,，.。:：()（）「」『』【】]/g,
+    ""
+  );
+
+}
+
+
+function knownCoordinateForItem(
+  item
+){
+
+  const values = [
+
+    item?.nameZh,
+    item?.name,
+    item?.venueZh,
+    item?.venue
+
+  ]
+  .filter(Boolean);
+
+
+  for(
+    const value
+    of values
+  ){
+
+    const key =
+      normalizePointKey(
+        value
+      );
+
+
+    for(
+      const [
+        name,
+        coords
+      ]
+      of Object.entries(
+        KNOWN_STAMP_COORDINATES
+      )
+    ){
+
+      if(
+        normalizePointKey(
+          name
+        )
+        ===
+        key
+      ){
+
+        return coords;
+
+      }
+
+    }
+
+  }
+
+  return null;
+
+}
+
+
+function getItemLatLng(
+  item
+){
+
+  let lat =
+    Number(
+      item?.coords?.[0]
+      ??
+      item?.lat
+    );
+
+
+  let lng =
+    Number(
+      item?.coords?.[1]
+      ??
+      item?.lng
+    );
+
+
+  if(
+    (
+      !Number.isFinite(
+        lat
+      )
+      ||
+      !Number.isFinite(
+        lng
+      )
+    )
+    &&
+    (
+      String(
+        item?.venueType
+        ||
+        ""
+      ) ===
+      "pokemon_center"
+    )
+  ){
+
+    const center =
+      findCenterRecord(
+        item
+      );
+
+
+    if(center){
+
+      lat =
+        Number(
+          center?.coords?.[0]
+          ??
+          center?.lat
+        );
+
+      lng =
+        Number(
+          center?.coords?.[1]
+          ??
+          center?.lng
+        );
+
+    }
+
+  }
+
+
+  if(
+    !Number.isFinite(lat)
+    ||
+    !Number.isFinite(lng)
+  ){
+
+    const known =
+      knownCoordinateForItem(
+        item
+      );
+
+
+    if(known){
+
+      lat =
+        Number(
+          known[0]
+        );
+
+      lng =
+        Number(
+          known[1]
+        );
+
+    }
+
+  }
+
+
+  return {
+    lat,
+    lng
+  };
+
+}
+
+
+/* =========================================================
+   STAMP STATUS
+========================================================= */
+
+function getStampEventStatus(
+  event
+){
+
+  const now =
+    new Date();
+
+
+  const start =
+    event?.startDate
+    ?
+    new Date(
+      `${event.startDate}T00:00:00`
+    )
+    :
+    null;
+
+
+  const end =
+    event?.endDate
+    ?
+    new Date(
+      `${event.endDate}T23:59:59`
+    )
+    :
+    null;
+
+
+  if(
+    start
+    &&
+    now < start
+  ){
+
+    return "活動尚未開始";
+
+  }
+
+
+  if(
+    end
+    &&
+    now > end
+  ){
+
+    return "活動已結束";
+
+  }
+
+
+  return "進行中";
+
+}
+
+
+function getStampEventDateText(
+  event
+){
+
+  const s =
+    event?.startDate
+    ||
+    "";
+
+  const e =
+    event?.endDate
+    ||
+    "";
+
+
+  if(
+    s
+    &&
+    e
+  ){
+
+    return (
+      `開始：${s}　結束：${e}`
+    );
+
+  }
+
+
+  if(s){
+
+    return (
+      `開始：${s}　結束：無期限`
+    );
+
+  }
+
+
+  if(e){
+
+    return (
+      `結束：${e}`
+    );
+
+  }
+
+
+  return "日期尚待官方公布";
+
+}
+
+
+function getStampEventName(
+  item
+){
+
+  return (
+
+    item?.eventZh
+    ||
+    item?.eventNameZh
+    ||
+    item?.event
+    ||
+    item?.eventName
+    ||
+    item?.activityZh
+    ||
+    item?.activity
+    ||
+    "GO 集章趣"
+
+  );
+
+}
+
+
+function getStampDates(
+  item
+){
+
+  const s =
+    item?.startDate
+    ||
+    "";
+
+  const e =
+    item?.endDate
+    ||
+    "";
+
+
+  return (
+
+    s && e
+
+    ?
+
+    `${s} ～ ${e}`
+
+    :
+
+    s
+    ?
+    `${s} ～`
+
+    :
+
+    ""
+
+  );
+
+}
+
+
+/* =========================================================
+   FETCH
+========================================================= */
+
+async function fetchJSON(
+  url
+){
+
+  const sep =
+    url.includes("?")
+    ? "&"
+    : "?";
+
+
+  const response =
+    await fetch(
+      url
+      +
+      sep
+      +
+      "ts="
+      +
+      Date.now(),
+      {
+        cache:
+          "no-store"
+      }
+    );
+
+
+  if(
+    !response.ok
+  ){
+
+    throw new Error(
+      `HTTP ${response.status}`
+    );
+
+  }
+
+
+  return await response.json();
+
+}
+
+
+/* =========================================================
+   DATA NORMALIZE
+========================================================= */
+
+function normalizeDataList(
+  json,
+  type
+){
+
+  if(
+    type === "stamp"
+    &&
+    Array.isArray(
+      json?.list
+    )
+  ){
+
+    return json.list;
+
+  }
+
+
+  if(
+    Array.isArray(
+      json?.list
+    )
+  ){
+
+    return json.list;
+
+  }
+
+
+  if(
+    Array.isArray(
+      json
+    )
+  ){
+
+    return json;
+
+  }
+
+
+  if(
+    type === "stamp"
+    &&
+    Array.isArray(
+      json?.events
+    )
+  ){
+
+    const flat = [];
+
+
+    for(
+      const event
+      of json.events
+    ){
+
+      const points =
+        Array.isArray(
+          event.stamps
+        )
+        ?
+        event.stamps
+        :
+        [];
+
+
+      for(
+        const p
+        of points
+      ){
+
+        flat.push({
+
+          ...event,
+
+          ...p,
+
+          eventId:
+            p.eventId
+            ||
+            event.eventId
+            ||
+            event.id
+
+        });
+
+      }
+
+    }
+
+
+    return flat;
+
+  }
+
+
+  for(
+    const key
+    of [
+      "data",
+      "items",
+      "stamps",
+      "records",
+      "locations",
+      "results"
+    ]
+  ){
+
+    if(
+      Array.isArray(
+        json?.[key]
+      )
+    ){
+
+      return json[key];
+
+    }
+
+  }
+
+
+  return [];
+
+}
+
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+async function loadDataSet(
+  type
+){
+
+  let lastError =
+    "";
+
+
+  for(
+    const url
+    of [
+      DATA_URLS[type],
+      RAW_DATA_URLS[type]
+    ]
+  ){
+
+    try{
+
+      const json =
+        await fetchJSON(
+          url
+        );
+
+
+      if(
+        type === "stamp"
+      ){
+
+        stampEventsMeta =
+          Array.isArray(
+            json?.events
+          )
+          ?
+          json.events
+          :
+          [];
+
+      }
+
+
+      const list =
+        normalizeDataList(
+          json,
+          type
+        );
+
+
+      if(
+        !Array.isArray(
+          list
+        )
+      ){
+
+        throw new Error(
+          "資料格式錯誤"
+        );
+
+      }
+
+
+      dataSets[type] =
+        list;
+
+
+      buildGroups(
+        type
+      );
+
+
+      return true;
+
+    }catch(error){
+
+      lastError =
+        error.message;
+
+      console.warn(
+        `[${type}]`,
+        url,
+        error
+      );
+
+    }
+
+  }
+
+
+  dataSets[type] =
+    [];
+
+
+  if(
+    type === "stamp"
+  ){
+
+    stampEventsMeta =
+      [];
+
+  }
+
+
+  buildGroups(
+    type
+  );
+
+
+  if(
+    type === collectionType
+  ){
+
+    document.getElementById(
+      "regions"
+    ).innerHTML = `
+
+      <div
+        class="error-box"
+        style="grid-column:1/-1"
+      >
+
+        ⚠️ 資料載入失敗
+
+        <br><br>
+
+        ${escapeHtml(
+          lastError
+        )}
+
+      </div>
+
     `;
 
-    el.appendChild(card);
   }
+
+
+  return false;
+
 }
+
+
+/* =========================================================
+   GROUP
+========================================================= */
+
+function buildGroups(
+  type
+){
+
+  groups[type] =
+    {};
+
+
+  if(
+    type === "stamp"
+  ){
+
+    return;
+
+  }
+
+
+  for(
+    const item
+    of dataSets[type]
+  ){
+
+    item.__prefCode =
+      resolvePrefecture(
+        item
+      );
+
+
+    const pref =
+      item.__prefCode
+      ?
+      PREF[
+        item.__prefCode
+      ]
+      :
+      null;
+
+
+    if(pref){
+
+      (
+        groups[type][pref]
+        ||=
+        []
+      )
+      .push(
+        item
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   STAMP EVENTS
+========================================================= */
+
+function getStampEvents(){
+
+  const map =
+    new Map();
+
+
+  const ensure = (
+    meta
+  ) => {
+
+    const id =
+      String(
+        meta?.eventId
+        ||
+        meta?.id
+        ||
+        meta?.event
+        ||
+        "GO-STAMP-UNKNOWN"
+      );
+
+
+    if(
+      !map.has(id)
+    ){
+
+      map.set(
+
+        id,
+
+        {
+
+          id,
+
+          event:
+            meta?.event
+            ||
+            meta?.eventName
+            ||
+            "GO 集章趣",
+
+          eventZh:
+            meta?.eventZh
+            ||
+            meta?.eventNameZh
+            ||
+            meta?.event
+            ||
+            "GO 集章趣",
+
+          startDate:
+            meta?.startDate
+            ||
+            "",
+
+          endDate:
+            meta?.endDate
+            ||
+            "",
+
+          sourceUrl:
+            meta?.sourceUrl
+            ||
+            "",
+
+          activityImage:
+            meta?.activityImage
+            ||
+            meta?.eventImage
+            ||
+            meta?.image
+            ||
+            "",
+
+          eventImage:
+            meta?.eventImage
+            ||
+            meta?.activityImage
+            ||
+            meta?.image
+            ||
+            "",
+
+          expectedStamps:
+            Number.isFinite(
+              Number(
+                meta?.expectedStamps
+              )
+            )
+            ?
+            Number(
+              meta.expectedStamps
+            )
+            :
+            null,
+
+          descriptionZh:
+            meta?.descriptionZh
+            ||
+            "",
+
+          items:[]
+
+        }
+
+      );
+
+    }
+
+
+    return map.get(
+      id
+    );
+
+  };
+
+
+  for(
+    const meta
+    of stampEventsMeta
+  ){
+
+    ensure(
+      meta
+    );
+
+  }
+
+
+  for(
+    const item
+    of dataSets.stamp
+  ){
+
+    const event =
+      ensure(
+        item
+      );
+
+
+    const titleOriginal =
+      item?.name
+      ||
+      item?.venue
+      ||
+      item?.event
+      ||
+      "";
+
+
+    const looksLikePlaceholder =
+
+      !item?.stampImage
+      &&
+      !item?.lat
+      &&
+      !item?.lng
+      &&
+      String(
+        titleOriginal
+      )
+      ===
+      String(
+        event.event
+      );
+
+
+    if(
+      looksLikePlaceholder
+    ){
+
+      continue;
+
+    }
+
+
+    if(
+      !event.items.some(
+        x =>
+          getItemId(x)
+          ===
+          getItemId(item)
+      )
+    ){
+
+      event.items.push(
+        item
+      );
+
+    }
+
+
+    if(
+      !event.startDate
+      ||
+      (
+        item.startDate
+        &&
+        item.startDate
+        <
+        event.startDate
+      )
+    ){
+
+      event.startDate =
+        item.startDate;
+
+    }
+
+
+    if(
+      !event.endDate
+      ||
+      (
+        item.endDate
+        &&
+        item.endDate
+        >
+        event.endDate
+      )
+    ){
+
+      event.endDate =
+        item.endDate;
+
+    }
+
+
+    if(
+      !event.sourceUrl
+      &&
+      item.sourceUrl
+    ){
+
+      event.sourceUrl =
+        item.sourceUrl;
+
+    }
+
+
+    if(
+      !event.activityImage
+      &&
+      item.activityImage
+    ){
+
+      event.activityImage =
+        item.activityImage;
+
+    }
+
+
+    if(
+      !event.eventImage
+      &&
+      item.eventImage
+    ){
+
+      event.eventImage =
+        item.eventImage;
+
+    }
+
+
+    if(
+      event.expectedStamps == null
+      &&
+      Number.isFinite(
+        Number(
+          item.expectedStamps
+        )
+      )
+    ){
+
+      event.expectedStamps =
+        Number(
+          item.expectedStamps
+        );
+
+    }
+
+  }
+
+
+  return [
+    ...map.values()
+  ]
+  .sort(
+
+    (a,b) =>
+
+      (
+        a.startDate
+        ||
+        "9999"
+      )
+      .localeCompare(
+        b.startDate
+        ||
+        "9999"
+      )
+
+      ||
+
+      (
+        a.eventZh
+        ||
+        a.event
+      )
+      .localeCompare(
+        b.eventZh
+        ||
+        b.event
+      )
+
+  );
+
+}
+
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+function switchCollectionType(
+  type
+){
+
+  if(
+    ![
+      "lid",
+      "stamp"
+    ].includes(type)
+  ){
+
+    return;
+
+  }
+
+
+  collectionType =
+    type;
+
+
+  document
+    .getElementById(
+      "tabLid"
+    )
+    .classList
+    .toggle(
+      "active",
+      type === "lid"
+    );
+
+
+  document
+    .getElementById(
+      "tabStamp"
+    )
+    .classList
+    .toggle(
+      "active",
+      type === "stamp"
+    );
+
+
+  document.getElementById(
+    "sectionTitle"
+  ).textContent =
+
+    type === "lid"
+
+    ?
+
+    "🔴 Poké Lid 蒐集進度"
+
+    :
+
+    "🎟️ GO 集章趣 蒐集進度";
+
+
+  document.getElementById(
+    "progressLabel"
+  ).textContent =
+
+    type === "lid"
+
+    ?
+
+    "Poké Lid 已收集："
+
+    :
+
+    "GO 集章趣 已收集：";
+
+
+  closeAllPanels();
+
+
+  currentRegion =
+    null;
+
+  currentPrefecture =
+    null;
+
+  currentStampEventId =
+    null;
+
+  currentCollectionItems =
+    [];
+
+  currentItem =
+    null;
+
+
+  document.getElementById(
+    "stampAllDownloadBox"
+  ).style.display =
+
+    type === "stamp"
+
+    ?
+
+    "flex"
+
+    :
+
+    "none";
+
+
+  renderRegions();
+
+  updateOverall();
+
+}
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+function closeAllPanels(){
+
+  for(
+    const id
+    of [
+      "prefecturePanel",
+      "collectionPanel",
+      "modalOverlay"
+    ]
+  ){
+
+    document
+      .getElementById(
+        id
+      )
+      .classList
+      .remove(
+        "show"
+      );
+
+  }
+
+
+  document.body.classList.remove(
+    "no-scroll"
+  );
+
+}
+
+
+/* =========================================================
+   OVERALL
+========================================================= */
+
+function updateOverall(){
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    const events =
+      getStampEvents();
+
+
+    let total =
+      0;
+
+    let obtained =
+      0;
+
+
+    for(
+      const event
+      of events
+    ){
+
+      const items =
+        event.items
+        ||
+        [];
+
+
+      const eventTotal =
+        Number(
+          event.expectedStamps
+          ||
+          0
+        )
+        ||
+        items.length;
+
+
+      total +=
+        eventTotal;
+
+
+      obtained +=
+        items.filter(
+          x =>
+            obtainedIds.stamp.has(
+              getItemId(x)
+            )
+        )
+        .length;
+
+    }
+
+
+    document.getElementById(
+      "totalObtained"
+    ).textContent =
+      obtained;
+
+
+    document.getElementById(
+      "totalCount"
+    ).textContent =
+      total;
+
+
+    return;
+
+  }
+
+
+  const list =
+    dataSets.lid
+    ||
+    [];
+
+
+  const obtained =
+    list.filter(
+      item =>
+        obtainedIds.lid.has(
+          getItemId(item)
+        )
+    ).length;
+
+
+  document.getElementById(
+    "totalObtained"
+  ).textContent =
+    obtained;
+
+
+  document.getElementById(
+    "totalCount"
+  ).textContent =
+    list.length;
+
+}
+
+
+/* =========================================================
+   REGION
+========================================================= */
+
+function renderRegions(){
+
+  const el =
+    document.getElementById(
+      "regions"
+    );
+
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    return renderStampEvents(
+      el
+    );
+
+  }
+
+
+  const list =
+    dataSets.lid
+    ||
+    [];
+
+
+  if(
+    !list.length
+  ){
+
+    el.innerHTML = `
+
+      <div
+        class="error-box"
+        style="grid-column:1/-1"
+      >
+
+        ⚠️ Poké Lid 沒有資料
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  el.innerHTML =
+    "";
+
+
+  for(
+    const [
+      regionName,
+      region
+    ]
+    of Object.entries(
+      REGIONS
+    )
+  ){
+
+    const items =
+      list.filter(
+        item =>
+          region.prefs.includes(
+            Number(
+              item.__prefCode
+            )
+          )
+      );
+
+
+    const obtained =
+      items.filter(
+        item =>
+          obtainedIds.lid.has(
+            getItemId(item)
+          )
+      ).length;
+
+
+    const total =
+      items.length;
+
+
+    const percent =
+      total
+      ?
+      Math.round(
+        obtained
+        /
+        total
+        *
+        1000
+      )
+      /
+      10
+
+      :
+
+      0;
+
+
+    const sample =
+      items.slice(
+        0,
+        3
+      );
+
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+
+    card.className =
+      "region-card";
+
+
+    card.onclick =
+      () =>
+        openRegion(
+          regionName
+        );
+
+
+    const images =
+      sample
+      .map(
+        item => {
+
+          const image =
+            getItemImageUrl(
+              "lid",
+              item
+            );
+
+
+          if(
+            !image
+          ){
+
+            return "";
+
+          }
+
+
+          return `
+
+            <img
+              class="region-image"
+              src="${escapeHtml(image)}"
+              alt=""
+              loading="lazy"
+            >
+
+          `;
+
+        }
+      )
+      .join("");
+
+
+    const completeStamp =
+
+      total > 0
+      &&
+      obtained >= total
+
+      ?
+
+      `
+        <div
+          class="collection-complete-stamp"
+          aria-label="已完成"
+        >
+
+          完成
+
+          <small>
+            COMPLETE
+          </small>
+
+        </div>
+      `
+
+      :
+
+      "";
+
+
+    card.innerHTML = `
+
+      <div class="region-images">
+
+        ${
+          images
+
+          ||
+
+          `
+            <div class="region-empty">
+              尚無資料
+            </div>
+          `
+        }
+
+        ${completeStamp}
+
+      </div>
+
+
+      <div class="region-info">
+
+        <div class="region-name">
+
+          ${escapeHtml(
+            regionName
+          )}
+
+        </div>
+
+
+        <div class="region-count">
+
+          ${obtained}
+          /
+          ${total}
+
+        </div>
+
+
+        <div class="region-percent">
+
+          完成率
+          ${percent}%
+
+        </div>
+
+
+        <div class="download-subbox">
+
+          <button
+            class="download-subbtn"
+            onclick="
+              event.stopPropagation();
+              downloadLidGroup(
+                '${escapeJs(regionName)}',
+                'txt'
+              )
+            "
+          >
+            TXT
+          </button>
+
+
+          <button
+            class="download-subbtn"
+            onclick="
+              event.stopPropagation();
+              downloadLidGroup(
+                '${escapeJs(regionName)}',
+                'json'
+              )
+            "
+          >
+            JSON
+          </button>
+
+
+          <button
+            class="download-subbtn"
+            onclick="
+              event.stopPropagation();
+              downloadLidGroup(
+                '${escapeJs(regionName)}',
+                'csv'
+              )
+            "
+          >
+            CSV
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    el.appendChild(
+      card
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   STAMP EVENTS
+========================================================= */
+
+function renderStampEvents(
+  el
+){
+
+  const events =
+    getStampEvents();
+
+
+  if(
+    !events.length
+  ){
+
+    el.innerHTML = `
+
+      <div
+        class="error-box"
+        style="grid-column:1/-1"
+      >
+
+        ⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。
+
+        <br><br>
+
+        資料由 GitHub Actions
+        自動同步 Pokémon GO 官方網站。
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  el.innerHTML =
+    "";
+
+
+  for(
+    const event
+    of events
+  ){
+
+    const items =
+      event.items
+      ||
+      [];
+
+
+    const obtained =
+      items.filter(
+        x =>
+          obtainedIds.stamp.has(
+            getItemId(x)
+          )
+      ).length;
+
+
+    const total =
+      Number(
+        event.expectedStamps
+        ||
+        0
+      )
+      ||
+      items.length;
+
+
+    const percent =
+      total
+      ?
+      Math.round(
+        obtained
+        /
+        total
+        *
+        1000
+      )
+      /
+      10
+
+      :
+
+      0;
+
+
+    const known =
+      items.length;
+
+
+    const status =
+      getStampEventStatus(
+        event
+      );
+
+
+    const banner =
+      event.activityImage
+      ||
+      event.eventImage
+      ||
+      event.image
+      ||
+      "";
+
+
+    const statusKey =
+
+      status === "活動尚未開始"
+
+      ?
+
+      "upcoming"
+
+      :
+
+      status === "活動已結束"
+
+      ?
+
+      "ended"
+
+      :
+
+      "active";
+
+
+    const statusOverlay =
+
+      statusKey !== "active"
+
+      ?
+
+      `
+        <div
+          class="stamp-event-status-overlay"
+        >
+
+          ${escapeHtml(
+            status
+          )}
+
+        </div>
+      `
+
+      :
+
+      "";
+
+
+    const completeStamp =
+
+      total > 0
+      &&
+      obtained >= total
+
+      ?
+
+      `
+        <div
+          class="collection-complete-stamp"
+          aria-label="已完成"
+        >
+
+          完成
+
+          <small>
+            COMPLETE
+          </small>
+
+        </div>
+      `
+
+      :
+
+      "";
+
+
+    const countText =
+
+      total
+
+      ?
+
+      `${obtained} / ${total}`
+
+      :
+
+      known
+
+      ?
+
+      `${obtained} / ${known}`
+
+      :
+
+      "尚待官方公布";
+
+
+    const note =
+
+      total
+      &&
+      known < total
+
+      ?
+
+      `
+        <div
+          class="stamp-event-data-note"
+        >
+
+          目前已取得
+          ${known}
+          /
+          ${total}
+          個官方集章點資料
+
+        </div>
+      `
+
+      :
+
+      "";
+
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+
+    card.className =
+      "region-card stamp-event-card";
+
+
+    card.onclick =
+      () =>
+        openStampEvent(
+          event.id
+        );
+
+
+    card.innerHTML = `
+
+      <div
+        class="region-images stamp-event-banner-wrap"
+      >
+
+        ${
+          banner
+
+          ?
+
+          `
+            <img
+              class="stamp-event-banner"
+              src="${escapeHtml(banner)}"
+              alt="${escapeHtml(
+                event.eventZh
+                ||
+                event.event
+                ||
+                "GO 集章趣"
+              )}"
+              loading="lazy"
+
+              onerror="
+                this.style.display='none';
+                this.nextElementSibling.style.display='flex';
+              "
+            >
+
+            <div
+              class="stamp-event-banner-fallback"
+              style="display:none"
+            >
+              ${escapeHtml(
+                event.eventZh
+                ||
+                event.event
+                ||
+                "GO 集章趣"
+              )}
+            </div>
+          `
+
+          :
+
+          `
+            <div
+              class="stamp-event-banner-fallback"
+            >
+              ${escapeHtml(
+                event.eventZh
+                ||
+                event.event
+                ||
+                "GO 集章趣"
+              )}
+            </div>
+          `
+
+        }
+
+
+        ${statusOverlay}
+
+        ${completeStamp}
+
+      </div>
+
+
+      <div class="region-info">
+
+        <div class="region-name">
+
+          ${escapeHtml(
+            event.eventZh
+            ||
+            event.event
+            ||
+            "GO 集章趣"
+          )}
+
+        </div>
+
+
+        <div class="region-count">
+
+          ${countText}
+
+        </div>
+
+
+        <div
+          class="
+            stamp-event-live-status
+            ${statusKey}
+          "
+        >
+
+          ${escapeHtml(
+            status
+          )}
+
+        </div>
+
+
+        <div
+          class="stamp-event-date"
+        >
+
+          ${escapeHtml(
+            getStampEventDateText(
+              event
+            )
+          )}
+
+        </div>
+
+
+        <div
+          class="region-percent"
+        >
+
+          ${
+            total
+            ?
+
+            `完成率 ${percent}%`
+
+            :
+
+            "資料待官方公布"
+
+          }
+
+          ${note}
+
+
+          ${
+            known
+
+            ?
+
+            `
+              <br>
+              📍 座標資料
+              ${
+                items.filter(
+                  item => {
+
+                    const p =
+                      getItemLatLng(
+                        item
+                      );
+
+                    return (
+                      Number.isFinite(
+                        p.lat
+                      )
+                      &&
+                      Number.isFinite(
+                        p.lng
+                      )
+                    );
+
+                  }
+                ).length
+              }
+              /
+              ${known}
+            `
+
+            :
+
+            ""
+
+          }
+
+        </div>
+
+
+        <div class="download-subbox">
+
+          <button
+            class="download-subbtn"
+            onclick="
+              event.stopPropagation();
+              downloadStampEvent(
+                '${escapeJs(event.id)}',
+                'txt'
+              )
+            "
+          >
+            TXT
+          </button>
+
+
+          <button
+            class="download-subbtn"
+            onclick="
+              event.stopPropagation();
+              downloadStampEvent(
+                '${escapeJs(event.id)}',
+                'json'
+              )
+            "
+          >
+            JSON
+          </button>
+
+
+          <button
+            class="download-subbtn"
+            onclick="
+              event.stopPropagation();
+              downloadStampEvent(
+                '${escapeJs(event.id)}',
+                'csv'
+              )
+            "
+          >
+            CSV
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    el.appendChild(
+      card
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LID REGION
+========================================================= */
+
+function openRegion(
+  regionName
+){
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    return;
+
+  }
+
+
+  currentRegion =
+    regionName;
+
+
+  document.getElementById(
+    "prefectureTitle"
+  ).textContent =
+    regionName;
+
+
+  renderPrefectureSummary();
+
+  renderPrefectureGrid();
+
+
+  document
+    .getElementById(
+      "prefecturePanel"
+    )
+    .classList
+    .add(
+      "show"
+    );
+
+
+  document.body.classList.add(
+    "no-scroll"
+  );
+
+}
+
+
+function renderPrefectureSummary(){
+
+  if(!currentRegion){
+
+    return;
+
+  }
+
+
+  const region =
+    REGIONS[
+      currentRegion
+    ];
+
+
+  const items =
+    (
+      dataSets.lid
+      ||
+      []
+    )
+    .filter(
+      item =>
+        region.prefs.includes(
+          Number(
+            item.__prefCode
+          )
+        )
+    );
+
+
+  const obtained =
+    items.filter(
+      item =>
+        obtainedIds.lid.has(
+          getItemId(item)
+        )
+    ).length;
+
+
+  document.getElementById(
+    "prefectureSummary"
+  ).textContent =
+
+    `已收集 ${obtained} / ${items.length}`;
+
+}
+
+
+function renderPrefectureGrid(){
+
+  const el =
+    document.getElementById(
+      "prefectureGrid"
+    );
+
+
+  const region =
+    REGIONS[
+      currentRegion
+    ];
+
+
+  const list =
+    dataSets.lid
+    ||
+    [];
+
+
+  el.innerHTML =
+    "";
+
+
+  for(
+    const prefCode
+    of region.prefs
+  ){
+
+    const prefName =
+      PREF[prefCode];
+
+
+    const items =
+      list.filter(
+        item =>
+          Number(
+            item.__prefCode
+          )
+          ===
+          Number(
+            prefCode
+          )
+      );
+
+
+    if(
+      !items.length
+    ){
+
+      continue;
+
+    }
+
+
+    const obtained =
+      items.filter(
+        item =>
+          obtainedIds.lid.has(
+            getItemId(item)
+          )
+      ).length;
+
+
+    const total =
+      items.length;
+
+
+    const percent =
+      Math.round(
+        obtained
+        /
+        total
+        *
+        100
+      );
+
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+
+    card.className =
+      "prefecture-card";
+
+
+    card.onclick =
+      () =>
+        openPrefectureCollection(
+          prefName
+        );
+
+
+    card.innerHTML = `
+
+      <div
+        class="prefecture-card-top"
+      >
+
+        <div
+          class="prefecture-name"
+        >
+
+          ${escapeHtml(
+            prefName
+          )}
+
+        </div>
+
+
+        <div
+          class="prefecture-count"
+        >
+
+          ${obtained}
+          /
+          ${total}
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="prefecture-progress"
+      >
+
+        <div
+          class="prefecture-progress-bar"
+          style="
+            width:${percent}%
+          "
+        ></div>
+
+      </div>
+
+
+      <div
+        class="prefecture-percent"
+      >
+
+        完成率
+        ${percent}%
+
+      </div>
+
+    `;
+
+
+    el.appendChild(
+      card
+    );
+
+  }
+
+
+  if(
+    !el.children.length
+  ){
+
+    el.innerHTML = `
+
+      <div
+        class="loading"
+        style="grid-column:1/-1"
+      >
+
+        此區域目前沒有
+        Poké Lid 資料。
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+function closePrefecturePanel(){
+
+  document
+    .getElementById(
+      "prefecturePanel"
+    )
+    .classList
+    .remove(
+      "show"
+    );
+
+
+  currentRegion =
+    null;
+
+
+  document.body.classList.remove(
+    "no-scroll"
+  );
+
+}
+
+
+function prefectureOverlayClick(
+  event
+){
+
+  if(
+    event.target ===
+    document.getElementById(
+      "prefecturePanel"
+    )
+  ){
+
+    closePrefecturePanel();
+
+  }
+
+}
+
+
+/* =========================================================
+   COLLECTION
+========================================================= */
+
+function openPrefectureCollection(
+  prefName
+){
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    return;
+
+  }
+
+
+  currentPrefecture =
+    prefName;
+
+
+  currentCollectionItems =
+    groups.lid[
+      prefName
+    ]
+    ||
+    [];
+
+
+  document.getElementById(
+    "collectionTitle"
+  ).textContent =
+    prefName;
+
+
+  document.querySelector(
+    ".back-btn"
+  ).textContent =
+    "← 返回縣列表";
+
+
+  updateCollectionSummary();
+
+  renderCollectionGrid();
+
+
+  document
+    .getElementById(
+      "collectionPanel"
+    )
+    .classList
+    .add(
+      "show"
+    );
+
+
+  document.body.classList.add(
+    "no-scroll"
+  );
+
+}
+
+
+function openStampEvent(
+  eventId
+){
+
+  const event =
+    getStampEvents().find(
+      x =>
+        String(x.id)
+        ===
+        String(eventId)
+    );
+
+
+  if(!event){
+
+    return;
+
+  }
+
+
+  currentStampEventId =
+    event.id;
+
+
+  currentCollectionItems =
+    event.items
+    ||
+    [];
+
+
+  document.getElementById(
+    "collectionTitle"
+  ).textContent =
+
+    event.eventZh
+    ||
+    event.event;
+
+
+  const total =
+    Number(
+      event.expectedStamps
+      ||
+      0
+    )
+    ||
+    currentCollectionItems.length;
+
+
+  const obtained =
+    currentCollectionItems.filter(
+      x =>
+        obtainedIds.stamp.has(
+          getItemId(x)
+        )
+    ).length;
+
+
+  document.getElementById(
+    "collectionSummary"
+  ).textContent =
+
+    total
+
+    ?
+
+    `已收集 ${obtained} / ${total}${
+      currentCollectionItems.length
+      <
+      total
+
+      ?
+
+      `　（目前已取得 ${currentCollectionItems.length} 個集章點資料）`
+
+      :
+
+      ""
+    }`
+
+    :
+
+    "官方集章點資料尚待公布";
+
+
+  document.querySelector(
+    ".back-btn"
+  ).textContent =
+    "← 返回活動列表";
+
+
+  renderCollectionGrid();
+
+
+  document
+    .getElementById(
+      "collectionPanel"
+    )
+    .classList
+    .add(
+      "show"
+    );
+
+
+  document.body.classList.add(
+    "no-scroll"
+  );
+
+}
+
+
+function updateCollectionSummary(){
+
+  const obtained =
+    currentCollectionItems.filter(
+      item =>
+        obtainedIds.lid.has(
+          getItemId(item)
+        )
+    ).length;
+
+
+  document.getElementById(
+    "collectionSummary"
+  ).textContent =
+
+    `已收集 ${obtained} / ${currentCollectionItems.length}`;
+
+}
+
+
+function updateStampEventSummary(){
+
+  if(
+    !currentStampEventId
+  ){
+
+    return;
+
+  }
+
+
+  const event =
+    getStampEvents().find(
+      x =>
+        String(x.id)
+        ===
+        String(
+          currentStampEventId
+        )
+    );
+
+
+  if(!event){
+
+    return;
+
+  }
+
+
+  currentCollectionItems =
+    event.items
+    ||
+    [];
+
+
+  const obtained =
+    currentCollectionItems.filter(
+      x =>
+        obtainedIds.stamp.has(
+          getItemId(x)
+        )
+    ).length;
+
+
+  const total =
+    Number(
+      event.expectedStamps
+      ||
+      0
+    )
+    ||
+    currentCollectionItems.length;
+
+
+  document.getElementById(
+    "collectionSummary"
+  ).textContent =
+
+    total
+
+    ?
+
+    `已收集 ${obtained} / ${total}${
+      currentCollectionItems.length
+      <
+      total
+
+      ?
+
+      `　（目前已取得 ${currentCollectionItems.length} 個集章點資料）`
+
+      :
+
+      ""
+    }`
+
+    :
+
+    "官方集章點資料尚待公布";
+
+}
+
+
+/* =========================================================
+   INLINE OBTAIN
+========================================================= */
+
+function toggleObtainedByItemId(
+  event,
+  id
+){
+
+  if(event){
+
+    event.stopPropagation();
+
+  }
+
+
+  const item =
+    (
+      dataSets[
+        collectionType
+      ]
+      ||
+      []
+    )
+    .find(
+      x =>
+        String(
+          x?.id
+        )
+        ===
+        String(id)
+    );
+
+
+  if(!item){
+
+    return;
+
+  }
+
+
+  const checkbox =
+    event?.target;
+
+
+  const value =
+    !!checkbox?.checked;
+
+
+  const type =
+    collectionType;
+
+
+  const itemId =
+    getItemId(
+      item
+    );
+
+
+  if(value){
+
+    obtainedIds[type].add(
+      itemId
+    );
+
+  }else{
+
+    obtainedIds[type].delete(
+      itemId
+    );
+
+  }
+
+
+  saveLocalCollection(
+    type
+  );
+
+
+  refreshAllCollectionUI();
+
+}
+
+
+/* =========================================================
+   COLLECTION GRID
+========================================================= */
+
+function renderCollectionGrid(){
+
+  const el =
+    document.getElementById(
+      "collectionGrid"
+    );
+
+
+  el.innerHTML =
+    "";
+
+
+  if(
+    !currentCollectionItems.length
+  ){
+
+    el.innerHTML = `
+
+      <div
+        class="loading"
+        style="grid-column:1/-1"
+      >
+
+        目前官方尚未公開可取得的
+        單一圖章圖片／集章點資料。
+
+        <br>
+
+        活動仍保留，
+        待官方資料更新後會自動補上。
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  for(
+    const item
+    of currentCollectionItems
+  ){
+
+    const obtained =
+      obtainedIds[
+        collectionType
+      ].has(
+        getItemId(item)
+      );
+
+
+    const title =
+      getItemTitle(
+        collectionType,
+        item
+      );
+
+
+    const image =
+      getItemImageUrl(
+        collectionType,
+        item
+      );
+
+
+    const itemId =
+      escapeJs(
+        getItemId(
+          item
+        )
+      );
+
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+
+    card.className =
+
+      "collection-item "
+
+      +
+
+      (
+        obtained
+
+        ?
+
+        "obtained"
+
+        :
+
+        "not-obtained"
+      );
+
+
+    card.onclick =
+      () =>
+        openModalFromItem(
+          item
+        );
+
+
+    card.innerHTML = `
+
+      <div
+        class="collection-image-wrap"
+      >
+
+        ${
+          image
+
+          ?
+
+          `
+            <img
+              class="collection-image"
+              src="${escapeHtml(image)}"
+              alt="${escapeHtml(title)}"
+              loading="lazy"
+            >
+          `
+
+          :
+
+          `
+            <div
+              class="stamp-missing-image"
+            >
+
+              目前尚未取得這個
+              GO 集章的實際圖片
+
+              <br>
+
+              官方資料更新後會自動補上
+
+            </div>
+          `
+
+        }
+
+      </div>
+
+
+      <div
+        class="collection-city"
+      >
+
+        ${escapeHtml(
+          item.nameZh
+          ||
+          item.venueZh
+          ||
+          title
+        )}
+
+      </div>
+
+
+      ${
+        item.countryZh
+        ||
+        item.cityZh
+
+        ?
+
+        `
+          <div
+            style="
+              margin-top:3px;
+              color:#7b999d;
+              font-size:10px;
+              line-height:1.35;
+            "
+          >
+
+            ${escapeHtml(
+              item.cityZh
+              ||
+              item.countryZh
+              ||
+              ""
+            )}
+
+          </div>
+        `
+
+        :
+
+        ""
+      }
+
+
+      <div
+        class="collection-status"
+      >
+
+        ${
+          obtained
+
+          ?
+
+          "● 已收集"
+
+          :
+
+          "● 未收集"
+        }
+
+      </div>
+
+
+      ${
+        collectionType === "stamp"
+
+        ?
+
+        `
+          <label
+            class="stamp-inline-obtain"
+            onclick="
+              event.stopPropagation()
+            "
+          >
+
+            <input
+              type="checkbox"
+              ${
+                obtained
+                ?
+                "checked"
+                :
+                ""
+              }
+
+              onchange="
+                toggleObtainedByItemId(
+                  event,
+                  '${itemId}'
+                )
+              "
+            >
+
+            <span>
+              已獲得
+            </span>
+
+          </label>
+        `
+
+        :
+
+        ""
+      }
+
+    `;
+
+
+    el.appendChild(
+      card
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+function refreshAllCollectionUI(){
+
+  updateOverall();
+
+  renderRegions();
+
+
+  if(
+    collectionType === "lid"
+  ){
+
+    if(
+      currentRegion
+    ){
+
+      renderPrefectureSummary();
+
+      renderPrefectureGrid();
+
+    }
+
+
+    if(
+      currentPrefecture
+    ){
+
+      updateCollectionSummary();
+
+      renderCollectionGrid();
+
+    }
+
+  }
+
+
+  else if(
+    currentStampEventId
+  ){
+
+    updateStampEventSummary();
+
+    renderCollectionGrid();
+
+  }
+
+
+  updateModalObtained();
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModalFromItem(
+  item
+){
+
+  const {
+    lat,
+    lng
+  } =
+    getItemLatLng(
+      item
+    );
+
+
+  const pref =
+
+    collectionType === "stamp"
+
+    ?
+
+    (
+      item.countryZh
+      ||
+      item.cityZh
+      ||
+      item.city
+      ||
+      item.pref
+      ||
+      ""
+    )
+
+    :
+
+    (
+      PREF[
+        item.__prefCode
+      ]
+      ||
+      currentPrefecture
+      ||
+      ""
+    );
+
+
+  openModal(
+    item,
+    pref,
+    lat,
+    lng
+  );
+
+}
+
+
+function openModal(
+  item,
+  pref,
+  lat,
+  lng
+){
+
+  currentItem =
+    item;
+
+
+  currentItemType =
+    collectionType;
+
+
+  const title =
+    getItemTitle(
+      currentItemType,
+      item
+    );
+
+
+  const image =
+    getItemImageUrl(
+      currentItemType,
+      item
+    );
+
+
+  const modalImage =
+    document.getElementById(
+      "modalImage"
+    );
+
+
+  modalImage.src =
+    image
+    ||
+    "";
+
+
+  modalImage.alt =
+    title;
+
+
+  modalImage.style.display =
+    image
+    ?
+    "block"
+    :
+    "none";
+
+
+  document.getElementById(
+    "modalType"
+  ).textContent =
+
+    currentItemType === "lid"
+
+    ?
+
+    "🔴 Poké Lid"
+
+    :
+
+    "🎟️ Pokémon GO GO 集章趣";
+
+
+  document.getElementById(
+    "modalPref"
+  ).textContent =
+    pref;
+
+
+  document.getElementById(
+    "modalCity"
+  ).textContent =
+    title;
+
+
+  document.getElementById(
+    "modalAddress"
+  ).textContent =
+
+    item.addressZh
+
+    ||
+
+    item.address
+
+    ||
+
+    item.location
+
+    ||
+
+    item.venueZh
+
+    ||
+
+    item.venue
+
+    ||
+
+    "";
+
+
+  const valid =
+    Number.isFinite(
+      lat
+    )
+    &&
+    Number.isFinite(
+      lng
+    );
+
+
+  document.getElementById(
+    "modalCoordinate"
+  ).textContent =
+
+    valid
+
+    ?
+
+    `${lat}, ${lng}`
+
+    :
+
+    "無座標資料";
+
+
+  const details =
+    document.getElementById(
+      "stampDetails"
+    );
+
+
+  if(
+    currentItemType === "stamp"
+  ){
+
+    details.innerHTML = `
+
+      <div class="stamp-event">
+
+        🎟️ ${escapeHtml(
+          getStampEventName(
+            item
+          )
+        )}
+
+      </div>
+
+
+      ${
+        item.venueZh
+        &&
+        item.venueZh !== title
+
+        ?
+
+        `
+          <div
+            class="stamp-venue"
+          >
+
+            📍 ${escapeHtml(
+              item.venueZh
+            )}
+
+          </div>
+        `
+
+        :
+
+        ""
+      }
+
+
+      ${
+        getStampDates(
+          item
+        )
+
+        ?
+
+        `
+          <div
+            class="stamp-dates"
+          >
+
+            📅 ${escapeHtml(
+              getStampDates(
+                item
+              )
+            )}
+
+          </div>
+        `
+
+        :
+
+        ""
+      }
+
+
+      <span
+        class="stamp-status"
+      >
+
+        ${escapeHtml(
+          getStampStatus(
+            item
+          )
+        )}
+
+      </span>
+
+
+      ${
+        item.rewardZh
+        ||
+        item.reward
+
+        ?
+
+        `
+          <div
+            class="stamp-reward"
+          >
+
+            🎁 ${escapeHtml(
+              item.rewardZh
+              ||
+              item.reward
+            )}
+
+          </div>
+        `
+
+        :
+
+        ""
+      }
+
+
+      ${
+        item.stampImageSource
+
+        ?
+
+        `
+          <div
+            class="stamp-source"
+          >
+
+            圖片來源：
+            ${escapeHtml(
+              item.stampImageSource
+            )}
+
+          </div>
+        `
+
+        :
+
+        ""
+      }
+
+    `;
+
+
+    details.style.display =
+      "block";
+
+  }
+
+  else{
+
+    details.innerHTML =
+      "";
+
+    details.style.display =
+      "none";
+
+  }
+
+
+  updateModalObtained();
+
+
+  document
+    .getElementById(
+      "modalOverlay"
+    )
+    .classList
+    .add(
+      "show"
+    );
+
+
+  document.body.classList.add(
+    "no-scroll"
+  );
+
+}
+
+
+function updateModalObtained(){
+
+  if(
+    !currentItem
+  ){
+
+    return;
+
+  }
+
+
+  const checked =
+    obtainedIds[
+      currentItemType
+    ].has(
+      getItemId(
+        currentItem
+      )
+    );
+
+
+  document.getElementById(
+    "obtainedCheckbox"
+  ).checked =
+    checked;
+
+
+  document.getElementById(
+    "saveStatus"
+  ).textContent =
+
+    checked
+
+    ?
+
+    "✓ 已獲得"
+
+    :
+
+    "";
+
+}
+
+
+function toggleObtained(){
+
+  if(
+    !currentItem
+  ){
+
+    return;
+
+  }
+
+
+  const value =
+    document.getElementById(
+      "obtainedCheckbox"
+    ).checked;
+
+
+  const type =
+    currentItemType;
+
+
+  const id =
+    getItemId(
+      currentItem
+    );
+
+
+  if(value){
+
+    obtainedIds[type].add(
+      id
+    );
+
+  }else{
+
+    obtainedIds[type].delete(
+      id
+    );
+
+  }
+
+
+  saveLocalCollection(
+    type
+  );
+
+
+  document.getElementById(
+    "saveStatus"
+  ).textContent =
+
+    value
+
+    ?
+
+    "✓ 已獲得"
+
+    :
+
+    "已取消";
+
+
+  refreshAllCollectionUI();
+
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
 
 function backToPrefectureList(){
+
   closeModal();
-  if(collectionType==="stamp"){
-    document.getElementById("collectionPanel").classList.remove("show"); currentStampEventId=null; currentCollectionItems=[]; document.body.classList.remove("no-scroll"); renderRegions(); return;
+
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    document
+      .getElementById(
+        "collectionPanel"
+      )
+      .classList
+      .remove(
+        "show"
+      );
+
+
+    currentStampEventId =
+      null;
+
+    currentCollectionItems =
+      [];
+
+
+    document.body.classList.remove(
+      "no-scroll"
+    );
+
+
+    renderRegions();
+
+    return;
+
   }
-  document.getElementById("collectionPanel").classList.remove("show"); renderPrefectureSummary(); renderPrefectureGrid(); document.getElementById("prefecturePanel").classList.add("show"); document.body.classList.add("no-scroll"); currentPrefecture=null; currentCollectionItems=[];
-}
-function closeCollectionPanel(){ closeModal(); document.getElementById("collectionPanel").classList.remove("show"); currentPrefecture=null; currentStampEventId=null; currentCollectionItems=[]; document.body.classList.remove("no-scroll"); }
-function collectionOverlayClick(event){ if(event.target===document.getElementById("collectionPanel"))closeCollectionPanel(); }
 
-function openModalFromItem(item){ const {lat,lng}=getItemLatLng(item); const pref=collectionType==="stamp"?(item.countryZh||item.cityZh||item.city||item.pref||""):(PREF[item.__prefCode]||currentPrefecture||""); openModal(item,pref,lat,lng); }
-function openModal(item,pref,lat,lng){
-  currentItem=item; currentItemType=collectionType; const title=getItemTitle(currentItemType,item); const image=getItemImageUrl(currentItemType,item);
-  const modalImage=document.getElementById("modalImage");
-  modalImage.src=image || "";
-  modalImage.alt=title;
-  modalImage.style.display=image ? "block" : "none";
-  document.getElementById("modalType").textContent=currentItemType==="lid"?"🔴 Poké Lid":"🎟️ Pokémon GO GO 集章趣"; document.getElementById("modalPref").textContent=pref; document.getElementById("modalCity").textContent=title; document.getElementById("modalAddress").textContent=item.addressZh||item.address||item.location||item.venueZh||item.venue||"";
-  const valid=Number.isFinite(lat)&&Number.isFinite(lng); document.getElementById("modalCoordinate").textContent=valid?`${lat}, ${lng}`:"無座標資料";
-  const details=document.getElementById("stampDetails");
-  if(currentItemType==="stamp"){
-    details.innerHTML=`<div class="stamp-event">🎟️ ${escapeHtml(getStampEventName(item))}</div>${item.venueZh&&item.venueZh!==title?`<div class="stamp-venue">📍 ${escapeHtml(item.venueZh)}</div>`:""}${getStampDates(item)?`<div class="stamp-dates">📅 ${escapeHtml(getStampDates(item))}</div>`:""}<span class="stamp-status">${escapeHtml(getStampStatus(item))}</span>${item.rewardZh||item.reward?`<div class="stamp-reward">🎁 ${escapeHtml(item.rewardZh||item.reward)}</div>`:""}${item.stampImageSource?`<div class="stamp-source">圖片來源：${escapeHtml(item.stampImageSource)}</div>`:""}`; details.style.display="block";
-  }else{ details.innerHTML=""; details.style.display="none"; }
-  updateModalObtained(); document.getElementById("modalOverlay").classList.add("show"); document.body.classList.add("no-scroll");
-}
-function updateModalObtained(){ if(!currentItem)return; const checked=obtainedIds[currentItemType].has(getItemId(currentItem)); document.getElementById("obtainedCheckbox").checked=checked; document.getElementById("saveStatus").textContent=checked?"✓ 已獲得":""; }
-function refreshAllCollectionUI(){
-  updateOverall(); renderRegions();
-  if(collectionType==="lid"){
-    if(currentRegion) {renderPrefectureSummary();renderPrefectureGrid();}
-    if(currentPrefecture) {updateCollectionSummary();renderCollectionGrid();}
-  }else if(currentStampEventId){ updateStampEventSummary(); renderCollectionGrid(); }
-  updateModalObtained();
-}
-function toggleObtained(){ if(!currentItem)return; const type=currentItemType,id=getItemId(currentItem),value=document.getElementById("obtainedCheckbox").checked; if(value)obtainedIds[type].add(id);else obtainedIds[type].delete(id); saveLocalCollection(type); document.getElementById("saveStatus").textContent=value?"✓ 已獲得":"已取消"; refreshAllCollectionUI(); }
 
-function openAppleMaps(event){ if(event)event.stopPropagation();if(!currentItem)return;const {lat,lng}=getItemLatLng(currentItem);const title=getItemTitle(currentItemType,currentItem);const destination=Number.isFinite(lat)&&Number.isFinite(lng)?`${lat},${lng}`:(currentItem.address||currentItem.location||currentItem.venue||title);window.open("https://maps.apple.com/?daddr="+encodeURIComponent(destination)+"&dirflg=d&q="+encodeURIComponent(title),"_blank","noopener"); }
-function openGoogleMaps(event){ if(event)event.stopPropagation();if(!currentItem)return;const {lat,lng}=getItemLatLng(currentItem);const destination=Number.isFinite(lat)&&Number.isFinite(lng)?`${lat},${lng}`:(currentItem.address||currentItem.location||currentItem.venue||getItemTitle(currentItemType,currentItem));window.open("https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(destination),"_blank","noopener"); }
-async function copyCoordinate(event){ if(event)event.stopPropagation();const text=document.getElementById("modalCoordinate").textContent.trim();if(!text||text==="無座標資料")return;try{await navigator.clipboard.writeText(text);}catch{const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand("copy");}catch{}ta.remove();}const hint=document.getElementById("copyHint");hint.classList.add("show");setTimeout(()=>hint.classList.remove("show"),1500);}
-function closeModal(event){if(event)event.stopPropagation();document.getElementById("modalOverlay").classList.remove("show");if(!document.getElementById("collectionPanel").classList.contains("show")&&!document.getElementById("prefecturePanel").classList.contains("show"))document.body.classList.remove("no-scroll");}
-function overlayClick(event){if(event.target===document.getElementById("modalOverlay"))closeModal();}
+  document
+    .getElementById(
+      "collectionPanel"
+    )
+    .classList
+    .remove(
+      "show"
+    );
 
-function escapeJs(value){
-  return String(value??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\r?\n/g," ");
+
+  renderPrefectureSummary();
+
+  renderPrefectureGrid();
+
+
+  document
+    .getElementById(
+      "prefecturePanel"
+    )
+    .classList
+    .add(
+      "show"
+    );
+
+
+  document.body.classList.add(
+    "no-scroll"
+  );
+
+
+  currentPrefecture =
+    null;
+
+  currentCollectionItems =
+    [];
+
 }
 
-function getStampDownloadGroups(includeUpcoming=false){
-  const output={};
-  for(const event of getStampEvents()){
-    // 「全部 GO 集章趣／所有圖章」下載：未開始活動不納入。
-    // 單一活動下載則由 downloadStampEvent() 直接處理，不受此篩選影響。
-    if(!includeUpcoming && getStampEventStatus(event)==="活動尚未開始") continue;
-    const title=String(event.eventZh||event.event||"GO 集章趣").trim() || "GO 集章趣";
-    if(!output[title]) output[title]=[];
-    for(const item of (event.items||[])){
-      const {lat,lng}=getItemLatLng(item);
-      output[title].push({
-        title:getItemTitle("stamp",item),
-        lat:Number.isFinite(lat)?String(lat):"",
-        lng:Number.isFinite(lng)?String(lng):""
-      });
+
+function closeCollectionPanel(){
+
+  closeModal();
+
+
+  document
+    .getElementById(
+      "collectionPanel"
+    )
+    .classList
+    .remove(
+      "show"
+    );
+
+
+  currentPrefecture =
+    null;
+
+  currentStampEventId =
+    null;
+
+  currentCollectionItems =
+    [];
+
+
+  document.body.classList.remove(
+    "no-scroll"
+  );
+
+}
+
+
+function collectionOverlayClick(
+  event
+){
+
+  if(
+    event.target ===
+    document.getElementById(
+      "collectionPanel"
+    )
+  ){
+
+    closeCollectionPanel();
+
+  }
+
+}
+
+
+/* =========================================================
+   MAP
+========================================================= */
+
+function openAppleMaps(
+  event
+){
+
+  if(event){
+
+    event.stopPropagation();
+
+  }
+
+
+  if(
+    !currentItem
+  ){
+
+    return;
+
+  }
+
+
+  const {
+    lat,
+    lng
+  } =
+    getItemLatLng(
+      currentItem
+    );
+
+
+  const title =
+    getItemTitle(
+      currentItemType,
+      currentItem
+    );
+
+
+  const destination =
+
+    Number.isFinite(
+      lat
+    )
+    &&
+    Number.isFinite(
+      lng
+    )
+
+    ?
+
+    `${lat},${lng}`
+
+    :
+
+    (
+      currentItem.address
+      ||
+      currentItem.location
+      ||
+      currentItem.venue
+      ||
+      title
+    );
+
+
+  window.open(
+
+    "https://maps.apple.com/"
+    +
+    "?daddr="
+    +
+    encodeURIComponent(
+      destination
+    )
+    +
+    "&dirflg=d"
+    +
+    "&q="
+    +
+    encodeURIComponent(
+      title
+    ),
+
+    "_blank",
+
+    "noopener"
+
+  );
+
+}
+
+
+function openGoogleMaps(
+  event
+){
+
+  if(event){
+
+    event.stopPropagation();
+
+  }
+
+
+  if(
+    !currentItem
+  ){
+
+    return;
+
+  }
+
+
+  const {
+    lat,
+    lng
+  } =
+    getItemLatLng(
+      currentItem
+    );
+
+
+  const destination =
+
+    Number.isFinite(
+      lat
+    )
+    &&
+    Number.isFinite(
+      lng
+    )
+
+    ?
+
+    `${lat},${lng}`
+
+    :
+
+    (
+      currentItem.address
+      ||
+      currentItem.location
+      ||
+      currentItem.venue
+      ||
+      getItemTitle(
+        currentItemType,
+        currentItem
+      )
+    );
+
+
+  window.open(
+
+    "https://www.google.com/maps/dir/"
+    +
+    "?api=1"
+    +
+    "&destination="
+    +
+    encodeURIComponent(
+      destination
+    ),
+
+    "_blank",
+
+    "noopener"
+
+  );
+
+}
+
+
+/* =========================================================
+   COPY
+========================================================= */
+
+async function copyCoordinate(
+  event
+){
+
+  if(event){
+
+    event.stopPropagation();
+
+  }
+
+
+  const text =
+    document
+      .getElementById(
+        "modalCoordinate"
+      )
+      .textContent
+      .trim();
+
+
+  if(
+    !text
+    ||
+    text ===
+    "無座標資料"
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+      text
+    );
+
+  }catch{
+
+    const ta =
+      document.createElement(
+        "textarea"
+      );
+
+
+    ta.value =
+      text;
+
+
+    ta.style.position =
+      "fixed";
+
+
+    ta.style.opacity =
+      "0";
+
+
+    document.body.appendChild(
+      ta
+    );
+
+
+    ta.focus();
+
+    ta.select();
+
+
+    try{
+
+      document.execCommand(
+        "copy"
+      );
+
+    }catch{}
+
+
+    ta.remove();
+
+  }
+
+
+  const hint =
+    document.getElementById(
+      "copyHint"
+    );
+
+
+  hint.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+
+    () =>
+      hint.classList.remove(
+        "show"
+      ),
+
+    1500
+
+  );
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal(
+  event
+){
+
+  if(event){
+
+    event.stopPropagation();
+
+  }
+
+
+  document
+    .getElementById(
+      "modalOverlay"
+    )
+    .classList
+    .remove(
+      "show"
+    );
+
+
+  if(
+    !document
+      .getElementById(
+        "collectionPanel"
+      )
+      .classList
+      .contains(
+        "show"
+      )
+    &&
+    !document
+      .getElementById(
+        "prefecturePanel"
+      )
+      .classList
+      .contains(
+        "show"
+      )
+  ){
+
+    document.body.classList.remove(
+      "no-scroll"
+    );
+
+  }
+
+}
+
+
+function overlayClick(
+  event
+){
+
+  if(
+    event.target ===
+    document.getElementById(
+      "modalOverlay"
+    )
+  ){
+
+    closeModal();
+
+  }
+
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+function escapeJs(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /\\/g,
+    "\\\\"
+  )
+  .replace(
+    /'/g,
+    "\\'"
+  )
+  .replace(
+    /\r?\n/g,
+    " "
+  );
+
+}
+
+
+function sanitizeFilename(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /[\\/:*?"<>|]/g,
+    "_"
+  )
+  .trim()
+  ||
+  "download";
+
+}
+
+
+function buildGroupedJson(
+  groupsObject
+){
+
+  return JSON.stringify(
+    groupsObject,
+    null,
+    2
+  );
+
+}
+
+
+function buildGroupedCsv(
+  groupsObject
+){
+
+  const rows = [
+    [
+      "group",
+      "title",
+      "lat",
+      "lng"
+    ]
+  ];
+
+
+  for(
+    const [
+      group,
+      items
+    ]
+    of Object.entries(
+      groupsObject
+    )
+  ){
+
+    for(
+      const item
+      of items
+    ){
+
+      rows.push([
+        group,
+        item.title,
+        item.lat,
+        item.lng
+      ]);
+
     }
+
   }
-  return output;
+
+
+  return rows
+    .map(
+      row =>
+        row
+          .map(
+            v =>
+              `"${String(
+                v ?? ""
+              )
+              .replaceAll(
+                '"',
+                '""'
+              )}"`
+          )
+          .join(",")
+    )
+    .join("\n");
+
 }
 
-function sanitizeFilename(value){
-  return String(value??"").replace(/[\\/:*?"<>|]/g,"_").trim() || "download";
-}
 
-function buildGroupedJson(groupsObject){
-  return JSON.stringify(groupsObject,null,2);
-}
+function buildGroupedTxt(
+  groupsObject
+){
 
-function buildGroupedCsv(groupsObject){
-  const rows=[["group","title","lat","lng"]];
-  for(const [group,items] of Object.entries(groupsObject)){
-    for(const item of items){
-      rows.push([group,item.title,item.lat,item.lng]);
-    }
-  }
-  return rows.map(row=>row.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\n");
-}
+  const lines = [];
 
-function buildGroupedTxt(groupsObject){
-  const lines=[];
-  for(const [group,items] of Object.entries(groupsObject)){
-    lines.push(`# ===== ${group} (${items.length}) =====`);
-    if(!items.length){
-      lines.push("(目前沒有可下載的集章點資料)");
+
+  for(
+    const [
+      group,
+      items
+    ]
+    of Object.entries(
+      groupsObject
+    )
+  ){
+
+    lines.push(
+      `# ===== ${group} (${items.length}) =====`
+    );
+
+
+    if(
+      !items.length
+    ){
+
+      lines.push(
+        "(目前沒有可下載的集章點資料)"
+      );
+
     }else{
-      for(const item of items){
-        lines.push(`${item.title}`);
-        lines.push(`${item.lat},${item.lng}`);
-        lines.push("");
+
+      for(
+        const item
+        of items
+      ){
+
+        lines.push(
+          `${item.title}`
+        );
+
+        lines.push(
+          `${item.lat},${item.lng}`
+        );
+
+        lines.push(
+          ""
+        );
+
       }
+
     }
-    lines.push("");
+
+
+    lines.push(
+      ""
+    );
+
   }
-  return lines.join("\n");
+
+
+  return lines.join(
+    "\n"
+  );
+
 }
 
-function downloadGroupedData(groupsObject,scope,format,filenameBase){
-  let content="";
-  let mime="text/plain;charset=utf-8";
-  let ext="txt";
-  if(format==="json"){
-    content=buildGroupedJson(groupsObject);
-    mime="application/json;charset=utf-8";
-    ext="json";
-  }else if(format==="csv"){
-    content="\ufeff"+buildGroupedCsv(groupsObject);
-    mime="text/csv;charset=utf-8";
-    ext="csv";
-  }else{
-    content="\ufeff"+buildGroupedTxt(groupsObject);
+
+function downloadGroupedData(
+  groupsObject,
+  format,
+  filenameBase
+){
+
+  let content =
+    "";
+
+  let mime =
+    "text/plain;charset=utf-8";
+
+  let ext =
+    "txt";
+
+
+  if(
+    format === "json"
+  ){
+
+    content =
+      buildGroupedJson(
+        groupsObject
+      );
+
+    mime =
+      "application/json;charset=utf-8";
+
+    ext =
+      "json";
+
   }
-  downloadBlob(new Blob([content],{type:mime}),`${sanitizeFilename(filenameBase)}.${ext}`);
+
+
+  else if(
+    format === "csv"
+  ){
+
+    content =
+      "\ufeff"
+      +
+      buildGroupedCsv(
+        groupsObject
+      );
+
+    mime =
+      "text/csv;charset=utf-8";
+
+    ext =
+      "csv";
+
+  }
+
+
+  else{
+
+    content =
+      "\ufeff"
+      +
+      buildGroupedTxt(
+        groupsObject
+      );
+
+  }
+
+
+  downloadBlob(
+
+    new Blob(
+      [
+        content
+      ],
+      {
+        type:
+          mime
+      }
+    ),
+
+    `${sanitizeFilename(
+      filenameBase
+    )}.${ext}`
+
+  );
+
 }
 
-function downloadAllStampPoints(format){
-  const groupsObject=getStampDownloadGroups();
-  downloadGroupedData(groupsObject,"stamp-all-points",format,"go_stamp_all_points");
+
+/* =========================================================
+   STAMP DOWNLOAD
+========================================================= */
+
+function getStampDownloadGroups(){
+
+  const output =
+    {};
+
+
+  for(
+    const event
+    of getStampEvents()
+  ){
+
+    /*
+     * 全部 GO 集章趣下載：
+     * 尚未開始不包含。
+     */
+
+    if(
+      getStampEventStatus(
+        event
+      )
+      ===
+      "活動尚未開始"
+    ){
+
+      continue;
+
+    }
+
+
+    const title =
+      String(
+        event.eventZh
+        ||
+        event.event
+        ||
+        "GO 集章趣"
+      ).trim()
+      ||
+      "GO 集章趣";
+
+
+    if(
+      !output[title]
+    ){
+
+      output[title] =
+        [];
+
+    }
+
+
+    for(
+      const item
+      of (
+        event.items
+        ||
+        []
+      )
+    ){
+
+      const {
+        lat,
+        lng
+      } =
+        getItemLatLng(
+          item
+        );
+
+
+      output[title].push({
+
+        title:
+          getItemTitle(
+            "stamp",
+            item
+          ),
+
+        lat:
+          Number.isFinite(
+            lat
+          )
+          ?
+          String(lat)
+          :
+          "",
+
+        lng:
+          Number.isFinite(
+            lng
+          )
+          ?
+          String(lng)
+          :
+          ""
+
+      });
+
+    }
+
+  }
+
+
+  return output;
+
 }
 
-function downloadStampEvent(eventId,format){
-  const event=getStampEvents().find(x=>String(x.id)===String(eventId));
-  if(!event)return;
-  const groupName=String(event.eventZh||event.event||"GO 集章趣").trim() || "GO 集章趣";
-  const items=(event.items||[]).map(item=>{
-    const {lat,lng}=getItemLatLng(item);
-    return {
-      title:getItemTitle("stamp",item),
-      lat:Number.isFinite(lat)?String(lat):"",
-      lng:Number.isFinite(lng)?String(lng):""
-    };
-  });
-  const obj={[groupName]:items};
-  downloadGroupedData(obj,eventId,format,`go_stamp_${groupName}`);
+
+function downloadAllStampPoints(
+  format
+){
+
+  const groupsObject =
+    getStampDownloadGroups();
+
+
+  downloadGroupedData(
+
+    groupsObject,
+
+    format,
+
+    "go_stamp_all_points"
+
+  );
+
 }
+
+
+function downloadStampEvent(
+  eventId,
+  format
+){
+
+  const event =
+    getStampEvents().find(
+      x =>
+        String(x.id)
+        ===
+        String(eventId)
+    );
+
+
+  if(!event){
+
+    return;
+
+  }
+
+
+  const groupName =
+    String(
+      event.eventZh
+      ||
+      event.event
+      ||
+      "GO 集章趣"
+    )
+    .trim()
+    ||
+    "GO 集章趣";
+
+
+  const items =
+    (
+      event.items
+      ||
+      []
+    )
+    .map(
+      item => {
+
+        const {
+          lat,
+          lng
+        } =
+          getItemLatLng(
+            item
+          );
+
+
+        return {
+
+          title:
+            getItemTitle(
+              "stamp",
+              item
+            ),
+
+          lat:
+            Number.isFinite(
+              lat
+            )
+            ?
+            String(
+              lat
+            )
+            :
+            "",
+
+          lng:
+            Number.isFinite(
+              lng
+            )
+            ?
+            String(
+              lng
+            )
+            :
+            ""
+
+        };
+
+      }
+    );
+
+
+  const obj = {
+
+    [groupName]:
+      items
+
+  };
+
+
+  downloadGroupedData(
+
+    obj,
+
+    format,
+
+    `go_stamp_${groupName}`
+
+  );
+
+}
+
+
+/* =========================================================
+   LID DOWNLOAD
+========================================================= */
 
 function getLidDownloadGroups(){
-  const output={};
-  for(const [region,items] of Object.entries(groups.lid).sort()){
-    output[region]=items.map(item=>{
-      const {lat,lng}=getItemLatLng(item);
-      return {
-        title:getItemTitle("lid",item),
-        lat:Number.isFinite(lat)?String(lat):"",
-        lng:Number.isFinite(lng)?String(lng):""
-      };
-    });
+
+  const output =
+    {};
+
+
+  for(
+    const [
+      region,
+      items
+    ]
+    of Object.entries(
+      groups.lid
+    ).sort()
+  ){
+
+    output[
+      region
+    ] = items.map(
+      item => {
+
+        const {
+          lat,
+          lng
+        } =
+          getItemLatLng(
+            item
+          );
+
+
+        return {
+
+          title:
+            getItemTitle(
+              "lid",
+              item
+            ),
+
+          lat:
+            Number.isFinite(
+              lat
+            )
+            ?
+            String(
+              lat
+            )
+            :
+            "",
+
+          lng:
+            Number.isFinite(
+              lng
+            )
+            ?
+            String(
+              lng
+            )
+            :
+            ""
+
+        };
+
+      }
+    );
+
   }
+
+
   return output;
+
 }
 
-function downloadLidGroup(regionName,format){
-  const items=(groups.lid[regionName]||[]).map(item=>{
-    const {lat,lng}=getItemLatLng(item);
-    return {
-      title:getItemTitle("lid",item),
-      lat:Number.isFinite(lat)?String(lat):"",
-      lng:Number.isFinite(lng)?String(lng):""
-    };
-  });
-  const obj={[regionName]:items};
-  downloadGroupedData(obj,regionName,format,`poke_lid_${regionName}`);
+
+function downloadLidGroup(
+  regionName,
+  format
+){
+
+  const items =
+    (
+      groups.lid[
+        regionName
+      ]
+      ||
+      []
+    )
+    .map(
+      item => {
+
+        const {
+          lat,
+          lng
+        } =
+          getItemLatLng(
+            item
+          );
+
+
+        return {
+
+          title:
+            getItemTitle(
+              "lid",
+              item
+            ),
+
+          lat:
+            Number.isFinite(
+              lat
+            )
+            ?
+            String(
+              lat
+            )
+            :
+            "",
+
+          lng:
+            Number.isFinite(
+              lng
+            )
+            ?
+            String(
+              lng
+            )
+            :
+            ""
+
+        };
+
+      }
+    );
+
+
+  const obj = {
+
+    [regionName]:
+      items
+
+  };
+
+
+  downloadGroupedData(
+
+    obj,
+
+    format,
+
+    `poke_lid_${regionName}`
+
+  );
+
 }
 
-function downloadBlob(blob,filename){const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+
+function downloadBlob(
+  blob,
+  filename
+){
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const a =
+    document.createElement(
+      "a"
+    );
+
+
+  a.href =
+    url;
+
+
+  a.download =
+    filename;
+
+
+  document.body.appendChild(
+    a
+  );
+
+
+  a.click();
+
+
+  a.remove();
+
+
+  setTimeout(
+
+    () =>
+      URL.revokeObjectURL(
+        url
+      ),
+
+    1000
+
+  );
+
+}
+
+
 function downloadAll(){
-  if(collectionType==="stamp"){
-    downloadGroupedData(getStampDownloadGroups(),"stamp-all", "txt", "go_stamp_all");
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    downloadGroupedData(
+
+      getStampDownloadGroups(),
+
+      "txt",
+
+      "go_stamp_all"
+
+    );
+
     return;
+
   }
-  downloadGroupedData(getLidDownloadGroups(),"lid-all", "txt", "poke_lid_all");
+
+
+  downloadGroupedData(
+
+    getLidDownloadGroups(),
+
+    "txt",
+
+    "poke_lid_all"
+
+  );
+
 }
+
 
 function downloadJSON(){
-  if(collectionType==="stamp"){
-    downloadGroupedData(getStampDownloadGroups(),"stamp-all", "json", "go_stamp_all");
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    downloadGroupedData(
+
+      getStampDownloadGroups(),
+
+      "json",
+
+      "go_stamp_all"
+
+    );
+
     return;
+
   }
-  downloadGroupedData(getLidDownloadGroups(),"lid-all", "json", "poke_lid_all");
+
+
+  downloadGroupedData(
+
+    getLidDownloadGroups(),
+
+    "json",
+
+    "poke_lid_all"
+
+  );
+
 }
+
 
 function downloadCSV(){
-  if(collectionType==="stamp"){
-    downloadGroupedData(getStampDownloadGroups(),"stamp-all", "csv", "go_stamp_all");
+
+  if(
+    collectionType === "stamp"
+  ){
+
+    downloadGroupedData(
+
+      getStampDownloadGroups(),
+
+      "csv",
+
+      "go_stamp_all"
+
+    );
+
     return;
+
   }
-  downloadGroupedData(getLidDownloadGroups(),"lid-all", "csv", "poke_lid_all");
+
+
+  downloadGroupedData(
+
+    getLidDownloadGroups(),
+
+    "csv",
+
+    "poke_lid_all"
+
+  );
+
 }
 
-async function loadHistoryFile(type){try{const json=await fetchJSON(HISTORY_URLS[type]);return(json.history||[]).map(entry=>({...entry,type}));}catch{return[];}}
-async function loadHistory(){const [lidHistory,stampHistory]=await Promise.all([loadHistoryFile("lid"),loadHistoryFile("stamp")]);historyEntries=[...lidHistory,...stampHistory].sort((a,b)=>new Date(b.time||0)-new Date(a.time||0));renderHistory();}
-function setHistoryFilter(filter){currentHistoryFilter=filter;document.getElementById("historyAll").classList.toggle("active",filter==="all");document.getElementById("historyLid").classList.toggle("active",filter==="lid");document.getElementById("historyStamp").classList.toggle("active",filter==="stamp");renderHistory();}
-function renderHistory(){const el=document.getElementById("history");let logs=historyEntries;if(currentHistoryFilter!=="all")logs=logs.filter(x=>x.type===currentHistoryFilter);if(!logs.length){el.innerHTML=`<span class="muted">尚無更新紀錄。</span>`;return;}const labels={lid:"Poké Lid",stamp:"GO 集章趣"};el.innerHTML=logs.slice(0,50).map(item=>`<div class="history-card"><b>${escapeHtml(item.time||"")}</b><span class="history-type ${item.type}">${labels[item.type]||item.type}</span><br><span class="muted">${escapeHtml(item.eventZh||item.event||"")}　版本：${escapeHtml(item.total??"")} 筆</span><br>🟢 新增 ${(item.added||[]).length}　 🔴 移除 ${(item.removed||[]).length}　 🟡 修改 ${(item.changed||[]).length}</div>`).join("");}
-function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
 
-document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;const modal=document.getElementById("modalOverlay"),collection=document.getElementById("collectionPanel"),prefecture=document.getElementById("prefecturePanel");if(modal.classList.contains("show")){closeModal();return;}if(collection.classList.contains("show")){backToPrefectureList();return;}if(prefecture.classList.contains("show"))closePrefecturePanel();});
+/* =========================================================
+   HISTORY
+========================================================= */
 
-async function start(){loadLocalCollection("lid");loadLocalCollection("stamp");await Promise.all([loadDataSet("lid"),loadDataSet("center"),loadDataSet("stamp")]);switchCollectionType("lid");await loadHistory();}
+async function loadHistoryFile(
+  type
+){
+
+  try{
+
+    const json =
+      await fetchJSON(
+        HISTORY_URLS[type]
+      );
+
+
+    return (
+
+      json.history
+      ||
+      []
+
+    )
+    .map(
+      entry =>
+        ({
+          ...entry,
+          type
+        })
+    );
+
+
+  }catch{
+
+    return [];
+
+  }
+
+}
+
+
+async function loadHistory(){
+
+  const [
+    lidHistory,
+    stampHistory
+  ] =
+    await Promise.all([
+
+      loadHistoryFile(
+        "lid"
+      ),
+
+      loadHistoryFile(
+        "stamp"
+      )
+
+    ]);
+
+
+  historyEntries = [
+
+    ...lidHistory,
+    ...stampHistory
+
+  ]
+  .sort(
+    (a,b) =>
+      new Date(
+        b.time
+        ||
+        0
+      )
+      -
+      new Date(
+        a.time
+        ||
+        0
+      )
+  );
+
+
+  renderHistory();
+
+}
+
+
+function setHistoryFilter(
+  filter
+){
+
+  currentHistoryFilter =
+    filter;
+
+
+  document
+    .getElementById(
+      "historyAll"
+    )
+    .classList
+    .toggle(
+      "active",
+      filter === "all"
+    );
+
+
+  document
+    .getElementById(
+      "historyLid"
+    )
+    .classList
+    .toggle(
+      "active",
+      filter === "lid"
+    );
+
+
+  document
+    .getElementById(
+      "historyStamp"
+    )
+    .classList
+    .toggle(
+      "active",
+      filter === "stamp"
+    );
+
+
+  renderHistory();
+
+}
+
+
+function renderHistory(){
+
+  const el =
+    document.getElementById(
+      "history"
+    );
+
+
+  let logs =
+    historyEntries;
+
+
+  if(
+    currentHistoryFilter
+    !==
+    "all"
+  ){
+
+    logs =
+      logs.filter(
+        x =>
+          x.type
+          ===
+          currentHistoryFilter
+      );
+
+  }
+
+
+  if(
+    !logs.length
+  ){
+
+    el.innerHTML = `
+
+      <span class="muted">
+
+        尚無更新紀錄。
+
+      </span>
+
+    `;
+
+    return;
+
+  }
+
+
+  const labels = {
+
+    lid:
+      "Poké Lid",
+
+    stamp:
+      "GO 集章趣"
+
+  };
+
+
+  el.innerHTML =
+
+    logs
+      .slice(
+        0,
+        50
+      )
+      .map(
+        item => `
+
+          <div
+            class="history-card"
+          >
+
+            <b>
+              ${escapeHtml(
+                item.time
+                ||
+                ""
+              )}
+            </b>
+
+
+            <span
+              class="
+                history-type
+                ${item.type}
+              "
+            >
+
+              ${
+                labels[
+                  item.type
+                ]
+                ||
+                item.type
+              }
+
+            </span>
+
+
+            <br>
+
+
+            <span
+              class="muted"
+            >
+
+              ${escapeHtml(
+                item.eventZh
+                ||
+                item.event
+                ||
+                ""
+              )}
+
+              　
+              版本：
+
+              ${escapeHtml(
+                item.total
+                ??
+                ""
+              )}
+
+              筆
+
+            </span>
+
+
+            <br>
+
+
+            🟢 新增
+            ${
+              (
+                item.added
+                ||
+                []
+              ).length
+            }
+
+
+            　
+
+            🔴 移除
+            ${
+              (
+                item.removed
+                ||
+                []
+              ).length
+            }
+
+
+            　
+
+            🟡 修改
+            ${
+              (
+                item.changed
+                ||
+                []
+              ).length
+            }
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /[&<>"']/g,
+
+    char =>
+      ({
+
+        "&":
+          "&amp;",
+
+        "<":
+          "&lt;",
+
+        ">":
+          "&gt;",
+
+        '"':
+          "&quot;",
+
+        "'":
+          "&#39;"
+
+      }[char])
+
+  );
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key !==
+      "Escape"
+    ){
+
+      return;
+
+    }
+
+
+    const modal =
+      document.getElementById(
+        "modalOverlay"
+      );
+
+
+    const collection =
+      document.getElementById(
+        "collectionPanel"
+      );
+
+
+    const prefecture =
+      document.getElementById(
+        "prefecturePanel"
+      );
+
+
+    if(
+      modal.classList.contains(
+        "show"
+      )
+    ){
+
+      closeModal();
+
+      return;
+
+    }
+
+
+    if(
+      collection.classList.contains(
+        "show"
+      )
+    ){
+
+      backToPrefectureList();
+
+      return;
+
+    }
+
+
+    if(
+      prefecture.classList.contains(
+        "show"
+      )
+    ){
+
+      closePrefecturePanel();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function start(){
+
+  loadLocalCollection(
+    "lid"
+  );
+
+  loadLocalCollection(
+    "stamp"
+  );
+
+
+  await Promise.all([
+
+    loadDataSet(
+      "lid"
+    ),
+
+    loadDataSet(
+      "center"
+    ),
+
+    loadDataSet(
+      "stamp"
+    )
+
+  ]);
+
+
+  migrateStampObtainedData();
+
+
+  switchCollectionType(
+    "lid"
+  );
+
+
+  await loadHistory();
+
+}
+
+
 start();
 
 </script>
 
 </body>
+
 </html>

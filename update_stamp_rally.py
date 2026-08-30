@@ -10,7 +10,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parent
 STAMP_FILE = ROOT / "svgstamp_rally.json"
 HISTORY_FILE = ROOT / "svgstamp_history.json"
 
@@ -54,6 +54,80 @@ STAMP_KEYWORDS = [
     "Stamp Rally",
     "stamp rally",
 ]
+
+
+INSTRUCTIONAL_STAMP_PATTERNS = [
+    r"我該怎麼進行.*(?:GO)?\s*集章趣",
+    r"我怎麼(?:進行|參加|玩).*集章趣",
+    r"GO\s*集章趣.*(?:玩法|教學|說明|怎麼玩)",
+    r"how to (?:participate|play|do).*stamp rally",
+    r"how (?:do|to).*stamp rally",
+    r"stamp rally.*(?:how to|guide|how it works|instructions)",
+    r"(?:ご利用方法|遊び方|参加方法|楽しみ方).*スタンプラリー",
+    r"スタンプラリー.*(?:ご利用方法|遊び方|参加方法|楽しみ方)",
+    r"(?:faq|frequently asked questions).*stamp rally",
+]
+
+
+def is_instructional_stamp_text(value):
+    text = normalize_text(value).lower()
+    if not text:
+        return False
+    return any(re.search(pattern, text, re.I) for pattern in INSTRUCTIONAL_STAMP_PATTERNS)
+
+
+def has_strong_stamp_event_signal(soup, page_text, url):
+    """判斷頁面是否真的在介紹一個 GO 集章趣活動，而不是單純提到集章趣。"""
+    candidates = []
+    for tag in soup.find_all(["h1", "h2"]):
+        text = normalize_text(tag.get_text(" ", strip=True))
+        if text:
+            candidates.append(text)
+
+    for attrs in ({"property": "og:title"}, {"name": "twitter:title"}):
+        meta = soup.find("meta", attrs=attrs)
+        if meta:
+            text = normalize_text(meta.get("content", ""))
+            if text:
+                candidates.append(text)
+
+    title_text = normalize_text(soup.title.get_text(" ", strip=True)) if soup.title else ""
+    if title_text:
+        candidates.append(title_text)
+
+    # 明確是教學/FAQ 頁，直接排除。
+    if any(is_instructional_stamp_text(x) for x in candidates):
+        return False
+
+    # URL 本身若明顯是教學說明頁，也不建立活動。
+    path = urlparse(url).path.lower()
+    if any(token in path for token in ("how-to", "howto", "guide", "faq", "instructions")):
+        # 仍允許 URL 看起來是活動頁且標題明確是實際活動名稱。
+        if not any("stamp rally" in x.lower() or "スタンプラリー" in x for x in candidates):
+            return False
+
+    # 官方首頁／新聞列表／活動索引本身不是單一活動，不能因為
+    # 頁面內含教學或活動摘要就被當成一個活動。
+    path_clean = path.rstrip("/")
+    listing_paths = {"/news", "/ja/news", "/event", "/events", "/info", "/ja/event", "/ja/events", "/ja/info"}
+    if path_clean in listing_paths:
+        return False
+
+    # 至少要有明確活動性訊號。優先看標題，其次看常見活動詞。
+    title_has_stamp = any(
+        ("スタンプラリー" in x) or ("stamp rally" in x.lower())
+        for x in candidates
+    )
+    activity_words = (
+        "開催", "開催期間", "イベント", "event period", "期間",
+        "city safari", "go wild area", "go fest", "community day",
+        "pokemon center", "ポケモンセンター", "pokemon go", "pokémon go"
+    )
+    body_has_activity = any(word.lower() in page_text.lower() for word in activity_words)
+
+    return title_has_stamp or body_has_activity and any(
+        ("スタンプラリー" in page_text) or ("stamp rally" in page_text.lower())
+    )
 
 PREF_ALIASES = [
     ("北海道", "北海道"),
@@ -649,10 +723,20 @@ def parse_stamp_page(url, old_items):
     ):
         return []
 
+    # 只建立真正的 GO 集章趣活動；教學／FAQ 等說明頁不進 JSON。
+    if not has_strong_stamp_event_signal(soup, page_text, url):
+        print("  SKIP: instructional/non-event Stamp Rally page")
+        return []
+
     event = extract_event_name(
         soup,
         page_text
     )
+
+    # 再做一次活動名稱層級的保險判斷。
+    if is_instructional_stamp_text(event):
+        print("  SKIP: instructional Stamp Rally title ->", event)
+        return []
 
     event_id = get_event_id(
         event,
@@ -802,11 +886,22 @@ def parse_stamp_page(url, old_items):
     return items
 
 
+def is_invalid_existing_stamp_item(item):
+    """移除之前版本誤收進 JSON 的教學／FAQ／索引項目。"""
+    values = [
+        item.get("event", ""),
+        item.get("eventName", ""),
+        item.get("name", ""),
+        item.get("venue", ""),
+    ]
+    return any(is_instructional_stamp_text(value) for value in values if value)
+
+
 def merge_items(old_items, fresh_items):
     merged = {
         item.get("id"): item
         for item in old_items
-        if item.get("id")
+        if item.get("id") and not is_invalid_existing_stamp_item(item)
     }
 
     # 若某活動已有新的「有縣市地點」資料，

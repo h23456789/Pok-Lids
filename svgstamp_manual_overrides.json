@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-30T15:41:30.475Z",
+  "updated": "2026-08-30T15:42:40.640Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {
@@ -50,6 +50,18 @@
       ],
       "coordinatesSource": "Published place coordinate reference",
       "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-NAGASAKI-P004.png"
+    },
+    {
+      "id": "GO-STAMP-BOOTSTRAP-NAGASAKI-P007",
+      "eventId": "GO-STAMP-BOOTSTRAP-NAGASAKI",
+      "venue": "長崎水濱森林公園",
+      "name": "長崎水濱森林公園",
+      "manualCoordinates": [
+        32.740833,
+        129.868872
+      ],
+      "coordinatesSource": "Published place coordinate reference",
+      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-NAGASAKI-P007.png"
     }
   ]
 }

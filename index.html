@@ -2705,93 +2705,10 @@ let historyEntries = [];
 
 const STORAGE_KEYS = {
   lid:"pokemonJapanCollection_lid",
-  stamp:"pokemonJapanCollection_stamp",
-  // 已獲得 ID 的穩定身份對照表。
-  // 用來避免官方資料更新、活動改名或 ID 重新生成後，
-  // 使用者原本的 localStorage 狀態看起來被清空。
-  stampIdentity:"pokemonJapanCollection_stamp_identity_v1"
+  stamp:"pokemonJapanCollection_stamp"
 };
 
-let stampIdentityMap = {};
-
 function getItemId(item){ return String(item?.id ?? ""); }
-
-function normalizeLocalIdentity(value){
-  return String(value??"")
-    .toLowerCase()
-    .replace(/\s+/g,"")
-    .replace(/[‐‑–—_・･.,，。:：/\\()（）「」『』【】]/g,"");
-}
-
-function getStableItemIdentity(type,item){
-  if(!item) return "";
-  if(type==="stamp"){
-    // sourceUrl 是官方活動頁的穩定來源；venue/name 是同活動中的單一集章點。
-    // 即使 eventId 或活動名稱被官方修改，只要來源頁與地點不變，
-    // 仍能辨識為同一個圖章。
-    const source=normalizeLocalIdentity(item.sourceUrl || "");
-    const venue=normalizeLocalIdentity(item.venue || item.name || item.venueZh || item.nameZh || "");
-    const city=normalizeLocalIdentity(item.city || item.cityZh || "");
-    if(source && venue) return `stamp|${source}|${venue}`;
-    if(source) return `stamp|${source}|${city}`;
-    return `stamp|${normalizeLocalIdentity(item.eventId || item.event || item.eventName || "")}|${venue}|${city}`;
-  }
-  return `lid|${getItemId(item)}`;
-}
-
-function loadStampIdentityMap(){
-  try{
-    const raw=localStorage.getItem(STORAGE_KEYS.stampIdentity);
-    const parsed=raw?JSON.parse(raw):{};
-    stampIdentityMap=parsed && typeof parsed==="object" && !Array.isArray(parsed)?parsed:{};
-  }catch{ stampIdentityMap={}; }
-}
-
-function saveStampIdentityMap(){
-  try{ localStorage.setItem(STORAGE_KEYS.stampIdentity,JSON.stringify(stampIdentityMap)); }catch{}
-}
-
-function migrateLocalCollectionAgainstData(type,list){
-  if(type!=="stamp" || !Array.isArray(list)) return;
-
-  let changed=false;
-  const currentByIdentity=new Map();
-
-  for(const item of list){
-    const id=getItemId(item);
-    const identity=getStableItemIdentity(type,item);
-    if(id && identity) currentByIdentity.set(identity,id);
-  }
-
-  // 將之前版本記錄的舊 ID 遷移到目前資料的新 ID。
-  for(const [identity,oldIdRaw] of Object.entries(stampIdentityMap)){
-    const oldId=String(oldIdRaw||"");
-    const newId=currentByIdentity.get(identity);
-    if(!oldId || !newId || oldId===newId) continue;
-    if(obtainedIds.stamp.has(oldId)){
-      obtainedIds.stamp.delete(oldId);
-      obtainedIds.stamp.add(newId);
-      changed=true;
-    }
-  }
-
-  // 建立／更新目前所有圖章的穩定身份對照。
-  for(const [identity,id] of currentByIdentity.entries()){
-    if(stampIdentityMap[identity]!==id){
-      stampIdentityMap[identity]=id;
-      changed=true;
-    }
-  }
-
-  if(changed){
-    saveLocalCollection("stamp");
-    saveStampIdentityMap();
-  }else{
-    // 即使沒有 obtained 變更，也確保新使用者之後有完整對照表。
-    saveStampIdentityMap();
-  }
-}
-
 function loadLocalCollection(type){
   try{
     const raw=localStorage.getItem(STORAGE_KEYS[type]);
@@ -2799,9 +2716,7 @@ function loadLocalCollection(type){
     obtainedIds[type]=Array.isArray(parsed)?new Set(parsed.map(String)):new Set();
   }catch{ obtainedIds[type]=new Set(); }
 }
-function saveLocalCollection(type){
-  try{ localStorage.setItem(STORAGE_KEYS[type],JSON.stringify([...obtainedIds[type]])); }catch{}
-}
+function saveLocalCollection(type){ localStorage.setItem(STORAGE_KEYS[type],JSON.stringify([...obtainedIds[type]])); }
 
 function resolvePrefecture(item){
   const raw=String(item?.pref??"").trim();
@@ -2972,7 +2887,6 @@ async function loadDataSet(type){
       if(!Array.isArray(list)) throw new Error("資料格式錯誤");
       dataSets[type]=list;
       buildGroups(type);
-      if(type==="stamp") migrateLocalCollectionAgainstData(type,list);
       return true;
     }catch(error){ lastError=error.message; console.warn(`[${type}]`,url,error); }
   }
@@ -3420,16 +3334,7 @@ function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,char=>({"
 
 document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;const modal=document.getElementById("modalOverlay"),collection=document.getElementById("collectionPanel"),prefecture=document.getElementById("prefecturePanel");if(modal.classList.contains("show")){closeModal();return;}if(collection.classList.contains("show")){backToPrefectureList();return;}if(prefecture.classList.contains("show"))closePrefecturePanel();});
 
-async function start(){
-  loadLocalCollection("lid");
-  loadLocalCollection("stamp");
-  loadStampIdentityMap();
-  await Promise.all([loadDataSet("lid"),loadDataSet("center"),loadDataSet("stamp")]);
-  // JSON 載入完成後，立即把舊版 localStorage 與目前官方資料做一次 ID 遷移。
-  migrateLocalCollectionAgainstData("stamp",dataSets.stamp||[]);
-  switchCollectionType("lid");
-  await loadHistory();
-}
+async function start(){loadLocalCollection("lid");loadLocalCollection("stamp");await Promise.all([loadDataSet("lid"),loadDataSet("center"),loadDataSet("stamp")]);switchCollectionType("lid");await loadHistory();}
 start();
 
 </script>

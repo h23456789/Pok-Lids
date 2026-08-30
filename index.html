@@ -2772,6 +2772,97 @@ function loadLocalCollection(type){
 }
 function saveLocalCollection(type){ localStorage.setItem(STORAGE_KEYS[type],JSON.stringify([...obtainedIds[type]])); }
 
+
+async function loadManualOverrides(){
+  let lastError = "";
+  for(const url of [DATA_URLS.manual, RAW_DATA_URLS.manual]){
+    try{
+      const json = await fetchJSON(url);
+      const items = Array.isArray(json?.items) ? json.items : [];
+      manualOverrides = items;
+      return true;
+    }catch(error){
+      lastError = error?.message || String(error);
+      console.warn("[manual overrides]", url, error);
+    }
+  }
+  manualOverrides = [];
+  if(lastError) console.warn("Manual overrides unavailable:", lastError);
+  return false;
+}
+
+function normalizeOverrideKey(value){
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/[‐‑–—_ー・･.,，。:：/\\()（）「」『』【】]/g, "");
+}
+
+function findManualOverrideForItem(item){
+  const list = Array.isArray(manualOverrides) ? manualOverrides : [];
+  const itemId = String(item?.id ?? "");
+  if(itemId){
+    const byId = list.find(o => String(o?.id ?? "") === itemId);
+    if(byId) return byId;
+  }
+
+  const eventId = String(item?.eventId ?? "");
+  const names = [
+    item?.venue,
+    item?.name,
+    item?.venueZh,
+    item?.nameZh
+  ].filter(Boolean).map(normalizeOverrideKey);
+
+  return list.find(o => {
+    if(eventId && String(o?.eventId ?? "") !== eventId) return false;
+    const overrideNames = [
+      o?.venue,
+      o?.name,
+      o?.venueZh,
+      o?.nameZh,
+      ...(Array.isArray(o?.venueAliases) ? o.venueAliases : []),
+      ...(Array.isArray(o?.aliases) ? o.aliases : [])
+    ].filter(Boolean).map(normalizeOverrideKey);
+    return names.some(name => overrideNames.includes(name));
+  }) || null;
+}
+
+function applyRuntimeManualOverrides(){
+  if(!Array.isArray(manualOverrides) || !manualOverrides.length) return;
+
+  for(const item of (dataSets.stamp || [])){
+    const override = findManualOverrideForItem(item);
+    if(!override) continue;
+
+    const coords = override.manualCoordinates;
+    if(Array.isArray(coords) && coords.length >= 2){
+      const lat = Number(coords[0]);
+      const lng = Number(coords[1]);
+      if(Number.isFinite(lat) && Number.isFinite(lng)){
+        item.coords = [lat, lng];
+        item.lat = lat;
+        item.lng = lng;
+        item.coordinatesManual = true;
+        item.coordinatesSource = override.coordinatesSource || "Manual override";
+        if(override.coordinatesSourceUrl) item.coordinatesSourceUrl = override.coordinatesSourceUrl;
+      }
+    }
+
+    if(override.manualStampImage){
+      item.stampImage = String(override.manualStampImage);
+      item.stampImageManual = true;
+      item.stampImageSource = override.stampImageSource || "Manual override";
+    }
+
+    if(override.manualCenterBadge){
+      item.centerBadgeImage = String(override.manualCenterBadge);
+      item.centerBadgeManual = true;
+      item.centerBadgeOfficial = override.centerBadgeOfficial !== false;
+    }
+  }
+}
+
 function resolvePrefecture(item){
   const raw=String(item?.pref??"").trim();
   if(raw){
@@ -3198,10 +3289,10 @@ function renderCollectionGrid(){
         : ""
       }
       <div class="collection-status">${obtained?"● 已收集":"● 未收集"}</div>
-      ${collectionType==="stamp"
-        ? `<label class="stamp-inline-obtain" onclick="event.stopPropagation()"><input type="checkbox" ${obtained?"checked":""} onchange="toggleObtainedByItemId(event,'${itemId}')"><span>已獲得</span></label>`
-        : ""
-      }
+      <label class="stamp-inline-obtain" onclick="event.stopPropagation()">
+        <input type="checkbox" ${obtained?"checked":""} onchange="toggleObtainedByItemId(event,'${itemId}')">
+        <span>已獲得</span>
+      </label>
     `;
 
     el.appendChild(card);
@@ -3413,15 +3504,38 @@ document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;const
 async function start(){
   loadLocalCollection("lid");
   loadLocalCollection("stamp");
+
+  // 先只載入 Lid，讓首頁可以立即顯示，不必等待中心／活動／人工覆蓋資料。
+  const lidReady = await loadDataSet("lid");
+  if(lidReady){
+    switchCollectionType("lid");
+  }else{
+    renderRegions();
+    updateOverall();
+  }
+
+  // 其他資料背景載入；完成後再刷新畫面。
   await Promise.all([
-    loadDataSet("lid"),
     loadDataSet("center"),
     loadDataSet("stamp"),
     loadManualOverrides()
   ]);
+
   applyRuntimeManualOverrides();
   migrateStampObtainedData();
-  switchCollectionType("lid");
+
+  // 保持目前所在分頁；若仍是 Lid，刷新即可，不再把畫面強制切頁。
+  renderRegions();
+  updateOverall();
+
+  if(currentStampEventId){
+    updateStampEventSummary();
+    renderCollectionGrid();
+  }else if(currentPrefecture){
+    updateCollectionSummary();
+    renderCollectionGrid();
+  }
+
   await loadHistory();
 }
 start();

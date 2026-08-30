@@ -1995,6 +1995,50 @@ button{
   text-shadow:0 2px 5px rgba(0,0,0,.35);
   z-index:2;
 }
+
+/* 100% 完成印章：蓋在區塊 Banner 上，不影響 Banner 本身 */
+.collection-complete-stamp{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-10deg);
+  width:118px;
+  height:118px;
+  border:6px solid rgba(190,38,38,.92);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:rgba(190,38,38,.96);
+  background:rgba(255,255,255,.18);
+  box-shadow:0 0 0 3px rgba(255,255,255,.55), 0 3px 12px rgba(0,0,0,.22);
+  font-size:21px;
+  line-height:1.15;
+  font-weight:1000;
+  letter-spacing:2px;
+  z-index:5;
+  pointer-events:none;
+  text-shadow:0 1px 0 rgba(255,255,255,.65);
+}
+.collection-complete-stamp::before,
+.collection-complete-stamp::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  width:72%;
+  height:2px;
+  background:rgba(190,38,38,.75);
+  transform:translateX(-50%);
+}
+.collection-complete-stamp::before{top:27px;}
+.collection-complete-stamp::after{bottom:27px;}
+.collection-complete-stamp small{
+  display:block;
+  font-size:10px;
+  letter-spacing:1px;
+  margin-top:4px;
+}
 .stamp-event-date{
   margin-top:5px;
   color:#6f8f94;
@@ -2938,7 +2982,10 @@ function renderRegions(){
     const total=items.length; const percent=total?Math.round(obtained/total*1000)/10:0;
     const sample=items.slice(0,3); const card=document.createElement("div"); card.className="region-card"; card.onclick=()=>openRegion(regionName);
     const images=sample.map(item=>{const image=getItemImageUrl("lid",item);return image?`<img class="region-image" src="${escapeHtml(image)}" alt="" loading="lazy">`:"";}).join("");
-    card.innerHTML=`<div class="region-images">${images||`<div class="region-empty">尚無資料</div>`}</div><div class="region-info"><div class="region-name">${escapeHtml(regionName)}</div><div class="region-count">${obtained} / ${total}</div><div class="region-percent">完成率 ${percent}%</div><div class="download-subbox"><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','txt')">TXT</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','json')">JSON</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','csv')">CSV</button></div></div>`;
+    const completeStamp=(total>0 && obtained>=total)
+      ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
+      : "";
+    card.innerHTML=`<div class="region-images">${images||`<div class="region-empty">尚無資料</div>`}${completeStamp}</div><div class="region-info"><div class="region-name">${escapeHtml(regionName)}</div><div class="region-count">${obtained} / ${total}</div><div class="region-percent">完成率 ${percent}%</div><div class="download-subbox"><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','txt')">TXT</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','json')">JSON</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','csv')">CSV</button></div></div>`;
     el.appendChild(card);
   }
 }
@@ -2982,6 +3029,9 @@ function renderStampEvents(el){
     const statusKey=status==="活動尚未開始"?"upcoming":(status==="活動已結束"?"ended":"active");
     const statusOverlay=(statusKey!=="active")
       ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
+    const completeStamp=(total>0 && obtained>=total)
+      ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
+      : "";
     const countText=total?`${obtained} / ${total}`:(known?`${obtained} / ${known}`:"尚待官方公布");
     const note=(total && known<total)
       ? `<div class="stamp-event-data-note">目前已取得 ${known} / ${total} 個官方集章點資料</div>` : "";
@@ -2992,6 +3042,7 @@ function renderStampEvents(el){
           : `<div class="stamp-event-banner-fallback">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
         }
         ${statusOverlay}
+        ${completeStamp}
       </div>
       <div class="region-info">
         <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>

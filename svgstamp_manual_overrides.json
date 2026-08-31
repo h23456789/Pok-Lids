@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-31T15:49:20.538Z",
+  "updated": "2026-08-31T15:50:50.523Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {
@@ -199,6 +199,18 @@
       ],
       "coordinatesSource": "Verified community coordinate reference",
       "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-SHINAGAWA-P003.png"
+    },
+    {
+      "id": "GO-STAMP-BOOTSTRAP-SHINAGAWA-P004",
+      "eventId": "GO-STAMP-BOOTSTRAP-SHINAGAWA",
+      "venue": "鮫洲入江廣場",
+      "name": "鮫洲入江廣場",
+      "manualCoordinates": [
+        35.603301,
+        139.743942
+      ],
+      "coordinatesSource": "Verified community coordinate reference",
+      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-SHINAGAWA-P004.png"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-31T15:33:40.864Z",
+  "updated": "2026-08-31T15:36:13.813Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {
@@ -139,6 +139,18 @@
       "coordinatesSource": "verified community coordinates",
       "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-SUITA-P001.png",
       "stampImageSource": "Manual override"
+    },
+    {
+      "id": "GO-STAMP-BOOTSTRAP-SUITA-P004",
+      "eventId": "GO-STAMP-BOOTSTRAP-SUITA",
+      "venue": "桃山公園",
+      "name": "桃山公園",
+      "manualCoordinates": [
+        34.825308,
+        135.509497
+      ],
+      "coordinatesSource": "verified community coordinates",
+      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-SUITA-P004.png"
     }
   ]
 }

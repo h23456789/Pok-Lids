@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-31T17:01:47.976Z",
+  "updated": "2026-08-31T17:02:51.229Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {
@@ -223,6 +223,18 @@
       ],
       "coordinatesSource": "Verified community coordinate reference",
       "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P001.png"
+    },
+    {
+      "id": "GO-STAMP-BOOTSTRAP-MINATO-P003",
+      "eventId": "GO-STAMP-BOOTSTRAP-MINATO",
+      "venue": "原芝浦小學校紀念碑",
+      "name": "原芝浦小學校紀念碑",
+      "manualCoordinates": [
+        35.665661,
+        139.7461202
+      ],
+      "coordinatesSource": "Verified community coordinate reference",
+      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P003.png"
     }
   ]
 }

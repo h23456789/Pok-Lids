@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-31T15:54:44.731Z",
+  "updated": "2026-08-31T17:01:47.976Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {
@@ -211,6 +211,18 @@
       ],
       "coordinatesSource": "Verified community coordinate reference",
       "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-SHINAGAWA-P004.png"
+    },
+    {
+      "id": "GO-STAMP-BOOTSTRAP-MINATO-P001",
+      "eventId": "GO-STAMP-BOOTSTRAP-MINATO",
+      "venue": "東京鐵塔",
+      "name": "東京鐵塔",
+      "manualCoordinates": [
+        35.6586,
+        139.7454
+      ],
+      "coordinatesSource": "Verified community coordinate reference",
+      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P001.png"
     }
   ]
 }

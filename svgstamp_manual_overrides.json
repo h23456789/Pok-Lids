@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-31T15:37:27.387Z",
+  "updated": "2026-08-31T15:45:50.607Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {
@@ -163,6 +163,18 @@
       ],
       "coordinatesSource": "verified community coordinates",
       "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-SUITA-P005.png"
+    },
+    {
+      "id": "GO-STAMP-BOOTSTRAP-SHINAGAWA-P001",
+      "eventId": "GO-STAMP-BOOTSTRAP-SHINAGAWA",
+      "venue": "天王洲 Isle 第四公園",
+      "name": "天王洲 Isle 第四公園",
+      "manualCoordinates": [
+        35.623578,
+        139.748265
+      ],
+      "coordinatesSource": "Verified community coordinate reference",
+      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-SHINAGAWA-P001.png"
     }
   ]
 }

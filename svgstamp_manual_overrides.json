@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-31T15:16:50.555Z",
+  "updated": "2026-08-31T15:18:30.613Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {

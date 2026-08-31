@@ -36,7 +36,8 @@ button{font:inherit}
   overflow:hidden;
 }
 
-.header:before,.header:after{
+.header:before,
+.header:after{
   content:"";
   position:absolute;
   border-radius:50%;
@@ -251,8 +252,9 @@ button{font:inherit}
 .modal-overlay{z-index:11000}
 .admin-overlay{z-index:15000}
 
-.prefecture-window{
-  width:min(850px,100%);
+.prefecture-window,
+.collection-window{
+  width:min(1100px,100%);
   max-height:calc(100vh - 28px);
   background:#f7fcfc;
   border-radius:26px;
@@ -352,17 +354,6 @@ button{font:inherit}
   margin-top:7px;
   font-size:12px;
   color:#829a9e;
-}
-
-.collection-window{
-  width:min(1100px,100%);
-  max-height:calc(100vh - 28px);
-  background:#f7fcfc;
-  border-radius:26px;
-  overflow:hidden;
-  box-shadow:0 20px 80px rgba(0,0,0,.35);
-  display:flex;
-  flex-direction:column;
 }
 
 .collection-header-actions{
@@ -529,8 +520,108 @@ button{font:inherit}
   font-weight:900;
 }
 
-.modal-overlay{
-  z-index:11000;
+.stamp-event-banner-wrap{
+  height:185px;
+  padding:0;
+}
+
+.stamp-event-banner{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  position:relative;
+  z-index:1;
+}
+
+.stamp-event-banner-fallback{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  text-align:center;
+  color:#397b83;
+  background:#c8edf5;
+  font-weight:900;
+}
+
+.stamp-event-status-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(20,55,60,.45);
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+  text-shadow:0 2px 5px rgba(0,0,0,.35);
+  z-index:4;
+}
+
+.collection-complete-stamp{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-10deg);
+  width:118px;
+  height:118px;
+  border:6px solid rgba(190,38,38,.92);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:rgba(190,38,38,.96);
+  background:rgba(255,255,255,.18);
+  box-shadow:0 0 0 3px rgba(255,255,255,.55),0 3px 12px rgba(0,0,0,.22);
+  font-size:21px;
+  line-height:1.15;
+  font-weight:1000;
+  letter-spacing:2px;
+  z-index:5;
+  pointer-events:none;
+}
+
+.collection-complete-stamp small{
+  display:block;
+  font-size:10px;
+  letter-spacing:1px;
+  margin-top:4px;
+}
+
+.stamp-event-date{
+  margin-top:5px;
+  color:#6f8f94;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.stamp-event-live-status{
+  display:inline-block;
+  margin-top:6px;
+  padding:4px 9px;
+  border-radius:999px;
+  background:#eaf7ed;
+  color:#2d8b50;
+  font-size:11px;
+  font-weight:900;
+}
+
+.stamp-event-live-status.upcoming{
+  background:#eef4ff;
+  color:#42689a;
+}
+
+.stamp-event-live-status.ended{
+  background:#f0f0f0;
+  color:#777;
+}
+
+.modal-overlay.show{
+  display:flex;
 }
 
 .poke-modal{
@@ -547,7 +638,7 @@ button{font:inherit}
   position:absolute;
   top:12px;
   right:12px;
-  z-index:5;
+  z-index:8;
   width:38px;
   height:38px;
   border:0;
@@ -570,10 +661,11 @@ button{font:inherit}
   object-fit:contain;
   display:block;
   margin:auto;
-  filter:drop-shadow(0 5px 8px rgba(0,0,0,.2));
 }
 
-.modal-content{padding:20px}
+.modal-content{
+  padding:20px;
+}
 
 .modal-type{
   font-size:12px;
@@ -609,7 +701,6 @@ button{font:inherit}
   font-family:monospace;
   font-size:14px;
   cursor:pointer;
-  user-select:none;
   max-width:100%;
   overflow-wrap:anywhere;
 }
@@ -730,7 +821,9 @@ button{font:inherit}
   font-size:14px;
 }
 
-.history-card:last-child{border-bottom:0}
+.history-card:last-child{
+  border-bottom:0;
+}
 
 .history-type{
   display:inline-block;
@@ -769,130 +862,19 @@ button{font:inherit}
   font-weight:800;
 }
 
-.stamp-all-download-box{
-  margin-top:8px;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:6px;
-}
-
-.stamp-all-download-btn{
-  border:0;
-  border-radius:999px;
-  padding:7px 12px;
-  background:#f0eaff;
-  color:#6f4bb8;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:900;
-}
-
-.stamp-event-banner-wrap{
-  height:185px;
-  padding:0;
-}
-
-.stamp-event-banner{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  position:relative;
-  z-index:1;
-}
-
-.stamp-event-banner-fallback{
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
+.loading{
   text-align:center;
-  color:#397b83;
-  background:#c8edf5;
-  font-weight:900;
+  padding:40px;
+  color:#6f9095;
 }
 
-.stamp-event-status-overlay{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(20,55,60,.45);
-  color:#fff;
-  font-size:22px;
-  font-weight:900;
-  text-shadow:0 2px 5px rgba(0,0,0,.35);
-  z-index:3;
-}
-
-.collection-complete-stamp{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) rotate(-10deg);
-  width:118px;
-  height:118px;
-  border:6px solid rgba(190,38,38,.92);
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:rgba(190,38,38,.96);
-  background:rgba(255,255,255,.18);
-  box-shadow:0 0 0 3px rgba(255,255,255,.55),0 3px 12px rgba(0,0,0,.22);
-  font-size:21px;
-  line-height:1.15;
-  font-weight:1000;
-  letter-spacing:2px;
-  z-index:5;
-  pointer-events:none;
-}
-
-.collection-complete-stamp small{
-  display:block;
-  font-size:10px;
-  letter-spacing:1px;
-  margin-top:4px;
-}
-
-.stamp-event-date{
-  margin-top:5px;
-  color:#6f8f94;
-  font-size:12px;
-  line-height:1.5;
-}
-
-.stamp-event-data-note{
-  margin-top:5px;
-  color:#9a7b28;
-  font-size:11px;
-  line-height:1.5;
-}
-
-.stamp-event-live-status{
-  margin-top:6px;
-  display:inline-block;
-  padding:4px 9px;
-  border-radius:999px;
-  background:#eaf7ed;
-  color:#2d8b50;
-  font-size:11px;
-  font-weight:900;
-}
-
-.stamp-event-live-status.upcoming{
-  background:#eef4ff;
-  color:#42689a;
-}
-
-.stamp-event-live-status.ended{
-  background:#f0f0f0;
-  color:#777;
+.error-box{
+  padding:16px;
+  border-radius:12px;
+  background:#fff4f4;
+  color:#bd4c4c;
+  font-size:14px;
+  line-height:1.7;
 }
 
 .admin-modal{
@@ -940,7 +922,7 @@ button{font:inherit}
 
 .admin-grid{
   display:grid;
-  grid-template-columns:370px minmax(0,1fr);
+  grid-template-columns:360px minmax(0,1fr);
   gap:14px;
   min-height:100%;
 }
@@ -973,8 +955,7 @@ button{font:inherit}
 }
 
 .admin-field input,
-.admin-field select,
-.admin-field textarea{
+.admin-field select{
   width:100%;
   padding:9px 10px;
   border:1px solid #c9dddd;
@@ -1035,13 +1016,13 @@ button{font:inherit}
 }
 
 .admin-status.ok{
-  color:#239f62;
   background:#edf9f1;
+  color:#239f62;
 }
 
 .admin-status.error{
-  color:#a64f4f;
   background:#fff0f0;
+  color:#a64f4f;
 }
 
 .admin-point-info{
@@ -1051,48 +1032,6 @@ button{font:inherit}
   color:#58757b;
   font-size:12px;
   line-height:1.6;
-}
-
-.admin-list{
-  max-height:250px;
-  overflow:auto;
-}
-
-.admin-event-item,
-.admin-point-item{
-  border:1px solid #e3eeee;
-  border-radius:11px;
-  padding:9px 10px;
-  margin-bottom:7px;
-  cursor:pointer;
-  background:#fbfefe;
-}
-
-.admin-event-item:hover,
-.admin-point-item:hover{
-  background:#f1faf8;
-}
-
-.admin-event-item.active,
-.admin-point-item.active{
-  background:#e5f6f1;
-  border-color:#79cbbb;
-}
-
-.admin-event-name,
-.admin-point-name{
-  color:#397b83;
-  font-size:12px;
-  font-weight:900;
-  line-height:1.4;
-}
-
-.admin-event-meta,
-.admin-point-meta{
-  margin-top:4px;
-  color:#81999d;
-  font-size:10px;
-  line-height:1.45;
 }
 
 .admin-canvas-wrap{
@@ -1108,6 +1047,7 @@ button{font:inherit}
 .admin-canvas-wrap canvas{
   display:block;
   max-width:none;
+  cursor:crosshair;
 }
 
 .admin-crop-toolbar{
@@ -1127,9 +1067,7 @@ button{font:inherit}
 .admin-crop-preview{
   margin-top:12px;
   min-height:120px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+  display:flex;
   align-items:center;
   justify-content:center;
   border-radius:14px;
@@ -1137,17 +1075,9 @@ button{font:inherit}
   padding:10px;
 }
 
-.admin-preview-box{
-  min-height:120px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-}
-
-.admin-preview-box img{
+.admin-crop-preview img{
   max-width:100%;
-  max-height:240px;
+  max-height:280px;
   object-fit:contain;
   border-radius:12px;
   background:
@@ -1155,45 +1085,15 @@ button{font:inherit}
     50%/16px 16px;
 }
 
-.admin-handle-help{
-  font-size:11px;
-  color:#718c90;
-  line-height:1.55;
-}
-
-.admin-coordinate-result{
-  margin-top:5px;
-  color:#27bd7a;
-  font-size:12px;
-  font-weight:900;
-}
-
-.admin-resize-note{
-  position:absolute;
-  right:7px;
-  bottom:5px;
-  color:#8aa0a4;
-  font-size:10px;
-  pointer-events:none;
-}
-
 .muted{
   color:#839da0;
 }
 
-.loading{
-  text-align:center;
-  padding:40px;
-  color:#6f9095;
-}
-
-.error-box{
-  padding:16px;
-  border-radius:12px;
-  background:#fff4f4;
-  color:#bd4c4c;
-  font-size:14px;
-  line-height:1.7;
+.admin-coordinate-result{
+  margin-top:3px;
+  color:#27bd7a;
+  font-size:12px;
+  font-weight:900;
 }
 
 @media(max-width:1000px){
@@ -1206,10 +1106,6 @@ button{font:inherit}
   .admin-grid{
     grid-template-columns:1fr;
   }
-
-  .admin-list{
-    max-height:180px;
-  }
 }
 
 @media(max-width:900px){
@@ -1219,6 +1115,7 @@ button{font:inherit}
 }
 
 @media(max-width:700px){
+
   .container{padding:10px}
 
   .header{
@@ -1253,7 +1150,6 @@ button{font:inherit}
   .region-images{
     height:120px;
     padding:9px 5px;
-    gap:3px;
   }
 
   .region-info{
@@ -1262,7 +1158,6 @@ button{font:inherit}
 
   .region-name{font-size:17px}
   .region-count{font-size:21px}
-  .region-percent{font-size:11px}
 
   .prefecture-window,
   .collection-window{
@@ -1292,13 +1187,17 @@ button{font:inherit}
     grid-template-columns:repeat(3,minmax(0,1fr));
   }
 
-  .collection-city{font-size:12px}
+  .collection-city{
+    font-size:12px;
+  }
 
   .map-navigation{
     grid-template-columns:1fr;
   }
 
-  .modal-overlay{padding:10px}
+  .modal-overlay{
+    padding:10px;
+  }
 
   .poke-modal{
     width:calc(100vw - 20px);
@@ -1310,19 +1209,11 @@ button{font:inherit}
     width:min(260px,78vw);
   }
 
-  .modal-city{font-size:22px}
-
-  .stamp-event-status-overlay{
-    font-size:21px;
+  .modal-city{
+    font-size:22px;
   }
 
-  .collection-complete-stamp{
-    width:100px;
-    height:100px;
-    font-size:20px;
-  }
-
-  .admin-crop-preview{
+  .admin-grid{
     grid-template-columns:1fr;
   }
 
@@ -1346,9 +1237,7 @@ button{font:inherit}
 
 <div class="main-top-actions">
   <button
-    id="adminOpenBtn"
     class="download-btn"
-    type="button"
     onclick="openAdminPanel()"
   >
     ⚙️ 管理／手動修正
@@ -1405,40 +1294,15 @@ button{font:inherit}
   id="regions"
   class="region-grid"
 >
-  <div class="loading">資料載入中……</div>
+  <div class="loading">
+    資料載入中……
+  </div>
 </div>
 
 <div
   id="mainDownloadBox"
   class="download-box"
 ></div>
-
-<div
-  id="stampAllDownloadBox"
-  class="stamp-all-download-box"
-  style="display:none;"
->
-  <button
-    class="stamp-all-download-btn"
-    onclick="downloadAllStampPoints('txt')"
-  >
-    🎟️ 所有圖章 TXT
-  </button>
-
-  <button
-    class="stamp-all-download-btn"
-    onclick="downloadAllStampPoints('json')"
-  >
-    🎟️ 所有圖章 JSON
-  </button>
-
-  <button
-    class="stamp-all-download-btn"
-    onclick="downloadAllStampPoints('csv')"
-  >
-    🎟️ 所有圖章 CSV
-  </button>
-</div>
 
 <div class="history-box">
 
@@ -1571,8 +1435,9 @@ button{font:inherit}
       <div class="collection-header-actions">
 
         <button
+          id="collectionBackBtn"
           class="back-btn"
-          onclick="backToPrefectureList()"
+          onclick="backFromCollection()"
         >
           ← 返回
         </button>
@@ -1617,7 +1482,7 @@ button{font:inherit}
 
 
 <!-- =======================================================
-     ITEM MODAL
+     MODAL
 ======================================================= -->
 
 <div
@@ -1633,7 +1498,7 @@ button{font:inherit}
 
     <button
       class="modal-close"
-      onclick="closeModal(event)"
+      onclick="closeModal()"
     >
       ×
     </button>
@@ -1672,7 +1537,7 @@ button{font:inherit}
 
       <div
         id="stampDetails"
-        style="display:none;"
+        style="display:none"
       ></div>
 
       <div>
@@ -1755,7 +1620,7 @@ button{font:inherit}
         </div>
 
         <div class="admin-modal-sub">
-          Lid、Pokémon Center、GO 集章趣皆可檢視；人工修改不會立即同步。
+          活動、圖章名稱、座標、截圖與人工圖片管理；人工修改不會立即同步。
         </div>
 
       </div>
@@ -1769,28 +1634,22 @@ button{font:inherit}
 
     </div>
 
-
     <div class="admin-modal-body">
 
       <div class="admin-grid">
 
         <div>
 
-          <!-- GITHUB -->
-
           <div class="admin-section">
 
             <h3>GitHub</h3>
 
             <div class="admin-field">
-
               <label>Repository</label>
-
               <input
                 id="adminRepo"
                 value="h23456789/Pok-Lids"
               >
-
             </div>
 
             <div class="admin-row2">
@@ -1837,14 +1696,18 @@ button{font:inherit}
               <input
                 id="adminToken"
                 type="password"
-                placeholder="Contents + Actions 權限"
+                placeholder="Contents / Actions 權限"
               >
 
             </div>
 
             <div class="admin-help">
-              需要 Repository 的 Contents: Read and write，以及 Actions: Read and write。
-              Token 不會寫入 localStorage。
+
+              手動修改會寫入
+              <b>svgstamp_manual_overrides.json</b>。
+              不會立即執行同步。
+              完成修改後，再按「一鍵同步更新」。
+
             </div>
 
             <div class="admin-buttons">
@@ -1875,11 +1738,9 @@ button{font:inherit}
           </div>
 
 
-          <!-- EVENT -->
-
           <div class="admin-section">
 
-            <h3>選擇活動／區塊</h3>
+            <h3>選擇活動／圖章</h3>
 
             <div class="admin-field">
 
@@ -1911,11 +1772,9 @@ button{font:inherit}
           </div>
 
 
-          <!-- NAME -->
-
           <div class="admin-section">
 
-            <h3>① 名稱</h3>
+            <h3>① 圖章名稱</h3>
 
             <div class="admin-field">
 
@@ -1925,19 +1784,13 @@ button{font:inherit}
 
               <input
                 id="adminPointName"
-                placeholder="例如：長崎站（海鷗廣場）"
+                placeholder="輸入新的圖章／地點名稱"
               >
 
             </div>
 
-            <div class="admin-help">
-              儲存後會寫入 manual override，不會修改官方原始資料。
-            </div>
-
           </div>
 
-
-          <!-- COORD -->
 
           <div class="admin-section">
 
@@ -1947,15 +1800,11 @@ button{font:inherit}
 
               <label>
                 座標
-                <span class="muted">
-                  支援「經度,緯度」或「緯度,經度」
-                </span>
               </label>
 
               <input
                 id="adminCoordinate"
                 placeholder="例如 129.868889, 32.750278"
-                autocomplete="off"
               >
 
               <div
@@ -1967,7 +1816,9 @@ button{font:inherit}
 
             <div class="admin-field">
 
-              <label>座標來源</label>
+              <label>
+                座標來源
+              </label>
 
               <input
                 id="adminCoordSource"
@@ -1976,16 +1827,12 @@ button{font:inherit}
 
             </div>
 
-            <div class="admin-buttons">
-
-              <button
-                class="admin-mini-btn"
-                onclick="adminClearCoord()"
-              >
-                清除手動座標
-              </button>
-
-            </div>
+            <button
+              class="admin-mini-btn"
+              onclick="adminClearCoord()"
+            >
+              清除手動座標
+            </button>
 
           </div>
 
@@ -1993,8 +1840,6 @@ button{font:inherit}
 
 
         <div>
-
-          <!-- IMAGE -->
 
           <div class="admin-section">
 
@@ -2014,26 +1859,21 @@ button{font:inherit}
 
             </div>
 
-
             <div class="admin-crop-toolbar">
 
               <button
                 class="admin-mini-btn"
-                type="button"
                 onclick="adminZoom(-0.2)"
               >
                 −
               </button>
 
-              <span
-                id="adminZoomLabel"
-              >
+              <span id="adminZoomLabel">
                 100%
               </span>
 
               <button
                 class="admin-mini-btn"
-                type="button"
                 onclick="adminZoom(0.2)"
               >
                 ＋
@@ -2041,7 +1881,6 @@ button{font:inherit}
 
               <button
                 class="admin-mini-btn"
-                type="button"
                 onclick="adminResetZoom()"
               >
                 重設
@@ -2057,7 +1896,8 @@ button{font:inherit}
               </label>
 
               <label>
-                容差
+                去背容差
+
                 <input
                   id="adminBgTolerance"
                   type="range"
@@ -2068,7 +1908,10 @@ button{font:inherit}
                     document.getElementById('adminBgTolLabel').textContent=this.value
                   "
                 >
-                <span id="adminBgTolLabel">36</span>
+
+                <span id="adminBgTolLabel">
+                  36
+                </span>
               </label>
 
               <label>
@@ -2093,18 +1936,20 @@ button{font:inherit}
                 height="600"
               ></canvas>
 
-              <div class="admin-resize-note">
-                視窗右下角可拖曳調整後台大小
-              </div>
-
             </div>
 
 
             <div class="admin-help">
 
-              上傳後會出現四個角點。
-              分別拖曳四角，就可以變形為長方形、正方形或透視角度。
-              裁切時會按照四角做透視校正。
+              ① 用滑鼠在圖片上拖曳拉出矩形範圍。
+              <br>
+              ② 拉完後會出現四個角。
+              <br>
+              ③ 拖曳四角只能改變矩形的寬與高，不會產生梯形或任意透視。
+              <br>
+              ④ 可以拉成長方形或正方形。
+              <br>
+              ⑤ 滾輪或 ± 可以放大縮小圖片。
 
             </div>
 
@@ -2115,7 +1960,7 @@ button{font:inherit}
                 class="admin-mini-btn primary"
                 onclick="adminCropPreview()"
               >
-                ✂️ 透視裁切預覽
+                ✂️ 裁切預覽
               </button>
 
               <button
@@ -2132,21 +1977,11 @@ button{font:inherit}
               id="adminCropPreview"
               class="admin-crop-preview"
             >
-
-              <div class="admin-preview-box">
-                <div class="muted">裁切結果</div>
-              </div>
-
-              <div class="admin-preview-box">
-                <div class="muted">最終圖章</div>
-              </div>
-
+              尚未裁切。
             </div>
 
           </div>
 
-
-          <!-- SAVE -->
 
           <div class="admin-section">
 
@@ -2189,7 +2024,7 @@ button{font:inherit}
 
               <button
                 class="admin-mini-btn"
-                onclick="adminReloadCurrent()"
+                onclick="adminLoadData()"
               >
                 ↻ 重新載入
               </button>
@@ -2200,15 +2035,6 @@ button{font:inherit}
               id="adminSaveStatus"
               class="admin-status"
             ></div>
-
-            <div class="admin-help">
-
-              注意：儲存人工修正只會更新
-              <b>svgstamp_manual_overrides.json</b>
-              與人工圖片，不會立即重新執行官方同步。
-              完成多筆修改後，再按「一鍵同步更新」。
-
-            </div>
 
           </div>
 
@@ -2259,7 +2085,7 @@ const WORKFLOW_FILE="update-stamp-rally.yml";
 const PREF={
   1:"北海道",2:"青森県",3:"岩手県",4:"宮城県",5:"秋田県",6:"山形県",7:"福島県",
   8:"茨城県",9:"栃木県",10:"群馬県",11:"埼玉県",12:"千葉県",13:"東京都",14:"神奈川県",
-  15:"新潟県",16:"富山県",17:"石川県",18:"福井県",19:"山梨県",20:"長野県",21:"岐阜県",22:"静岡県",23:"愛知県",
+  15:"新潟県",16:"富山県",17:"石川県",18:"福井県",19:"山梨県",20:"長野県",21:"岐阜県",22:"靜岡縣",23:"愛知県",
   24:"三重県",25:"滋賀県",26:"京都府",27:"大阪府",28:"兵庫県",29:"奈良県",30:"和歌山県",
   31:"鳥取県",32:"島根県",33:"岡山県",34:"広島県",35:"山口県",36:"徳島県",37:"香川県",38:"愛媛県",39:"高知県",
   40:"福岡県",41:"佐賀県",42:"長崎県",43:"熊本県",44:"大分県",45:"宮崎県",46:"鹿児島県",47:"沖縄県"
@@ -2269,7 +2095,7 @@ const PREF_ALIAS={};
 
 for(const [code,name] of Object.entries(PREF)){
   PREF_ALIAS[name]=Number(code);
-  PREF_ALIAS[name.replace(/県$|府$/,"")]=Number(code);
+  PREF_ALIAS[name.replace(/県$|府$|縣$/,"")]=Number(code);
 }
 
 const REGIONS={
@@ -2280,19 +2106,6 @@ const REGIONS={
   "中國・四國":{prefs:[31,32,33,34,35,36,37,38,39]},
   "九州・沖繩":{prefs:[40,41,42,43,44,45,46,47]}
 };
-
-const STORAGE_KEYS={
-  lid:"pokemonJapanCollection_lid",
-  stamp:"pokemonJapanCollection_stamp"
-};
-
-const STAMP_IDENTITY_MAP_KEY=
-  "pokemonJapanCollection_stamp_identity_v3";
-
-
-/* =========================================================
-   KNOWN CENTER BADGES
-========================================================= */
 
 const OFFICIAL_CENTER_BADGES={
 
@@ -2346,68 +2159,28 @@ const OFFICIAL_CENTER_BADGES={
 
   "寶可夢中心沖繩":
     "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp"
-
 };
 
-
-/* =========================================================
-   COORDINATES
-========================================================= */
+const POKEMON_GO_LAB_BADGES=[
+  "https://shop.pokemon.co.jp/images/logos/logo-pokemon-go-lab.webp",
+  "https://shop.pokemon.co.jp/images/logos/logo-pokemongo-lab.webp",
+  "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp"
+];
 
 const KNOWN_COORDINATES={
-
   "長崎站（海鷗廣場）":[32.750278,129.868889],
-
   "長崎漁港尾上地區防災綠地（尾上之丘）":[32.747425,129.863614],
-
   "原長崎縣廳所在地":[32.753981,129.871064],
-
   "長崎中華街（新地橋廣場）":[32.749722,129.872222],
-
   "長崎水濱森林公園":[32.740833,129.868872],
-
   "長崎體育城":[32.778807,129.855036],
-
   "長崎歷史文化博物館":[32.752846,129.879495],
-
   "長崎市役所／社區中心":[32.7494464,129.8798385],
-
   "万博記念公園":[34.759428,135.500232],
-
   "千里南公園":[34.796386,135.50757],
-
   "江坂公園":[34.756812,135.527394],
-
   "桃山公園":[34.825308,135.509497],
-
-  "佐井寺公園":[34.806184,135.532263],
-
-  "東京鐵塔":[35.6586,139.7454],
-
-  "SL廣場 C11 292":[35.6671448,139.7574141],
-
-  "原芝浦小學校紀念碑":[35.665661,139.74612],
-
-  "江戶坂":[35.6669716,139.7454765],
-
-  "芝公園 Gym Statue":[35.6560133,139.7490935],
-
-  "江東區役所":[35.6730499,139.8164348],
-
-  "東陽21 Goddess Fountain":[35.6748,139.81523],
-
-  "仙台堀公園 嬰兒噴泉":[35.67618,139.81274],
-
-  "東京都現代美術館 Like a Snail B":[35.6796307,139.8074057],
-
-  "天王洲 Isle 第四公園":[35.623578,139.748265],
-
-  "聖蹟公園":[35.619162,139.74419],
-
-  "街道松廣場":[35.615484,139.744176],
-
-  "鮫洲入江廣場":[35.603301,139.743942]
-
+  "佐井寺公園":[34.806184,135.532263]
 };
 
 
@@ -2438,18 +2211,53 @@ let obtainedIds={
 
 let currentRegion=null;
 let currentPrefecture=null;
-let currentCollectionItems=[];
 let currentStampEventId=null;
+let currentCollectionItems=[];
 let currentItem=null;
 let currentItemType="lid";
 
 let historyEntries=[];
 let currentHistoryFilter="all";
 
+const STORAGE_KEYS={
+  lid:"pokemonJapanCollection_lid",
+  stamp:"pokemonJapanCollection_stamp"
+};
+
 
 /* =========================================================
-   STORAGE
+   BASIC HELPERS
 ========================================================= */
+
+function escapeHtml(value){
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    ch=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      "\"":"&quot;",
+      "'":"&#39;"
+    }[ch])
+  );
+}
+
+function escapeJs(value){
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/\r?\n/g," ");
+}
+
+function normalizeKey(value){
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/\s+/g,"")
+    .replace(
+      /[‐-–—_ー・･.,，。:：/\\()（）「」『』【】]/g,
+      ""
+    );
+}
 
 function getItemId(item){
   return String(item?.id ?? "");
@@ -2516,7 +2324,7 @@ function saveLocalCollection(type){
 
 async function fetchJSON(
   url,
-  timeoutMs=12000
+  timeoutMs=10000
 ){
 
   const controller=
@@ -2524,7 +2332,9 @@ async function fetchJSON(
 
   const timer=
     setTimeout(
-      () => controller.abort(),
+      ()=>{
+        controller.abort();
+      },
       timeoutMs
     );
 
@@ -2572,14 +2382,8 @@ async function fetchJSON(
 
 }
 
-
-/* =========================================================
-   DATA
-========================================================= */
-
 function normalizeDataList(
-  json,
-  type
+  json
 ){
 
   if(
@@ -2600,23 +2404,12 @@ function normalizeDataList(
 
   }
 
-  if(
-    type==="stamp"
-    &&
-    Array.isArray(
-      json?.stamps
-    )
-  ){
-
-    return json.stamps;
-
-  }
-
   for(
     const key
     of [
       "data",
       "items",
+      "stamps",
       "records",
       "locations",
       "results"
@@ -2677,12 +2470,15 @@ async function loadDataSet(
 
       dataSets[type]=
         normalizeDataList(
-          json,
-          type
+          json
         );
 
-      if(type==="lid"){
+      if(
+        type==="lid"
+      ){
+
         buildLidGroups();
+
       }
 
       return true;
@@ -2709,7 +2505,7 @@ async function loadDataSet(
   }
 
   console.warn(
-    `loadDataSet(${type}) failed:`,
+    `loadDataSet(${type}) failed`,
     lastError
   );
 
@@ -2750,7 +2546,7 @@ async function loadManualOverrides(){
     }catch(error){
 
       console.warn(
-        "Manual override load failed:",
+        "Manual override:",
         error
       );
 
@@ -2761,83 +2557,6 @@ async function loadManualOverrides(){
   manualOverrides=[];
 
   return false;
-
-}
-
-
-/* =========================================================
-   TEXT
-========================================================= */
-
-function normalizeOverrideKey(
-  value
-){
-
-  return String(
-    value ?? ""
-  )
-  .toLowerCase()
-  .replace(
-    /\s+/g,
-    ""
-  )
-  .replace(
-    /[‐-–—_ー・･.,，。:：/\\()（）「」『』【】]/g,
-    ""
-  );
-
-}
-
-function normalizeTitleKey(
-  value
-){
-
-  return normalizeOverrideKey(
-    value
-  );
-
-}
-
-function escapeHtml(
-  value
-){
-
-  return String(
-    value ?? ""
-  )
-  .replace(
-    /[&<>"']/g,
-    char =>
-      ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        "\"":"&quot;",
-        "'":"&#39;"
-      }[char])
-  );
-
-}
-
-function escapeJs(
-  value
-){
-
-  return String(
-    value ?? ""
-  )
-  .replace(
-    /\\/g,
-    "\\\\"
-  )
-  .replace(
-    /'/g,
-    "\\'"
-  )
-  .replace(
-    /\r?\n/g,
-    " "
-  );
 
 }
 
@@ -2972,21 +2691,21 @@ function findManualOverrideForItem(
   item
 ){
 
-  const itemId=
-    String(
-      item?.id ?? ""
+  const id=
+    getItemId(
+      item
     );
 
-  if(itemId){
+  if(id){
 
     const exact=
       manualOverrides.find(
         row =>
           String(
-            row?.id ?? ""
+            row?.id
           )
           ===
-          itemId
+          id
       );
 
     if(exact){
@@ -2999,7 +2718,9 @@ function findManualOverrideForItem(
 
   const eventId=
     String(
-      item?.eventId ?? ""
+      item?.eventId
+      ||
+      ""
     );
 
   const names=[
@@ -3010,26 +2731,28 @@ function findManualOverrideForItem(
   ]
   .filter(Boolean)
   .map(
-    normalizeOverrideKey
+    normalizeKey
   );
 
   return(
     manualOverrides.find(
       row => {
 
-        const rowEvent=
+        const rowEventId=
           String(
-            row?.eventId ?? ""
+            row?.eventId
+            ||
+            ""
           );
 
         if(
           eventId
           &&
-          rowEvent
+          rowEventId
           &&
           eventId
           !==
-          rowEvent
+          rowEventId
         ){
 
           return false;
@@ -3037,22 +2760,10 @@ function findManualOverrideForItem(
         }
 
         const rowNames=[
-
           row?.venue,
           row?.name,
           row?.venueZh,
           row?.nameZh,
-
-          ...(
-            Array.isArray(
-              row?.venueAliases
-            )
-            ?
-            row.venueAliases
-            :
-            []
-          ),
-
           ...(
             Array.isArray(
               row?.aliases
@@ -3061,17 +2772,27 @@ function findManualOverrideForItem(
             row.aliases
             :
             []
+          ),
+          ...(
+            Array.isArray(
+              row?.venueAliases
+            )
+            ?
+            row.venueAliases
+            :
+            []
           )
-
         ]
         .filter(Boolean)
         .map(
-          normalizeOverrideKey
+          normalizeKey
         );
 
         return names.some(
-          n =>
-            rowNames.includes(n)
+          name =>
+            rowNames.includes(
+              name
+            )
         );
 
       }
@@ -3086,11 +2807,9 @@ function applyRuntimeManualOverrides(){
 
   for(
     const item
-    of (
-      dataSets.stamp
-      ||
-      []
-    )
+    of dataSets.stamp
+    ||
+    []
   ){
 
     const override=
@@ -3163,16 +2882,10 @@ function applyRuntimeManualOverrides(){
       item.stampImageManual=
         true;
 
-    }
-
-    if(
-      override.manualCenterBadge
-    ){
-
-      item.centerBadgeImage=
-        String(
-          override.manualCenterBadge
-        );
+      item.stampImageSource=
+        override.stampImageSource
+        ||
+        "Manual override";
 
     }
 
@@ -3212,21 +2925,14 @@ function applyRuntimeManualOverrides(){
 
 
 /* =========================================================
-   STAMP EVENT CANONICAL
+   ACTIVITY CANONICAL KEY
 ========================================================= */
 
-function canonicalStampSource(
+function canonicalSourceUrl(
   url
 ){
 
-  const raw=
-    String(
-      url ?? ""
-    )
-    .trim()
-    .toLowerCase();
-
-  if(!raw){
+  if(!url){
 
     return "";
 
@@ -3234,16 +2940,16 @@ function canonicalStampSource(
 
   try{
 
-    const u=
+    const parsed=
       new URL(
-        raw,
+        url,
         location.href
       );
 
     let path=
-      u.pathname
+      parsed.pathname
       .replace(
-        /\/$/,
+        /\/+$/,
         ""
       );
 
@@ -3255,11 +2961,10 @@ function canonicalStampSource(
 
     let host=
       (
-        u.hostname
+        parsed.hostname
         ||
         ""
-      )
-      .toLowerCase();
+      ).toLowerCase();
 
     if(
       host.startsWith("www.")
@@ -3270,7 +2975,7 @@ function canonicalStampSource(
 
     }
 
-    return (
+    return(
       host
       +
       path
@@ -3278,84 +2983,285 @@ function canonicalStampSource(
 
   }catch{
 
-    return raw
-      .replace(
-        /^https?:\/\//,
-        ""
-      )
-      .replace(
-        /^www\./,
-        ""
-      )
-      .replace(
-        /^\/(?:en|ja|zh-hant|zh_hant)(?=\/|$)/i,
-        ""
-      )
-      .replace(
-        /\/$/,
-        ""
-      );
+    return String(
+      url
+    )
+    .toLowerCase()
+    .replace(
+      /^https?:\/\//,
+      ""
+    )
+    .replace(
+      /^www\./,
+      ""
+    )
+    .replace(
+      /^\/(?:en|ja|zh-hant|zh_hant)(?=\/|$)/i,
+      ""
+    )
+    .replace(
+      /\/+$/,
+      ""
+    );
 
   }
 
 }
 
-function stampEventCanonicalKey(
-  meta
+function cleanActivityTitle(
+  value
+){
+
+  return String(
+    value
+    ||
+    ""
+  )
+  .replace(
+    /\s*[—\-|]\s*Pokémon GO\s*$/i,
+    ""
+  )
+  .replace(
+    /\s*[—\-|]\s*Pok[eé]mon GO\s*$/i,
+    ""
+  )
+  .replace(
+    /\s+/g,
+    " "
+  )
+  .trim();
+
+}
+
+function canonicalActivityKey(
+  row
 ){
 
   const source=
-    canonicalStampSource(
-      meta?.sourceUrl
+    canonicalSourceUrl(
+      row?.sourceUrl
       ||
-      meta?.canonicalPage
+      row?.canonicalPage
       ||
       ""
     );
 
   if(source){
 
-    return "url:"+source;
+    return(
+      "source:"
+      +
+      source
+    );
 
   }
 
-  const eventId=
-    String(
-      meta?.eventId
+  const eventText=
+    cleanActivityTitle(
+      row?.eventZh
       ||
-      meta?.id
+      row?.eventNameZh
       ||
-      meta?.event
+      row?.event
       ||
-      meta?.eventName
+      row?.eventName
       ||
       ""
     );
 
-  return(
-    "event:"
-    +
-    normalizeTitleKey(
-      eventId
+
+  /*
+   * PokéXciting 是明確活動名稱。
+   * 不管語言版本或 eventId 不同，
+   * 都強制歸同一 activity。
+   */
+
+  if(
+    normalizeKey(
+      eventText
+    ).includes(
+      normalizeKey(
+        "PokéXciting"
+      )
     )
-  );
+  ){
+
+    return:
+      "title:pokexciting-2026";
+
+  }
+
+
+  if(
+    eventText
+  ){
+
+    return(
+      "title:"
+      +
+      normalizeKey(
+        eventText
+      )
+    );
+
+  }
+
+  if(
+    row?.eventId
+  ){
+
+    return(
+      "eventid:"
+      +
+      String(
+        row.eventId
+      )
+    );
+
+  }
+
+  if(
+    row?.id
+  ){
+
+    return(
+      "id:"
+      +
+      String(
+        row.id
+      )
+    );
+
+  }
+
+  return "unknown";
 
 }
+
+
+/* =========================================================
+   NOTE:
+   JS 不允許 return:。
+   修正 canonicalActivityKey 的 PokéXciting。
+========================================================= */
+
+function getCanonicalActivityKey(
+  row
+){
+
+  const source=
+    canonicalSourceUrl(
+      row?.sourceUrl
+      ||
+      row?.canonicalPage
+      ||
+      ""
+    );
+
+  if(source){
+
+    return(
+      "source:"
+      +
+      source
+    );
+
+  }
+
+
+  const eventText=
+    cleanActivityTitle(
+      row?.eventZh
+      ||
+      row?.eventNameZh
+      ||
+      row?.event
+      ||
+      row?.eventName
+      ||
+      ""
+    );
+
+
+  if(
+    normalizeKey(
+      eventText
+    ).includes(
+      normalizeKey(
+        "PokéXciting"
+      )
+    )
+  ){
+
+    return "title:pokexciting-2026";
+
+  }
+
+
+  if(eventText){
+
+    return(
+      "title:"
+      +
+      normalizeKey(
+        eventText
+      )
+    );
+
+  }
+
+
+  if(row?.eventId){
+
+    return(
+      "eventid:"
+      +
+      String(
+        row.eventId
+      )
+    );
+
+  }
+
+
+  if(row?.id){
+
+    return(
+      "id:"
+      +
+      String(
+        row.id
+      )
+    );
+
+  }
+
+
+  return "unknown";
+
+}
+
+
+/* =========================================================
+   LOCALE
+========================================================= */
 
 function sourceLocaleRank(
   url
 ){
 
-  const path=
+  const value=
     String(
-      url ?? ""
+      url
+      ||
+      ""
     )
     .toLowerCase();
 
   if(
-    path.includes("/zh-hant/")
+    value.includes("/zh-hant/")
     ||
-    path.includes("/zh_hant/")
+    value.includes("/zh_hant/")
   ){
 
     return 0;
@@ -3363,7 +3269,7 @@ function sourceLocaleRank(
   }
 
   if(
-    path.includes("/ja/")
+    value.includes("/ja/")
   ){
 
     return 1;
@@ -3371,7 +3277,7 @@ function sourceLocaleRank(
   }
 
   if(
-    path.includes("/en/")
+    value.includes("/en/")
   ){
 
     return 2;
@@ -3394,29 +3300,26 @@ function getStampEventStatus(
   const now=
     new Date();
 
-  const start=
-    event?.startDate
-    ?
-    new Date(
-      `${event.startDate}T00:00:00`
-    )
-    :
-    null;
 
-  const end=
-    event?.endDate
-    ?
-    new Date(
-      `${event.endDate}T23:59:59`
-    )
-    :
-    null;
+  /*
+   * 沒開始日期：
+   * 不得視為進行中。
+   */
 
-  if(!start){
+  if(
+    !event?.startDate
+  ){
 
     return "活動尚未開始";
 
   }
+
+
+  const start=
+    new Date(
+      `${event.startDate}T00:00:00`
+    );
+
 
   if(
     now<
@@ -3427,16 +3330,31 @@ function getStampEventStatus(
 
   }
 
+
+  /*
+   * 結束日使用所有點的最大 endDate。
+   */
+
   if(
-    end
-    &&
-    now>
-    end
+    event?.endDate
   ){
 
-    return "活動已結束";
+    const end=
+      new Date(
+        `${event.endDate}T23:59:59`
+      );
+
+    if(
+      now>
+      end
+    ){
+
+      return "活動已結束";
+
+    }
 
   }
+
 
   return "進行中";
 
@@ -3446,47 +3364,23 @@ function getStampEventDateText(
   event
 ){
 
-  const s=
-    event?.startDate
-    ||
-    "";
+  return[
+    "開始："
+    +
+    (
+      event?.startDate
+      ||
+      "尚未公布"
+    ),
 
-  const e=
-    event?.endDate
-    ||
-    "";
-
-  if(
-    s
-    &&
-    e
-  ){
-
-    return(
-      `開始：${s}　結束：${e}`
-    );
-
-  }
-
-  if(s){
-
-    return(
-      `開始：${s}　結束：尚未公布`
-    );
-
-  }
-
-  if(e){
-
-    return(
-      `開始：尚未公布　結束：${e}`
-    );
-
-  }
-
-  return(
-    "開始：尚未公布　結束：尚未公布"
-  );
+    "結束："
+    +
+    (
+      event?.endDate
+      ||
+      "尚未公布"
+    )
+  ].join("　");
 
 }
 
@@ -3496,14 +3390,132 @@ function getStampEvents(){
     new Map();
 
 
-  function mergeEvent(
+  function createEvent(
+    key,
+    row
+  ){
+
+    if(
+      !map.has(key)
+    ){
+
+      map.set(
+        key,
+        {
+
+          id:
+            row?.eventId
+            ||
+            row?.id
+            ||
+            key,
+
+          eventId:
+            row?.eventId
+            ||
+            row?.id
+            ||
+            key,
+
+          event:
+            row?.event
+            ||
+            row?.eventName
+            ||
+            row?.eventZh
+            ||
+            "GO 集章趣",
+
+          eventName:
+            row?.eventName
+            ||
+            row?.event
+            ||
+            row?.eventZh
+            ||
+            "GO 集章趣",
+
+          eventZh:
+            row?.eventZh
+            ||
+            row?.eventNameZh
+            ||
+            row?.event
+            ||
+            row?.eventName
+            ||
+            "GO 集章趣",
+
+          eventNameZh:
+            row?.eventNameZh
+            ||
+            row?.eventZh
+            ||
+            row?.event
+            ||
+            row?.eventName
+            ||
+            "GO 集章趣",
+
+          activity:
+            row?.activity
+            ||
+            "GO Stamp Rally",
+
+          activityZh:
+            row?.activityZh
+            ||
+            "GO 集章趣",
+
+          startDate:
+            row?.startDate
+            ||
+            "",
+
+          endDate:
+            row?.endDate
+            ||
+            "",
+
+          activityImage:
+            row?.activityImage
+            ||
+            row?.eventImage
+            ||
+            "",
+
+          eventImage:
+            row?.eventImage
+            ||
+            row?.activityImage
+            ||
+            "",
+
+          sourceUrl:
+            row?.sourceUrl
+            ||
+            "",
+
+          items:[]
+
+        }
+      );
+
+    }
+
+    return map.get(key);
+
+  }
+
+
+  function mergeMeta(
     event,
-    meta
+    row
   ){
 
     const incomingRank=
       sourceLocaleRank(
-        meta?.sourceUrl
+        row?.sourceUrl
       );
 
     const currentRank=
@@ -3517,37 +3529,27 @@ function getStampEvents(){
       currentRank
     ){
 
-      if(
-        meta?.sourceUrl
-      ){
-
-        event.sourceUrl=
-          meta.sourceUrl;
-
-      }
-
       for(
         const key
         of [
-          "eventZh",
-          "eventNameZh",
-          "activityZh",
-          "descriptionZh",
-          "activityImage",
-          "eventImage",
-          "rewardZh",
           "event",
           "eventName",
-          "activity"
+          "eventZh",
+          "eventNameZh",
+          "activity",
+          "activityZh",
+          "activityImage",
+          "eventImage",
+          "sourceUrl"
         ]
       ){
 
         if(
-          meta?.[key]
+          row?.[key]
         ){
 
           event[key]=
-            meta[key];
+            row[key];
 
         }
 
@@ -3561,21 +3563,19 @@ function getStampEvents(){
           "eventZh",
           "eventNameZh",
           "activityZh",
-          "descriptionZh",
           "activityImage",
-          "eventImage",
-          "rewardZh"
+          "eventImage"
         ]
       ){
 
         if(
-          !event?.[key]
+          !event[key]
           &&
-          meta?.[key]
+          row?.[key]
         ){
 
           event[key]=
-            meta[key];
+            row[key];
 
         }
 
@@ -3584,240 +3584,116 @@ function getStampEvents(){
     }
 
 
+    /*
+     * 整個活動：
+     * start = 最早開始
+     * end   = 最晚結束
+     */
+
     if(
-      meta?.startDate
+      row?.startDate
       &&
       (
         !event.startDate
         ||
-        meta.startDate<
+        row.startDate<
         event.startDate
       )
     ){
 
       event.startDate=
-        meta.startDate;
+        row.startDate;
 
     }
 
 
     if(
-      meta?.endDate
+      row?.endDate
       &&
       (
         !event.endDate
         ||
-        meta.endDate>
+        row.endDate>
         event.endDate
       )
     ){
 
       event.endDate=
-        meta.endDate;
-
-    }
-
-    if(
-      Number.isFinite(
-        Number(
-          meta?.expectedStamps
-        )
-      )
-      &&
-      !Number.isFinite(
-        Number(
-          event?.expectedStamps
-        )
-      )
-    ){
-
-      event.expectedStamps=
-        Number(
-          meta.expectedStamps
-        );
+        row.endDate;
 
     }
 
   }
 
 
-  const ensure=(
-    meta
-  )=>{
-
-    const key=
-      stampEventCanonicalKey(
-        meta
-      );
-
-    if(
-      !map.has(
-        key
-      )
-    ){
-
-      map.set(
-        key,
-        {
-
-          id:
-            String(
-              meta?.eventId
-              ||
-              meta?.id
-              ||
-              "STAMP-"+key
-            ),
-
-          event:
-            meta?.event
-            ||
-            meta?.eventName
-            ||
-            "GO 集章趣",
-
-          eventName:
-            meta?.eventName
-            ||
-            meta?.event
-            ||
-            "GO 集章趣",
-
-          eventZh:
-            meta?.eventZh
-            ||
-            meta?.eventNameZh
-            ||
-            meta?.event
-            ||
-            "GO 集章趣",
-
-          eventNameZh:
-            meta?.eventNameZh
-            ||
-            meta?.eventZh
-            ||
-            meta?.event
-            ||
-            "GO 集章趣",
-
-          activity:
-            meta?.activity
-            ||
-            "GO Stamp Rally",
-
-          activityZh:
-            meta?.activityZh
-            ||
-            "GO 集章趣",
-
-          startDate:
-            meta?.startDate
-            ||
-            "",
-
-          endDate:
-            meta?.endDate
-            ||
-            "",
-
-          expectedStamps:
-            Number.isFinite(
-              Number(
-                meta?.expectedStamps
-              )
-            )
-            ?
-            Number(
-              meta.expectedStamps
-            )
-            :
-            null,
-
-          activityImage:
-            meta?.activityImage
-            ||
-            meta?.eventImage
-            ||
-            "",
-
-          eventImage:
-            meta?.eventImage
-            ||
-            meta?.activityImage
-            ||
-            "",
-
-          sourceUrl:
-            meta?.sourceUrl
-            ||
-            meta?.canonicalPage
-            ||
-            "",
-
-          descriptionZh:
-            meta?.descriptionZh
-            ||
-            "",
-
-          items:[]
-
-        }
-      );
-
-    }
-
-    const event=
-      map.get(
-        key
-      );
-
-    mergeEvent(
-      event,
-      meta
-    );
-
-    return event;
-
-  };
-
+  /*
+   * 第一階段：events metadata
+   */
 
   for(
-    const meta
+    const row
     of stampEventsMeta
   ){
 
-    ensure(
-      meta
+    const key=
+      getCanonicalActivityKey(
+        row
+      );
+
+    const event=
+      createEvent(
+        key,
+        row
+      );
+
+    mergeMeta(
+      event,
+      row
     );
 
   }
 
 
+  /*
+   * 第二階段：所有 list points
+   * 不再依賴 events metadata。
+   */
+
   for(
     const item
-    of (
-      dataSets.stamp
-      ||
-      []
-    )
+    of dataSets.stamp
+    ||
+    []
   ){
 
-    const event=
-      ensure(
+    const key=
+      getCanonicalActivityKey(
         item
       );
 
-    const existing=
-      event.items.some(
-        x =>
-          getItemId(x)
-          ===
-          getItemId(item)
+    const event=
+      createEvent(
+        key,
+        item
       );
 
+    mergeMeta(
+      event,
+      item
+    );
+
+
     if(
-      !existing
+      !event.items.some(
+        existing =>
+          getItemId(
+            existing
+          )
+          ===
+          getItemId(
+            item
+          )
+      )
     ){
 
       event.items.push(
@@ -3826,22 +3702,17 @@ function getStampEvents(){
 
     }
 
-    if(
-      Number.isFinite(
-        Number(
-          item.expectedStamps
-        )
-      )
-    ){
-
-      event.expectedStamps=
-        Number(
-          item.expectedStamps
-        );
-
-    }
-
   }
+
+
+  /*
+   * 第三階段：
+   * 再次用 eventId / 活動標題做第二層融合，
+   * 防止舊資料的 sourceUrl 缺失造成同活動拆開。
+   */
+
+  const merged=
+    new Map();
 
 
   for(
@@ -3849,20 +3720,93 @@ function getStampEvents(){
     of map.values()
   ){
 
+    const rawTitle=
+      normalizeKey(
+        cleanActivityTitle(
+          event.eventZh
+          ||
+          event.event
+          ||
+          ""
+        )
+      );
+
+
+    let key=
+      rawTitle
+      ?
+      "title:"+rawTitle
+      :
+      "event:"+normalizeKey(
+        event.eventId
+      );
+
+
     if(
-      !Number.isFinite(
-        Number(
-          event.expectedStamps
+      rawTitle.includes(
+        normalizeKey(
+          "PokéXciting"
         )
       )
-      ||
-      Number(
-        event.expectedStamps
-      )<=0
     ){
 
-      event.expectedStamps=
-        event.items.length;
+      key=
+        "title:pokexciting-2026";
+
+    }
+
+
+    if(
+      !merged.has(
+        key
+      )
+    ){
+
+      merged.set(
+        key,
+        event
+      );
+
+      continue;
+
+    }
+
+
+    const target=
+      merged.get(
+        key
+      );
+
+
+    mergeMeta(
+      target,
+      event
+    );
+
+
+    for(
+      const item
+      of event.items
+    ){
+
+      if(
+        !target.items.some(
+          existing =>
+            getItemId(
+              existing
+            )
+            ===
+            getItemId(
+              item
+            )
+        )
+      ){
+
+        target.items.push(
+          item
+        );
+
+      }
 
     }
 
@@ -3870,18 +3814,18 @@ function getStampEvents(){
 
 
   return[
-    ...map.values()
+    ...merged.values()
   ]
   .filter(
-    x =>
-      x.items.length
+    event =>
+      event.items.length
       ||
-      x.startDate
+      event.startDate
       ||
-      x.endDate
+      event.endDate
   )
   .sort(
-    (a,b)=>
+    (a,b) =>
       (
         a.startDate
         ||
@@ -3898,18 +3842,8 @@ function getStampEvents(){
 
 
 /* =========================================================
-   IMAGE
+   CENTER
 ========================================================= */
-
-function normalizeCenterName(
-  value
-){
-
-  return normalizeOverrideKey(
-    value
-  );
-
-}
 
 function findCenterRecord(
   item
@@ -3925,34 +3859,36 @@ function findCenterRecord(
   ]
   .filter(Boolean)
   .map(
-    normalizeCenterName
+    normalizeKey
   );
+
 
   for(
     const candidate
     of candidates
   ){
 
-    const found=
+    const record=
       (
         dataSets.center
         ||
         []
       )
       .find(
-        record => {
+        center => {
 
           const names=[
-            record?.name,
-            record?.title,
-            record?.venue,
-            record?.nameZh,
-            record?.venueZh,
-            record?.centerName
+            center?.name,
+            center?.title,
+            center?.venue,
+            center?.nameZh,
+            center?.venueZh,
+            center?.centerName,
+            center?.centerNameZh
           ]
           .filter(Boolean)
           .map(
-            normalizeCenterName
+            normalizeKey
           );
 
           return names.some(
@@ -3973,15 +3909,46 @@ function findCenterRecord(
         }
       );
 
-    if(found){
 
-      return found;
+    if(record){
+
+      return record;
 
     }
 
   }
 
   return null;
+
+}
+
+function isPokemonGoLab(
+  item
+){
+
+  const text=[
+    item?.name,
+    item?.venue,
+    item?.nameZh,
+    item?.venueZh,
+    item?.centerName,
+    item?.centerNameZh
+  ]
+  .filter(Boolean)
+  .join(" ")
+  .toLowerCase();
+
+  return(
+    text.includes("pokemon go lab")
+    ||
+    text.includes("pokémon go lab")
+    ||
+    text.includes("pokemon go lab.")
+    ||
+    text.includes("ポケモンgo lab")
+    ||
+    text.includes("pokémon go lab")
+  );
 
 }
 
@@ -4016,38 +3983,21 @@ function getItemImageUrl(
   }
 
 
-  const names=[
-    item?.nameZh,
-    item?.venueZh,
-    item?.name,
-    item?.venue,
-    item?.centerNameZh,
-    item?.centerName
-  ]
-  .filter(Boolean)
-  .map(String);
-
-
-  const isCenter=
-    String(
-      item?.venueType
-      ||
-      ""
-    )
-    ===
-    "pokemon_center"
-    ||
-    names.some(
-      x =>
-        x.includes("寶可夢中心")
-        ||
-        x.toLowerCase().includes("pokemon center")
-        ||
-        x.includes("ポケモンセンター")
+  const center=
+    findCenterRecord(
+      item
     );
 
 
-  if(isCenter){
+  if(
+    isPokemonGoLab(
+      item
+    )
+  ){
+
+    /*
+     * 先使用人工／同步器提供的 badge。
+     */
 
     if(
       item?.centerBadgeImage
@@ -4058,57 +4008,109 @@ function getItemImageUrl(
     }
 
 
-    const center=
-      findCenterRecord(
-        item
-      );
-
-
-    const centerImage=
+    const labImage=
+      center?.pokemonGoLabBadge
+      ||
+      center?.pokemonGoLabIcon
+      ||
+      center?.labBadge
+      ||
+      center?.labIcon
+      ||
       center?.pokemonCenterBadge
       ||
       center?.pokemonCenterIcon
       ||
-      center?.centerBadge
-      ||
-      center?.centerIcon
-      ||
-      center?.badge
-      ||
-      center?.logo
-      ||
       "";
 
 
-    if(centerImage){
+    if(
+      labImage
+    ){
 
-      return centerImage;
+      return labImage;
 
     }
 
 
-    for(
-      const [
-        name,
-        url
-      ]
-      of Object.entries(
-        OFFICIAL_CENTER_BADGES
+    /*
+     * 最後 fallback。
+     * 第一個實際圖檔若日後被官方移除，
+     * 第二個 fallback 仍能保持顯示。
+     */
+
+    return(
+      POKEMON_GO_LAB_BADGES[0]
+      ||
+      POKEMON_GO_LAB_BADGES[1]
+      ||
+      ""
+    );
+
+  }
+
+
+  const image=
+    center?.pokemonCenterBadge
+    ||
+    center?.pokemonCenterIcon
+    ||
+    center?.centerBadge
+    ||
+    center?.centerIcon
+    ||
+    center?.badge
+    ||
+    center?.logo
+    ||
+    item?.centerBadgeImage
+    ||
+    "";
+
+
+  if(image){
+
+    return image;
+
+  }
+
+
+  const names=[
+    item?.name,
+    item?.venue,
+    item?.nameZh,
+    item?.venueZh,
+    item?.centerName,
+    item?.centerNameZh
+  ]
+  .filter(Boolean);
+
+
+  for(
+    const [
+      centerName,
+      imageUrl
+    ]
+    of Object.entries(
+      OFFICIAL_CENTER_BADGES
+    )
+  ){
+
+    const key=
+      normalizeKey(
+        centerName
+      );
+
+    if(
+      names.some(
+        name =>
+          normalizeKey(
+            name
+          )===key
       )
     ){
 
-      if(
-        names.some(
-          x =>
-            normalizeCenterName(x)
-            ===
-            normalizeCenterName(name)
-        )
-      ){
-
-        return url;
-
-      }
+      return imageUrl;
 
     }
 
@@ -4125,7 +4127,7 @@ function getItemImageUrl(
 
 
 /* =========================================================
-   COORDINATES
+   COORDINATE
 ========================================================= */
 
 function getKnownCoordinate(
@@ -4147,9 +4149,10 @@ function getKnownCoordinate(
   ){
 
     const key=
-      normalizeOverrideKey(
+      normalizeKey(
         name
       );
+
 
     for(
       const [
@@ -4162,7 +4165,7 @@ function getKnownCoordinate(
     ){
 
       if(
-        normalizeOverrideKey(
+        normalizeKey(
           knownName
         )
         ===
@@ -4292,15 +4295,13 @@ function updateOverall(){
     collectionType==="stamp"
   ){
 
-    const events=
-      getStampEvents();
-
     let total=0;
     let obtained=0;
 
+
     for(
       const event
-      of events
+      of getStampEvents()
     ){
 
       const items=
@@ -4308,14 +4309,18 @@ function updateOverall(){
         ||
         [];
 
-      const count=
+
+      const eventTotal=
         Number(
           event.expectedStamps
         )
         ||
         items.length;
 
-      total+=count;
+
+      total+=
+        eventTotal;
+
 
       obtained+=
         items.filter(
@@ -4344,19 +4349,20 @@ function updateOverall(){
   }
 
 
-  const items=
+  const list=
     dataSets.lid
     ||
     [];
 
+
   const obtained=
-    items.filter(
+    list.filter(
       item =>
         obtainedIds.lid.has(
           getItemId(item)
         )
-    )
-    .length;
+    ).length;
+
 
   document.getElementById(
     "totalObtained"
@@ -4366,13 +4372,13 @@ function updateOverall(){
   document.getElementById(
     "totalCount"
   ).textContent=
-    items.length;
+    list.length;
 
 }
 
 
 /* =========================================================
-   RENDER REGIONS
+   REGIONS
 ========================================================= */
 
 function renderRegions(){
@@ -4381,6 +4387,9 @@ function renderRegions(){
     document.getElementById(
       "regions"
     );
+
+
+  el.innerHTML="";
 
 
   if(
@@ -4396,9 +4405,6 @@ function renderRegions(){
   }
 
 
-  el.innerHTML="";
-
-
   for(
     const [
       regionName,
@@ -4410,12 +4416,7 @@ function renderRegions(){
   ){
 
     const items=
-      (
-        dataSets.lid
-        ||
-        []
-      )
-      .filter(
+      dataSets.lid.filter(
         item =>
           region.prefs.includes(
             Number(
@@ -4431,8 +4432,7 @@ function renderRegions(){
           obtainedIds.lid.has(
             getItemId(item)
           )
-      )
-      .length;
+      ).length;
 
 
     const total=
@@ -4443,21 +4443,44 @@ function renderRegions(){
       total
       ?
       Math.round(
-        obtained
-        /
-        total
-        *
+        obtained/
+        total*
         100
       )
       :
       0;
 
 
-    const sample=
+    const images=
       items.slice(
         0,
         3
-      );
+      )
+      .map(
+        item => {
+
+          const image=
+            getItemImageUrl(
+              "lid",
+              item
+            );
+
+          return image
+            ?
+            `
+              <img
+                class="region-image"
+                src="${escapeHtml(image)}"
+                alt=""
+                loading="lazy"
+              >
+            `
+            :
+            "";
+
+        }
+      )
+      .join("");
 
 
     const card=
@@ -4476,52 +4499,6 @@ function renderRegions(){
         );
 
 
-    const images=
-      sample
-      .map(
-        item => {
-
-          const url=
-            getItemImageUrl(
-              "lid",
-              item
-            );
-
-          return url
-            ?
-            `
-              <img
-                class="region-image"
-                src="${escapeHtml(url)}"
-                alt=""
-                loading="lazy"
-              >
-            `
-            :
-            "";
-
-        }
-      )
-      .join("");
-
-
-    const complete=
-      total>0
-      &&
-      obtained>=total
-      ?
-      `
-        <div
-          class="collection-complete-stamp"
-        >
-          完成
-          <small>COMPLETE</small>
-        </div>
-      `
-      :
-      "";
-
-
     card.innerHTML=`
 
       <div class="region-images">
@@ -4529,14 +4506,8 @@ function renderRegions(){
         ${
           images
           ||
-          `
-            <div class="region-empty">
-              尚無資料
-            </div>
-          `
+          `<div class="region-empty">尚無資料</div>`
         }
-
-        ${complete}
 
       </div>
 
@@ -4570,7 +4541,7 @@ function renderRegions(){
 
 
 /* =========================================================
-   STAMP EVENTS RENDER
+   STAMP EVENTS UI
 ========================================================= */
 
 function renderStampEvents(
@@ -4601,9 +4572,6 @@ function renderStampEvents(
   }
 
 
-  el.innerHTML="";
-
-
   for(
     const event
     of events
@@ -4621,8 +4589,7 @@ function renderStampEvents(
           obtainedIds.stamp.has(
             getItemId(item)
           )
-      )
-      .length;
+      ).length;
 
 
     const total=
@@ -4637,10 +4604,8 @@ function renderStampEvents(
       total
       ?
       Math.round(
-        obtained
-        /
-        total
-        *
+        obtained/
+        total*
         100
       )
       :
@@ -4679,9 +4644,7 @@ function renderStampEvents(
       obtained>=total
       ?
       `
-        <div
-          class="collection-complete-stamp"
-        >
+        <div class="collection-complete-stamp">
           完成
           <small>COMPLETE</small>
         </div>
@@ -4709,9 +4672,7 @@ function renderStampEvents(
 
     card.innerHTML=`
 
-      <div
-        class="region-images stamp-event-banner-wrap"
-      >
+      <div class="region-images stamp-event-banner-wrap">
 
         ${
           banner
@@ -4720,15 +4681,13 @@ function renderStampEvents(
 
           `
             <img
-              src="${escapeHtml(
-                banner
-              )}"
               class="stamp-event-banner"
+              src="${escapeHtml(banner)}"
               alt=""
               loading="lazy"
               onerror="
                 this.style.display='none';
-                if(this.nextElementSibling)this.nextElementSibling.style.display='flex';
+                this.nextElementSibling.style.display='flex';
               "
             >
 
@@ -4736,7 +4695,6 @@ function renderStampEvents(
               class="stamp-event-banner-fallback"
               style="display:none"
             >
-
               ${escapeHtml(
                 event.eventZh
                 ||
@@ -4744,7 +4702,6 @@ function renderStampEvents(
                 ||
                 "GO 集章趣"
               )}
-
             </div>
           `
 
@@ -4752,7 +4709,6 @@ function renderStampEvents(
 
           `
             <div class="stamp-event-banner-fallback">
-
               ${escapeHtml(
                 event.eventZh
                 ||
@@ -4760,7 +4716,6 @@ function renderStampEvents(
                 ||
                 "GO 集章趣"
               )}
-
             </div>
           `
         }
@@ -4772,16 +4727,8 @@ function renderStampEvents(
           ?
 
           `
-            <div
-              class="
-                stamp-event-status-overlay
-              "
-            >
-
-              ${escapeHtml(
-                status
-              )}
-
+            <div class="stamp-event-status-overlay">
+              ${escapeHtml(status)}
             </div>
           `
 
@@ -4827,11 +4774,7 @@ function renderStampEvents(
         <span
           class="stamp-event-live-status ${statusClass}"
         >
-
-          ${escapeHtml(
-            status
-          )}
-
+          ${escapeHtml(status)}
         </span>
 
 
@@ -4846,34 +4789,15 @@ function renderStampEvents(
         </div>
 
 
-        ${
-          total
-          &&
-          items.length<total
-
-          ?
-
-          `
-            <div class="stamp-event-data-note">
-
-              目前已取得
-              ${items.length}
-              /
-              ${total}
-              個集章點資料
-
-            </div>
-          `
-
-          :
-
-          ""
-        }
-
-
         <div class="region-percent">
 
-          ${total ? `完成率 ${percent}%` : "資料待官方公布"}
+          ${
+            total
+            ?
+            `完成率 ${percent}%`
+            :
+            "資料待官方公布"
+          }
 
         </div>
 
@@ -4892,7 +4816,7 @@ function renderStampEvents(
 
 
 /* =========================================================
-   LID PANELS
+   LID NAVIGATION
 ========================================================= */
 
 function openRegion(
@@ -4907,10 +4831,14 @@ function openRegion(
   ).textContent=
     regionName;
 
-  renderPrefectureSummary();
-
   renderPrefectureGrid();
 
+  document.getElementById(
+    "prefectureSummary"
+  ).textContent=
+    getRegionSummary(
+      regionName
+    );
 
   document.getElementById(
     "prefecturePanel"
@@ -4924,17 +4852,13 @@ function openRegion(
 
 }
 
-function renderPrefectureSummary(){
-
-  if(!currentRegion){
-
-    return;
-
-  }
+function getRegionSummary(
+  regionName
+){
 
   const region=
     REGIONS[
-      currentRegion
+      regionName
     ];
 
   const items=
@@ -4955,10 +4879,9 @@ function renderPrefectureSummary(){
         )
     ).length;
 
-  document.getElementById(
-    "prefectureSummary"
-  ).textContent=
-    `已收集 ${obtained} / ${items.length}`;
+  return(
+    `已收集 ${obtained} / ${items.length}`
+  );
 
 }
 
@@ -4969,21 +4892,26 @@ function renderPrefectureGrid(){
       "prefectureGrid"
     );
 
+
+  el.innerHTML="";
+
+
   const region=
     REGIONS[
       currentRegion
     ];
 
-  el.innerHTML="";
-
 
   for(
-    const prefCode
+    const code
     of region.prefs
   ){
 
-    const prefName=
-      PREF[prefCode];
+    const name=
+      PREF[
+        code
+      ];
+
 
     const items=
       dataSets.lid.filter(
@@ -4992,14 +4920,16 @@ function renderPrefectureGrid(){
             item.__prefCode
           )
           ===
-          Number(prefCode)
+          code
       );
+
 
     if(!items.length){
 
       continue;
 
     }
+
 
     const obtained=
       items.filter(
@@ -5009,8 +4939,10 @@ function renderPrefectureGrid(){
           )
       ).length;
 
+
     const total=
       items.length;
+
 
     const percent=
       total
@@ -5029,33 +4961,31 @@ function renderPrefectureGrid(){
         "div"
       );
 
+
     card.className=
       "prefecture-card";
 
+
     card.onclick=
       () =>
-        openPrefectureCollection(
-          prefName
+        openPrefecture(
+          name
         );
+
 
     card.innerHTML=`
 
       <div class="prefecture-card-top">
 
         <div class="prefecture-name">
-
-          ${escapeHtml(prefName)}
-
+          ${escapeHtml(name)}
         </div>
 
         <div class="prefecture-count">
-
           ${obtained}/${total}
-
         </div>
 
       </div>
-
 
       <div class="prefecture-progress">
 
@@ -5066,11 +4996,8 @@ function renderPrefectureGrid(){
 
       </div>
 
-
       <div class="prefecture-percent">
-
         完成率 ${percent}%
-
       </div>
 
     `;
@@ -5084,12 +5011,16 @@ function renderPrefectureGrid(){
 
 }
 
-function openPrefectureCollection(
+function openPrefecture(
   prefName
 ){
 
   currentPrefecture=
     prefName;
+
+  currentStampEventId=
+    null;
+
 
   currentCollectionItems=
     groups.lid[
@@ -5098,19 +5029,23 @@ function openPrefectureCollection(
     ||
     [];
 
+
   document.getElementById(
     "collectionTitle"
   ).textContent=
     prefName;
 
-  document.querySelector(
-    ".back-btn"
+
+  document.getElementById(
+    "collectionBackBtn"
   ).textContent=
     "← 返回縣列表";
+
 
   renderCollectionSummary();
 
   renderCollectionGrid();
+
 
   document.getElementById(
     "collectionPanel"
@@ -5118,26 +5053,58 @@ function openPrefectureCollection(
     "show"
   );
 
-  document.body.classList.add(
-    "no-scroll"
-  );
-
 }
 
 function renderCollectionSummary(){
 
+  const type=
+    currentStampEventId
+    ?
+    "stamp"
+    :
+    "lid";
+
+
   const obtained=
     currentCollectionItems.filter(
       item =>
-        obtainedIds.lid.has(
+        obtainedIds[type].has(
           getItemId(item)
         )
     ).length;
 
+
+  let total=
+    currentCollectionItems.length;
+
+
+  if(
+    currentStampEventId
+  ){
+
+    const event=
+      getStampEvents().find(
+        x =>
+          String(x.id)
+          ===
+          String(currentStampEventId)
+      );
+
+
+    total=
+      Number(
+        event?.expectedStamps
+      )
+      ||
+      currentCollectionItems.length;
+
+  }
+
+
   document.getElementById(
     "collectionSummary"
   ).textContent=
-    `已收集 ${obtained} / ${currentCollectionItems.length}`;
+    `已收集 ${obtained} / ${total}`;
 
 }
 
@@ -5153,19 +5120,25 @@ function openStampEvent(
         String(eventId)
     );
 
+
   if(!event){
 
     return;
 
   }
 
+
   currentStampEventId=
     event.id;
+
+  currentPrefecture=
+    null;
 
   currentCollectionItems=
     event.items
     ||
     [];
+
 
   document.getElementById(
     "collectionTitle"
@@ -5174,14 +5147,17 @@ function openStampEvent(
     ||
     event.event;
 
-  document.querySelector(
-    ".back-btn"
+
+  document.getElementById(
+    "collectionBackBtn"
   ).textContent=
     "← 返回活動列表";
 
-  updateStampSummary();
+
+  renderCollectionSummary();
 
   renderCollectionGrid();
+
 
   document.getElementById(
     "collectionPanel"
@@ -5189,68 +5165,28 @@ function openStampEvent(
     "show"
   );
 
-  document.body.classList.add(
-    "no-scroll"
-  );
-
 }
 
-function updateStampSummary(){
+function backFromCollection(){
 
-  const event=
-    getStampEvents().find(
-      x =>
-        String(x.id)
-        ===
-        String(currentStampEventId)
-    );
+  if(
+    currentStampEventId
+  ){
 
-  if(!event){
+    closeCollectionPanel();
 
     return;
 
   }
 
-  currentCollectionItems=
-    event.items
-    ||
-    [];
-
-  const obtained=
-    currentCollectionItems.filter(
-      item =>
-        obtainedIds.stamp.has(
-          getItemId(item)
-        )
-    ).length;
-
-  const total=
-    Number(
-      event.expectedStamps
-    )
-    ||
-    currentCollectionItems.length;
 
   document.getElementById(
-    "collectionSummary"
-  ).textContent=
-
-    total
-
-    ?
-
-    `已收集 ${obtained} / ${total}`
-
-    :
-
-    "官方集章點資料尚待公布";
+    "collectionPanel"
+  ).classList.remove(
+    "show"
+  );
 
 }
-
-
-/* =========================================================
-   COLLECTION GRID
-========================================================= */
 
 function renderCollectionGrid(){
 
@@ -5259,42 +5195,22 @@ function renderCollectionGrid(){
       "collectionGrid"
     );
 
+
   el.innerHTML="";
 
 
-  if(
-    !currentCollectionItems.length
-  ){
-
-    el.innerHTML=`
-
-      <div
-        class="loading"
-        style="grid-column:1/-1"
-      >
-
-        目前沒有可顯示的集章點。
-
-      </div>
-
-    `;
-
-    return;
-
-  }
+  const type=
+    currentStampEventId
+    ?
+    "stamp"
+    :
+    "lid";
 
 
   for(
     const item
     of currentCollectionItems
   ){
-
-    const type=
-      currentStampEventId
-      ?
-      "stamp"
-      :
-      "lid";
 
     const obtained=
       obtainedIds[type].has(
@@ -5336,7 +5252,7 @@ function renderCollectionGrid(){
 
     card.onclick=
       () =>
-        openModalFromItem(
+        openItemModal(
           item,
           type
         );
@@ -5348,9 +5264,7 @@ function renderCollectionGrid(){
 
         ${
           image
-
           ?
-
           `
             <img
               class="collection-image"
@@ -5359,28 +5273,19 @@ function renderCollectionGrid(){
               loading="lazy"
             >
           `
-
           :
-
-          `
-            <span class="muted">
-              尚無圖片
-            </span>
-          `
+          `<span class="muted">尚無圖片</span>`
         }
 
       </div>
 
 
       <div class="collection-city">
-
         ${escapeHtml(title)}
-
       </div>
 
 
       <div class="collection-status">
-
         ${
           obtained
           ?
@@ -5388,7 +5293,6 @@ function renderCollectionGrid(){
           :
           "● 未收集"
         }
-
       </div>
 
 
@@ -5401,7 +5305,7 @@ function renderCollectionGrid(){
           type="checkbox"
           ${obtained?"checked":""}
           onchange="
-            toggleObtainedByItemId(
+            toggleObtainedById(
               event,
               '${escapeJs(getItemId(item))}',
               '${type}'
@@ -5409,9 +5313,7 @@ function renderCollectionGrid(){
           "
         >
 
-        <span>
-          已獲得
-        </span>
+        <span>已獲得</span>
 
       </label>
 
@@ -5431,23 +5333,20 @@ function renderCollectionGrid(){
    OBTAINED
 ========================================================= */
 
-function toggleObtainedByItemId(
+function toggleObtainedById(
   event,
   itemId,
   type
 ){
 
-  if(event){
+  event.stopPropagation();
 
-    event.stopPropagation();
 
-  }
-
-  const value=
+  const checked=
     !!event.target.checked;
 
 
-  if(value){
+  if(checked){
 
     obtainedIds[type].add(
       String(itemId)
@@ -5461,15 +5360,17 @@ function toggleObtainedByItemId(
 
   }
 
+
   saveLocalCollection(
     type
   );
 
-  refreshCollectionUI();
+
+  refreshUI();
 
 }
 
-function refreshCollectionUI(){
+function refreshUI(){
 
   updateOverall();
 
@@ -5480,7 +5381,13 @@ function refreshCollectionUI(){
     currentRegion
   ){
 
-    renderPrefectureSummary();
+    document.getElementById(
+      "prefectureSummary"
+    ).textContent=
+      getRegionSummary(
+        currentRegion
+      );
+
     renderPrefectureGrid();
 
   }
@@ -5490,23 +5397,72 @@ function refreshCollectionUI(){
     currentCollectionItems.length
   ){
 
-    if(
-      currentStampEventId
-    ){
-
-      updateStampSummary();
-
-    }else{
-
-      renderCollectionSummary();
-
-    }
+    renderCollectionSummary();
 
     renderCollectionGrid();
 
   }
 
+
   updateModalObtained();
+
+}
+
+function toggleObtained(){
+
+  if(!currentItem){
+
+    return;
+
+  }
+
+
+  const type=
+    currentItemType;
+
+  const id=
+    getItemId(
+      currentItem
+    );
+
+
+  const checked=
+    document.getElementById(
+      "obtainedCheckbox"
+    ).checked;
+
+
+  if(checked){
+
+    obtainedIds[type].add(
+      id
+    );
+
+  }else{
+
+    obtainedIds[type].delete(
+      id
+    );
+
+  }
+
+
+  saveLocalCollection(
+    type
+  );
+
+
+  refreshUI();
+
+
+  document.getElementById(
+    "saveStatus"
+  ).textContent=
+    checked
+    ?
+    "✓ 已獲得"
+    :
+    "已取消";
 
 }
 
@@ -5515,7 +5471,7 @@ function refreshCollectionUI(){
    MODAL
 ========================================================= */
 
-function openModalFromItem(
+function openItemModal(
   item,
   type
 ){
@@ -5554,6 +5510,7 @@ function openModalFromItem(
     ||
     "";
 
+
   img.style.display=
     image
     ?
@@ -5575,25 +5532,15 @@ function openModalFromItem(
   document.getElementById(
     "modalPref"
   ).textContent=
-    type==="lid"
-    ?
-    (
-      PREF[
-        item.__prefCode
-      ]
-      ||
-      ""
-    )
-    :
-    (
-      item.cityZh
-      ||
-      item.city
-      ||
-      item.pref
-      ||
-      ""
-    );
+    PREF[item?.__prefCode]
+    ||
+    item?.pref
+    ||
+    item?.cityZh
+    ||
+    item?.city
+    ||
+    "";
 
 
   document.getElementById(
@@ -5608,15 +5555,11 @@ function openModalFromItem(
   document.getElementById(
     "modalAddress"
   ).textContent=
-    item.addressZh
+    item?.addressZh
     ||
-    item.address
+    item?.address
     ||
-    item.location
-    ||
-    item.venueZh
-    ||
-    item.venue
+    item?.location
     ||
     "";
 
@@ -5633,7 +5576,7 @@ function openModalFromItem(
     "無座標資料";
 
 
-  const details=
+  const detail=
     document.getElementById(
       "stampDetails"
     );
@@ -5643,35 +5586,62 @@ function openModalFromItem(
     type==="stamp"
   ){
 
-    const eventName=
-      item.eventZh
-      ||
-      item.eventNameZh
-      ||
-      item.event
-      ||
-      "GO 集章趣";
+    const event=
+      getStampEvents().find(
+        e =>
+          String(e.id)
+          ===
+          String(item.eventId)
+      );
 
 
-    details.innerHTML=`
+    detail.style.display=
+      "block";
 
-      <div class="stamp-event">
 
-        🎟️ ${escapeHtml(eventName)}
+    detail.innerHTML=`
 
+      <div
+        style="
+          margin-top:8px;
+          color:#397b83;
+          font-size:13px;
+          font-weight:900;
+        "
+      >
+        🎟️ ${escapeHtml(
+          item.eventZh
+          ||
+          item.eventNameZh
+          ||
+          item.event
+          ||
+          event?.eventZh
+          ||
+          "GO 集章趣"
+        )}
       </div>
 
-
       ${
-        item.venueZh
+        event
 
         ?
 
         `
           <div
-            style="margin-top:5px;color:#4d858c;font-size:13px;font-weight:800"
+            style="
+              margin-top:5px;
+              color:#6f8f94;
+              font-size:12px;
+            "
           >
-            📍 ${escapeHtml(item.venueZh)}
+            ${
+              escapeHtml(
+                getStampEventDateText(
+                  event
+                )
+              )
+            }
           </div>
         `
 
@@ -5680,37 +5650,11 @@ function openModalFromItem(
         ""
       }
 
-
-      <span
-        class="stamp-status"
-        style="
-          display:inline-block;
-          margin-top:8px;
-          padding:4px 9px;
-          border-radius:999px;
-          background:#edf5f5;
-          color:#397b83;
-          font-size:11px;
-          font-weight:900;
-        "
-      >
-
-        ${escapeHtml(
-          getStampEventStatus(
-            item
-          )
-        )}
-
-      </span>
-
     `;
-
-    details.style.display=
-      "block";
 
   }else{
 
-    details.style.display=
+    detail.style.display=
       "none";
 
   }
@@ -5725,10 +5669,6 @@ function openModalFromItem(
     "show"
   );
 
-  document.body.classList.add(
-    "no-scroll"
-  );
-
 }
 
 function updateModalObtained(){
@@ -5738,6 +5678,7 @@ function updateModalObtained(){
     return;
 
   }
+
 
   document.getElementById(
     "obtainedCheckbox"
@@ -5751,65 +5692,6 @@ function updateModalObtained(){
     );
 
 }
-
-function toggleObtained(){
-
-  if(!currentItem){
-
-    return;
-
-  }
-
-  const type=
-    currentItemType;
-
-  const id=
-    getItemId(
-      currentItem
-    );
-
-  const checked=
-    document.getElementById(
-      "obtainedCheckbox"
-    ).checked;
-
-
-  if(checked){
-
-    obtainedIds[type].add(
-      id
-    );
-
-  }else{
-
-    obtainedIds[type].delete(
-      id
-    );
-
-  }
-
-  saveLocalCollection(
-    type
-  );
-
-  document.getElementById(
-    "saveStatus"
-  ).textContent=
-    checked
-    ?
-    "✓ 已獲得"
-    :
-    "已取消";
-
-
-  refreshCollectionUI();
-
-}
-
-
-/* =========================================================
-   CLOSE
-========================================================= */
 
 function closeModal(){
 
@@ -5839,19 +5721,17 @@ function overlayClick(
 
 }
 
+
+/* =========================================================
+   PANEL CLOSE
+========================================================= */
+
 function closePrefecturePanel(){
 
   document.getElementById(
     "prefecturePanel"
   ).classList.remove(
     "show"
-  );
-
-  currentRegion=
-    null;
-
-  document.body.classList.remove(
-    "no-scroll"
   );
 
 }
@@ -5882,17 +5762,13 @@ function closeCollectionPanel(){
     "show"
   );
 
-  currentPrefecture=
-    null;
-
   currentStampEventId=
     null;
 
-  currentCollectionItems=[];
+  currentPrefecture=
+    null;
 
-  document.body.classList.remove(
-    "no-scroll"
-  );
+  currentCollectionItems=[];
 
 }
 
@@ -5914,41 +5790,6 @@ function collectionOverlayClick(
 
 }
 
-function backToPrefectureList(){
-
-  if(
-    currentStampEventId
-  ){
-
-    closeCollectionPanel();
-
-    renderRegions();
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "collectionPanel"
-  ).classList.remove(
-    "show"
-  );
-
-
-  document.getElementById(
-    "prefecturePanel"
-  ).classList.add(
-    "show"
-  );
-
-  currentPrefecture=
-    null;
-
-  currentCollectionItems=[];
-
-}
-
 
 /* =========================================================
    MAP
@@ -5958,13 +5799,15 @@ function openAppleMaps(
   event
 ){
 
-  if(event){
-    event.stopPropagation();
-  }
+  event.stopPropagation();
+
 
   if(!currentItem){
+
     return;
+
   }
+
 
   const {
     lat,
@@ -5987,11 +5830,7 @@ function openAppleMaps(
 
 
   window.open(
-    "https://maps.apple.com/?daddr="
-    +
-    encodeURIComponent(
-      `${lat},${lng}`
-    ),
+    `https://maps.apple.com/?daddr=${encodeURIComponent(`${lat},${lng}`)}`,
     "_blank",
     "noopener"
   );
@@ -6002,13 +5841,15 @@ function openGoogleMaps(
   event
 ){
 
-  if(event){
-    event.stopPropagation();
-  }
+  event.stopPropagation();
+
 
   if(!currentItem){
+
     return;
+
   }
+
 
   const {
     lat,
@@ -6031,11 +5872,7 @@ function openGoogleMaps(
 
 
   window.open(
-    "https://www.google.com/maps/dir/?api=1&destination="
-    +
-    encodeURIComponent(
-      `${lat},${lng}`
-    ),
+    `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${lat},${lng}`)}`,
     "_blank",
     "noopener"
   );
@@ -6046,9 +5883,8 @@ async function copyCoordinate(
   event
 ){
 
-  if(event){
-    event.stopPropagation();
-  }
+  event.stopPropagation();
+
 
   const text=
     document.getElementById(
@@ -6075,19 +5911,19 @@ async function copyCoordinate(
 
   }catch{
 
-    const ta=
+    const textarea=
       document.createElement(
         "textarea"
       );
 
-    ta.value=
+    textarea.value=
       text;
 
     document.body.appendChild(
-      ta
+      textarea
     );
 
-    ta.select();
+    textarea.select();
 
     try{
       document.execCommand(
@@ -6095,7 +5931,7 @@ async function copyCoordinate(
       );
     }catch{}
 
-    ta.remove();
+    textarea.remove();
 
   }
 
@@ -6110,18 +5946,16 @@ function sanitizeFilename(
   value
 ){
 
-  return(
-    String(
-      value ?? ""
-    )
-    .replace(
-      /[\\/:*?"<>|]/g,
-      "_"
-    )
-    .trim()
-    ||
-    "download"
-  );
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /[\\/:*?"<>|]/g,
+    "_"
+  )
+  .trim()
+  ||
+  "download";
 
 }
 
@@ -6135,32 +5969,240 @@ function downloadBlob(
       blob
     );
 
+
   const a=
     document.createElement(
       "a"
     );
 
+
   a.href=
     url;
 
+
   a.download=
     filename;
+
 
   document.body.appendChild(
     a
   );
 
+
   a.click();
+
 
   a.remove();
 
+
   setTimeout(
-    () =>
+    ()=>{
       URL.revokeObjectURL(
         url
-      ),
+      );
+    },
     1000
   );
+
+}
+
+function getLidDownloadGroups(){
+
+  const output={};
+
+
+  for(
+    const [
+      region,
+      items
+    ]
+    of Object.entries(
+      groups.lid
+    )
+  ){
+
+    output[region]=
+      items.map(
+        item => {
+
+          const {
+            lat,
+            lng
+          }=
+            getItemLatLng(
+              item
+            );
+
+
+          return{
+
+            title:
+              getItemTitle(
+                "lid",
+                item
+              ),
+
+            lat:
+              Number.isFinite(lat)
+              ?
+              String(lat)
+              :
+              "",
+
+            lng:
+              Number.isFinite(lng)
+              ?
+              String(lng)
+              :
+              ""
+
+          };
+
+        }
+      );
+
+  }
+
+
+  return output;
+
+}
+
+function getStampDownloadGroups(){
+
+  const output={};
+
+
+  for(
+    const event
+    of getStampEvents()
+  ){
+
+    /*
+     * 尚未開始不下載。
+     */
+
+    if(
+      getStampEventStatus(
+        event
+      )
+      ===
+      "活動尚未開始"
+    ){
+
+      continue;
+
+    }
+
+
+    const title=
+      String(
+        event.eventZh
+        ||
+        event.event
+        ||
+        "GO 集章趣"
+      ).trim();
+
+
+    output[title]=[];
+
+
+    for(
+      const item
+      of event.items
+      ||
+      []
+    ){
+
+      const {
+        lat,
+        lng
+      }=
+        getItemLatLng(
+          item
+        );
+
+
+      output[title].push({
+
+        title:
+          getItemTitle(
+            "stamp",
+            item
+          ),
+
+        lat:
+          Number.isFinite(lat)
+          ?
+          String(lat)
+          :
+          "",
+
+        lng:
+          Number.isFinite(lng)
+          ?
+          String(lng)
+          :
+          ""
+
+      });
+
+    }
+
+  }
+
+
+  return output;
+
+}
+
+function buildGroupedTxt(
+  groupsObject
+){
+
+  const lines=[];
+
+
+  for(
+    const [
+      group,
+      items
+    ]
+    of Object.entries(
+      groupsObject
+    )
+  ){
+
+    lines.push(
+      `# ===== ${group} (${items.length}) =====`
+    );
+
+
+    for(
+      const item
+      of items
+    ){
+
+      lines.push(
+        item.title
+      );
+
+      lines.push(
+        `${item.lat},${item.lng}`
+      );
+
+      lines.push("");
+
+    }
+
+
+    lines.push("");
+
+  }
+
+
+  return lines.join("\n");
 
 }
 
@@ -6225,8 +6267,7 @@ function buildGroupedCsv(
           value =>
             `"${String(
               value ?? ""
-            )
-            .replaceAll(
+            ).replaceAll(
               '"',
               '""'
             )}"`
@@ -6237,62 +6278,16 @@ function buildGroupedCsv(
 
 }
 
-function buildGroupedTxt(
-  groupsObject
-){
-
-  const lines=[];
-
-
-  for(
-    const [
-      group,
-      items
-    ]
-    of Object.entries(
-      groupsObject
-    )
-  ){
-
-    lines.push(
-      `# ===== ${group} (${items.length}) =====`
-    );
-
-
-    for(
-      const item
-      of items
-    ){
-
-      lines.push(
-        item.title
-      );
-
-      lines.push(
-        `${item.lat},${item.lng}`
-      );
-
-      lines.push("");
-
-    }
-
-    lines.push("");
-
-  }
-
-  return lines.join("\n");
-
-}
-
 function downloadGroupedData(
   groupsObject,
   format,
-  filenameBase
+  baseName
 ){
 
   let content="";
-  let mime="text/plain;charset=utf-8";
-  let ext="txt";
+  let mime=
+    "text/plain;charset=utf-8";
+  let extension="txt";
 
 
   if(
@@ -6307,8 +6302,7 @@ function downloadGroupedData(
     mime=
       "application/json;charset=utf-8";
 
-    ext=
-      "json";
+    extension="json";
 
   }else if(
     format==="csv"
@@ -6324,8 +6318,7 @@ function downloadGroupedData(
     mime=
       "text/csv;charset=utf-8";
 
-    ext=
-      "csv";
+    extension="csv";
 
   }else{
 
@@ -6348,158 +6341,8 @@ function downloadGroupedData(
         type:mime
       }
     ),
-    `${sanitizeFilename(filenameBase)}.${ext}`
+    `${sanitizeFilename(baseName)}.${extension}`
   );
-
-}
-
-function getLidDownloadGroups(){
-
-  const output={};
-
-
-  for(
-    const [
-      region,
-      items
-    ]
-    of Object.entries(
-      groups.lid
-    )
-  ){
-
-    output[region]=
-      items.map(
-        item => {
-
-          const {
-            lat,
-            lng
-          }=
-            getItemLatLng(
-              item
-            );
-
-          return{
-
-            title:
-              getItemTitle(
-                "lid",
-                item
-              ),
-
-            lat:
-              Number.isFinite(lat)
-              ?
-              String(lat)
-              :
-              "",
-
-            lng:
-              Number.isFinite(lng)
-              ?
-              String(lng)
-              :
-              ""
-
-          };
-
-        }
-      );
-
-  }
-
-
-  return output;
-
-}
-
-function getStampDownloadGroups(){
-
-  const output={};
-
-
-  for(
-    const event
-    of getStampEvents()
-  ){
-
-    if(
-      getStampEventStatus(
-        event
-      )
-      ===
-      "活動尚未開始"
-    ){
-
-      continue;
-
-    }
-
-
-    const group=
-      String(
-        event.eventZh
-        ||
-        event.event
-        ||
-        "GO 集章趣"
-      )
-      .trim();
-
-
-    output[group]=
-      [];
-
-
-    for(
-      const item
-      of (
-        event.items
-        ||
-        []
-      )
-    ){
-
-      const {
-        lat,
-        lng
-      }=
-        getItemLatLng(
-          item
-        );
-
-
-      output[group].push({
-
-        title:
-          getItemTitle(
-            "stamp",
-            item
-          ),
-
-        lat:
-          Number.isFinite(lat)
-          ?
-          String(lat)
-          :
-          "",
-
-        lng:
-          Number.isFinite(lng)
-          ?
-          String(lng)
-          :
-          ""
-
-      });
-
-    }
-
-  }
-
-
-  return output;
 
 }
 
@@ -6575,64 +6418,34 @@ function downloadCSV(){
 
 }
 
-function downloadAllStampPoints(
-  format
-){
+function renderMainDownloadBox(){
 
-  downloadGroupedData(
-    getStampDownloadGroups(),
-    format,
-    "go_stamp_all_points"
-  );
-
-}
-
-
-/* =========================================================
-   MAIN DOWNLOAD UI
-========================================================= */
-
-function renderMainDownloads(){
-
-  const box=
-    document.getElementById(
-      "mainDownloadBox"
-    );
-
-
-  box.innerHTML=`
+  document.getElementById(
+    "mainDownloadBox"
+  ).innerHTML=`
 
     <button
       class="download-btn"
       onclick="downloadAll()"
     >
-      ${collectionType==="stamp"
-        ? "🎟️ 所有圖章 TXT"
-        : "🔴 所有圖章 TXT"}
+      TXT
     </button>
-
 
     <button
       class="download-btn"
       onclick="downloadJSON()"
     >
-      ${collectionType==="stamp"
-        ? "🎟️ 所有圖章 JSON"
-        : "🔴 所有圖章 JSON"}
+      JSON
     </button>
-
 
     <button
       class="download-btn"
       onclick="downloadCSV()"
     >
-      ${collectionType==="stamp"
-        ? "🎟️ 所有圖章 CSV"
-        : "🔴 所有圖章 CSV"}
+      CSV
     </button>
 
   `;
-
 
 }
 
@@ -6659,51 +6472,39 @@ async function loadHistoryFile(
         );
 
 
-      let rows=[];
-
-
       if(
         Array.isArray(
           json?.history
         )
       ){
 
-        rows=
-          json.history;
-
-      }else if(
-        Array.isArray(json)
-      ){
-
-        rows=
-          json;
-
-      }else if(
-        Array.isArray(
-          json?.items
-        )
-      ){
-
-        rows=
-          json.items;
+        return json.history.map(
+          row => ({
+            ...row,
+            type
+          })
+        );
 
       }
 
 
-      return rows.map(
-        row =>
-          ({
+      if(
+        Array.isArray(json)
+      ){
+
+        return json.map(
+          row => ({
             ...row,
             type
           })
-      );
+        );
+
+      }
 
     }catch(error){
 
       console.warn(
-        "History fetch failed:",
-        type,
-        url,
+        "history:",
         error
       );
 
@@ -6727,112 +6528,52 @@ async function loadHistory(){
     "讀取中……";
 
 
-  try{
+  const result=
+    await Promise.race([
 
-    const result=
-      await Promise.race([
+      Promise.all([
+        loadHistoryFile("lid"),
+        loadHistoryFile("stamp")
+      ]),
 
-        Promise.all([
-          loadHistoryFile("lid"),
-          loadHistoryFile("stamp")
-        ]),
+      new Promise(
+        resolve =>
+          setTimeout(
+            ()=>{
+              resolve([
+                [],
+                []
+              ]);
+            },
+            8500
+          )
+      )
 
-        new Promise(
-          resolve =>
-            setTimeout(
-              () =>
-                resolve([
-                  [],
-                  []
-                ]),
-              9000
-            )
-        )
-
-      ]);
-
-
-    historyEntries=[
-      ...result[0],
-      ...result[1]
-    ]
-    .sort(
-      (a,b) =>
-        new Date(
-          b.time
-          ||
-          b.updated
-          ||
-          0
-        )
-        -
-        new Date(
-          a.time
-          ||
-          a.updated
-          ||
-          0
-        )
-    );
+    ]);
 
 
-    renderHistory();
-
-  }catch(error){
-
-    console.warn(
-      "History error:",
-      error
-    );
-
-    historyEntries=[];
-
-    el.innerHTML=
-      `<span class="muted">目前沒有更新紀錄。</span>`;
-
-  }
-
-}
-
-function setHistoryFilter(
-  filter
-){
-
-  currentHistoryFilter=
-    filter;
-
-
-  document
-    .getElementById(
-      "historyAll"
-    )
-    .classList
-    .toggle(
-      "active",
-      filter==="all"
-    );
-
-
-  document
-    .getElementById(
-      "historyLid"
-    )
-    .classList
-    .toggle(
-      "active",
-      filter==="lid"
-    );
-
-
-  document
-    .getElementById(
-      "historyStamp"
-    )
-    .classList
-    .toggle(
-      "active",
-      filter==="stamp"
-    );
+  historyEntries=[
+    ...result[0],
+    ...result[1]
+  ]
+  .sort(
+    (a,b)=>
+      new Date(
+        b.time
+        ||
+        b.updated
+        ||
+        0
+      )
+      -
+      new Date(
+        a.time
+        ||
+        a.updated
+        ||
+        0
+      )
+  );
 
 
   renderHistory();
@@ -6847,16 +6588,18 @@ function renderHistory(){
     );
 
 
-  let logs=
+  let rows=
     historyEntries;
 
 
   if(
-    currentHistoryFilter!=="all"
+    currentHistoryFilter
+    !==
+    "all"
   ){
 
-    logs=
-      logs.filter(
+    rows=
+      rows.filter(
         row =>
           row.type
           ===
@@ -6867,7 +6610,7 @@ function renderHistory(){
 
 
   if(
-    !logs.length
+    !rows.length
   ){
 
     el.innerHTML=
@@ -6885,7 +6628,7 @@ function renderHistory(){
 
 
   el.innerHTML=
-    logs
+    rows
     .slice(
       0,
       50
@@ -6906,33 +6649,23 @@ function renderHistory(){
               )}
             </b>
 
-
             <span
-              class="
-                history-type
-                ${row.type}
-              "
+              class="history-type ${row.type}"
             >
-              ${
-                labels[row.type]
-                ||
-                row.type
-              }
+              ${labels[row.type]||row.type}
             </span>
-
 
             <br>
 
-
             <span class="muted">
 
-              ${
+              ${escapeHtml(
                 row.eventZh
                 ||
                 row.event
                 ||
                 ""
-              }
+              )}
 
              　
               ${
@@ -6944,7 +6677,6 @@ function renderHistory(){
               }
 
             </span>
-
 
             <br>
 
@@ -6987,9 +6719,37 @@ function renderHistory(){
 
 }
 
+function setHistoryFilter(
+  filter
+){
+
+  currentHistoryFilter=
+    filter;
+
+
+  [
+    ["historyAll","all"],
+    ["historyLid","lid"],
+    ["historyStamp","stamp"]
+  ].forEach(
+    ([id,value])=>{
+      document.getElementById(
+        id
+      ).classList.toggle(
+        "active",
+        filter===value
+      );
+    }
+  );
+
+
+  renderHistory();
+
+}
+
 
 /* =========================================================
-   SWITCH
+   MAIN SWITCH
 ========================================================= */
 
 function switchCollectionType(
@@ -7036,17 +6796,7 @@ function switchCollectionType(
     "🎟️ GO 集章趣 蒐集進度";
 
 
-  document.getElementById(
-    "stampAllDownloadBox"
-  ).style.display=
-    type==="stamp"
-    ?
-    "flex"
-    :
-    "none";
-
-
-  renderMainDownloads();
+  renderMainDownloadBox();
 
   renderRegions();
 
@@ -7056,13 +6806,12 @@ function switchCollectionType(
 
 
 /* =========================================================
-   ADMIN STATE
+   ADMIN
 ========================================================= */
 
 const adminState={
 
-  type:
-    "stamp",
+  type:"stamp",
 
   events:[],
 
@@ -7082,26 +6831,23 @@ const adminState={
 
   selectedPoint:null,
 
-  screenshot:null,
+  image:null,
+
+  imageUrl:"",
 
   fitScale:1,
 
   zoom:1,
 
-  corners:null,
+  rect:null,
 
-  draggingCorner:null,
+  dragging:null,
 
-  processedBlob:null,
+  cropBlob:null,
 
-  processedDataUrl:""
+  cropDataUrl:""
 
 };
-
-
-/* =========================================================
-   ADMIN OPEN
-========================================================= */
 
 function openAdminPanel(){
 
@@ -7114,7 +6860,6 @@ function openAdminPanel(){
   document.body.classList.add(
     "no-scroll"
   );
-
 
   if(
     !adminState.list.length
@@ -7141,7 +6886,6 @@ function closeAdminPanel(
   ).classList.remove(
     "show"
   );
-
 
   document.body.classList.remove(
     "no-scroll"
@@ -7196,7 +6940,6 @@ function adminHeaders(){
 
 }
 
-
 function adminRepo(){
 
   return document.getElementById(
@@ -7205,17 +6948,17 @@ function adminRepo(){
 
 }
 
-
 function adminBranch(){
 
-  return document.getElementById(
-    "adminBranch"
-  ).value.trim()
-  ||
-  "main";
+  return(
+    document.getElementById(
+      "adminBranch"
+    ).value.trim()
+    ||
+    "main"
+  );
 
 }
-
 
 async function adminGithubGet(
   path
@@ -7223,16 +6966,13 @@ async function adminGithubGet(
 
   const response=
     await fetch(
-
       `https://api.github.com/repos/${adminRepo()}/contents/${path}?ref=${encodeURIComponent(adminBranch())}`,
-
       {
         headers:
           adminHeaders(),
         cache:
           "no-store"
       }
-
     );
 
 
@@ -7251,17 +6991,15 @@ async function adminGithubGet(
 
 }
 
-
 function adminB64ToUtf8(
-  b64
+  base64
 ){
 
   const binary=
     atob(
       String(
-        b64
-      )
-      .replace(
+        base64
+      ).replace(
         /\n/g,
         ""
       )
@@ -7271,8 +7009,8 @@ function adminB64ToUtf8(
   const bytes=
     Uint8Array.from(
       binary,
-      c =>
-        c.charCodeAt(0)
+      char =>
+        char.charCodeAt(0)
     );
 
 
@@ -7283,7 +7021,6 @@ function adminB64ToUtf8(
   );
 
 }
-
 
 function adminUtf8ToB64(
   text
@@ -7321,7 +7058,6 @@ function adminUtf8ToB64(
 
 }
 
-
 async function adminGithubPut(
   path,
   content,
@@ -7330,14 +7066,10 @@ async function adminGithubPut(
 ){
 
   const body={
-
     message,
-
     content,
-
     branch:
       adminBranch()
-
   };
 
 
@@ -7351,24 +7083,12 @@ async function adminGithubPut(
 
   const response=
     await fetch(
-
       `https://api.github.com/repos/${adminRepo()}/contents/${path}`,
-
       {
-
-        method:
-          "PUT",
-
-        headers:
-          adminHeaders(),
-
-        body:
-          JSON.stringify(
-            body
-          )
-
+        method:"PUT",
+        headers:adminHeaders(),
+        body:JSON.stringify(body)
       }
-
     );
 
 
@@ -7376,12 +7096,9 @@ async function adminGithubPut(
     !response.ok
   ){
 
-    const text=
-      await response.text();
-
     const error=
       new Error(
-        `GitHub ${response.status}: ${text}`
+        `GitHub ${response.status}: ${await response.text()}`
       );
 
     error.status=
@@ -7398,24 +7115,76 @@ async function adminGithubPut(
 
 
 /* =========================================================
-   ADMIN DATA LOAD — ALL BLOCKS
+   ADMIN DATA
 ========================================================= */
 
-async function adminLoadData(){
+function adminStatus(
+  message,
+  ok=false
+){
 
-  const status=
+  const el=
     document.getElementById(
       "adminStatus"
     );
 
 
+  el.textContent=
+    message;
+
+
+  el.className=
+    "admin-status "
+    +
+    (
+      ok
+      ?
+      "ok"
+      :
+      ""
+    );
+
+}
+
+function adminSaveStatus(
+  message,
+  ok=false
+){
+
+  const el=
+    document.getElementById(
+      "adminSaveStatus"
+    );
+
+
+  el.textContent=
+    message;
+
+
+  el.className=
+    "admin-status "
+    +
+    (
+      ok
+      ?
+      "ok"
+      :
+      "error"
+    );
+
+}
+
+async function adminLoadData(){
+
   try{
 
-    if(
-      !document.getElementById(
+    const token=
+      document.getElementById(
         "adminToken"
-      ).value.trim()
-    ){
+      ).value.trim();
+
+
+    if(!token){
 
       throw new Error(
         "請先輸入 GitHub Token。"
@@ -7424,18 +7193,22 @@ async function adminLoadData(){
     }
 
 
-    status.className=
-      "admin-status";
+    adminState.type=
+      document.getElementById(
+        "adminDataType"
+      ).value;
 
-    status.textContent=
-      "正在讀取 Lid、Pokémon Center、GO 集章趣、人工修正……";
+
+    adminStatus(
+      "正在載入所有活動與區塊資料……"
+    );
 
 
     const [
-      lidJson,
-      centerJson,
-      stampJson,
-      overrideJson
+      lidFile,
+      centerFile,
+      stampFile,
+      overrideFile
     ]=
       await Promise.all([
 
@@ -7458,40 +7231,40 @@ async function adminLoadData(){
       ]);
 
 
+    const lidJson=
+      JSON.parse(
+        adminB64ToUtf8(
+          lidFile.content
+        )
+      );
+
+
+    const centerJson=
+      JSON.parse(
+        adminB64ToUtf8(
+          centerFile.content
+        )
+      );
+
+
+    const stampJson=
+      JSON.parse(
+        adminB64ToUtf8(
+          stampFile.content
+        )
+      );
+
+
     adminState.overrideSha=
-      overrideJson.sha
+      overrideFile.sha
       ||
       "";
-
-
-    const lid=
-      JSON.parse(
-        adminB64ToUtf8(
-          lidJson.content
-        )
-      );
-
-
-    const center=
-      JSON.parse(
-        adminB64ToUtf8(
-          centerJson.content
-        )
-      );
-
-
-    const stamp=
-      JSON.parse(
-        adminB64ToUtf8(
-          stampJson.content
-        )
-      );
 
 
     adminState.overrides=
       JSON.parse(
         adminB64ToUtf8(
-          overrideJson.content
+          overrideFile.content
         )
       );
 
@@ -7507,63 +7280,55 @@ async function adminLoadData(){
     }
 
 
-    adminState.list=
-      normalizeDataList(
-        (
-          adminState.type==="lid"
-          ?
-          lid
-          :
-          adminState.type==="center"
-          ?
-          center
-          :
-          stamp
-        ),
-        adminState.type
-      );
-
-
     adminState.centers=
       normalizeDataList(
-        center,
-        "center"
+        centerJson
       );
-
-
-    const stampList=
-      normalizeDataList(
-        stamp,
-        "stamp"
-      );
-
-
-    const stampEvents=
-      Array.isArray(
-        stamp.events
-      )
-      ?
-      stamp.events
-      :
-      [];
 
 
     if(
-      adminState.type==="stamp"
+      adminState.type==="lid"
     ){
 
-      adminState.events=
-        buildAdminEvents(
-          stampEvents,
-          stampList
+      adminState.list=
+        normalizeDataList(
+          lidJson
         );
+
+      adminState.events=
+        buildAdminLidEvents(
+          adminState.list
+        );
+
+    }else if(
+      adminState.type==="center"
+    ){
+
+      adminState.list=
+        normalizeDataList(
+          centerJson
+        );
+
+      adminState.events=[
+        {
+          eventId:"CENTER-ALL",
+          eventZh:"Pokémon Center",
+          event:"Pokémon Center",
+          points:
+            adminState.list
+        }
+      ];
 
     }else{
 
+      adminState.list=
+        normalizeDataList(
+          stampJson
+        );
+
       adminState.events=
-        buildAdminNonStampEvents(
-          adminState.type,
-          adminState.list
+        buildAdminStampEvents(
+          stampJson
         );
 
     }
@@ -7572,19 +7337,18 @@ async function adminLoadData(){
     adminPopulateEvents();
 
 
-    status.className=
-      "admin-status ok";
-
-
-    status.textContent=
-
+    adminStatus(
       `已載入。
 
-      Lid：${normalizeDataList(lid,"lid").length} 筆
-      Pokémon Center：${adminState.centers.length} 筆
-      GO 集章趣：${stampList.length} 筆
-      活動：${adminState.events.length} 個
-      人工修正：${adminState.overrides.items.length} 筆`;
+活動／區塊：${adminState.events.length}
+目前類別資料：${adminState.list.length}
+Pokémon Center：${adminState.centers.length}
+人工修正：${adminState.overrides.items.length}
+
+已採用「events + list」雙重掃描，因此不會因 events metadata 缺少而漏活動。`,
+      true
+    );
+
 
   }catch(error){
 
@@ -7593,20 +7357,15 @@ async function adminLoadData(){
     );
 
 
-    status.className=
-      "admin-status error";
-
-
-    status.textContent=
-      `讀取失敗：${error.message}`;
+    adminStatus(
+      `載入失敗：${error.message}`
+    );
 
   }
 
 }
 
-
-function buildAdminEvents(
-  events,
+function buildAdminLidEvents(
   list
 ){
 
@@ -7614,112 +7373,18 @@ function buildAdminEvents(
     new Map();
 
 
-  const canonicalEvent=
-    value =>
-      canonicalStampSource(
-        value
-      );
-
-
   for(
-    const event
-    of events
-  ){
-
-    const key=
-      canonicalEvent(
-        event.sourceUrl
-        ||
-        event.canonicalPage
-      )
-      ||
-      String(
-        event.eventId
-        ||
-        event.id
-        ||
-        event.event
-      );
-
-
-    if(
-      !map.has(
-        key
-      )
-    ){
-
-      map.set(
-        key,
-        {
-
-          eventId:
-            event.eventId
-            ||
-            event.id
-            ||
-            key,
-
-          event:
-            event.event
-            ||
-            event.eventName
-            ||
-            "GO 集章趣",
-
-          eventZh:
-            event.eventZh
-            ||
-            event.eventNameZh
-            ||
-            event.event
-            ||
-            "GO 集章趣",
-
-          startDate:
-            event.startDate
-            ||
-            "",
-
-          endDate:
-            event.endDate
-            ||
-            "",
-
-          sourceUrl:
-            event.sourceUrl
-            ||
-            event.canonicalPage
-            ||
-            "",
-
-          points:[]
-
-        }
-      );
-
-    }
-
-  }
-
-
-  for(
-    const item
+    const point
     of list
   ){
 
     const key=
-      canonicalEvent(
-        item.sourceUrl
-      )
-      ||
       String(
-        item.eventId
+        point.pref
         ||
-        item.event
+        point.region
         ||
-        item.eventName
-        ||
-        ""
+        "其他"
       );
 
 
@@ -7732,47 +7397,16 @@ function buildAdminEvents(
       map.set(
         key,
         {
-
           eventId:
-            item.eventId
-            ||
-            item.id
-            ||
+            "LID-"+key,
+
+          eventZh:
             key,
 
           event:
-            item.event
-            ||
-            item.eventName
-            ||
-            "GO 集章趣",
-
-          eventZh:
-            item.eventZh
-            ||
-            item.eventNameZh
-            ||
-            item.event
-            ||
-            "GO 集章趣",
-
-          startDate:
-            item.startDate
-            ||
-            "",
-
-          endDate:
-            item.endDate
-            ||
-            "",
-
-          sourceUrl:
-            item.sourceUrl
-            ||
-            "",
+            key,
 
           points:[]
-
         }
       );
 
@@ -7782,7 +7416,7 @@ function buildAdminEvents(
     map.get(
       key
     ).points.push(
-      item
+      point
     );
 
   }
@@ -7794,97 +7428,466 @@ function buildAdminEvents(
 
 }
 
-
-function buildAdminNonStampEvents(
-  type,
-  list
+function buildAdminStampEvents(
+  stampJson
 ){
 
-  if(
-    type==="lid"
+  const map=
+    new Map();
+
+
+  const meta=
+    Array.isArray(
+      stampJson?.events
+    )
+    ?
+    stampJson.events
+    :
+    [];
+
+
+  const list=
+    Array.isArray(
+      stampJson?.list
+    )
+    ?
+    stampJson.list
+    :
+    [];
+
+
+  /*
+   * events metadata 先全部建立。
+   */
+
+  for(
+    const row
+    of meta
   ){
 
-    const map=
-      new Map();
+    const key=
+      getCanonicalActivityKey(
+        row
+      );
 
 
-    for(
-      const item
-      of list
+    if(
+      !map.has(
+        key
+      )
     ){
 
-      const pref=
-        item.pref
-        ||
-        item.region
-        ||
-        "其他";
+      map.set(
+        key,
+        {
+
+          eventId:
+            row.eventId
+            ||
+            row.id
+            ||
+            key,
+
+          event:
+            row.event
+            ||
+            row.eventName
+            ||
+            "GO 集章趣",
+
+          eventZh:
+            row.eventZh
+            ||
+            row.eventNameZh
+            ||
+            row.event
+            ||
+            "GO 集章趣",
+
+          startDate:
+            row.startDate
+            ||
+            "",
+
+          endDate:
+            row.endDate
+            ||
+            "",
+
+          sourceUrl:
+            row.sourceUrl
+            ||
+            "",
+
+          points:[]
+
+        }
+      );
+
+    }
+
+  }
 
 
-      if(
-        !map.has(pref)
+  /*
+   * list 再全部掃一次。
+   * 這是修正「後台活動缺少」的關鍵。
+   */
+
+  for(
+    const point
+    of list
+  ){
+
+    const key=
+      getCanonicalActivityKey(
+        point
+      );
+
+
+    /*
+     * 舊資料有可能：
+     * events 使用 URL key，
+     * list 使用 eventId。
+     *
+     * 因此先嘗試直接 key，
+     * 找不到再以活動標題比對。
+     */
+
+    let event=
+      map.get(
+        key
+      );
+
+
+    if(!event){
+
+      const titleKey=
+        normalizeKey(
+          cleanActivityTitle(
+            point.eventZh
+            ||
+            point.eventNameZh
+            ||
+            point.event
+            ||
+            point.eventName
+            ||
+            ""
+          )
+        );
+
+
+      for(
+        const candidate
+        of map.values()
       ){
 
-        map.set(
-          pref,
-          {
-            eventId:
-              `LID-${pref}`,
+        const candidateTitle=
+          normalizeKey(
+            cleanActivityTitle(
+              candidate.eventZh
+              ||
+              candidate.event
+              ||
+              ""
+            )
+          );
 
-            event:
-              pref,
 
-            eventZh:
-              pref,
+        if(
+          titleKey
+          &&
+          candidateTitle
+          &&
+          (
+            titleKey===
+            candidateTitle
+            ||
+            (
+              titleKey.includes(
+                candidateTitle
+              )
+              &&
+              titleKey.length>
+              candidateTitle.length
+            )
+            ||
+            (
+              candidateTitle.includes(
+                titleKey
+              )
+              &&
+              candidateTitle.length>
+              titleKey.length
+            )
+          )
+        ){
 
-            points:[]
-          }
-        );
+          event=
+            candidate;
+
+          break;
+
+        }
 
       }
 
+    }
 
-      map.get(
-        pref
-      ).points.push(
-        item
+
+    if(!event){
+
+      event={
+
+        eventId:
+          point.eventId
+          ||
+          point.id
+          ||
+          key,
+
+        event:
+          point.event
+          ||
+          point.eventName
+          ||
+          "GO 集章趣",
+
+        eventZh:
+          point.eventZh
+          ||
+          point.eventNameZh
+          ||
+          point.event
+          ||
+          "GO 集章趣",
+
+        startDate:
+          point.startDate
+          ||
+          "",
+
+        endDate:
+          point.endDate
+          ||
+          "",
+
+        sourceUrl:
+          point.sourceUrl
+          ||
+          "",
+
+        points:[]
+
+      };
+
+
+      map.set(
+        key,
+        event
       );
 
     }
 
 
-    return[
-      ...map.values()
-    ];
+    if(
+      !event.points.some(
+        existing =>
+          String(
+            existing.id
+          )
+          ===
+          String(
+            point.id
+          )
+      )
+    ){
+
+      event.points.push(
+        point
+      );
+
+    }
+
+
+    if(
+      point.startDate
+      &&
+      (
+        !event.startDate
+        ||
+        point.startDate<
+        event.startDate
+      )
+    ){
+
+      event.startDate=
+        point.startDate;
+
+    }
+
+
+    if(
+      point.endDate
+      &&
+      (
+        !event.endDate
+        ||
+        point.endDate>
+        event.endDate
+      )
+    ){
+
+      event.endDate=
+        point.endDate;
+
+    }
+
+  }
+
+
+  /*
+   * 最後再做一次 PokéXciting 強制融合。
+   */
+
+  const values=[
+    ...map.values()
+  ];
+
+
+  const pokex=
+    values.filter(
+      event =>
+        normalizeKey(
+          event.eventZh
+          ||
+          event.event
+          ||
+          ""
+        ).includes(
+          normalizeKey(
+            "PokéXciting"
+          )
+        )
+    );
+
+
+  if(
+    pokex.length>1
+  ){
+
+    const primary=
+      pokex[0];
+
+
+    for(
+      let i=1;
+      i<pokex.length;
+      i++
+    ){
+
+      const extra=
+        pokex[i];
+
+
+      for(
+        const point
+        of extra.points
+      ){
+
+        if(
+          !primary.points.some(
+            p =>
+              String(p.id)
+              ===
+              String(point.id)
+          )
+        ){
+
+          primary.points.push(
+            point
+          );
+
+        }
+
+      }
+
+
+      if(
+        extra.startDate
+        &&
+        (
+          !primary.startDate
+          ||
+          extra.startDate<
+          primary.startDate
+        )
+      ){
+
+        primary.startDate=
+          extra.startDate;
+
+      }
+
+
+      if(
+        extra.endDate
+        &&
+        (
+          !primary.endDate
+          ||
+          extra.endDate>
+          primary.endDate
+        )
+      ){
+
+        primary.endDate=
+          extra.endDate;
+
+      }
+
+
+      map.delete(
+        values.find(
+          entry =>
+            entry===extra
+        )
+      );
+
+    }
 
   }
 
 
   return[
-
-    {
-
-      eventId:
-        "CENTER-ALL",
-
-      event:
-        "Pokémon Center",
-
-      eventZh:
-        "Pokémon Center",
-
-      points:
-        list
-
-    }
-
-  ];
+    ...map.values()
+  ]
+  .filter(
+    event =>
+      event.points.length>0
+      ||
+      event.event
+  )
+  .sort(
+    (a,b)=>
+      (
+        a.startDate
+        ||
+        "9999"
+      )
+      .localeCompare(
+        b.startDate
+        ||
+        "9999"
+      )
+  );
 
 }
 
 
 /* =========================================================
-   ADMIN EVENT / POINT
+   ADMIN EVENT UI
 ========================================================= */
 
 function adminPopulateEvents(){
@@ -7944,14 +7947,13 @@ function adminPopulateEvents(){
 
 }
 
+function adminCurrentEvent(){
 
-function adminCurrentPoints(){
-
-  const event=
+  return(
     adminState.events.find(
-      row =>
+      event =>
         String(
-          row.eventId
+          event.eventId
         )
         ===
         String(
@@ -7959,17 +7961,22 @@ function adminCurrentPoints(){
             "adminEventSelect"
           ).value
         )
-    );
+    )
+    ||
+    null
+  );
 
+}
+
+function adminCurrentPoints(){
 
   return(
-    event?.points
+    adminCurrentEvent()?.points
     ||
     []
   );
 
 }
-
 
 function adminPopulatePoints(){
 
@@ -8030,9 +8037,11 @@ function adminPopulatePoints(){
         "option"
       );
 
+
     option.value="";
+
     option.textContent=
-      "目前沒有此區塊的資料";
+      "目前沒有資料";
 
     select.appendChild(
       option
@@ -8053,11 +8062,11 @@ function adminFindOverride(
     adminState.overrides.items.find(
       row =>
         String(
-          row.id
+          row?.id
         )
         ===
         String(
-          point.id
+          point?.id
         )
     )
     ||
@@ -8066,13 +8075,14 @@ function adminFindOverride(
 
 }
 
-
 function adminShowPointInfo(){
 
   const point=
     adminCurrentPoints().find(
       row =>
-        String(row.id)
+        String(
+          row.id
+        )
         ===
         String(
           document.getElementById(
@@ -8100,13 +8110,17 @@ function adminShowPointInfo(){
   }
 
 
+  adminState.selectedEvent=
+    adminCurrentEvent();
+
+
   const override=
     adminFindOverride(
       point
     );
 
 
-  const currentTitle=
+  const title=
     override?.manualTitle
     ||
     override?.nameZh
@@ -8126,7 +8140,72 @@ function adminShowPointInfo(){
   document.getElementById(
     "adminPointName"
   ).value=
-    currentTitle;
+    title;
+
+
+  const coords=
+    override?.manualCoordinates
+    ||
+    point?.coords
+    ||
+    (
+      Number.isFinite(
+        Number(point?.lat)
+      )
+      &&
+      Number.isFinite(
+        Number(point?.lng)
+      )
+      ?
+      [
+        Number(point.lat),
+        Number(point.lng)
+      ]
+      :
+      getKnownCoordinate(
+        point
+      )
+    );
+
+
+  if(
+    Array.isArray(coords)
+    &&
+    coords.length>=2
+  ){
+
+    document.getElementById(
+      "adminCoordinate"
+    ).value=
+      `${coords[1]}, ${coords[0]}`;
+
+
+    adminUpdateCoordinateResult();
+
+  }else{
+
+    document.getElementById(
+      "adminCoordinate"
+    ).value="";
+
+
+    document.getElementById(
+      "adminCoordinateResult"
+    ).textContent="";
+
+  }
+
+
+  document.getElementById(
+    "adminCoordSource"
+  ).value=
+    override?.coordinatesSource
+    ||
+    point?.coordinatesSource
+    ||
+    point?.coordsSource
+    ||
+    "";
 
 
   document.getElementById(
@@ -8150,150 +8229,59 @@ function adminShowPointInfo(){
 
 
   document.getElementById(
-    "adminCoordSource"
-  ).value=
-    override?.coordinatesSource
-    ||
-    point?.coordinatesSource
-    ||
-    point?.coordsSource
-    ||
-    "";
-
-
-  const coords=
-    override?.manualCoordinates
-    ||
-    point?.coords
-    ||
-    (
-      Number.isFinite(
-        Number(
-          point?.lat
-        )
-      )
-      &&
-      Number.isFinite(
-        Number(
-          point?.lng
-        )
-      )
-      ?
-      [
-        Number(
-          point.lat
-        ),
-        Number(
-          point.lng
-        )
-      ]
-      :
-      getKnownCoordinate(
-        point
-      )
-    );
-
-
-  if(
-    Array.isArray(coords)
-    &&
-    coords.length>=2
-  ){
-
-    document.getElementById(
-      "adminCoordinate"
-    ).value=
-      `${coords[1]}, ${coords[0]}`;
-
-    adminUpdateCoordinateResult();
-
-  }else{
-
-    document.getElementById(
-      "adminCoordinate"
-    ).value="";
-
-    document.getElementById(
-      "adminCoordinateResult"
-    ).textContent="";
-
-  }
-
-
-  document.getElementById(
     "adminPointInfo"
-  ).innerHTML=
+  ).innerHTML=`
 
-    `
-      <b>
-        ${escapeHtml(
-          currentTitle
-        )}
-      </b>
+    <b>
+      ${escapeHtml(title)}
+    </b>
 
-      <br>
+    <br>
 
-      ID：
-      ${escapeHtml(
-        point.id
-        ||
-        ""
-      )}
+    ID：
+    ${escapeHtml(point.id||"")}
 
-      <br>
+    <br>
 
-      Event ID：
-      ${escapeHtml(
-        point.eventId
-        ||
-        ""
-      )}
+    Event ID：
+    ${escapeHtml(point.eventId||"")}
 
-      <br>
+    <br>
 
-      目前圖片：
-      ${
-        getItemImageUrl(
-          adminState.type==="lid"
-          ?
-          "lid"
-          :
-          "stamp",
-          point
-        )
-        ?
-        "已有"
-        :
-        "無"
-      }
+    活動：
+    ${escapeHtml(
+      adminState.selectedEvent?.eventZh
+      ||
+      adminState.selectedEvent?.event
+      ||
+      ""
+    )}
 
-      ${
-        override
-        ?
-        `
-          <br>
-          <span
-            style="
-              color:#6f4bb8;
-              font-weight:900
-            "
-          >
-            ● 已有人工修正
-          </span>
-        `
-        :
-        ""
-      }
-    `;
+    ${
+      override
+      ?
+      `
+        <br>
+        <span
+          style="
+            color:#6f4bb8;
+            font-weight:900
+          "
+        >
+          ● 已有人工修正
+        </span>
+      `
+      :
+      ""
+    }
 
-
-  adminRenderCanvas();
+  `;
 
 }
 
 
 /* =========================================================
-   COORDINATE PARSER
+   FLEXIBLE COORDINATE
 ========================================================= */
 
 function parseFlexibleCoordinate(
@@ -8302,7 +8290,9 @@ function parseFlexibleCoordinate(
 
   const numbers=
     String(
-      value ?? ""
+      value
+      ||
+      ""
     )
     .replace(
       /[()（）]/g,
@@ -8335,17 +8325,6 @@ function parseFlexibleCoordinate(
     numbers[1];
 
 
-  /*
-   * 日本座標常見：
-   * 緯度 24~46
-   * 經度 122~154
-   *
-   * 因此：
-   * 129.868889,32.750278
-   * 自動判定為 經度,緯度
-   */
-
-
   if(
     Math.abs(a)>90
     &&
@@ -8353,8 +8332,8 @@ function parseFlexibleCoordinate(
   ){
 
     return{
-      lng:a,
-      lat:b
+      lat:b,
+      lng:a
     };
 
   }
@@ -8403,18 +8382,12 @@ function parseFlexibleCoordinate(
   ){
 
     return{
-      lng:a,
-      lat:b
+      lat:b,
+      lng:a
     };
 
   }
 
-
-  /*
-   * 無法靠日本範圍判定時，
-   * 預設使用：
-   * 緯度,經度
-   */
 
   return{
     lat:a,
@@ -8433,18 +8406,15 @@ function adminUpdateCoordinateResult(){
     );
 
 
-  const result=
+  const el=
     document.getElementById(
       "adminCoordinateResult"
     );
 
 
-  if(
-    !parsed
-  ){
+  if(!parsed){
 
-    result.textContent=
-      "";
+    el.textContent="";
 
     return;
 
@@ -8457,22 +8427,21 @@ function adminUpdateCoordinateResult(){
     Math.abs(parsed.lng)>180
   ){
 
-    result.textContent=
-      "⚠️ 座標超出合法範圍";
-
-    result.style.color=
+    el.style.color=
       "#a64f4f";
+
+    el.textContent=
+      "⚠️ 座標超出合法範圍";
 
     return;
 
   }
 
 
-  result.style.color=
+  el.style.color=
     "#27bd7a";
 
-
-  result.textContent=
+  el.textContent=
     `解析結果 → 緯度 ${parsed.lat}　經度 ${parsed.lng}`;
 
 }
@@ -8483,11 +8452,6 @@ document.getElementById(
   "input",
   adminUpdateCoordinateResult
 );
-
-
-/* =========================================================
-   ADMIN CLEAR
-========================================================= */
 
 function adminClearCoord(){
 
@@ -8503,7 +8467,8 @@ function adminClearCoord(){
 
 
 /* =========================================================
-   SCREENSHOT
+   ADMIN CROP
+   矩形拉框 → 四角只能調整寬高
 ========================================================= */
 
 const adminCanvas=
@@ -8517,24 +8482,13 @@ const adminCtx=
   );
 
 
-function adminUpdateZoomLabel(){
-
-  document.getElementById(
-    "adminZoomLabel"
-  ).textContent=
-    `${Math.round(
-      adminState.zoom*100
-    )}%`;
-
-}
-
-
 function adminFitImage(
-  img
+  image
 ){
 
-  adminState.screenshot=
-    img;
+  adminState.image=
+    image;
+
 
   const wrap=
     document.getElementById(
@@ -8544,7 +8498,7 @@ function adminFitImage(
 
   const maxW=
     Math.max(
-      500,
+      600,
       (
         wrap.clientWidth
         ||
@@ -8556,13 +8510,13 @@ function adminFitImage(
 
 
   const maxH=
-    440;
+    450;
 
 
   adminState.fitScale=
     Math.min(
-      maxW/img.width,
-      maxH/img.height,
+      maxW/image.width,
+      maxH/image.height,
       1
     );
 
@@ -8571,62 +8525,11 @@ function adminFitImage(
     1;
 
 
-  const width=
-    Math.max(
-      2,
-      Math.round(
-        img.width
-        *
-        adminState.fitScale
-      )
-    );
+  adminState.rect=
+    null;
 
-
-  const height=
-    Math.max(
-      2,
-      Math.round(
-        img.height
-        *
-        adminState.fitScale
-      )
-    );
-
-
-  adminCanvas.width=
-    width;
-
-  adminCanvas.height=
-    height;
-
-
-  /*
-   * 初始四角就是整張圖。
-   */
-
-  adminState.corners=[
-
-    {
-      x:0,
-      y:0
-    },
-
-    {
-      x:width,
-      y:0
-    },
-
-    {
-      x:width,
-      y:height
-    },
-
-    {
-      x:0,
-      y:height
-    }
-
-  ];
+  adminState.dragging=
+    null;
 
 
   adminRenderCanvas();
@@ -8635,33 +8538,26 @@ function adminFitImage(
 
 }
 
-
 function adminRenderCanvas(){
 
-  const img=
-    adminState.screenshot;
-
-
-  if(!img){
+  if(
+    !adminState.image
+  ){
 
     return;
 
   }
 
 
-  const scale=
-    adminState.fitScale
-    *
-    adminState.zoom;
-
-
   const width=
     Math.max(
       2,
       Math.round(
-        img.width
+        adminState.image.width
         *
-        scale
+        adminState.fitScale
+        *
+        adminState.zoom
       )
     );
 
@@ -8670,16 +8566,17 @@ function adminRenderCanvas(){
     Math.max(
       2,
       Math.round(
-        img.height
+        adminState.image.height
         *
-        scale
+        adminState.fitScale
+        *
+        adminState.zoom
       )
     );
 
 
   adminCanvas.width=
     width;
-
 
   adminCanvas.height=
     height;
@@ -8694,7 +8591,7 @@ function adminRenderCanvas(){
 
 
   adminCtx.drawImage(
-    img,
+    adminState.image,
     0,
     0,
     width,
@@ -8703,7 +8600,7 @@ function adminRenderCanvas(){
 
 
   if(
-    !adminState.corners
+    !adminState.rect
   ){
 
     return;
@@ -8711,36 +8608,22 @@ function adminRenderCanvas(){
   }
 
 
+  const r=
+    adminState.rect;
+
+
   adminCtx.save();
 
 
-  adminCtx.beginPath();
-
-  adminCtx.moveTo(
-    adminState.corners[0].x,
-    adminState.corners[0].y
-  );
-
-  for(
-    let i=1;
-    i<4;
-    i++
-  ){
-
-    adminCtx.lineTo(
-      adminState.corners[i].x,
-      adminState.corners[i].y
-    );
-
-  }
-
-  adminCtx.closePath();
-
-
   adminCtx.fillStyle=
-    "rgba(57,123,131,.14)";
+    "rgba(57,123,131,.15)";
 
-  adminCtx.fill();
+  adminCtx.fillRect(
+    r.x,
+    r.y,
+    r.w,
+    r.h
+  );
 
 
   adminCtx.strokeStyle=
@@ -8754,28 +8637,49 @@ function adminRenderCanvas(){
     5
   ]);
 
-  adminCtx.stroke();
+
+  adminCtx.strokeRect(
+    r.x,
+    r.y,
+    r.w,
+    r.h
+  );
 
 
   adminCtx.setLineDash([]);
 
 
+  const corners=[
+    {
+      x:r.x,
+      y:r.y
+    },
+    {
+      x:r.x+r.w,
+      y:r.y
+    },
+    {
+      x:r.x+r.w,
+      y:r.y+r.h
+    },
+    {
+      x:r.x,
+      y:r.y+r.h
+    }
+  ];
+
+
   for(
-    let i=0;
-    i<4;
-    i++
+    const point
+    of corners
   ){
-
-    const p=
-      adminState.corners[i];
-
 
     adminCtx.beginPath();
 
     adminCtx.arc(
-      p.x,
-      p.y,
-      10,
+      point.x,
+      point.y,
+      9,
       0,
       Math.PI*2
     );
@@ -8795,29 +8699,21 @@ function adminRenderCanvas(){
 
     adminCtx.stroke();
 
-
-    adminCtx.fillStyle=
-      "#ef4b55";
-
-    adminCtx.font=
-      "bold 11px sans-serif";
-
-    adminCtx.textAlign=
-      "center";
-
-    adminCtx.textBaseline=
-      "middle";
-
-    adminCtx.fillText(
-      String(i+1),
-      p.x,
-      p.y
-    );
-
   }
 
 
   adminCtx.restore();
+
+}
+
+function adminUpdateZoomLabel(){
+
+  document.getElementById(
+    "adminZoomLabel"
+  ).textContent=
+    `${Math.round(
+      adminState.zoom*100
+    )}%`;
 
 }
 
@@ -8826,7 +8722,7 @@ function adminZoom(
 ){
 
   if(
-    !adminState.screenshot
+    !adminState.image
   ){
 
     return;
@@ -8845,63 +8741,52 @@ function adminZoom(
 
 
   /*
-   * 重新建立畫布後，
-   * 依比例縮放四角。
+   * 保留矩形在圖片中的比例位置。
    */
 
-  const oldW=
-    adminCanvas.width;
-
-  const oldH=
-    adminCanvas.height;
-
-
-  const newScale=
-    adminState.fitScale
-    *
-    adminState.zoom;
-
-
-  const newW=
-    Math.max(
-      2,
-      Math.round(
-        adminState.screenshot.width
-        *
-        newScale
-      )
-    );
-
-
-  const newH=
-    Math.max(
-      2,
-      Math.round(
-        adminState.screenshot.height
-        *
-        newScale
-      )
-    );
-
-
-  const sx=
-    newW/oldW;
-
-  const sy=
-    newH/oldH;
-
-
   if(
-    adminState.corners
+    adminState.rect
   ){
 
-    adminState.corners=
-      adminState.corners.map(
-        p =>
-          ({
-            x:p.x*sx,
-            y:p.y*sy
-          })
+    const oldScale=
+      adminState.fitScale*
+      (
+        adminState.zoom-delta
+      );
+
+
+    const newScale=
+      adminState.fitScale*
+      adminState.zoom;
+
+
+    const ratio=
+      newScale/
+      oldScale;
+
+
+    adminState.rect.x=
+      Math.round(
+        adminState.rect.x*
+        ratio
+      );
+
+    adminState.rect.y=
+      Math.round(
+        adminState.rect.y*
+        ratio
+      );
+
+    adminState.rect.w=
+      Math.round(
+        adminState.rect.w*
+        ratio
+      );
+
+    adminState.rect.h=
+      Math.round(
+        adminState.rect.h*
+        ratio
       );
 
   }
@@ -8913,11 +8798,10 @@ function adminZoom(
 
 }
 
-
 function adminResetZoom(){
 
   if(
-    !adminState.screenshot
+    !adminState.image
   ){
 
     return;
@@ -8928,72 +8812,28 @@ function adminResetZoom(){
   adminState.zoom=
     1;
 
-
   adminFitImage(
-    adminState.screenshot
+    adminState.image
   );
 
 }
-
-
-document.getElementById(
-  "adminImageInput"
-).addEventListener(
-  "change",
-  event => {
-
-    const file=
-      event.target.files?.[0];
-
-    if(!file){
-
-      return;
-
-    }
-
-
-    const reader=
-      new FileReader();
-
-
-    reader.onload=
-      () => {
-
-        const img=
-          new Image();
-
-
-        img.onload=
-          () =>
-            adminFitImage(
-              img
-            );
-
-
-        img.src=
-          reader.result;
-
-      };
-
-
-    reader.readAsDataURL(
-      file
-    );
-
-  }
-);
-
-
-/* =========================================================
-   CORNER DRAGGING
-========================================================= */
 
 function adminPointerPos(
   event
 ){
 
-  const rect=
+  const bounds=
     adminCanvas.getBoundingClientRect();
+
+
+  const scaleX=
+    adminCanvas.width/
+    bounds.width;
+
+
+  const scaleY=
+    adminCanvas.height/
+    bounds.height;
 
 
   return{
@@ -9003,9 +8843,12 @@ function adminPointerPos(
         0,
         Math.min(
           adminCanvas.width,
-          event.clientX
-          -
-          rect.left
+          (
+            event.clientX
+            -
+            bounds.left
+          )*
+          scaleX
         )
       ),
 
@@ -9014,9 +8857,12 @@ function adminPointerPos(
         0,
         Math.min(
           adminCanvas.height,
-          event.clientY
-          -
-          rect.top
+          (
+            event.clientY
+            -
+            bounds.top
+          )*
+          scaleY
         )
       )
 
@@ -9029,7 +8875,7 @@ function adminHitCorner(
 ){
 
   if(
-    !adminState.corners
+    !adminState.rect
   ){
 
     return -1;
@@ -9037,38 +8883,58 @@ function adminHitCorner(
   }
 
 
-  let best=-1;
-  let bestDistance=22;
+  const r=
+    adminState.rect;
 
 
-  adminState.corners.forEach(
-    (corner,index) => {
+  const corners=[
+    {
+      x:r.x,
+      y:r.y
+    },
+    {
+      x:r.x+r.w,
+      y:r.y
+    },
+    {
+      x:r.x+r.w,
+      y:r.y+r.h
+    },
+    {
+      x:r.x,
+      y:r.y+r.h
+    }
+  ];
 
-      const dx=
-        corner.x
-        -
-        point.x;
 
-      const dy=
-        corner.y
-        -
-        point.y;
+  let found=
+    -1;
 
-      const d=
-        Math.sqrt(
-          dx*dx+dy*dy
+
+  let best=
+    22;
+
+
+  corners.forEach(
+    (corner,index)=>{
+
+      const distance=
+        Math.hypot(
+          corner.x-point.x,
+          corner.y-point.y
         );
 
 
       if(
-        d
-        <=
-        bestDistance
+        distance<
+        best
       ){
 
-        bestDistance=d;
+        best=
+          distance;
 
-        best=index;
+        found=
+          index;
 
       }
 
@@ -9076,16 +8942,51 @@ function adminHitCorner(
   );
 
 
-  return best;
+  return found;
 
 }
+
+
+function adminNormalizeRect(
+  start,
+  end
+){
+
+  return{
+
+    x:
+      Math.min(
+        start.x,
+        end.x
+      ),
+
+    y:
+      Math.min(
+        start.y,
+        end.y
+      ),
+
+    w:
+      Math.abs(
+        end.x-start.x
+      ),
+
+    h:
+      Math.abs(
+        end.y-start.y
+      )
+
+  };
+
+}
+
 
 adminCanvas.addEventListener(
   "pointerdown",
   event => {
 
     if(
-      !adminState.screenshot
+      !adminState.image
     ){
 
       return;
@@ -9102,58 +9003,65 @@ adminCanvas.addEventListener(
       );
 
 
-    const hit=
+    /*
+     * 已有矩形：
+     * 優先抓四角。
+     */
+
+    const corner=
       adminHitCorner(
         point
       );
 
 
     if(
-      hit<0
+      corner>=0
     ){
+
+      adminState.dragging={
+        mode:"corner",
+        corner,
+        startRect:{
+          ...adminState.rect
+        }
+      };
+
+
+      adminCanvas.setPointerCapture?.(
+        event.pointerId
+      );
+
 
       return;
 
     }
 
 
-    adminState.draggingCorner=
-      hit;
+    /*
+     * 沒抓到角：
+     * 重新用滑鼠拉框。
+     */
+
+    adminState.dragging={
+      mode:"draw",
+      startPoint:
+        point
+    };
+
+
+    adminState.rect={
+      x:
+        point.x,
+      y:
+        point.y,
+      w:0,
+      h:0
+    };
 
 
     adminCanvas.setPointerCapture?.(
       event.pointerId
     );
-
-  }
-);
-
-adminCanvas.addEventListener(
-  "pointermove",
-  event => {
-
-    if(
-      adminState.draggingCorner===null
-    ){
-
-      return;
-
-    }
-
-
-    event.preventDefault();
-
-
-    const point=
-      adminPointerPos(
-        event
-      );
-
-
-    adminState.corners[
-      adminState.draggingCorner
-    ]=
-      point;
 
 
     adminRenderCanvas();
@@ -9161,12 +9069,13 @@ adminCanvas.addEventListener(
   }
 );
 
+
 adminCanvas.addEventListener(
-  "pointerup",
+  "pointermove",
   event => {
 
     if(
-      adminState.draggingCorner===null
+      !adminState.dragging
     ){
 
       return;
@@ -9177,9 +9086,160 @@ adminCanvas.addEventListener(
     event.preventDefault();
 
 
-    adminState.draggingCorner=
-      null;
+    const point=
+      adminPointerPos(
+        event
+      );
 
+
+    if(
+      adminState.dragging.mode
+      ===
+      "draw"
+    ){
+
+      /*
+       * 初次拉框完全自由，
+       * 但仍然一定是矩形。
+       */
+
+      adminState.rect=
+        adminNormalizeRect(
+          adminState.dragging.startPoint,
+          point
+        );
+
+
+      adminRenderCanvas();
+
+      return;
+
+    }
+
+
+    /*
+     * 四角調整：
+     * 不允許單獨變成任意四邊。
+     * 只重新計算矩形 bounding box。
+     */
+
+    const startRect=
+      adminState.dragging.startRect;
+
+
+    let left=
+      startRect.x;
+
+    let top=
+      startRect.y;
+
+    let right=
+      startRect.x+
+      startRect.w;
+
+    let bottom=
+      startRect.y+
+      startRect.h;
+
+
+    switch(
+      adminState.dragging.corner
+    ){
+
+      case 0:
+
+        left=
+          Math.min(
+            point.x,
+            right-6
+          );
+
+        top=
+          Math.min(
+            point.y,
+            bottom-6
+          );
+
+        break;
+
+
+      case 1:
+
+        right=
+          Math.max(
+            point.x,
+            left+6
+          );
+
+        top=
+          Math.min(
+            point.y,
+            bottom-6
+          );
+
+        break;
+
+
+      case 2:
+
+        right=
+          Math.max(
+            point.x,
+            left+6
+          );
+
+        bottom=
+          Math.max(
+            point.y,
+            top+6
+          );
+
+        break;
+
+
+      case 3:
+
+        left=
+          Math.min(
+            point.x,
+            right-6
+          );
+
+        bottom=
+          Math.max(
+            point.y,
+            top+6
+          );
+
+        break;
+
+    }
+
+
+    /*
+     * 強制 bounding rectangle。
+     */
+
+    adminState.rect={
+      x:left,
+      y:top,
+      w:right-left,
+      h:bottom-top
+    };
+
+
+    adminRenderCanvas();
+
+  }
+);
+
+
+adminCanvas.addEventListener(
+  "pointerup",
+  event => {
+
+    adminState.dragging=
+      null;
 
     adminCanvas.releasePointerCapture?.(
       event.pointerId
@@ -9192,7 +9252,7 @@ adminCanvas.addEventListener(
   "pointercancel",
   () => {
 
-    adminState.draggingCorner=
+    adminState.dragging=
       null;
 
   }
@@ -9203,7 +9263,7 @@ adminCanvas.addEventListener(
   event => {
 
     if(
-      !adminState.screenshot
+      !adminState.image
     ){
 
       return;
@@ -9228,684 +9288,60 @@ adminCanvas.addEventListener(
   }
 );
 
+document.getElementById(
+  "adminImageInput"
+).addEventListener(
+  "change",
+  event => {
 
-/* =========================================================
-   PERSPECTIVE TRANSFORM
-========================================================= */
-
-function solveHomography(
-  src,
-  dst
-){
-
-  /*
-   * 求 3x3 Homography。
-   */
-
-  const A=[];
-  const b=[];
+    const file=
+      event.target.files?.[0];
 
 
-  for(
-    let i=0;
-    i<4;
-    i++
-  ){
+    if(!file){
 
-    const x=
-      src[i].x;
-
-    const y=
-      src[i].y;
-
-    const X=
-      dst[i].x;
-
-    const Y=
-      dst[i].y;
-
-
-    A.push([
-      x,
-      y,
-      1,
-      0,
-      0,
-      0,
-      -X*x,
-      -X*y
-    ]);
-
-    b.push(X);
-
-
-    A.push([
-      0,
-      0,
-      0,
-      x,
-      y,
-      1,
-      -Y*x,
-      -Y*y
-    ]);
-
-    b.push(Y);
-
-  }
-
-
-  /*
-   * Gaussian elimination。
-   */
-
-  for(
-    let i=0;
-    i<8;
-    i++
-  ){
-
-    let maxRow=
-      i;
-
-
-    for(
-      let r=i+1;
-      r<8;
-      r++
-    ){
-
-      if(
-        Math.abs(
-          A[r][i]
-        )
-        >
-        Math.abs(
-          A[maxRow][i]
-        )
-      ){
-
-        maxRow=r;
-
-      }
+      return;
 
     }
 
 
-    [
-      A[i],
-      A[maxRow]
-    ]=[
-      A[maxRow],
-      A[i]
-    ];
+    const reader=
+      new FileReader();
 
 
-    [
-      b[i],
-      b[maxRow]
-    ]=[
-      b[maxRow],
-      b[i]
-    ];
+    reader.onload=
+      ()=>{
+        const image=
+          new Image();
 
 
-    const pivot=
-      A[i][i];
+        image.onload=
+          ()=>{
+            adminFitImage(
+              image
+            );
+          };
 
 
-    if(
-      Math.abs(pivot)
-      <
-      1e-10
-    ){
+        image.src=
+          reader.result;
 
-      throw new Error(
-        "四角透視範圍無法計算。"
-      );
+      };
 
-    }
 
-
-    for(
-      let c=i;
-      c<8;
-      c++
-    ){
-
-      A[i][c]/=
-        pivot;
-
-    }
-
-    b[i]/=
-      pivot;
-
-
-    for(
-      let r=0;
-      r<8;
-      r++
-    ){
-
-      if(
-        r===i
-      ){
-
-        continue;
-
-      }
-
-
-      const factor=
-        A[r][i];
-
-
-      if(
-        Math.abs(factor)
-        <
-        1e-12
-      ){
-
-        continue;
-
-      }
-
-
-      for(
-        let c=i;
-        c<8;
-        c++
-      ){
-
-        A[r][c]-=
-          factor
-          *
-          A[i][c];
-
-      }
-
-
-      b[r]-=
-        factor
-        *
-        b[i];
-
-    }
-
-  }
-
-
-  return[
-
-    b[0],
-    b[1],
-    b[2],
-
-    b[3],
-    b[4],
-    b[5],
-
-    b[6],
-    b[7],
-    1
-
-  ];
-
-}
-
-
-/*
- * 取得四角所形成的裁切結果尺寸。
- */
-
-function getPerspectiveOutputSize(
-  corners
-){
-
-  const top=
-    Math.hypot(
-      corners[1].x-corners[0].x,
-      corners[1].y-corners[0].y
-    );
-
-  const bottom=
-    Math.hypot(
-      corners[2].x-corners[3].x,
-      corners[2].y-corners[3].y
-    );
-
-  const left=
-    Math.hypot(
-      corners[3].x-corners[0].x,
-      corners[3].y-corners[0].y
-    );
-
-  const right=
-    Math.hypot(
-      corners[2].x-corners[1].x,
-      corners[2].y-corners[1].y
-    );
-
-
-  return{
-
-    width:
-      Math.max(
-        16,
-        Math.round(
-          (top+bottom)/2
-        )
-      ),
-
-    height:
-      Math.max(
-        16,
-        Math.round(
-          (left+right)/2
-        )
-      )
-
-  };
-
-}
-
-
-/*
- * output pixel -> source coordinates
- */
-
-function invertHomography(
-  H
-){
-
-  const a=H[0];
-  const b=H[1];
-  const c=H[2];
-  const d=H[3];
-  const e=H[4];
-  const f=H[5];
-  const g=H[6];
-  const h=H[7];
-  const i=H[8];
-
-
-  const A=
-    e*i
-    -
-    f*h;
-
-  const B=
-    c*h
-    -
-    b*i;
-
-  const C=
-    b*f
-    -
-    c*e;
-
-  const D=
-    f*g
-    -
-    d*i;
-
-  const E=
-    a*i
-    -
-    c*g;
-
-  const F=
-    c*d
-    -
-    a*f;
-
-  const G=
-    d*h
-    -
-    e*g;
-
-  const I=
-    a*e
-    -
-    b*d;
-
-
-  const det=
-    a*A
-    +
-    b*D
-    +
-    c*G;
-
-
-  if(
-    Math.abs(det)
-    <
-    1e-12
-  ){
-
-    throw new Error(
-      "透視矩陣無效。"
+    reader.readAsDataURL(
+      file
     );
 
   }
-
-
-  return[
-
-    A/det,
-    B/det,
-    C/det,
-
-    D/det,
-    E/det,
-    F/det,
-
-    G/det,
-    -(
-      a*h
-      -
-      b*g
-    )/det,
-    I/det
-
-  ];
-
-}
-
-
-function adminPerspectiveCrop(
-  img,
-  corners,
-  outputWidth,
-  outputHeight
-){
-
-  const srcCorners=
-    corners.map(
-      p =>
-        ({
-          x:p.x,
-          y:p.y
-        })
-    );
-
-
-  const dstCorners=[
-
-    {
-      x:0,
-      y:0
-    },
-
-    {
-      x:outputWidth,
-      y:0
-    },
-
-    {
-      x:outputWidth,
-      y:outputHeight
-    },
-
-    {
-      x:0,
-      y:outputHeight
-    }
-
-  ];
-
-
-  const H=
-    solveHomography(
-      srcCorners,
-      dstCorners
-    );
-
-
-  const inv=
-    invertHomography(
-      H
-    );
-
-
-  const output=
-    document.createElement(
-      "canvas"
-    );
-
-
-  output.width=
-    outputWidth;
-
-  output.height=
-    outputHeight;
-
-
-  const outCtx=
-    output.getContext(
-      "2d"
-    );
-
-
-  const imgWidth=
-    img.width;
-
-  const imgHeight=
-    img.height;
-
-
-  const pixels=
-    outCtx.createImageData(
-      outputWidth,
-      outputHeight
-    );
-
-
-  const srcCanvas=
-    document.createElement(
-      "canvas"
-    );
-
-
-  srcCanvas.width=
-    imgWidth;
-
-  srcCanvas.height=
-    imgHeight;
-
-
-  const srcCtx=
-    srcCanvas.getContext(
-      "2d"
-    );
-
-
-  srcCtx.drawImage(
-    img,
-    0,
-    0
-  );
-
-
-  const sourcePixels=
-    srcCtx.getImageData(
-      0,
-      0,
-      imgWidth,
-      imgHeight
-    );
-
-
-  const src=
-    sourcePixels.data;
-
-  const dst=
-    pixels.data;
-
-
-  for(
-    let y=0;
-    y<outputHeight;
-    y++
-  ){
-
-    for(
-      let x=0;
-      x<outputWidth;
-      x++
-    ){
-
-      const denom=
-        inv[6]*x
-        +
-        inv[7]*y
-        +
-        inv[8];
-
-
-      const sx=
-        (
-          inv[0]*x
-          +
-          inv[1]*y
-          +
-          inv[2]
-        )
-        /
-        denom;
-
-
-      const sy=
-        (
-          inv[3]*x
-          +
-          inv[4]*y
-          +
-          inv[5]
-        )
-        /
-        denom;
-
-
-      const sourceX=
-        Math.round(
-          sx
-        );
-
-
-      const sourceY=
-        Math.round(
-          sy
-        );
-
-
-      const di=
-        (
-          y
-          *
-          outputWidth
-          +
-          x
-        )
-        *
-        4;
-
-
-      if(
-        sourceX<0
-        ||
-        sourceY<0
-        ||
-        sourceX>=imgWidth
-        ||
-        sourceY>=imgHeight
-      ){
-
-        dst[
-          di+0
-        ]=0;
-
-        dst[
-          di+1
-        ]=0;
-
-        dst[
-          di+2
-        ]=0;
-
-        dst[
-          di+3
-        ]=0;
-
-        continue;
-
-      }
-
-
-      const si=
-        (
-          sourceY
-          *
-          imgWidth
-          +
-          sourceX
-        )
-        *
-        4;
-
-
-      dst[
-        di+0
-      ]=
-        src[
-          si+0
-        ];
-
-      dst[
-        di+1
-      ]=
-        src[
-          si+1
-        ];
-
-      dst[
-        di+2
-      ]=
-        src[
-          si+2
-        ];
-
-      dst[
-        di+3
-      ]=
-        src[
-          si+3
-        ];
-
-    }
-
-  }
-
-
-  outCtx.putImageData(
-    pixels,
-    0,
-    0
-  );
-
-
-  return output;
-
-}
+);
 
 
 /* =========================================================
-   BACKGROUND REMOVAL
+   CROP
 ========================================================= */
 
-function adminRemoveBg(
+function adminRemoveBackground(
   canvas,
   tolerance
 ){
@@ -9915,10 +9351,11 @@ function adminRemoveBg(
       "2d"
     );
 
-  const w=
+
+  const width=
     canvas.width;
 
-  const h=
+  const height=
     canvas.height;
 
 
@@ -9926,8 +9363,8 @@ function adminRemoveBg(
     ctx.getImageData(
       0,
       0,
-      w,
-      h
+      width,
+      height
     );
 
 
@@ -9936,105 +9373,64 @@ function adminRemoveBg(
 
 
   const seeds=[
-
-    [0,0],
-
-    [w-1,0],
-
-    [0,h-1],
-
-    [w-1,h-1]
-
+    0,
+    width-1,
+    (height-1)*width,
+    height*width-1
   ];
 
 
-  const avg=[0,0,0];
+  let baseR=0;
+  let baseG=0;
+  let baseB=0;
 
 
   for(
-    const [
-      x,
-      y
-    ]
+    const index
     of seeds
   ){
 
-    const index=
-      (
-        y*w
-        +
-        x
-      )
-      *
-      4;
+    const offset=
+      index*4;
 
-
-    avg[0]+=
-      data[
-        index
-        +
-        0
-      ];
-
-    avg[1]+=
-      data[
-        index
-        +
-        1
-      ];
-
-    avg[2]+=
-      data[
-        index
-        +
-        2
-      ];
+    baseR+=data[offset];
+    baseG+=data[offset+1];
+    baseB+=data[offset+2];
 
   }
 
 
-  avg[0]/=
+  baseR/=
     seeds.length;
 
-  avg[1]/=
+  baseG/=
     seeds.length;
 
-  avg[2]/=
+  baseB/=
     seeds.length;
 
 
   const visited=
     new Uint8Array(
-      w*h
+      width*height
     );
 
 
-  const queue=[];
+  const queue=
+    [];
 
 
   for(
-    const [
-      x,
-      y
-    ]
+    const seed
     of seeds
   ){
 
-    const idx=
-      y*w+x;
+    visited[seed]=
+      1;
 
-
-    if(
-      !visited[idx]
-    ){
-
-      visited[idx]=1;
-
-      queue.push(
-        idx
-      );
-
-    }
+    queue.push(
+      seed
+    );
 
   }
 
@@ -10047,61 +9443,60 @@ function adminRemoveBg(
     36;
 
 
-  function similar(
-    idx
-  ){
+  const similar=
+    index => {
 
-    const p=
-      idx*4;
-
-
-    const dr=
-      data[p]
-      -
-      avg[0];
-
-    const dg=
-      data[p+1]
-      -
-      avg[1];
-
-    const db=
-      data[p+2]
-      -
-      avg[2];
+      const offset=
+        index*4;
 
 
-    return(
-      Math.sqrt(
-        dr*dr
-        +
-        dg*dg
-        +
-        db*db
-      )
-      <=
-      tol
-    );
-
-  }
+      const dr=
+        data[offset]
+        -
+        baseR;
 
 
-  let qi=0;
+      const dg=
+        data[offset+1]
+        -
+        baseG;
+
+
+      const db=
+        data[offset+2]
+        -
+        baseB;
+
+
+      return(
+        Math.sqrt(
+          dr*dr+
+          dg*dg+
+          db*db
+        )
+        <=
+        tol
+      );
+
+    };
+
+
+  let cursor=0;
 
 
   while(
-    qi<
+    cursor<
     queue.length
   ){
 
-    const idx=
+    const index=
       queue[
-        qi++
+        cursor++
       ];
 
 
     if(
-      !similar(idx)
+      !similar(index)
     ){
 
       continue;
@@ -10110,39 +9505,59 @@ function adminRemoveBg(
 
 
     data[
-      idx*4+3
+      index*4+3
     ]=0;
 
 
     const x=
-      idx%w;
+      index%
+      width;
+
 
     const y=
       Math.floor(
-        idx/w
+        index/
+        width
       );
 
 
-    const near=[
-
-      idx-1,
-      idx+1,
-      idx-w,
-      idx+w
-
+    const neighbors=[
+      [x-1,y],
+      [x+1,y],
+      [x,y-1],
+      [x,y+1]
     ];
 
 
     for(
-      const next
-      of near
+      const [
+        nx,
+        ny
+      ]
+      of neighbors
     ){
 
       if(
-        next<0
+        nx<0
         ||
-        next>=w*h
+        ny<0
         ||
+        nx>=width
+        ||
+        ny>=height
+      ){
+
+        continue;
+
+      }
+
+
+      const next=
+        ny*width+
+        nx;
+
+
+      if(
         visited[next]
       ){
 
@@ -10151,30 +9566,8 @@ function adminRemoveBg(
       }
 
 
-      const nx=
-        next%w;
-
-      const ny=
-        Math.floor(
-          next/w
-        );
-
-
-      if(
-        Math.abs(
-          nx-x
-        )+
-        Math.abs(
-          ny-y
-        )!==1
-      ){
-
-        continue;
-
-      }
-
-
-      visited[next]=1;
+      visited[next]=
+        1;
 
       queue.push(
         next
@@ -10193,20 +9586,54 @@ function adminRemoveBg(
 
 }
 
+function adminCropCanvas(){
 
-/* =========================================================
-   CIRCLE OUTPUT
-========================================================= */
+  if(
+    !adminState.image
+    ||
+    !adminState.rect
+  ){
 
-function adminApplyCircleMask(
-  source
-){
-
-  const size=
-    Math.min(
-      source.width,
-      source.height
+    throw new Error(
+      "請先上傳圖片並用滑鼠拉出裁切框。"
     );
+
+  }
+
+
+  const scale=
+    adminState.fitScale*
+    adminState.zoom;
+
+
+  const rect=
+    adminState.rect;
+
+
+  const sx=
+    rect.x/scale;
+
+  const sy=
+    rect.y/scale;
+
+  const sw=
+    rect.w/scale;
+
+  const sh=
+    rect.h/scale;
+
+
+  if(
+    sw<3
+    ||
+    sh<3
+  ){
+
+    throw new Error(
+      "裁切範圍太小。"
+    );
+
+  }
 
 
   const output=
@@ -10216,10 +9643,17 @@ function adminApplyCircleMask(
 
 
   output.width=
-    size;
+    Math.max(
+      1,
+      Math.round(sw)
+    );
+
 
   output.height=
-    size;
+    Math.max(
+      1,
+      Math.round(sh)
+    );
 
 
   const ctx=
@@ -10228,162 +9662,140 @@ function adminApplyCircleMask(
     );
 
 
-  ctx.clearRect(
-    0,
-    0,
-    size,
-    size
-  );
-
-
-  ctx.save();
-
-  ctx.beginPath();
-
-  ctx.arc(
-    size/2,
-    size/2,
-    size/2,
-    0,
-    Math.PI*2
-  );
-
-  ctx.clip();
-
-
   ctx.drawImage(
-    source,
-    (
-      size-source.width
-    )/2,
-    (
-      size-source.height
-    )/2
+    adminState.image,
+    sx,
+    sy,
+    sw,
+    sh,
+    0,
+    0,
+    output.width,
+    output.height
   );
 
 
-  ctx.restore();
+  if(
+    document.getElementById(
+      "adminRemoveBg"
+    ).checked
+  ){
+
+    adminRemoveBackground(
+      output,
+      document.getElementById(
+        "adminBgTolerance"
+      ).value
+    );
+
+  }
+
+
+  if(
+    document.getElementById(
+      "adminCircleCrop"
+    ).checked
+  ){
+
+    const size=
+      Math.min(
+        output.width,
+        output.height
+      );
+
+
+    const circle=
+      document.createElement(
+        "canvas"
+      );
+
+
+    circle.width=
+      size;
+
+    circle.height=
+      size;
+
+
+    const circleCtx=
+      circle.getContext(
+        "2d"
+      );
+
+
+    circleCtx.save();
+
+    circleCtx.beginPath();
+
+    circleCtx.arc(
+      size/2,
+      size/2,
+      size/2,
+      0,
+      Math.PI*2
+    );
+
+    circleCtx.clip();
+
+
+    circleCtx.drawImage(
+      output,
+      (
+        size-output.width
+      )/2,
+      (
+        size-output.height
+      )/2
+    );
+
+
+    circleCtx.restore();
+
+
+    return circle;
+
+  }
 
 
   return output;
 
 }
 
-
-/* =========================================================
-   CROP PREVIEW
-========================================================= */
-
 async function adminCropPreview(){
 
   try{
 
-    if(
-      !adminState.screenshot
-      ||
-      !adminState.corners
-    ){
-
-      throw new Error(
-        "請先上傳截圖。"
-      );
-
-    }
-
-
-    const scale=
-      adminState.fitScale
-      *
-      adminState.zoom;
-
-
-    /*
-     * 畫布座標 → 原始圖片座標。
-     */
-
-    const srcCorners=
-      adminState.corners.map(
-        point =>
-          ({
-            x:
-              point.x/scale,
-
-            y:
-              point.y/scale
-          })
-      );
-
-
-    const size=
-      getPerspectiveOutputSize(
-        srcCorners
-      );
-
-
-    let output=
-      adminPerspectiveCrop(
-        adminState.screenshot,
-        srcCorners,
-        size.width,
-        size.height
-      );
-
-
-    if(
-      document.getElementById(
-        "adminRemoveBg"
-      ).checked
-    ){
-
-      adminRemoveBg(
-        output,
-        document.getElementById(
-          "adminBgTolerance"
-        ).value
-      );
-
-    }
-
-
-    if(
-      document.getElementById(
-        "adminCircleCrop"
-      ).checked
-    ){
-
-      output=
-        adminApplyCircleMask(
-          output
-        );
-
-    }
+    const canvas=
+      adminCropCanvas();
 
 
     const blob=
       await new Promise(
-        (resolve,reject) =>
-          output.toBlob(
-            file =>
-              file
-              ?
-              resolve(file)
-              :
-              reject(
-                new Error(
-                  "PNG 製作失敗"
-                )
-              ),
+        (resolve,reject)=>{
+          canvas.toBlob(
+            file=>{
+              if(file){
+                resolve(file);
+              }else{
+                reject(
+                  new Error(
+                    "PNG 製作失敗。"
+                  )
+                );
+              }
+            },
             "image/png"
-          )
+          );
+        }
       );
 
 
-    adminState.processedBlob=
+    adminState.cropBlob=
       blob;
 
 
-    adminState.processedDataUrl=
-      output.toDataURL(
+    adminState.cropDataUrl=
+      canvas.toDataURL(
         "image/png"
       );
 
@@ -10392,49 +9804,22 @@ async function adminCropPreview(){
       "adminCropPreview"
     ).innerHTML=`
 
-      <div class="admin-preview-box">
-
-        <div class="muted">
-          透視裁切
-        </div>
-
-        <img
-          src="${adminState.processedDataUrl}"
-          alt=""
-        >
-
-      </div>
-
-
-      <div class="admin-preview-box">
-
-        <div class="muted">
-          最終圖章
-        </div>
-
-        <img
-          src="${adminState.processedDataUrl}"
-          alt=""
-        >
-
-      </div>
+      <img
+        src="${adminState.cropDataUrl}"
+        alt="裁切預覽"
+      >
 
     `;
 
 
-    adminSetSaveStatus(
-      "✓ 裁切完成，可儲存人工修正。",
+    adminSaveStatus(
+      "✓ 裁切完成。",
       true
     );
 
-
   }catch(error){
 
-    console.error(
-      error
-    );
-
-    adminSetSaveStatus(
+    adminSaveStatus(
       error.message,
       false
     );
@@ -10446,11 +9831,11 @@ async function adminCropPreview(){
 function adminDownloadCrop(){
 
   if(
-    !adminState.processedBlob
+    !adminState.cropBlob
   ){
 
-    adminSetSaveStatus(
-      "請先執行透視裁切預覽。",
+    adminSaveStatus(
+      "請先裁切預覽。",
       false
     );
 
@@ -10461,7 +9846,7 @@ function adminDownloadCrop(){
 
   const url=
     URL.createObjectURL(
-      adminState.processedBlob
+      adminState.cropBlob
     );
 
 
@@ -10473,7 +9858,6 @@ function adminDownloadCrop(){
 
   a.href=
     url;
-
 
   a.download=
     "stamp-crop.png";
@@ -10491,10 +9875,11 @@ function adminDownloadCrop(){
 
 
   setTimeout(
-    () =>
+    ()=>{
       URL.revokeObjectURL(
         url
-      ),
+      );
+    },
     1000
   );
 
@@ -10505,22 +9890,22 @@ function adminDownloadCrop(){
    ADMIN IMAGE UPLOAD
 ========================================================= */
 
-async function adminUploadProcessedImage(
+async function adminUploadCrop(
   point
 ){
 
   if(
-    !adminState.processedBlob
+    !adminState.cropBlob
   ){
 
-    return null;
+    return "";
 
   }
 
 
   const safe=
     String(
-      point.id
+      point?.id
       ||
       Date.now()
     )
@@ -10535,7 +9920,7 @@ async function adminUploadProcessedImage(
 
 
   const buffer=
-    await adminState.processedBlob.arrayBuffer();
+    await adminState.cropBlob.arrayBuffer();
 
 
   const bytes=
@@ -10575,13 +9960,13 @@ async function adminUploadProcessedImage(
 
   try{
 
-    const current=
+    const existing=
       await adminGithubGet(
         path
       );
 
     sha=
-      current.sha
+      existing.sha
       ||
       "";
 
@@ -10602,11 +9987,6 @@ async function adminUploadProcessedImage(
     );
 
   }catch(error){
-
-    /*
-     * 圖片與別的更新同時發生時，
-     * 再抓一次 SHA。
-     */
 
     if(
       error.status!==409
@@ -10639,12 +10019,12 @@ async function adminUploadProcessedImage(
 
 
 /* =========================================================
-   ADMIN SAVE OVERRIDE — WITH 409 RETRY
+   ADMIN SAVE OVERRIDE
 ========================================================= */
 
 async function adminReadLatestOverrides(){
 
-  const latest=
+  const file=
     await adminGithubGet(
       "svgstamp_manual_overrides.json"
     );
@@ -10653,7 +10033,7 @@ async function adminReadLatestOverrides(){
   const data=
     JSON.parse(
       adminB64ToUtf8(
-        latest.content
+        file.content
       )
     );
 
@@ -10674,7 +10054,7 @@ async function adminReadLatestOverrides(){
     data,
 
     sha:
-      latest.sha
+      file.sha
       ||
       ""
 
@@ -10683,23 +10063,19 @@ async function adminReadLatestOverrides(){
 }
 
 function adminUpsertOverride(
-  rows,
+  list,
   patch
 ){
 
   const index=
-    rows.findIndex(
+    list.findIndex(
       row =>
         String(
-          row.id
-          ||
-          ""
+          row?.id
         )
         ===
         String(
-          patch.id
-          ||
-          ""
+          patch?.id
         )
     );
 
@@ -10708,50 +10084,20 @@ function adminUpsertOverride(
     index>=0
   ){
 
-    rows[index]={
-      ...rows[index],
+    list[index]={
+      ...list[index],
       ...patch
     };
 
   }else{
 
-    rows.push(
+    list.push(
       patch
     );
 
   }
 
 }
-
-
-function adminSetSaveStatus(
-  message,
-  ok
-){
-
-  const el=
-    document.getElementById(
-      "adminSaveStatus"
-    );
-
-
-  el.textContent=
-    message;
-
-
-  el.className=
-    "admin-status "
-    +
-    (
-      ok
-      ?
-      "ok"
-      :
-      "error"
-    );
-
-}
-
 
 async function adminSaveOverride(){
 
@@ -10783,19 +10129,11 @@ async function adminSaveOverride(){
     }
 
 
-    /*
-     * ① 名稱
-     */
-
     const displayName=
       document.getElementById(
         "adminPointName"
       ).value.trim();
 
-
-    /*
-     * ② 座標
-     */
 
     const coordinateText=
       document.getElementById(
@@ -10806,7 +10144,9 @@ async function adminSaveOverride(){
     let coords=[];
 
 
-    if(coordinateText){
+    if(
+      coordinateText
+    ){
 
       const parsed=
         parseFlexibleCoordinate(
@@ -10844,20 +10184,15 @@ async function adminSaveOverride(){
     }
 
 
-    /*
-     * ③ 如果有裁切圖片就先上傳
-     */
-
-    let imagePath=
-      "";
+    let imagePath="";
 
 
     if(
-      adminState.processedBlob
+      adminState.cropBlob
     ){
 
       imagePath=
-        await adminUploadProcessedImage(
+        await adminUploadCrop(
           point
         );
 
@@ -10875,10 +10210,6 @@ async function adminSaveOverride(){
 
     }
 
-
-    /*
-     * ④ 建立 patch
-     */
 
     const patch={
 
@@ -10900,8 +10231,6 @@ async function adminSaveOverride(){
         point.venue
         ||
         point.name
-        ||
-        displayName
         ||
         "",
 
@@ -10962,8 +10291,8 @@ async function adminSaveOverride(){
 
 
     /*
-     * ⑤ 最重要：
-     * 永遠先抓最新版本再寫。
+     * 重要：
+     * 永遠重新抓最新版 JSON。
      */
 
     let latest=
@@ -10984,7 +10313,7 @@ async function adminSaveOverride(){
       new Date().toISOString();
 
 
-    const content=
+    const encoded=
       adminUtf8ToB64(
         JSON.stringify(
           latest.data,
@@ -10999,23 +10328,17 @@ async function adminSaveOverride(){
     try{
 
       await adminGithubPut(
-
         "svgstamp_manual_overrides.json",
-
-        content,
-
+        encoded,
         `admin: manual override ${point.id}`,
-
         latest.sha
-
       );
 
     }catch(error){
 
       /*
-       * 409：
-       * 代表這段時間內有人／Actions 更新了檔案。
-       * 重新抓最新內容，再把本次 patch 疊回去。
+       * GitHub 409：
+       * 重新抓最新內容後重新套本次 patch。
        */
 
       if(
@@ -11046,9 +10369,7 @@ async function adminSaveOverride(){
 
 
       await adminGithubPut(
-
         "svgstamp_manual_overrides.json",
-
         adminUtf8ToB64(
           JSON.stringify(
             latest.data,
@@ -11058,20 +10379,12 @@ async function adminSaveOverride(){
           +
           "\n"
         ),
-
         `admin: manual override ${point.id} retry`,
-
         latest.sha
-
       );
 
     }
 
-
-    /*
-     * 不重新跑 Actions。
-     * 不立即刷新主網站。
-     */
 
     adminState.overrides=
       latest.data;
@@ -11080,25 +10393,31 @@ async function adminSaveOverride(){
       latest.sha;
 
 
-    adminSetSaveStatus(
+    /*
+     * 不跑 Actions。
+     * 不立即改主頁資料。
+     */
 
-      `✓ 人工資料已儲存。
+    adminSaveStatus(
 
-圖章：${displayName || getItemTitle(
-        adminState.type==="lid"
-        ?
-        "lid"
-        :
-        "stamp",
-        point
-      )}
+      `✓ 人工修正已儲存。
+
+圖章：
+${displayName || getItemTitle(
+  adminState.type==="lid"
+  ?
+  "lid"
+  :
+  "stamp",
+  point
+)}
 
 ${
   coords.length>=2
   ?
   `座標：${coords[0]}, ${coords[1]}`
   :
-  ""
+  "座標：未修改"
 }
 
 ${
@@ -11106,14 +10425,13 @@ ${
   ?
   `圖片：${imagePath}`
   :
-  ""
+  "圖片：未修改"
 }
 
-目前尚未同步主資料。
-完成多筆修改後，按「🔄 一鍵同步更新」。`,
+目前不會立即同步官方資料。
+全部修改完成後按「🔄 一鍵同步更新」。`,
 
       true
-
     );
 
 
@@ -11124,23 +10442,12 @@ ${
     );
 
 
-    adminSetSaveStatus(
+    adminSaveStatus(
       `❌ ${error.message}`,
       false
     );
 
   }
-
-}
-
-
-/* =========================================================
-   ADMIN RELOAD
-========================================================= */
-
-function adminReloadCurrent(){
-
-  adminLoadData();
 
 }
 
@@ -11170,28 +10477,20 @@ async function adminTriggerSync(){
 
     const response=
       await fetch(
-
         `https://api.github.com/repos/${adminRepo()}/actions/workflows/${encodeURIComponent(WORKFLOW_FILE)}/dispatches`,
-
         {
-
-          method:
-            "POST",
-
+          method:"POST",
           headers:{
             ...adminHeaders(),
             "Accept":
               "application/vnd.github+json"
           },
-
           body:
             JSON.stringify({
               ref:
                 adminBranch()
             })
-
         }
-
       );
 
 
@@ -11206,18 +10505,17 @@ async function adminTriggerSync(){
     }
 
 
-    document.getElementById(
-      "adminStatus"
-    ).textContent=
-      "✓ 已送出一鍵同步更新。\nGitHub Actions 已開始排程。\n人工修改不會再另外觸發第二次更新。";
+    adminStatus(
+      "✓ 已送出一鍵同步更新。\nGitHub Actions 已開始執行。\n人工修正會由同步程式重新套回。",
+      true
+    );
 
 
   }catch(error){
 
-    document.getElementById(
-      "adminStatus"
-    ).textContent=
-      `❌ 一鍵同步失敗：${error.message}`;
+    adminStatus(
+      `❌ 一鍵同步失敗：${error.message}`
+    );
 
   }
 
@@ -11225,25 +10523,15 @@ async function adminTriggerSync(){
 
 
 /* =========================================================
-   ADMIN SELECT EVENTS
+   EVENTS
 ========================================================= */
 
 document.getElementById(
   "adminDataType"
 ).addEventListener(
   "change",
-  () => {
-
-    adminState.type=
-      document.getElementById(
-        "adminDataType"
-      ).value;
-
-    adminLoadData();
-
-  }
+  adminLoadData
 );
-
 
 document.getElementById(
   "adminEventSelect"
@@ -11252,24 +10540,12 @@ document.getElementById(
   adminPopulatePoints
 );
 
-
 document.getElementById(
   "adminPointSelect"
 ).addEventListener(
   "change",
   adminShowPointInfo
 );
-
-
-/* =========================================================
-   COLLECTION TYPE
-========================================================= */
-
-function renderMainTabDownloadState(){
-
-  renderMainDownloads();
-
-}
 
 
 /* =========================================================
@@ -11288,43 +10564,32 @@ async function start(){
 
 
   /*
-   * History 獨立背景載入。
-   * 不會阻塞 Lid。
+   * History 完全獨立。
+   * 失敗不會讓首頁卡住。
    */
 
   loadHistory();
 
 
   /*
-   * Lid 先出畫面。
+   * Lid 先出來。
    */
 
-  const lidReady=
-    await loadDataSet(
-      "lid"
-    );
+  await loadDataSet(
+    "lid"
+  );
 
 
   buildLidGroups();
 
 
-  if(lidReady){
-
-    switchCollectionType(
-      "lid"
-    );
-
-  }else{
-
-    renderRegions();
-
-    updateOverall();
-
-  }
+  switchCollectionType(
+    "lid"
+  );
 
 
   /*
-   * 其餘資料背景更新。
+   * 其他資料背景載入。
    */
 
   await Promise.all([
@@ -11365,29 +10630,10 @@ document.addEventListener(
     }
 
 
-    const admin=
+    if(
       document.getElementById(
         "adminOverlay"
-      );
-
-    const modal=
-      document.getElementById(
-        "modalOverlay"
-      );
-
-    const collection=
-      document.getElementById(
-        "collectionPanel"
-      );
-
-    const prefecture=
-      document.getElementById(
-        "prefecturePanel"
-      );
-
-
-    if(
-      admin.classList.contains(
+      ).classList.contains(
         "show"
       )
     ){
@@ -11400,7 +10646,9 @@ document.addEventListener(
 
 
     if(
-      modal.classList.contains(
+      document.getElementById(
+        "modalOverlay"
+      ).classList.contains(
         "show"
       )
     ){
@@ -11413,7 +10661,9 @@ document.addEventListener(
 
 
     if(
-      collection.classList.contains(
+      document.getElementById(
+        "collectionPanel"
+      ).classList.contains(
         "show"
       )
     ){
@@ -11426,7 +10676,9 @@ document.addEventListener(
 
 
     if(
-      prefecture.classList.contains(
+      document.getElementById(
+        "prefecturePanel"
+      ).classList.contains(
         "show"
       )
     ){

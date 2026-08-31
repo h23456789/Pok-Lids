@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-31T15:23:49.933Z",
+  "updated": "2026-08-31T15:25:21.446Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {
@@ -13,7 +13,8 @@
         129.868889
       ],
       "coordinatesSource": "Published place coordinate reference",
-      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-NAGASAKI-P001.png"
+      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-NAGASAKI-P001.png",
+      "stampImageSource": "Manual override"
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-NAGASAKI-P002",

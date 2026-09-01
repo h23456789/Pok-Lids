@@ -1173,6 +1173,120 @@ def build_events_metadata(old_events, merged):
     )
 
 
+
+def load_manual_overrides():
+    """Load optional manual corrections.
+
+    Supported JSON forms:
+      {"<item-id>": {"field": "value", ...}}
+      {"items": {"<item-id>": {...}}}
+      [{"id": "<item-id>", "field": "value", ...}, ...]
+
+    Missing or malformed override files are treated as an empty override set.
+    """
+    if not OVERRIDE_FILE.exists():
+        return {}
+
+    try:
+        data = load_json(OVERRIDE_FILE, {})
+    except Exception as error:
+        print("WARNING: cannot load manual overrides:", error)
+        return {}
+
+    if isinstance(data, dict):
+        if isinstance(data.get("items"), dict):
+            return data["items"]
+        # Ignore metadata keys if the file uses a top-level object.
+        if all(isinstance(v, dict) for v in data.values()):
+            return data
+        return {}
+
+    if isinstance(data, list):
+        result = {}
+        for row in data:
+            if not isinstance(row, dict):
+                continue
+            item_id = str(row.get("id") or "").strip()
+            if not item_id:
+                continue
+            result[item_id] = {
+                k: v for k, v in row.items() if k != "id"
+            }
+        return result
+
+    return {}
+
+
+def apply_manual_overrides(items, overrides):
+    """Apply only explicit manual fields; never create records from overrides."""
+    if not isinstance(overrides, dict):
+        return list(items or [])
+
+    result = []
+    for item in items or []:
+        row = dict(item)
+        item_id = str(row.get("id") or "").strip()
+        override = overrides.get(item_id)
+        if isinstance(override, dict):
+            for field, value in override.items():
+                # Internal control keys are not copied into the stamp record.
+                if field in {"id", "delete", "remove"}:
+                    continue
+                row[field] = value
+        result.append(row)
+    return result
+
+
+def _stable_item_signature(item):
+    """Signature used for history/change detection, excluding volatile fields."""
+    ignored = {"updated", "lastSeen", "_debug"}
+    return json.dumps(
+        {k: v for k, v in item.items() if k not in ignored},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def compare_items(old_items, new_items):
+    old_map = {
+        str(item.get("id")): item
+        for item in (old_items or [])
+        if item.get("id")
+    }
+    new_map = {
+        str(item.get("id")): item
+        for item in (new_items or [])
+        if item.get("id")
+    }
+
+    added = sorted(set(new_map) - set(old_map))
+    removed = sorted(set(old_map) - set(new_map))
+    changed = sorted(
+        item_id
+        for item_id in (set(old_map) & set(new_map))
+        if _stable_item_signature(old_map[item_id]) != _stable_item_signature(new_map[item_id])
+    )
+    return added, removed, changed
+
+
+def history_detail(item):
+    """Compact history representation for one stamp point."""
+    if not isinstance(item, dict):
+        return {}
+    return {
+        "id": item.get("id", ""),
+        "eventId": item.get("eventId", ""),
+        "event": item.get("event", ""),
+        "eventZh": item.get("eventZh", ""),
+        "venue": item.get("venue") or item.get("name", ""),
+        "venueZh": item.get("venueZh", ""),
+        "pref": item.get("pref", ""),
+        "city": item.get("city", ""),
+        "coords": item.get("coords", []),
+        "sourceUrl": item.get("sourceUrl", ""),
+    }
+
 def main():
     print("========================================")
     print("Pokémon Stamp Rally AUTO UPDATER")

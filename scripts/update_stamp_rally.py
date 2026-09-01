@@ -349,6 +349,98 @@ def extract_description(soup):
     return ""
 
 
+def is_non_target_text(value):
+    """Return True for Stamp Rally content that is outside this project's target.
+
+    Target: in-game Pokémon GO GO Stamp Rally collection.
+    Excludes: Pokémon Center on-site rallies, Poké Lid rallies, railway/highway
+    rallies, and pages that are merely generic event/campaign pages.
+    """
+    text = norm(value).lower()
+    if not text:
+        return False
+
+    # Explicitly excluded physical/offline rally families.
+    excluded = (
+        "poké lid", "poke lid", "pokelid", "ポケふた", "寶可夢人孔蓋",
+        "pokemon center stamp rally", "pokémon center stamp rally",
+        "ポケモンセンタースタンプラリー", "寶可夢中心 stamp rally",
+        "寶可夢中心 集章", "寶可夢中心 go 集章",
+        "jr east", "jr東日本", "jr west", "jr西日本", "jr九州",
+        "jr東海", "名鉄", "meitetsu", "nexco", "高速道路",
+    )
+    if any(x in text for x in excluded):
+        return True
+
+    # Pokémon Center on-site event pages should not become GO Stamp Rally records.
+    if ("pokemon center" in text or "pokémon center" in text or "ポケモンセンター" in text or "寶可夢中心" in text):
+        # Only allow it when the text clearly describes an actual in-game GO stamp rally,
+        # not a physical Center stamp rally.
+        physical_center = any(x in text for x in (
+            "center stamp rally", "pokemon center stamp rally", "pokémon center stamp rally",
+            "ポケモンセンタースタンプラリー", "店頭", "店内", "來店", "現場",
+        ))
+        if physical_center:
+            return True
+
+    return False
+
+
+def is_non_target_item(item):
+    if not isinstance(item, dict):
+        return True
+    blob = " ".join(
+        str(item.get(k) or "")
+        for k in (
+            "event", "eventName", "eventZh", "eventNameZh",
+            "activity", "activityZh", "venue", "name", "venueZh", "nameZh",
+            "source", "sourceUrl", "canonicalPage",
+        )
+    )
+    if is_non_target_text(blob):
+        return True
+
+    # Only collect actual in-game stamp-point records in the final list.
+    activity = norm(item.get("activityZh") or item.get("activity") or "").lower()
+    venue_type = norm(item.get("venueType") or "").lower()
+    if activity and "stamp rally" not in activity and "集章趣" not in activity:
+        return True
+    if venue_type in {"pokemon_center", "pokemon-center", "physical_stamp_rally"}:
+        return True
+    return False
+
+
+def is_target_stamp_activity(activity):
+    """Strict activity-level filter.
+
+    A page may contain many activities. Only an activity that itself describes a
+    GO Stamp Rally / GO 集章趣, or whose section URL/title explicitly identifies
+    a stamp-rally feature, is accepted.
+    """
+    if not activity:
+        return False
+    title = norm(activity.get("sectionTitle") or "")
+    page_title = norm(activity.get("pageTitle") or "")
+    description = norm(activity.get("description") or "")
+    blob = f"{title} {page_title} {description}".lower()
+    url = norm(activity.get("pageUrl") or "").lower()
+
+    if is_non_target_text(blob):
+        return False
+
+    explicit_terms = (
+        "go stamp rally", "go stamp rallies", "goスタンプラリー", "go集章趣",
+        "stamp rally", "スタンプラリー",
+    )
+    url_explicit = "stamp-rally" in url or "stamp_rally" in url or "stamp-rally" in url
+
+    if any(term in blob for term in explicit_terms):
+        return True
+    if url_explicit:
+        return True
+    return False
+
+
 def page_is_go_stamp(soup):
     text = norm(soup.get_text(" ", strip=True)).lower()
     if any(x in text for x in EXCLUDE_TERMS):
@@ -546,8 +638,20 @@ def parse_activity_blocks(soup, page_url):
     page_banner = extract_banner(soup, page_url)
     blocks = extract_heading_blocks(soup)
 
-    # 若官方頁沒有獨立 Stamp Rally heading，整頁仍視為單一 rally block。
-    if not blocks and page_is_go_stamp(soup):
+    # Only treat the whole page as one rally when the page itself is explicitly
+    # identified as a Stamp Rally page. Generic event pages often mention stamp
+    # features and must not become a rally automatically.
+    page_url_lower = page_url.lower()
+    explicit_page_rally = (
+        "stamp-rally" in page_url_lower
+        or "stamp_rally" in page_url_lower
+        or "go-stamp" in page_url_lower
+        or "go_stamp" in page_url_lower
+        or any(term in page_title.lower() for term in (
+            "go stamp rally", "goスタンプラリー", "stamp rally", "スタンプラリー", "go集章趣"
+        ))
+    )
+    if not blocks and page_is_go_stamp(soup) and explicit_page_rally:
         blocks = [(page_title, [soup])]
 
     activities = []
@@ -566,6 +670,15 @@ def parse_activity_blocks(soup, page_url):
         points = []
         for node in nodes:
             points.extend(parse_points_from_container(node))
+        # Do not turn every section on a Pokémon GO event page into a Stamp Rally.
+        candidate = {
+            "pageUrl": page_url,
+            "sectionTitle": block_title,
+            "pageTitle": page_title,
+            "description": extract_description(soup),
+        }
+        if not is_target_stamp_activity(candidate):
+            continue
         # Deduplicate names within the block.
         dedup = []
         seen = set()
@@ -573,6 +686,11 @@ def parse_activity_blocks(soup, page_url):
             k = re.sub(r"[^a-z0-9一-龥ぁ-んァ-ン]+", "", p["name"].lower())
             if k and k not in seen:
                 seen.add(k); dedup.append(p)
+        # An announced activity without any actual stamp-point list is not a collectible
+        # point set for this Japan collection. Keep metadata only when it explicitly
+        # reports a stamp count; otherwise discard it here.
+        if not dedup and not expected:
+            continue
         activities.append({
             "pageUrl": page_url,
             "pageKey": canonical_page_key(page_url),
@@ -823,6 +941,8 @@ def build_from_discovery(discovered, old_data):
         activities = parse_activity_blocks(soup, page_url)
         print("PARSE:", page_url, "activities=", len(activities))
         for activity in activities:
+            if not is_target_stamp_activity(activity):
+                continue
             label = canonical_event_label(activity)
             if any(term in str(label).lower() for term in CENTER_EXCLUDE_TERMS):
                 continue

@@ -1,6 +1,6 @@
 {
   "version": "17.0",
-  "updated": "2026-09-01T17:50:03.668840+00:00",
+  "updated": "2026-09-01T18:10:08.320432+00:00",
   "source": "Pokémon GO Official Website",
   "sourceMode": "official-first; localized dedupe; activity-block discovery; verified-community/OSM fallback",
   "rule": "Only in-game Pokémon GO GO Stamp Rally. Offline stamp rallies and Poké Lid are excluded.",

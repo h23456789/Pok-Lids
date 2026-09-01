@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-08-31T17:06:05.179Z",
+  "updated": "2026-08-31T15:54:44.731Z",
   "description": "Manual overrides for Pokémon GO GO Stamp Rally. Values in this file have priority over automatic discovery/geocoding and are preserved by GitHub Actions.",
   "items": [
     {
@@ -211,66 +211,6 @@
       ],
       "coordinatesSource": "Verified community coordinate reference",
       "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-SHINAGAWA-P004.png"
-    },
-    {
-      "id": "GO-STAMP-BOOTSTRAP-MINATO-P001",
-      "eventId": "GO-STAMP-BOOTSTRAP-MINATO",
-      "venue": "東京鐵塔",
-      "name": "東京鐵塔",
-      "manualCoordinates": [
-        35.6586,
-        139.7454
-      ],
-      "coordinatesSource": "Verified community coordinate reference",
-      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P001.png"
-    },
-    {
-      "id": "GO-STAMP-BOOTSTRAP-MINATO-P003",
-      "eventId": "GO-STAMP-BOOTSTRAP-MINATO",
-      "venue": "原芝浦小學校紀念碑",
-      "name": "原芝浦小學校紀念碑",
-      "manualCoordinates": [
-        35.665661,
-        139.7461202
-      ],
-      "coordinatesSource": "Verified community coordinate reference",
-      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P003.png"
-    },
-    {
-      "id": "GO-STAMP-BOOTSTRAP-MINATO-P004",
-      "eventId": "GO-STAMP-BOOTSTRAP-MINATO",
-      "venue": "江戶坂",
-      "name": "江戶坂",
-      "manualCoordinates": [
-        35.6669716,
-        139.7454765
-      ],
-      "coordinatesSource": "Verified community coordinate reference",
-      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P004.png"
-    },
-    {
-      "id": "GO-STAMP-BOOTSTRAP-MINATO-P005",
-      "eventId": "GO-STAMP-BOOTSTRAP-MINATO",
-      "venue": "芝公園 Gym Statue",
-      "name": "芝公園 Gym Statue",
-      "manualCoordinates": [
-        35.6560133,
-        139.7490935
-      ],
-      "coordinatesSource": "Verified community coordinate reference",
-      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P005.png"
-    },
-    {
-      "id": "GO-STAMP-BOOTSTRAP-MINATO-P002",
-      "eventId": "GO-STAMP-BOOTSTRAP-MINATO",
-      "venue": "SL廣場 C11 292",
-      "name": "SL廣場 C11 292",
-      "manualCoordinates": [
-        35.6671448,
-        139.7574141
-      ],
-      "coordinatesSource": "Verified community coordinate reference",
-      "manualStampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P002.png"
     }
   ]
 }

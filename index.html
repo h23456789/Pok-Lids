@@ -1188,16 +1188,11 @@ button{
       calc(100vw - 28px)
     );
 
-  min-width:360px;
-  min-height:320px;
-  max-width:calc(100vw - 20px);
-
   max-height:
     calc(
       100vh - 35px
     );
 
-  resize:both;
   overflow:auto;
 
   background:#fff;
@@ -1218,6 +1213,12 @@ button{
   position:relative;
 
   z-index:11001;
+  resize:both;
+  min-width:min(360px,calc(100vw - 20px));
+  min-height:320px;
+  max-width:calc(100vw - 20px);
+  overflow:auto;
+
 }
 
 .modal-close{
@@ -2365,6 +2366,33 @@ button{
   </button>
 
 </div>
+
+<div
+  id="stampAllDownloadBox"
+  class="stamp-all-download-box"
+  style="display:none;"
+>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('txt')"
+  >
+    🎟️ 所有圖章 TXT
+  </button>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('json')"
+  >
+    🎟️ 所有圖章 JSON
+  </button>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('csv')"
+  >
+    🎟️ 所有圖章 CSV
+  </button>
+</div>
+
+
 
 <!-- =========================================================
      HISTORY
@@ -3570,82 +3598,138 @@ function canonicalStampSourceUrl(url){
 }
 
 function stampNormalizeActivityText(value){return String(value??"").toLowerCase().replace(/[\s\u3000]/g,"").replace(/[「」『』【】（）()［］[\]・･.,，。:：;；_ー\-‐‑–—|]/g,"");}
-function stampIsHowTo(item){const t=stampNormalizeActivityText([item?.event,item?.eventName,item?.eventZh,item?.eventNameZh,item?.title,item?.name].filter(Boolean).join(" "));return t.includes(stampNormalizeActivityText("我該怎麼進行"))||t.includes("howtostamprally")||t.includes("howdostamprallieswork")||t.includes("faq");}
-function stampIsPokeLid(item){const t=stampNormalizeActivityText([item?.event,item?.eventName,item?.eventZh,item?.eventNameZh,item?.activity,item?.activityZh,item?.venue,item?.name].filter(Boolean).join(" "));return t.includes("pokelid")||t.includes("ポケふた")||t.includes("寶可夢人孔蓋");}
-function stampIsPokemonCenter(item){
-  if(!item) return false;
-  const venueType=String(item?.venueType||"").toLowerCase();
-  if(venueType==="pokemon_center") return true;
-  const t=stampNormalizeActivityText([item?.event,item?.eventName,item?.eventZh,item?.eventNameZh,item?.activity,item?.activityZh,item?.venue,item?.name].filter(Boolean).join(" "));
-  return t.includes("ポケモンセンタースタンプラリー")||t.includes("pokemoncenterstamprally")||t.includes("寶可夢中心集章")||t.includes("寶可夢中心go集章");
+function stampIsHowTo(item){const t=stampNormalizeActivityText([item?.event,item?.eventName,item?.eventZh,item?.eventNameZh,item?.title,item?.name].filter(Boolean).join(" "));return t.includes(stampNormalizeActivityText("我該怎麼進行"))||t.includes("howtostamprally")||t.includes("howdostamprallieswork");}
+function stampIsPokeLid(item){return stampNormalizeActivityText([item?.event,item?.eventName,item?.eventZh,item?.eventNameZh,item?.activity,item?.activityZh,item?.venue,item?.name].filter(Boolean).join(" ")).includes("ポケふた")||stampNormalizeActivityText([item?.event,item?.eventName,item?.eventZh,item?.eventNameZh,item?.activity,item?.activityZh,item?.venue,item?.name].filter(Boolean).join(" ")).includes("pokelid");}
+function stampIsPokemonCenterOnly(item){
+  const t=String([item?.event,item?.eventName,item?.eventZh,item?.eventNameZh,item?.activity,item?.activityZh,item?.venue,item?.name].filter(Boolean).join(" ")).toLowerCase();
+  const hasCenter=t.includes("pokemon center")||t.includes("pokémon center")||t.includes("ポケモンセンター")||t.includes("寶可夢中心");
+  const hasGo=t.includes("pokemon go")||t.includes("pokémon go")||t.includes("go stamp rally")||t.includes("goスタンプラリー")||t.includes("go集章趣");
+  return hasCenter && !hasGo;
 }
-function stampIsOfficialSource(item){
+function stampIsOfficialGoSource(item){
   const url=String(item?.sourceUrl||"").trim();
-  if(!url) return false;
+  if(!url)return false;
   try{
     const host=new URL(url,location.href).hostname.toLowerCase().replace(/^www\./,"");
-    return host==="pokemongo.com"||host==="pokemon.co.jp"||host==="shop.pokemon.co.jp";
+    return host==="pokemongo.com";
   }catch{return false;}
 }
-function stampHasUsableCoordinates(item){const {lat,lng}=getItemLatLng(item);return Number.isFinite(lat)&&Number.isFinite(lng);}
-function stampIsJapanPoint(item){const {lat,lng}=getItemLatLng(item);return Number.isFinite(lat)&&Number.isFinite(lng)&&lat>=24&&lat<=46&&lng>=122&&lng<=146.5;}
-function stampIsActualGoPoint(item){
-  if(!item||stampIsHowTo(item)||stampIsPokeLid(item)||stampIsPokemonCenter(item))return false;
-  if(!stampIsOfficialSource(item))return false;
-  const activity=stampNormalizeActivityText([item?.activity,item?.activityZh,item?.event,item?.eventName,item?.eventZh,item?.eventNameZh].filter(Boolean).join(" "));
-  const gameSignal=activity.includes("gostamprally")||activity.includes("go集章趣")||activity.includes("goスタンプラリー")||activity.includes("pokemongostamprally");
-  return gameSignal&&stampHasUsableCoordinates(item)&&stampIsJapanPoint(item);
+function stampHasUsableCoordinates(item){
+  const {lat,lng}=getItemLatLng(item);
+  return Number.isFinite(lat)&&Number.isFinite(lng);
+}
+function stampIsJapanPoint(item){
+  const {lat,lng}=getItemLatLng(item);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng))return false;
+  // Japan collection: keep Japan only (including Okinawa), exclude Taiwan/Singapore/etc.
+  return lat>=24 && lat<=46 && lng>=122.0 && lng<=146.5;
+}
+function stampIsTargetPoint(item){
+  return !!item &&
+    stampIsOfficialGoSource(item) &&
+    !stampIsHowTo(item) &&
+    !stampIsPokeLid(item) &&
+    !stampIsPokemonCenterOnly(item) &&
+    stampHasUsableCoordinates(item) &&
+    stampIsJapanPoint(item);
 }
 function stampSourceKey(url){
-  const raw=String(url??"").trim().toLowerCase(); if(!raw)return "";
-  try{const u=new URL(raw,location.href);let path=(u.pathname||"").replace(/\/+$/g,"");path=path.replace(/^\/(?:en|ja|zh-hant|zh_hant)(?=\/|$)/i,"");return `${u.hostname.toLowerCase().replace(/^www\./,"")}${path}`;}
-  catch{return raw.replace(/^https?:\/\//i,"").replace(/^www\./,"").replace(/^\/(?:en|ja|zh-hant|zh_hant)(?=\/|$)/i,"").replace(/\/+$/g,"");}
+  const raw=String(url??"").trim().toLowerCase();
+  if(!raw)return "";
+  try{
+    const u=new URL(raw,location.href);
+    let path=(u.pathname||"").replace(/\/+$/g,"");
+    path=path.replace(/^\/(?:en|ja|zh-hant|zh_hant)(?=\/|$)/i,"");
+    return `${u.hostname.toLowerCase().replace(/^www\./,"")}${path}`;
+  }catch{return raw.replace(/^https?:\/\//i,"").replace(/^www\./,"").replace(/^\/(?:en|ja|zh-hant|zh_hant)(?=\/|$)/i,"").replace(/\/+$/g,"");}
 }
 function stampCanonicalActivityKey(row){
-  if(!row||stampIsHowTo(row)||stampIsPokeLid(row)||stampIsPokemonCenter(row))return "__skip__";
-  const t=stampNormalizeActivityText([row?.eventZh,row?.eventNameZh,row?.event,row?.eventName,row?.activityZh,row?.activity].filter(Boolean).join(" "));
-  const known=[
-    [["東京港區gostamprally","tokyominatocitygostamprally"],"tokyo-minato-2026"],
-    [["東京江東區gostamprally","tokyokotocitygostamprally"],"tokyo-koto-2026"],
-    [["東京品川區gostamprally","tokyoshinagawacitygostamprally"],"tokyo-shinagawa-2026"],
-    [["長崎市gostamprally","nagasakicitygostamprally"],"nagasaki-2025"],
-    [["吹田市gostamprally","suitacitygostamprally"],"suita-2025"]
-  ];
-  for(const [keys,id] of known){if(keys.some(k=>t.includes(k)))return id;}
+  if(!row || stampIsHowTo(row) || stampIsPokeLid(row) || stampIsPokemonCenterOnly(row))return "__skip__";
   const source=stampSourceKey(row?.sourceUrl||"");
+  // Different language pages of the same official article share this canonical key.
   if(source)return "source:"+source;
   if(row?.eventId)return "eventid:"+String(row.eventId);
-  return t?"title:"+t:"unknown";
+  const title=stampNormalizeActivityText(row?.eventZh||row?.eventNameZh||row?.event||row?.eventName||"");
+  return title?"title:"+title:"unknown";
 }
 function stampDisplayActivityName(rows){
-  const zh=rows.find(x=>x?.eventZh||x?.eventNameZh); if(zh){const v=String(zh.eventZh||zh.eventNameZh).replace(/\s*[—\-|]\s*Pok[eé]mon\s*GO\s*$/i,"").trim(); if(v)return v;}
-  const first=rows.find(x=>x?.event||x?.eventName); if(first){const v=String(first.event||first.eventName).replace(/\s*[—\-|]\s*Pok[eé]mon\s*GO\s*$/i,"").trim(); if(v)return v;}
+  const zh=rows.find(x=>x?.eventZh||x?.eventNameZh);
+  if(zh){
+    const value=String(zh.eventZh||zh.eventNameZh).replace(/\s*[—\-|]\s*Pok[eé]mon GO\s*$/i,"").trim();
+    if(value)return value;
+  }
+  const first=rows.find(x=>x?.event||x?.eventName);
+  if(first){
+    const value=String(first.event||first.eventName).replace(/\s*[—\-|]\s*Pok[eé]mon GO\s*$/i,"").trim();
+    if(value)return value;
+  }
   return "GO 集章趣";
 }
+function stampEventKey(meta){return stampCanonicalActivityKey(meta);}
 function getStampEvents(){
-  const sourceRows=[...(Array.isArray(stampEventsMeta)?stampEventsMeta:[]),...(Array.isArray(dataSets.stamp)?dataSets.stamp:[])];
-  const rows=sourceRows.filter(row=>row&&!stampIsHowTo(row)&&!stampIsPokeLid(row)&&!stampIsPokemonCenter(row));
+  const rows=[
+    ...(Array.isArray(stampEventsMeta)?stampEventsMeta:[]),
+    ...(Array.isArray(dataSets.stamp)?dataSets.stamp:[])
+  ].filter(row=>row&&!stampIsHowTo(row)&&!stampIsPokeLid(row)&&!stampIsPokemonCenterOnly(row));
+
   const buckets=new Map();
-  for(const row of rows){const key=stampCanonicalActivityKey(row);if(key==="__skip__")continue;(buckets.get(key)||buckets.set(key,[]).get(key)).push(row);}
+  for(const row of rows){
+    const key=stampCanonicalActivityKey(row);
+    if(key==="__skip__")continue;
+    if(!buckets.has(key))buckets.set(key,[]);
+    buckets.get(key).push(row);
+  }
+
   const out=[];
   for(const [key,group] of buckets){
-    const items=[]; const seen=new Set(); let startDate="",endDate="",sourceUrl="",activityImage="",eventImage="",descriptionZh="",expectedStamps=null;
+    let startDate="",endDate="",sourceUrl="",activityImage="",eventImage="",descriptionZh="",expectedStamps=null;
+    const items=[];
+    const seenIds=new Set();
+
     for(const row of group){
-      if(row?.startDate&&(!startDate||row.startDate<startDate))startDate=row.startDate;
-      if(row?.endDate&&(!endDate||row.endDate> endDate))endDate=row.endDate;
-      if(!sourceUrl&&row?.sourceUrl)sourceUrl=row.sourceUrl;
-      if(!activityImage&&(row?.activityImage||row?.eventImage||row?.image))activityImage=row.activityImage||row.eventImage||row.image;
-      if(!eventImage&&(row?.eventImage||row?.activityImage||row?.image))eventImage=row.eventImage||row.activityImage||row.image;
-      if(!descriptionZh&&(row?.descriptionZh||row?.description_zh))descriptionZh=row.descriptionZh||row.description_zh;
-      if(expectedStamps===null&&Number.isFinite(Number(row?.expectedStamps)))expectedStamps=Number(row.expectedStamps);
-      if(!stampIsActualGoPoint(row))continue;
-      const id=getItemId(row); if(!id||seen.has(id))continue; seen.add(id); items.push(row);
+      if(row.startDate&&(!startDate||row.startDate<startDate))startDate=row.startDate;
+      if(row.endDate&&(!endDate||row.endDate>endDate))endDate=row.endDate;
+      if(!sourceUrl&&row.sourceUrl)sourceUrl=row.sourceUrl;
+      if(!activityImage&&(row.activityImage||row.eventImage||row.image))activityImage=row.activityImage||row.eventImage||row.image;
+      if(!eventImage&&(row.eventImage||row.activityImage||row.image))eventImage=row.eventImage||row.activityImage||row.image;
+      if(!descriptionZh&&(row.descriptionZh||row.description_zh))descriptionZh=row.descriptionZh||row.description_zh;
+      if(expectedStamps===null&&Number.isFinite(Number(row.expectedStamps)))expectedStamps=Number(row.expectedStamps);
+
+      if(!stampIsTargetPoint(row))continue;
+      const id=getItemId(row);
+      if(!id||seenIds.has(id))continue;
+      seenIds.add(id);
+      items.push(row);
     }
+
+    // A collection activity must contain at least one actual in-game Japan point.
     if(!items.length)continue;
-    if(expectedStamps===null||expectedStamps>items.length)expectedStamps=items.length;
-    const name=stampDisplayActivityName(group);
-    out.push({id:key,eventId:key,event:name,eventName:name,eventZh:name,eventNameZh:name,activity:"GO Stamp Rally",activityZh:"GO 集章趣",startDate,endDate,sourceUrl,activityImage,eventImage,expectedStamps,descriptionZh,items});
+    if(expectedStamps===null || expectedStamps<items.length)expectedStamps=items.length;
+
+    // Prevent expected stamp counts from inflating the total with non-Japan locations.
+    const japanPoints=items.length;
+    if(expectedStamps>japanPoints)expectedStamps=japanPoints;
+
+    out.push({
+      id:key,
+      eventId:key,
+      event:stampDisplayActivityName(group),
+      eventName:stampDisplayActivityName(group),
+      eventZh:stampDisplayActivityName(group),
+      eventNameZh:stampDisplayActivityName(group),
+      activity:"GO Stamp Rally",
+      activityZh:"GO 集章趣",
+      startDate,
+      endDate,
+      sourceUrl,
+      activityImage,
+      eventImage,
+      expectedStamps,
+      descriptionZh,
+      items
+    });
   }
+
   return out.sort((a,b)=>(a.startDate||"9999").localeCompare(b.startDate||"9999")||(a.eventZh||"").localeCompare(b.eventZh||""));
 }
 
@@ -3657,7 +3741,7 @@ function switchCollectionType(type){
   document.getElementById("sectionTitle").textContent=type==="lid"?"🔴 Poké Lid 蒐集進度":"🎟️ GO 集章趣 蒐集進度";
   document.getElementById("progressLabel").textContent=type==="lid"?"Poké Lid 已收集：":"GO 集章趣 已收集：";
   closeAllPanels(); currentRegion=null; currentPrefecture=null; currentStampEventId=null; currentCollectionItems=[]; currentItem=null;
-  updateDownloadButtonLabels();
+  document.getElementById("stampAllDownloadBox").style.display = type === "stamp" ? "flex" : "none";
   renderRegions(); updateOverall();
 }
 function closeAllPanels(){ for(const id of ["prefecturePanel","collectionPanel","modalOverlay"]) document.getElementById(id).classList.remove("show"); document.body.classList.remove("no-scroll"); }
@@ -3689,7 +3773,7 @@ function renderRegions(){
     const completeStamp=(total>0 && obtained>=total)
       ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
       : "";
-    card.innerHTML=`<div class="region-images">${images||`<div class="region-empty">尚無資料</div>`}${completeStamp}</div><div class="region-info"><div class="region-name">${escapeHtml(regionName)}</div><div class="region-count">${obtained} / ${total}</div><div class="region-percent">完成率 ${percent}%</div></div>`;
+    card.innerHTML=`<div class="region-images">${images||`<div class="region-empty">尚無資料</div>`}${completeStamp}</div><div class="region-info"><div class="region-name">${escapeHtml(regionName)}</div><div class="region-count">${obtained} / ${total}</div><div class="region-percent">完成率 ${percent}%</div><div class="download-subbox"><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','txt')">TXT</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','json')">JSON</button><button class="download-subbtn" onclick="event.stopPropagation();downloadLidGroup('${escapeJs(regionName)}','csv')">CSV</button></div></div>`;
     el.appendChild(card);
   }
 }
@@ -3704,7 +3788,7 @@ function getStampEventStatus(event){
   const endValid=end && !Number.isNaN(end.getTime());
 
   // 開始日期未公布或日期格式無法確認時，絕不判定為進行中。
-  if(!startRaw || !startValid)return "活動尚未開始";
+  if(!startRaw || !startValid)return "日期未定";
   if(now<start)return "活動尚未開始";
   if(endValid && now>end)return "活動已結束";
   return "進行中";
@@ -3715,7 +3799,7 @@ function getStampEventDateText(event){
   const e=event?.endDate||"";
   if(s&&e)return `開始：${s}　結束：${e}`;
   if(s)return `開始：${s}　結束：無期限`;
-  if(e)return `開始：尚待官方公布　結束：${e}`;
+  if(e)return `結束：${e}`;
   return "日期尚待官方公布";
 }
 
@@ -4074,14 +4158,9 @@ document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;const
 async function start(){
   loadLocalCollection("lid");
   loadLocalCollection("stamp");
-  updateDownloadButtonLabels();
 
-  // History 與首頁資料完全分離：不再阻塞 Lid 首頁顯示。
-  loadHistory();
-
-  // 先載入 Lid，讓首頁立即顯示。
-  const lidReady=await loadDataSet("lid");
-
+  // 先只載入 Lid，讓首頁可以立即顯示，不必等待中心／活動／人工覆蓋資料。
+  const lidReady = await loadDataSet("lid");
   if(lidReady){
     switchCollectionType("lid");
   }else{
@@ -4089,7 +4168,7 @@ async function start(){
     updateOverall();
   }
 
-  // 其他資料背景載入。
+  // 其他資料背景載入；完成後再刷新畫面。
   await Promise.all([
     loadDataSet("center"),
     loadDataSet("stamp"),
@@ -4097,7 +4176,9 @@ async function start(){
   ]);
 
   applyRuntimeManualOverrides();
+  migrateStampObtainedData();
 
+  // 保持目前所在分頁；若仍是 Lid，刷新即可，不再把畫面強制切頁。
   renderRegions();
   updateOverall();
 
@@ -4108,6 +4189,8 @@ async function start(){
     updateCollectionSummary();
     renderCollectionGrid();
   }
+
+  await loadHistory();
 }
 
 start();

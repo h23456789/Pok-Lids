@@ -1,10 +1,25 @@
 {
   "version": "7.0",
-  "updated": "2026-08-31 16:28:55",
+  "updated": "2026-09-01 00:57:38",
   "source": "official",
   "sourceMode": "official GO discovery; canonical activity dedupe; PokéXciting unified; manual overrides protected; place-name geocoding fallback",
   "rule": "Only in-game Pokémon GO GO Stamp Rally. Offline stamp rallies, ordinary PokéStops and Poké Lid are excluded.",
   "events": [
+    {
+      "eventId": "STAMP-AUTO-FE94725B9D84",
+      "event": "トップページ｜ピカチュウ大量発生チュウ！ 2019公式サイト",
+      "eventName": "トップページ｜ピカチュウ大量発生チュウ！ 2019公式サイト",
+      "eventZh": "トップページ｜ピカチュウ大量発生チュウ！ 2019公式サイト",
+      "eventNameZh": "トップページ｜ピカチュウ大量発生チュウ！ 2019公式サイト",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
+      "startDate": "2019-08-06",
+      "endDate": "",
+      "pointCount": 1,
+      "activityImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb.jpg?2019",
+      "eventImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb.jpg?2019",
+      "sourceUrl": "https://www.pokemon.co.jp/ex/pika_event/"
+    },
     {
       "eventId": "STAMP-AUTO-FE94725B9D84",
       "event": "トップページ｜ピカチュウ大量発生チュウ！ 2019公式サイト",
@@ -38,24 +53,17 @@
     {
       "eventId": "GO-STAMP-BOOTSTRAP-SUITA",
       "event": "Suita City GO Stamp Rally",
-      "eventZh": "吹田市 GO 集章趣",
       "eventName": "Suita City GO Stamp Rally",
+      "eventZh": "吹田市 GO 集章趣",
       "eventNameZh": "吹田市 GO 集章趣",
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "startDate": "2025-05-09",
       "endDate": "",
-      "expectedStamps": 5,
-      "eventImage": "",
+      "pointCount": 5,
       "activityImage": "",
-      "sourceUrl": "https://pokemongo.com/gofest/osaka/features",
-      "canonicalPage": "https://pokemongo.com/gofest/osaka/features",
-      "sourceLocale": "en",
-      "dataStatus": "partial",
-      "descriptionZh": "",
-      "status": "active",
-      "source": "Pokémon GO Official / verified community data",
-      "pointCount": 5
+      "eventImage": "",
+      "sourceUrl": "https://pokemongo.com/gofest/osaka/features"
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-NAGASAKI",
@@ -74,25 +82,18 @@
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-NAGASAKI",
-      "event": "Pokémon GO Stamp Rally in Nagasaki",
-      "eventZh": "長崎市 GO 集章趣",
-      "eventName": "Pokémon GO Stamp Rally in Nagasaki",
-      "eventNameZh": "長崎市 GO 集章趣",
+      "event": "The wild adventure continues! A new Pokémon GO Stamp Rally in Nagasaki is now available to all Trainers.",
+      "eventName": "The wild adventure continues! A new Pokémon GO Stamp Rally in Nagasaki is now available to all Trainers.",
+      "eventZh": "The wild adventure continues! A new Pokémon GO Stamp Rally in Nagasaki is now available to all Trainers.",
+      "eventNameZh": "The wild adventure continues! A new Pokémon GO Stamp Rally in Nagasaki is now available to all Trainers.",
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "startDate": "2025-11-10",
       "endDate": "",
-      "expectedStamps": 8,
-      "eventImage": "",
-      "activityImage": "",
-      "sourceUrl": "https://pokemongo.com/zh-Hant/news/stamp-rally-nagasaki",
-      "canonicalPage": "https://pokemongo.com/zh-Hant/news/stamp-rally-nagasaki",
-      "sourceLocale": "en",
-      "dataStatus": "partial",
-      "descriptionZh": "",
-      "status": "active",
-      "source": "Pokémon GO Official / verified community data",
-      "pointCount": 8
+      "pointCount": 9,
+      "activityImage": "https://lh3.googleusercontent.com/6tnAxzCE3_LxGNyyPGFCqx8OtYpUROumYbdHwIXq-IdoZJZ-HlsS8thDRU6MnWlR3z1AbmQ-3Gw47oWXmBJ6M5uBESMAMfREQ8M",
+      "eventImage": "https://lh3.googleusercontent.com/6tnAxzCE3_LxGNyyPGFCqx8OtYpUROumYbdHwIXq-IdoZJZ-HlsS8thDRU6MnWlR3z1AbmQ-3Gw47oWXmBJ6M5uBESMAMfREQ8M",
+      "sourceUrl": "https://pokemongo.com/zh-Hant/news/stamp-rally-nagasaki"
     },
     {
       "eventId": "GO-STAMP-BOOTSTRAP-SHINAGAWA",
@@ -149,23 +150,17 @@
     {
       "eventId": "STAMP-PKCNTR-2026",
       "event": "ポケモンセンタースタンプラリー2026",
-      "eventZh": "寶可夢中心 GO 集章趣 2026",
       "eventName": "Pokémon Center Stamp Rally 2026",
+      "eventZh": "寶可夢中心 GO 集章趣 2026",
       "eventNameZh": "寶可夢中心 GO 集章趣 2026",
-      "activity": "Pokémon GO GOスタンプラリー",
+      "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
-      "expectedStamps": 18,
       "pointCount": 20,
-      "source": "Pokémon GO Official Website / Pokémon Center Official Website",
-      "sourceUrl": "https://www.pokemon.co.jp/info/2026/06/260626_e01.html",
-      "official": true,
       "activityImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
       "eventImage": "https://shop.pokemon.co.jp/ja/shop/common/images/a73074b8185405a87064cc8e5ea00467697c0499.jpg",
-      "status": "active",
-      "reward": "3か所以上：ポケモンセンタースタンプラリー2026認定証／全18か所：コンプリート認定証",
-      "rewardZh": "收集 3 個以上集章：可獲得「寶可夢中心集章拉力賽 2026」認證證書；收集全部 18 個集章：可獲得完成認證證書。"
+      "sourceUrl": "https://www.pokemon.co.jp/info/2026/06/260626_e01.html"
     },
     {
       "eventId": "STAMP-AUTO-B155C759E3EB",
@@ -183,21 +178,19 @@
       "sourceUrl": "https://pokemongo.com/en/news/event-apac-stamp-rally-2026"
     },
     {
-      "eventId": "STAMP-AUTO-4EA1076FB128",
-      "event": "「PokéXciting!」イベントの地域横断「GOスタンプラリー」で、アジア太平洋地域をめぐる冒険に出発！ — Pokémon GO",
-      "eventName": "「PokéXciting!」イベントの地域横断「GOスタンプラリー」で、アジア太平洋地域をめぐる冒険に出発！ — Pokémon GO",
-      "activity": "Pokémon GO GOスタンプラリー",
-      "source": "Pokémon Official Website",
-      "sourceUrl": "https://pokemongo.com/ja/news/event-apac-stamp-rally-2026",
+      "eventId": "STAMP-AUTO-B155C759E3EB",
+      "event": "PokéXciting! cross-region GO Stamp Rally—get ready to explore the Asia-Pacific region! — Pokémon GO",
+      "eventName": "PokéXciting! cross-region GO Stamp Rally—get ready to explore the Asia-Pacific region! — Pokémon GO",
+      "eventZh": "PokéXciting! cross-region GO Stamp Rally—get ready to explore the Asia-Pacific region! — Pokémon GO",
+      "eventNameZh": "PokéXciting! cross-region GO Stamp Rally—get ready to explore the Asia-Pacific region! — Pokémon GO",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
       "startDate": "2026-09-12",
       "endDate": "2029-09-11",
       "pointCount": 7,
-      "eventZh": "PokéXciting! 跨地區 GO 集章趣",
-      "eventNameZh": "PokéXciting! 跨地區 GO 集章趣",
-      "activityZh": "GO 集章趣",
       "activityImage": "https://lh3.googleusercontent.com/nqJ9X06yWs01-pPsSB7I2KTTvPsVMwMW0VZqaJCU9jVUb6E45970crW3-rVyQWufr_esZMy3uqzvHwQDbryqqPxhFNhwx8o_8jXEB1TUoN8%3Ds0-e365",
-      "eventImage": "https://lh3.googleusercontent.com/nqJ9X06yWs01-pPsSB7I2KTTvPsVMwMW0VZqaJCU9jVUb6E45970crW3-rVyQWufr_esZMy3uqzvHwQDbryqqPxhFNhwx8o_8jXEB1TUoN8%3Ds0-e365",
-      "expectedStamps": 7
+      "eventImage": "https://lh3.googleusercontent.com/nqJ9X06yWs01-pPsSB7I2KTTvPsVMwMW0VZqaJCU9jVUb6E45970crW3-rVyQWufr_esZMy3uqzvHwQDbryqqPxhFNhwx8o_8jXEB1TUoN8",
+      "sourceUrl": "https://pokemongo.com/en/news/event-apac-stamp-rally-2026"
     },
     {
       "eventId": "STAMP-AUTO-B4A4D73E3090",
@@ -222,13 +215,27 @@
       "eventNameZh": "最令人興奮的寶可夢慶典──寶可夢30週年活動「PokéXciting!」精彩登場！ — Pokémon GO",
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
-      "sourceUrl": "https://pokemongo.com/zh_Hant/news/event-apac-30th-anniversary-2026",
-      "activityImage": "https://lh3.googleusercontent.com/qY34YSOXE0Zh2j7uqgaqbBl5J2rU9busGpGyuqR67XqDagGgAfQc5GHVv4T_2AndIBYm7py5h0HjuriW3MFQX0y6qR-vgwPTCGl2tlcFblQ",
-      "eventImage": "https://lh3.googleusercontent.com/qY34YSOXE0Zh2j7uqgaqbBl5J2rU9busGpGyuqR67XqDagGgAfQc5GHVv4T_2AndIBYm7py5h0HjuriW3MFQX0y6qR-vgwPTCGl2tlcFblQ",
       "startDate": "2026-09-12",
       "endDate": "2026-09-13",
-      "expectedStamps": 1,
-      "pointCount": 1
+      "pointCount": 1,
+      "activityImage": "https://lh3.googleusercontent.com/qY34YSOXE0Zh2j7uqgaqbBl5J2rU9busGpGyuqR67XqDagGgAfQc5GHVv4T_2AndIBYm7py5h0HjuriW3MFQX0y6qR-vgwPTCGl2tlcFblQ",
+      "eventImage": "https://lh3.googleusercontent.com/qY34YSOXE0Zh2j7uqgaqbBl5J2rU9busGpGyuqR67XqDagGgAfQc5GHVv4T_2AndIBYm7py5h0HjuriW3MFQX0y6qR-vgwPTCGl2tlcFblQ",
+      "sourceUrl": "https://pokemongo.com/zh_Hant/news/event-apac-30th-anniversary-2026"
+    },
+    {
+      "eventId": "STAMP-AUTO-F022ABF08C68",
+      "event": "Others｜Pikachu Outbreak! 2019",
+      "eventName": "Others｜Pikachu Outbreak! 2019",
+      "eventZh": "Others｜Pikachu Outbreak! 2019",
+      "eventNameZh": "Others｜Pikachu Outbreak! 2019",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
+      "startDate": "",
+      "endDate": "",
+      "pointCount": 1,
+      "activityImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb_en.jpg?2019",
+      "eventImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb_en.jpg?2019",
+      "sourceUrl": "https://www.pokemon.co.jp/ex/pika_event/en/event_05/"
     },
     {
       "eventId": "STAMP-AUTO-F022ABF08C68",
@@ -268,13 +275,27 @@
       "eventNameZh": "PokéXciting! Comes to KLCC Park — Get Ready, Kuala Lumpur! — Pokémon GO",
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
-      "sourceUrl": "https://pokemongo.com/news/event-kuala-lumpur-30th-anniversary-2026",
-      "activityImage": "https://lh3.googleusercontent.com/R5icuDPTQf1ppU6yMDRpgn0k96xPy1tlgKD6bvpY0n0wATMDX5rfHl1QA__e0SAIYOEpY0895EyLm--tIhmrSysuuIVg1vIUNYZqOsc-Yw",
-      "eventImage": "https://lh3.googleusercontent.com/R5icuDPTQf1ppU6yMDRpgn0k96xPy1tlgKD6bvpY0n0wATMDX5rfHl1QA__e0SAIYOEpY0895EyLm--tIhmrSysuuIVg1vIUNYZqOsc-Yw",
       "startDate": "",
       "endDate": "",
-      "expectedStamps": 1,
-      "pointCount": 1
+      "pointCount": 1,
+      "activityImage": "https://lh3.googleusercontent.com/R5icuDPTQf1ppU6yMDRpgn0k96xPy1tlgKD6bvpY0n0wATMDX5rfHl1QA__e0SAIYOEpY0895EyLm--tIhmrSysuuIVg1vIUNYZqOsc-Yw",
+      "eventImage": "https://lh3.googleusercontent.com/R5icuDPTQf1ppU6yMDRpgn0k96xPy1tlgKD6bvpY0n0wATMDX5rfHl1QA__e0SAIYOEpY0895EyLm--tIhmrSysuuIVg1vIUNYZqOsc-Yw",
+      "sourceUrl": "https://pokemongo.com/news/event-kuala-lumpur-30th-anniversary-2026"
+    },
+    {
+      "eventId": "STAMP-AUTO-A8D9EA95B829",
+      "event": "top page｜Pikachu Outbreak! 2019",
+      "eventName": "top page｜Pikachu Outbreak! 2019",
+      "eventZh": "top page｜Pikachu Outbreak! 2019",
+      "eventNameZh": "top page｜Pikachu Outbreak! 2019",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
+      "startDate": "",
+      "endDate": "",
+      "pointCount": 1,
+      "activityImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb_en.jpg?2019",
+      "eventImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb_en.jpg?2019",
+      "sourceUrl": "https://www.pokemon.co.jp/ex/pika_event/en/"
     },
     {
       "eventId": "STAMP-AUTO-A8D9EA95B829",
@@ -305,6 +326,36 @@
       "activityImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb.jpg?2019",
       "eventImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb.jpg?2019",
       "sourceUrl": "https://www.pokemon.co.jp/ex/pika_event/event_05/"
+    },
+    {
+      "eventId": "STAMP-AUTO-47DA6658F45A",
+      "event": "その他のイベント｜ピカチュウ大量発生チュウ！ 2019公式サイト",
+      "eventName": "その他のイベント｜ピカチュウ大量発生チュウ！ 2019公式サイト",
+      "eventZh": "その他のイベント｜ピカチュウ大量発生チュウ！ 2019公式サイト",
+      "eventNameZh": "その他のイベント｜ピカチュウ大量発生チュウ！ 2019公式サイト",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
+      "startDate": "",
+      "endDate": "",
+      "pointCount": 1,
+      "activityImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb.jpg?2019",
+      "eventImage": "https://www.pokemon.co.jp/ex/pika_event/common/images/fb.jpg?2019",
+      "sourceUrl": "https://www.pokemon.co.jp/ex/pika_event/event_05/"
+    },
+    {
+      "eventId": "STAMP-AUTO-B62BD857D95F",
+      "event": "最新消息 – Pokémon GO",
+      "eventName": "最新消息 – Pokémon GO",
+      "eventZh": "最新消息 – Pokémon GO",
+      "eventNameZh": "最新消息 – Pokémon GO",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
+      "startDate": "",
+      "endDate": "",
+      "pointCount": 1,
+      "activityImage": "https://lh3.googleusercontent.com/IPj1UZVD_Pu1txMymYI-u8ZIrHhwcZ4jrP6tR0Z7_skB67a4bYd6JtF7aMorC_D0cxUQjPmH2bMD698we75qYRdyMJuC5Gls=s0",
+      "eventImage": "https://lh3.googleusercontent.com/IPj1UZVD_Pu1txMymYI-u8ZIrHhwcZ4jrP6tR0Z7_skB67a4bYd6JtF7aMorC_D0cxUQjPmH2bMD698we75qYRdyMJuC5Gls=s0",
+      "sourceUrl": "https://pokemongo.com/zh-Hant/news"
     },
     {
       "eventId": "STAMP-AUTO-B62BD857D95F",
@@ -1174,7 +1225,7 @@
       ],
       "lat": 35.6671448,
       "lng": 139.7574141,
-      "stampImage": "",
+      "stampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P002.png",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
       "stampImageOfficial": false,
@@ -1186,7 +1237,10 @@
       "coordinatesOfficial": false,
       "coordsSource": "Verified community coordinate reference",
       "coordinatesConfidence": "high",
-      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/",
+      "coordinatesManual": true,
+      "coordinatesSource": "Verified community coordinate reference",
+      "stampImageManual": true
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-MINATO-P003",
@@ -1210,7 +1264,7 @@
       ],
       "lat": 35.665661,
       "lng": 139.7461202,
-      "stampImage": "",
+      "stampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P003.png",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
       "stampImageOfficial": false,
@@ -1222,7 +1276,10 @@
       "coordinatesOfficial": false,
       "coordsSource": "Verified community coordinate reference",
       "coordinatesConfidence": "high",
-      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/",
+      "coordinatesManual": true,
+      "coordinatesSource": "Verified community coordinate reference",
+      "stampImageManual": true
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-MINATO-P001",
@@ -1246,7 +1303,7 @@
       ],
       "lat": 35.6586,
       "lng": 139.7454,
-      "stampImage": "",
+      "stampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P001.png",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
       "stampImageOfficial": false,
@@ -1258,7 +1315,10 @@
       "coordinatesOfficial": false,
       "coordsSource": "Verified community coordinate reference",
       "coordinatesConfidence": "high",
-      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/",
+      "coordinatesManual": true,
+      "coordinatesSource": "Verified community coordinate reference",
+      "stampImageManual": true
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-MINATO-P004",
@@ -1282,7 +1342,7 @@
       ],
       "lat": 35.6669716,
       "lng": 139.7454765,
-      "stampImage": "",
+      "stampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P004.png",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
       "stampImageOfficial": false,
@@ -1294,7 +1354,10 @@
       "coordinatesOfficial": false,
       "coordsSource": "Verified community coordinate reference",
       "coordinatesConfidence": "high",
-      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/",
+      "coordinatesManual": true,
+      "coordinatesSource": "Verified community coordinate reference",
+      "stampImageManual": true
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-MINATO-P005",
@@ -1318,7 +1381,7 @@
       ],
       "lat": 35.6560133,
       "lng": 139.7490935,
-      "stampImage": "",
+      "stampImage": "assets/stamps/GO-STAMP-BOOTSTRAP-MINATO-P005.png",
       "stampImageType": "actual-stamp",
       "stampImageSource": "",
       "stampImageOfficial": false,
@@ -1330,7 +1393,10 @@
       "coordinatesOfficial": false,
       "coordsSource": "Verified community coordinate reference",
       "coordinatesConfidence": "high",
-      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/"
+      "coordinatesSourceUrl": "https://www.margxt.fr/evenement-chasse-aux-tampons-a-minato-tokyo-japon-dans-pokemon-go/",
+      "coordinatesManual": true,
+      "coordinatesSource": "Verified community coordinate reference",
+      "stampImageManual": true
     },
     {
       "id": "GO-STAMP-BOOTSTRAP-SHINAGAWA-P001",

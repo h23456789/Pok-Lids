@@ -2,6 +2,7 @@ import hashlib
 import json
 import re
 import time
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
@@ -9,1099 +10,1419 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
-=========================================================
-
-PATH
-
-=========================================================
-
-ROOT = Path(file).resolve().parent.parent
-
+_SCRIPT_DIR = Path(__file__).resolve().parent
+ROOT = _SCRIPT_DIR.parent if _SCRIPT_DIR.name.lower() == "scripts" else _SCRIPT_DIR
 STAMP_FILE = ROOT / "svgstamp_rally.json"
 HISTORY_FILE = ROOT / "svgstamp_history.json"
 OVERRIDE_FILE = ROOT / "svgstamp_manual_overrides.json"
 
-=========================================================
-
-CONFIG
-
-=========================================================
-
 TIMEOUT = 30
 REQUEST_DELAY = 0.35
-
 MAX_DISCOVERY_PAGES = 80
-GEOCODER_URL = "https://nominatim.openstreetmap.org/search"
-
-=========================================================
-
-HTTP
-
-=========================================================
+MAX_SITEMAP_URLS = 4000
 
 HEADERS = {
-"User-Agent": (
-"Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-"AppleWebKit/537.36 (KHTML, like Gecko) "
-"Chrome/151.0 Safari/537.36 "
-"PokemonJapanCollectionUpdater/7.0"
-),
-"Accept-Language": "zh-TW,zh;q=0.9,ja-JP,ja;q=0.8,en;q=0.7",
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/151.0 Safari/537.36 "
+        "PokemonJapanCollectionUpdater/4.0"
+    ),
+    "Accept-Language": "ja-JP,ja;q=0.9,en;q=0.8",
 }
 
 SESSION = requests.Session()
 SESSION.headers.update(HEADERS)
 
-=========================================================
-
-OFFICIAL DOMAINS
-
-=========================================================
-
-OFFICIAL_DOMAINS = {
-"pokemon.co.jp",
-"www.pokemon.co.jp",
-"shop.pokemon.co.jp",
-"pokemongo.com",
-"www.pokemongo.com",
-}
-
-=========================================================
-
-DISCOVERY
-
-=========================================================
+OFFICIAL_DOMAINS = {"pokemongo.com", "www.pokemongo.com"}
 
 DISCOVERY_URLS = [
-"https://www.pokemon.co.jp/",
-"https://www.pokemon.co.jp/info/",
-"https://www.pokemon.co.jp/event/",
-"https://shop.pokemon.co.jp/ja/",
-"https://shop.pokemon.co.jp/ja/shop/common/events/",
-"https://pokemongo.com/zh-Hant/news",
-"https://pokemongo.com/en/news",
-"https://pokemongo.com/ja/news",
-"https://pokemongo.com/zh-Hant/featured-in-person-events",
-"https://pokemongo.com/en/featured-in-person-events",
-"https://pokemongo.com/ja/featured-in-person-events",
+    "https://pokemongo.com/zh-Hant/news",
+    "https://pokemongo.com/en/news",
+    "https://pokemongo.com/ja/news",
+    "https://pokemongo.com/zh-Hant/featured-in-person-events",
+    "https://pokemongo.com/en/featured-in-person-events",
+    "https://pokemongo.com/ja/featured-in-person-events",
 ]
-
 STAMP_KEYWORDS = [
-"スタンプラリー",
-"GOスタンプラリー",
-"GO 集章趣",
-"GO集章趣",
-"STAMP RALLY",
-"Stamp Rally",
-"stamp rally",
+    "スタンプラリー",
+    "GOスタンプラリー",
+    "デジタルスタンプラリー",
+    "STAMP RALLY",
+    "Stamp Rally",
+    "stamp rally",
 ]
 
-INSTRUCTIONAL_PATTERNS = [
-r"我該怎麼進行.*集章趣",
-r"我怎麼(?:進行|參加|玩).*集章趣",
-r"如何.*集章趣",
-r"怎麼.*集章趣",
-r"how to .*stamp rally",
-r"how .*stamp rally",
-r"stamp rally.*how to",
-r"(?:ご利用方法|遊び方|参加方法|楽しみ方).スタンプラリー",
-r"スタンプラリー.(?:ご利用方法|遊び方|参加方法|楽しみ方)",
+
+INSTRUCTIONAL_STAMP_PATTERNS = [
+    r"我該怎麼進行.*(?:GO)?\s*集章趣",
+    r"我怎麼(?:進行|參加|玩).*集章趣",
+    r"GO\s*集章趣.*(?:玩法|教學|說明|怎麼玩)",
+    r"how to (?:participate|play|do).*stamp rally",
+    r"how (?:do|to).*stamp rally",
+    r"stamp rally.*(?:how to|guide|how it works|instructions)",
+    r"(?:ご利用方法|遊び方|参加方法|楽しみ方).*スタンプラリー",
+    r"スタンプラリー.*(?:ご利用方法|遊び方|参加方法|楽しみ方)",
+    r"(?:faq|frequently asked questions).*stamp rally",
 ]
 
-=========================================================
 
-TEXT
+def is_instructional_stamp_text(value):
+    text = normalize_text(value).lower()
+    if not text:
+        return False
+    return any(re.search(pattern, text, re.I) for pattern in INSTRUCTIONAL_STAMP_PATTERNS)
 
-=========================================================
+
+def has_strong_stamp_event_signal(soup, page_text, url):
+    """Only accept explicit in-game Pokémon GO Stamp Rally pages."""
+    host=(urlparse(url).hostname or "").lower()
+    if host not in {"pokemongo.com", "www.pokemongo.com"}:
+        return False
+
+    candidates=[]
+    for tag in soup.find_all(["h1","h2","h3"]):
+        text=normalize_text(tag.get_text(" ", strip=True))
+        if text: candidates.append(text)
+    for attrs in ({"property":"og:title"},{"name":"twitter:title"}):
+        meta=soup.find("meta",attrs=attrs)
+        if meta:
+            text=normalize_text(meta.get("content", ""))
+            if text: candidates.append(text)
+    if soup.title:
+        text=normalize_text(soup.title.get_text(" ", strip=True))
+        if text: candidates.append(text)
+
+    full_text=normalize_text(" ".join(candidates)+" "+page_text)
+    low=full_text.lower()
+
+    if is_instructional_stamp_text(full_text):
+        return False
+    if any(token in low for token in ("poké lid", "poke lid", "ポケふた", "ポケふたスタンプラリー")):
+        return False
+
+    explicit_go=bool(re.search(r"(?:go\s*stamp\s*rally|goスタンプラリー|go集章趣)",full_text,re.I))
+    return explicit_go
+
+PREF_ALIASES = [
+    ("北海道", "北海道"),
+    ("青森県", "青森県"), ("青森", "青森県"),
+    ("岩手県", "岩手県"), ("岩手", "岩手県"),
+    ("宮城県", "宮城県"), ("宮城", "宮城県"),
+    ("秋田県", "秋田県"), ("秋田", "秋田県"),
+    ("山形県", "山形県"), ("山形", "山形県"),
+    ("福島県", "福島県"), ("福島", "福島県"),
+    ("茨城県", "茨城県"), ("茨城", "茨城県"),
+    ("栃木県", "栃木県"), ("栃木", "栃木県"),
+    ("群馬県", "群馬県"), ("群馬", "群馬県"),
+    ("埼玉県", "埼玉県"), ("埼玉", "埼玉県"),
+    ("千葉県", "千葉県"), ("千葉", "千葉県"),
+    ("東京都", "東京都"), ("東京", "東京都"),
+    ("神奈川県", "神奈川県"), ("神奈川", "神奈川県"),
+    ("新潟県", "新潟県"), ("新潟", "新潟県"),
+    ("富山県", "富山県"), ("富山", "富山県"),
+    ("石川県", "石川県"), ("石川", "石川県"),
+    ("福井県", "福井県"), ("福井", "福井県"),
+    ("山梨県", "山梨県"), ("山梨", "山梨県"),
+    ("長野県", "長野県"), ("長野", "長野県"),
+    ("岐阜県", "岐阜県"), ("岐阜", "岐阜県"),
+    ("静岡県", "静岡県"), ("静岡", "静岡県"),
+    ("愛知県", "愛知県"), ("愛知", "愛知県"),
+    ("三重県", "三重県"), ("三重", "三重県"),
+    ("滋賀県", "滋賀県"), ("滋賀", "滋賀県"),
+    ("京都府", "京都府"), ("京都", "京都府"),
+    ("大阪府", "大阪府"), ("大阪", "大阪府"),
+    ("兵庫県", "兵庫県"), ("兵庫", "兵庫県"),
+    ("奈良県", "奈良県"), ("奈良", "奈良県"),
+    ("和歌山県", "和歌山県"), ("和歌山", "和歌山県"),
+    ("鳥取県", "鳥取県"), ("鳥取", "鳥取県"),
+    ("島根県", "島根県"), ("島根", "島根県"),
+    ("岡山県", "岡山県"), ("岡山", "岡山県"),
+    ("広島県", "広島県"), ("広島", "広島県"),
+    ("山口県", "山口県"), ("山口", "山口県"),
+    ("徳島県", "徳島県"), ("徳島", "徳島県"),
+    ("香川県", "香川県"), ("香川", "香川県"),
+    ("愛媛県", "愛媛県"), ("愛媛", "愛媛県"),
+    ("高知県", "高知県"), ("高知", "高知県"),
+    ("福岡県", "福岡県"), ("福岡", "福岡県"),
+    ("佐賀県", "佐賀県"), ("佐賀", "佐賀県"),
+    ("長崎県", "長崎県"), ("長崎", "長崎県"),
+    ("熊本県", "熊本県"), ("熊本", "熊本県"),
+    ("大分県", "大分県"), ("大分", "大分県"),
+    ("宮崎県", "宮崎県"), ("宮崎", "宮崎県"),
+    ("鹿児島県", "鹿児島県"), ("鹿児島", "鹿児島県"),
+    ("沖縄県", "沖縄県"), ("沖縄", "沖縄県"),
+]
+
+CENTER_HINTS = {
+    "ポケモンセンターサッポロ": ("北海道", "札幌市"),
+    "ポケモンセンタートウホク": ("宮城県", "仙台市"),
+    "ポケモンセンタートウキョーDX": ("東京都", "中央区"),
+    "ポケモンセンターメガトウキョー": ("東京都", "豊島区"),
+    "ポケモンセンターシブヤ": ("東京都", "渋谷区"),
+    "ポケモンセンタースカイツリータウン": ("東京都", "墨田区"),
+    "ポケモンセンタートウキョーベイ": ("千葉県", "船橋市"),
+    "ポケモンセンターヨコハマ": ("神奈川県", "横浜市"),
+    "ポケモンセンターナゴヤ": ("愛知県", "名古屋市"),
+    "ポケモンセンターカナザワ": ("石川県", "金沢市"),
+    "ポケモンセンターキョウト": ("京都府", "京都市"),
+    "ポケモンセンターオーサカDX": ("大阪府", "大阪市"),
+    "ポケモンセンターオーサカ": ("大阪府", "大阪市"),
+    "ポケモンセンターヒロシマ": ("広島県", "広島市"),
+    "ポケモンセンターカガワ": ("香川県", "高松市"),
+    "ポケモンセンターフクオカ": ("福岡県", "福岡市"),
+    "ポケモンセンターオキナワ": ("沖縄県", "沖縄市"),
+    "Pokémon GO Lab.": ("東京都", "豊島区"),
+}
+
 
 def normalize_text(value):
-if value is None:
-return ""
-return re.sub(r"\s+", " ", str(value).replace("\u3000", " ")).strip()
+    if value is None:
+        return ""
+    value = str(value).replace("\u3000", " ")
+    return re.sub(r"\s+", " ", value).strip()
 
-def normalize_identity(value):
-return re.sub(
-r"[\s\u3000-‐-–—_・･.,，。:：/\()（）「」『』【】]",
-"",
-normalize_text(value).lower()
-)
-
-def clean_event_title(value):
-value = normalize_text(value)
-value = re.sub(r"\s*[—-|]\sPok[eé]mon GO\s$", "", value, flags=re.I)
-return value.strip()
-
-def make_hash(*parts):
-raw = "|".join(normalize_text(part) for part in parts)
-return hashlib.sha1(raw.encode("utf-8")).hexdigest()[:12].upper()
-
-=========================================================
-
-URL
-
-=========================================================
 
 def is_official_url(url):
-try:
-parsed = urlparse(url)
-if parsed.scheme not in ("http", "https"):
-return False
-return (parsed.hostname or "").lower() in OFFICIAL_DOMAINS
-except Exception:
-return False
+    try:
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https"):
+            return False
+        return (parsed.hostname or "").lower() in OFFICIAL_DOMAINS
+    except Exception:
+        return False
 
-def canonical_source_url(url):
-raw = normalize_text(url)
-if not raw:
-return ""
-try:
-parsed = urlparse(raw)
-path = parsed.path.rstrip("/")
-path = re.sub(r"^/(?|ja|zh-hant|zh_hant)(?=/|$)", "", path, flags=re.I)
-host = (parsed.hostname or "").lower()
-if host.startswith("www."):
-host = host[4:]
-return host + path
-except Exception:
-return raw.lower()
-
-def source_locale_rank(url):
-value = normalize_text(url).lower()
-if "/zh-hant/" in value or "/zh_hant/" in value:
-return 0
-if "/ja/" in value:
-return 1
-if "/en/" in value:
-return 2
-return 3
-
-=========================================================
-
-ACTIVITY KEY
-
-=========================================================
-
-def canonical_activity_key(item):
-source = canonical_source_url(item.get("sourceUrl", "") or item.get("canonicalPage", ""))
-if source:
-return "source:" + source
-
-title = clean_event_title(
-    item.get("eventZh")
-    or item.get("eventNameZh")
-    or item.get("event")
-    or item.get("eventName")
-    or ""
-)
-
-# PokéXciting 特別處理。
-# 不管 eventId / locale，都視為同一活動。
-if "pokéxciting" in title.lower() or "pokexciting" in normalize_identity(title):
-    return "title:pokexciting-2026"
-
-if title:
-    return "title:" + normalize_identity(title)
-
-if item.get("eventId"):
-    return "eventid:" + normalize_text(item["eventId"])
-
-if item.get("id"):
-    return "id:" + normalize_text(item["id"])
-
-return "unknown"
-
-=========================================================
-
-HTTP / JSON
-
-=========================================================
 
 def get_html(url):
-try:
-response = SESSION.get(url, timeout=TIMEOUT, allow_redirects=True)
-response.raise_for_status()
-response.encoding = response.apparent_encoding or "utf-8"
-return response.text
-except Exception as error:
-print("HTTP ERROR:", url, error)
-return ""
+    try:
+        response = SESSION.get(
+            url,
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        response.raise_for_status()
+        response.encoding = response.apparent_encoding or "utf-8"
+        return response.text
+    except Exception as error:
+        print("HTTP ERROR:", url, error)
+        return ""
+
 
 def load_json(path, default):
-if not path.exists():
-return default
-try:
-return json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-return default
+    if not path.exists():
+        return default
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default
+
 
 def write_json(path, data):
-path.write_text(
-json.dumps(data, ensure_ascii=False, indent=2) + "\n",
-encoding="utf-8"
-)
+    path.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
-=========================================================
 
-DATE
+def make_hash(*parts):
+    raw = "|".join(normalize_text(p) for p in parts)
+    return hashlib.sha1(raw.encode("utf-8")).hexdigest()[:12].upper()
 
-=========================================================
+
+def canonical_source_url(url):
+    """將 pokemongo.com 不同語言版本視為同一官方來源。"""
+    try:
+        parsed = urlparse(normalize_text(url))
+        path = parsed.path.rstrip("/")
+        path = re.sub(
+            r"^/(?:en|ja|zh-hant|zh_hant)(?=/|$)",
+            "",
+            path,
+            flags=re.I,
+        )
+        host = (parsed.hostname or "").lower()
+        if host == "www.pokemongo.com":
+            host = "pokemongo.com"
+        if host == "www.pokemon.co.jp":
+            host = "pokemon.co.jp"
+        return f"{host}{path}"
+    except Exception:
+        return normalize_text(url).rstrip("/").lower()
+
+
+def preferred_source_rank(url):
+    path = urlparse(normalize_text(url)).path.lower()
+    if "/zh-hant/" in path or "/zh_hant/" in path:
+        return 0
+    if "/ja/" in path:
+        return 1
+    if "/en/" in path:
+        return 2
+    return 3
+
 
 def parse_date(value):
-value = normalize_text(value)
+    if not value:
+        return ""
 
-match = re.search(r"(20\d{2})年(\d{1,2})月(\d{1,2})日", value)
-if match:
-    year, month, day = match.groups()
-    return f"{year}-{int(month):02d}-{int(day):02d}"
+    match = re.search(
+        r"(20\d{2})年(\d{1,2})月(\d{1,2})日",
+        value,
+    )
+    if match:
+        year, month, day = match.groups()
+        return f"{year}-{int(month):02d}-{int(day):02d}"
 
-match = re.search(r"(20\d{2})[/-](\d{1,2})[/-](\d{1,2})", value)
-if match:
-    year, month, day = match.groups()
-    return f"{year}-{int(month):02d}-{int(day):02d}"
+    match = re.search(
+        r"(20\d{2})[/-](\d{1,2})[/-](\d{1,2})",
+        value,
+    )
+    if match:
+        year, month, day = match.groups()
+        return f"{year}-{int(month):02d}-{int(day):02d}"
 
-return ""
+    return ""
+
 
 def extract_dates(text):
-found = []
-patterns = [
-r"20\d{2}年\d{1,2}月\d{1,2}日",
-r"20\d{2}[/-]\d{1,2}[/-]\d{1,2}",
-]
-for pattern in patterns:
-for raw in re.findall(pattern, text or ""):
-value = parse_date(raw)
-if value and value not in found:
-found.append(value)
-return sorted(found)
+    values = []
 
-=========================================================
+    for pattern in (
+        r"20\d{2}年\d{1,2}月\d{1,2}日",
+        r"20\d{2}[/-]\d{1,2}[/-]\d{1,2}",
+    ):
+        for raw in re.findall(pattern, text or ""):
+            date = parse_date(raw)
+            if date and date not in values:
+                values.append(date)
 
-EVENT EXTRACTION
+    return sorted(values)
 
-=========================================================
 
 def extract_event_name(soup, page_text):
-candidates = []
+    candidates = []
 
-for tag in soup.find_all("h1"):
-    text = normalize_text(tag.get_text(" ", strip=True))
-    if text:
-        candidates.append(text)
-
-for attrs in ({"property": "og:title"}, {"name": "twitter:title"}):
-    meta = soup.find("meta", attrs=attrs)
-    if meta:
-        text = normalize_text(meta.get("content", ""))
+    for tag in soup.find_all("h1"):
+        text = normalize_text(tag.get_text(" ", strip=True))
         if text:
             candidates.append(text)
 
-if soup.title:
-    candidates.append(normalize_text(soup.title.get_text(" ", strip=True)))
+    for attrs in (
+        {"property": "og:title"},
+        {"name": "twitter:title"},
+    ):
+        meta = soup.find("meta", attrs=attrs)
+        if meta:
+            text = normalize_text(meta.get("content", ""))
+            if text:
+                candidates.append(text)
 
-for text in candidates:
-    if ("スタンプラリー" in text or "stamp rally" in text.lower() or "集章趣" in text):
-        return text
+    if soup.title:
+        text = normalize_text(soup.title.get_text(" ", strip=True))
+        if text:
+            candidates.append(text)
 
-return candidates[0] if candidates else "GO 集章趣"
+    for text in candidates:
+        if "スタンプラリー" in text or "Stamp Rally" in text:
+            return text
+
+    match = re.search(
+        r".{0,80}スタンプラリー.{0,120}",
+        page_text or "",
+    )
+    if match:
+        return normalize_text(match.group(0))
+
+    return candidates[0] if candidates else "期間限定 Stamp Rally"
+
 
 def extract_image(soup, base_url):
-for attrs in ({"property": "og"}, {"name": "twitter"}):
-meta = soup.find("meta", attrs=attrs)
-if meta:
-value = normalize_text(meta.get("content", ""))
-if value:
-return urljoin(base_url, value)
-return ""
+    for attrs in (
+        {"property": "og:image"},
+        {"name": "twitter:image"},
+    ):
+        meta = soup.find("meta", attrs=attrs)
+        if meta:
+            value = normalize_text(meta.get("content", ""))
+            if value:
+                return urljoin(base_url, value)
 
-def is_instructional(text):
-normalized = normalize_text(text)
-return any(re.search(pattern, normalized, re.I) for pattern in INSTRUCTIONAL_PATTERNS)
+    for img in soup.find_all("img"):
+        src = (
+            img.get("src")
+            or img.get("data-src")
+            or img.get("data-lazy-src")
+        )
+        if not src:
+            continue
+        absolute = urljoin(base_url, src)
+        lower = absolute.lower()
+        if any(token in lower for token in ("stamp", "rally", "スタンプ")):
+            return absolute
 
-def is_real_stamp_page(soup, page_text, url):
-event_name = extract_event_name(soup, page_text)
-if is_instructional(event_name):
-return False
+    return ""
 
-lower = (page_text or "").lower()
-return (
-    "stamp rally" in lower
-    or "スタンプラリー" in page_text
-    or "go 集章趣" in lower
-    or "go集章趣" in lower
-)
 
-=========================================================
+def extract_reward(page_text):
+    for keyword in (
+        "プレゼント内容",
+        "プレゼント条件",
+        "認定証",
+        "コンプリート",
+        "景品",
+        "賞品",
+    ):
+        pos = page_text.find(keyword)
+        if pos >= 0:
+            return normalize_text(page_text[pos:pos + 500])
+    return ""
 
-PREFECTURE
 
-=========================================================
+def extract_activity(page_text):
+    if "GOスタンプラリー" in page_text:
+        return "Pokémon GO GOスタンプラリー"
+    if "デジタルスタンプラリー" in page_text:
+        return "デジタルスタンプラリー"
+    return "Stamp Rally"
 
-PREF_ALIASES = [
-("北海道", "北海道"),
-("青森県", "青森県"), ("青森", "青森県"),
-("岩手県", "岩手県"), ("岩手", "岩手県"),
-("宮城県", "宮城県"), ("宮城", "宮城県"),
-("秋田県", "秋田県"), ("秋田", "秋田県"),
-("山形県", "山形県"), ("山形", "山形県"),
-("福島県", "福島県"), ("福島", "福島県"),
-("茨城県", "茨城県"), ("茨城", "茨城県"),
-("栃木県", "栃木県"), ("栃木", "栃木県"),
-("群馬県", "群馬県"), ("群馬", "群馬県"),
-("埼玉県", "埼玉県"), ("埼玉", "埼玉県"),
-("千葉県", "千葉県"), ("千葉", "千葉県"),
-("東京都", "東京都"), ("東京", "東京都"),
-("神奈川県", "神奈川県"), ("神奈川", "神奈川県"),
-("新潟県", "新潟県"), ("新潟", "新潟県"),
-("富山県", "富山県"), ("富山", "富山県"),
-("石川県", "石川県"), ("石川", "石川県"),
-("福井県", "福井県"), ("福井", "福井県"),
-("山梨県", "山梨県"), ("山梨", "山梨県"),
-("長野県", "長野県"), ("長野", "長野県"),
-("岐阜県", "岐阜県"), ("岐阜", "岐阜県"),
-("静岡県", "静岡県"), ("静岡", "静岡県"),
-("愛知県", "愛知県"), ("愛知", "愛知県"),
-("三重県", "三重県"), ("三重", "三重県"),
-("滋賀県", "滋賀県"), ("滋賀", "滋賀県"),
-("京都府", "京都府"), ("京都", "京都府"),
-("大阪府", "大阪府"), ("大阪", "大阪府"),
-("兵庫県", "兵庫県"), ("兵庫", "兵庫県"),
-("奈良県", "奈良県"), ("奈良", "奈良県"),
-("和歌山県", "和歌山県"), ("和歌山", "和歌山県"),
-("鳥取県", "鳥取県"), ("鳥取", "鳥取県"),
-("島根県", "島根県"), ("島根", "島根県"),
-("岡山県", "岡山県"), ("岡山", "岡山県"),
-("広島県", "広島県"), ("広島", "広島県"),
-("山口県", "山口県"), ("山口", "山口県"),
-("徳島県", "徳島県"), ("徳島", "徳島県"),
-("香川県", "香川県"), ("香川", "香川県"),
-("愛媛県", "愛媛県"), ("愛媛", "愛媛県"),
-("高知県", "高知県"), ("高知", "高知県"),
-("福岡県", "福岡県"), ("福岡", "福岡県"),
-("佐賀県", "佐賀県"), ("佐賀", "佐賀県"),
-("長崎県", "長崎県"), ("長崎", "長崎県"),
-("熊本県", "熊本県"), ("熊本", "熊本県"),
-("大分県", "大分県"), ("大分", "大分県"),
-("宮崎県", "宮崎県"), ("宮崎", "宮崎県"),
-("鹿児島県", "鹿児島県"), ("鹿児島", "鹿児島県"),
-("沖縄県", "沖縄県"), ("沖縄", "沖縄県"),
-]
 
 def extract_prefecture(text):
-normalized = normalize_text(text)
-for alias, canonical in PREF_ALIASES:
-if alias in normalized:
-return canonical
-return ""
+    text = normalize_text(text)
+    for alias, canonical in PREF_ALIASES:
+        if alias in text:
+            return canonical
+    return ""
 
-=========================================================
-
-EVENT / POINT ID
-
-=========================================================
 
 def get_event_id(event, source_url, old_items):
-canonical = canonical_source_url(source_url)
+    canonical = canonical_source_url(source_url)
 
-for item in old_items:
-    old_source = canonical_source_url(item.get("sourceUrl", ""))
-    if canonical and canonical == old_source:
-        existing = item.get("eventId") or item.get("id") or ""
-        if existing:
-            return existing
+    # 優先沿用舊有相同 canonical 官方來源的 eventId。
+    for item in old_items:
+        old_url = normalize_text(item.get("sourceUrl", ""))
+        if old_url and canonical_source_url(old_url) == canonical:
+            old_event_id = item.get("eventId") or item.get("id") or ""
+            if old_event_id:
+                return old_event_id
 
-return "STAMP-AUTO-" + make_hash(canonical or event)
+    # 不同語言、相同官方活動 URL 會得到相同 ID。
+    return "STAMP-AUTO-" + make_hash(canonical)
 
-def get_point_id(event_id, venue):
-return "STAMP-POINT-" + make_hash(normalize_identity(event_id), normalize_identity(venue))
 
-=========================================================
+def normalize_identity(value):
+    value = normalize_text(value).lower()
+    value = re.sub(r"[\s\u3000\-‐‑–—_・･.,，。:：/\\()（）「」『』【】]", "", value)
+    return value
 
-MANUAL OVERRIDE
 
-=========================================================
+def get_item_id(event_id, venue):
+    """
+    產生可重現的 Stamp ID。
+    同一個 event + venue 永遠得到相同 ID，避免每次 Actions 更新後
+    localStorage 的已獲得狀態因 ID 改變而看起來歸零。
+    """
+    raw_event = normalize_identity(event_id)
+    raw_venue = normalize_identity(venue)
+    return "STAMP-POINT-" + make_hash(raw_event, raw_venue)
 
-def load_manual_overrides():
-data = load_json(OVERRIDE_FILE, {"items": []})
-if not isinstance(data, dict):
-return []
-items = data.get("items", [])
-return items if isinstance(items, list) else []
 
-def find_manual_override(item, overrides):
-item_id = normalize_text(item.get("id", ""))
+def get_existing_item_id(event_id, venue, old_items, source_url=""):
+    event_key = normalize_identity(event_id)
+    venue_key = normalize_identity(venue)
+    source_key = canonical_source_url(source_url)
 
-if item_id:
-    for override in overrides:
-        if normalize_text(override.get("id", "")) == item_id:
-            return override
+    # ① 完全相同 eventId + venue：保留舊 ID。
+    for item in old_items:
+        if (
+            normalize_identity(item.get("eventId")) == event_key
+            and normalize_identity(item.get("venue") or item.get("name"))
+            == venue_key
+        ):
+            return item.get("id", "")
 
-event_id = normalize_text(item.get("eventId", ""))
-names = {
-    normalize_identity(value) for value in (
-        item.get("venue"), item.get("name"), item.get("venueZh"), item.get("nameZh")
-    ) if value
-}
+    # ② event 名稱曾被官方改名，但官方來源 URL 沒變：
+    #    仍視為同一個集章點，繼續沿用舊 ID。
+    if source_key and venue_key:
+        for item in old_items:
+            old_source = canonical_source_url(item.get("sourceUrl", ""))
+            old_venue = normalize_identity(item.get("venue") or item.get("name"))
+            if old_source == source_key and old_venue == venue_key:
+                return item.get("id", "")
 
-for override in overrides:
-    override_event = normalize_text(override.get("eventId", ""))
-    if event_id and override_event and event_id != override_event:
-        continue
+    return ""
 
-    override_names = {
-        normalize_identity(value) for value in (
-            override.get("venue"), override.get("name"), override.get("venueZh"), override.get("nameZh")
-        ) if value
-    }
-
-    if names & override_names:
-        return override
-
-return None
-
-def apply_manual_overrides(items, overrides):
-for item in items:
-override = find_manual_override(item, overrides)
-if not override:
-continue
-
-    coordinates = override.get("manualCoordinates")
-    if isinstance(coordinates, list) and len(coordinates) >= 2:
-        try:
-            lat = float(coordinates[0])
-            lng = float(coordinates[1])
-
-            if abs(lat) <= 90 and abs(lng) <= 180:
-                item["coords"] = [lat, lng]
-                item["lat"] = lat
-                item["lng"] = lng
-                item["coordinatesManual"] = True
-                item["coordinatesSource"] = override.get("coordinatesSource") or "Manual override"
-        except (TypeError, ValueError):
-            pass
-
-    if override.get("manualStampImage"):
-        item["stampImage"] = override["manualStampImage"]
-        item["stampImageManual"] = True
-
-    if override.get("manualCenterBadge"):
-        item["centerBadgeImage"] = override["manualCenterBadge"]
-
-    if override.get("manualTitle"):
-        item["nameZh"] = override["manualTitle"]
-        item["venueZh"] = override["manualTitle"]
-
-    if override.get("nameZh"):
-        item["nameZh"] = override["nameZh"]
-
-    if override.get("venueZh"):
-        item["venueZh"] = override["venueZh"]
-
-return items
-
-=========================================================
-
-STAMP PAGE
-
-=========================================================
-
-def parse_stamp_page(url, old_items):
-html = get_html(url)
-if not html:
-return []
-
-soup = BeautifulSoup(html, "html.parser")
-page_text = normalize_text(soup.get_text(" ", strip=True))
-
-if not is_real_stamp_page(soup, page_text, url):
-    return []
-
-event = extract_event_name(soup, page_text)
-dates = extract_dates(page_text)
-start_date = dates[0] if dates else ""
-end_date = dates[1] if len(dates) >= 2 else ""
-image = extract_image(soup, url)
-event_id = get_event_id(event, url, old_items)
-
-items = []
-centers = []
-
-for link in soup.find_all("a", href=True):
-    text = normalize_text(link.get_text(" ", strip=True))
-    if "ポケモンセンター" not in text:
-        continue
-
-    if any(bad in text for bad in ("サテライト", "出張所", "カフェ")):
-        continue
-
-    centers.append({
-        "name": text,
-        "url": urljoin(url, link["href"])
-    })
-
-seen = set()
-for center in centers:
-    venue = center["name"]
-    key = normalize_identity(venue)
-    
-    if key in seen:
-        continue
-    seen.add(key)
-
-    lower_venue = venue.lower()
-    venue_type = "pokemon_go_lab" if ("go lab" in lower_venue or "pokemon go lab" in lower_venue) else "pokemon_center"
-    is_zh = "/zh-hant/" in url.lower() or "/zh_hant/" in url.lower()
-
-    item = {
-        "id": get_point_id(event_id, venue),
-        "eventId": event_id,
-        "event": event,
-        "eventName": event,
-        "eventZh": event if is_zh else "",
-        "eventNameZh": event if is_zh else "",
-        "activity": "GO Stamp Rally",
-        "activityZh": "GO 集章趣",
-        "venueType": venue_type,
-        "venue": venue,
-        "name": venue,
-        "pref": extract_prefecture(page_text),
-        "city": "",
-        "address": "",
-        "coords": [],
-        "startDate": start_date,
-        "endDate": end_date,
-        "stampImage": "",
-        "activityImage": image,
-        "eventImage": image,
-        "source": "Pokémon GO Official Website",
-        "sourceUrl": url,
-        "venueSourceUrl": center["url"],
-        "official": True
-    }
-    items.append(item)
-
-if not items:
-    is_zh = "/zh-hant/" in url.lower() or "/zh_hant/" in url.lower()
-    items.append({
-        "id": get_point_id(event_id, event),
-        "eventId": event_id,
-        "event": event,
-        "eventName": event,
-        "eventZh": event if is_zh else "",
-        "eventNameZh": event if is_zh else "",
-        "activity": "GO Stamp Rally",
-        "activityZh": "GO 集章趣",
-        "venueType": "event",
-        "venue": "",
-        "name": event,
-        "pref": extract_prefecture(page_text),
-        "city": "",
-        "address": "",
-        "coords": [],
-        "startDate": start_date,
-        "endDate": end_date,
-        "stampImage": "",
-        "activityImage": image,
-        "eventImage": image,
-        "source": "Pokémon GO Official Website",
-        "sourceUrl": url,
-        "official": True
-    })
-
-return items
-
-=========================================================
-
-DISCOVERY
-
-=========================================================
-
-def discover_urls(old_items):
-candidates = set()
-
-for item in old_items:
-    source = normalize_text(item.get("sourceUrl", ""))
-    if is_official_url(source):
-        candidates.add(source)
-
-queue = list(DISCOVERY_URLS)
-visited = set()
-
-while queue and len(visited) < MAX_DISCOVERY_PAGES:
-    url = queue.pop(0)
-
-    if url in visited or not is_official_url(url):
-        continue
-
-    visited.add(url)
-    html = get_html(url)
-    if not html:
-        continue
-
-    soup = BeautifulSoup(html, "html.parser")
-    text = normalize_text(soup.get_text(" ", strip=True))
-
-    if is_real_stamp_page(soup, text, url):
-        candidates.add(url)
-
-    for link in soup.find_all("a", href=True):
-        absolute = urljoin(url, link["href"]).split("#", 1)[0]
-        if not is_official_url(absolute):
-            continue
-
-        link_text = normalize_text(link.get_text(" ", strip=True))
-        combined = f"{link_text} {absolute}".lower()
-
-        if any(keyword.lower() in combined for keyword in STAMP_KEYWORDS):
-            candidates.add(absolute)
-
-        path = urlparse(absolute).path.lower()
-        if any(token in path for token in (
-            "/news/", "/event/", "/events/", "/featured-in-person-events/", "/gofest/", "/gowildarea/"
-        )):
-            if absolute not in visited and absolute not in queue:
-                queue.append(absolute)
-
-    time.sleep(REQUEST_DELAY)
-
-# sitemap
-for sitemap in discover_sitemaps():
-    sitemap_html = get_html(sitemap)
-    if not sitemap_html:
-        continue
-
-    for url in re.findall(r"<loc>\s*(.*?)\s*</loc>", sitemap_html, re.I):
-        if not is_official_url(url):
-            continue
-
-        lower = url.lower()
-        if any(token in lower for token in (
-            "stamp", "rally", "event", "citysafari", "gofest", "featured-in-person-events"
-        )):
-            candidates.add(url)
-
-# canonical locale dedupe
-deduped = {}
-for candidate in candidates:
-    key = canonical_source_url(candidate)
-    if not key:
-        continue
-
-    current = deduped.get(key)
-    if current is None or source_locale_rank(candidate) < source_locale_rank(current):
-        deduped[key] = candidate
-
-return sorted(deduped.values())
 
 def discover_sitemaps():
-result = set()
-for robots in (
-"https://www.pokemon.co.jp/robots.txt",
-"https://shop.pokemon.co.jp/robots.txt",
-"https://pokemongo.com/robots.txt",
-):
-text = get_html(robots)
-for match in re.findall(r"(?im)^\sSitemap:\s(\S+)\s*$", text):
-if is_official_url(match):
-result.add(match)
+    sitemaps = set()
 
-result.update({
-    "https://www.pokemon.co.jp/sitemap.xml",
-    "https://shop.pokemon.co.jp/sitemap.xml",
-    "https://shop.pokemon.co.jp/sitemap_index.xml",
-    "https://pokemongo.com/sitemap.xml",
-    "https://pokemongo.com/sitemap_index.xml",
-})
+    for root in (
+        "https://www.pokemon.co.jp/robots.txt",
+        "https://shop.pokemon.co.jp/robots.txt",
+    ):
+        text = get_html(root)
+        for match in re.findall(
+            r"(?im)^\s*Sitemap:\s*(\S+)\s*$",
+            text,
+        ):
+            if is_official_url(match):
+                sitemaps.add(match)
 
-return sorted(result)
-
-=========================================================
-
-GEOCODING
-
-=========================================================
-
-def geocode_place(query):
-if not query:
-return None
-
-try:
-    response = SESSION.get(
-        GEOCODER_URL,
-        params={
-            "q": query,
-            "format": "jsonv2",
-            "limit": 1,
-            "countrycodes": "jp"
-        },
-        timeout=TIMEOUT,
-        headers={"Referer": "https://h23456789.github.io/Pok-Lids/"}
+    # Pokémon 官方 robots.txt 明確提供此 sitemap。
+    sitemaps.add(
+        "https://www.pokemon.co.jp/sitemap.xml"
     )
-    response.raise_for_status()
-    rows = response.json()
 
-    if rows:
-        return [float(rows[0]["lat"]), float(rows[0]["lon"])]
+    # Pokémon Center 若提供 XML sitemap，以下常見入口可直接嘗試；
+    # 找不到就略過，不會影響既有資料。
+    sitemaps.update({
+        "https://shop.pokemon.co.jp/sitemap.xml",
+        "https://shop.pokemon.co.jp/sitemap_index.xml",
+    })
 
-except Exception as error:
-    print("GEOCODE ERROR:", query, error)
+    return sorted(sitemaps)
 
-return None
 
-def enrich_coordinates(item):
-if item.get("coordinatesManual"):
-return item
+def parse_sitemap(url, visited=None, url_limit=MAX_SITEMAP_URLS):
+    if visited is None:
+        visited = set()
 
-coords = item.get("coords")
-if isinstance(coords, list) and len(coords) >= 2:
+    if url in visited:
+        return set()
+
+    visited.add(url)
+
+    if len(visited) > 25:
+        return set()
+
+    html = get_html(url)
+    if not html:
+        return set()
+
     try:
-        lat = float(coords[0])
-        lng = float(coords[1])
-        if abs(lat) <= 90 and abs(lng) <= 180:
-            return item
-    except (TypeError, ValueError):
-        pass
+        root = ET.fromstring(html)
+    except ET.ParseError:
+        return set()
 
-venue = normalize_text(item.get("venue") or item.get("name") or "")
-city = normalize_text(item.get("city") or item.get("cityZh") or "")
-pref = normalize_text(item.get("pref") or "")
+    found = set()
+    tag = root.tag.lower()
 
-queries = []
-if venue and city and pref:
-    queries.append(f"{venue}, {city}, {pref}, Japan")
-if venue and city:
-    queries.append(f"{venue}, {city}, Japan")
-if venue and pref:
-    queries.append(f"{venue}, {pref}, Japan")
-if venue:
-    queries.append(f"{venue}, Japan")
+    if tag.endswith("sitemapindex"):
+        for child in root.iter():
+            if not child.tag.lower().endswith("loc") or not child.text:
+                continue
+            child_url = child.text.strip()
+            if not is_official_url(child_url):
+                continue
+            found.update(
+                parse_sitemap(
+                    child_url,
+                    visited,
+                    url_limit=url_limit,
+                )
+            )
+            if len(found) >= url_limit:
+                break
 
-seen = set()
-for query in queries:
-    if query in seen:
-        continue
-    seen.add(query)
+    elif tag.endswith("urlset"):
+        for child in root.iter():
+            if not child.tag.lower().endswith("loc") or not child.text:
+                continue
+            child_url = child.text.strip()
+            if is_official_url(child_url):
+                found.add(child_url)
+                if len(found) >= url_limit:
+                    break
 
-    coords = geocode_place(query)
-    if coords:
-        item["coords"] = coords
-        item["lat"] = coords[0]
-        item["lng"] = coords[1]
-        item["coordsSource"] = "Place-name geocoding (Nominatim)"
-        item["coordinatesConfidence"] = "medium"
+    return found
+
+
+def event_family_key(event, source_url):
+    """
+    將不同語言、不同 locale query、同一官方活動路徑的頁面視為同一活動。
+    優先使用 canonical URL；再用活動標題建立第二層家族鍵。
+    """
+    canonical = canonical_source_url(source_url)
+    title = normalize_identity(event)
+    # 常見語言前後綴與網站標記不參與活動家族判斷。
+    title = re.sub(r"pokemon\s*go|pokémon\s*go|poumon|pokemon", "", title)
+    title = re.sub(r"(stamp|rally|スタンプ|集章趣)", "", title)
+    return f"{canonical}|{title}"
+
+
+def discover_urls(old_items):
+    candidates = set()
+
+    # 既有資料的官方來源也作為更新入口。
+    # 這不是寫死活動網址；只會更新已存在的官方來源。
+    for item in old_items:
+        source_url = normalize_text(item.get("sourceUrl", ""))
+        if is_official_url(source_url):
+            candidates.add(source_url)
+
+    # HTML 官方入口。
+    queue = list(DISCOVERY_URLS)
+    visited = set()
+
+    while queue and len(visited) < MAX_DISCOVERY_PAGES:
+        url = queue.pop(0)
+        if url in visited or not is_official_url(url):
+            continue
+
+        visited.add(url)
+        html = get_html(url)
+        if not html:
+            continue
+
+        soup = BeautifulSoup(html, "html.parser")
+
+        page_text = normalize_text(
+            soup.get_text(" ", strip=True)
+        )
+
+        # 這個頁面本身若已經是 Stamp Rally 頁，就保留。
+        if any(
+            keyword.lower() in page_text.lower()
+            for keyword in STAMP_KEYWORDS
+        ):
+            candidates.add(url)
+
+        for link in soup.find_all("a", href=True):
+            absolute = urljoin(url, link["href"])
+            absolute = absolute.split("#", 1)[0]
+
+            if not is_official_url(absolute):
+                continue
+
+            text = normalize_text(
+                link.get_text(" ", strip=True)
+            )
+            combined = f"{text} {absolute}"
+
+            if any(
+                keyword.lower() in combined.lower()
+                for keyword in STAMP_KEYWORDS
+            ):
+                candidates.add(absolute)
+
+            path = urlparse(absolute).path.lower()
+            if any(
+                token in path
+                for token in (
+                    "/info/",
+                    "/event/",
+                    "/events/",
+                    "/campaign/",
+                    "/common/events/",
+                )
+            ):
+                if absolute not in visited and absolute not in queue:
+                    queue.append(absolute)
+
+        time.sleep(REQUEST_DELAY)
+
+    # XML sitemap 作為第二層發現機制。
+    for sitemap in discover_sitemaps():
+        urls = parse_sitemap(sitemap)
+        for url in urls:
+            lower = url.lower()
+            if any(
+                token in lower
+                for token in (
+                    "event",
+                    "events",
+                    "campaign",
+                    "info",
+                    "stamp",
+                    "rally",
+                )
+            ):
+                candidates.add(url)
+
+    # 同一活動不同語言只保留一個來源網址；繁中優先、其次日文、最後英文。
+    deduped = {}
+    for candidate in candidates:
+        key = canonical_source_url(candidate)
+        current = deduped.get(key)
+        if current is None or preferred_source_rank(candidate) < preferred_source_rank(current):
+            deduped[key] = candidate
+
+    return sorted(deduped.values())
+
+
+def extract_center_links(soup, base_url):
+    results = []
+    seen = set()
+
+    for link in soup.find_all("a", href=True):
+        name = normalize_text(
+            link.get_text(" ", strip=True)
+        )
+        if not name:
+            continue
+
+        if "ポケモンセンター" not in name:
+            continue
+
+        if any(
+            bad in name
+            for bad in (
+                "サテライト",
+                "出張所",
+                "ポケモンカフェ",
+            )
+        ):
+            continue
+
+        if name in seen:
+            continue
+
+        results.append({
+            "name": name,
+            "url": urljoin(base_url, link["href"]),
+        })
+        seen.add(name)
+
+    if (
+        "Pokémon GO Lab." in soup.get_text(" ", strip=True)
+        or "Pokémon GO Lab" in soup.get_text(" ", strip=True)
+    ):
+        if "Pokémon GO Lab." not in seen:
+            results.append({
+                "name": "Pokémon GO Lab.",
+                "url": base_url,
+            })
+
+    return results
+
+
+def enrich_location(item, venue_url):
+    html = get_html(venue_url)
+    if not html:
         return item
 
-    time.sleep(1.1)
-
-return item
-
-=========================================================
-
-MERGE
-
-=========================================================
-
-def point_key(item):
-return (
-canonical_activity_key(item),
-normalize_identity(item.get("venue") or item.get("name") or "")
-)
-
-def merge_items(old_items, fresh_items):
-result = {}
-
-# 先處理舊資料
-for item in old_items:
-    if not item.get("id"):
-        continue
-
-    if is_instructional(item.get("event", "")):
-        continue
-
-    key = point_key(item)
-    if key not in result:
-        result[key] = item
-        continue
-
-    current = result[key]
-    preferred = item if source_locale_rank(item.get("sourceUrl", "")) < source_locale_rank(current.get("sourceUrl", "")) else current
-    other = current if preferred is item else item
-
-    for field in (
-        "eventZh", "eventNameZh", "activityZh", "nameZh", "venueZh",
-        "cityZh", "addressZh", "activityImage", "eventImage", "rewardZh",
-        "stampImage", "centerBadgeImage", "coords", "lat", "lng", "address"
-    ):
-        if not preferred.get(field) and other.get(field):
-            preferred[field] = other[field]
-
-    result[key] = preferred
-
-# 再處理新資料
-for item in fresh_items:
-    if not item.get("id"):
-        continue
-
-    key = point_key(item)
-    if key not in result:
-        result[key] = item
-        continue
-
-    current = result[key]
-
-    # 舊資料 ID 一定保留
-    if current.get("id"):
-        item["id"] = current["id"]
-
-    preferred = item if source_locale_rank(item.get("sourceUrl", "")) < source_locale_rank(current.get("sourceUrl", "")) else current
-    other = current if preferred is item else item
-
-    for field in (
-        "eventZh", "eventNameZh", "activityZh", "nameZh", "venueZh",
-        "cityZh", "addressZh", "activityImage", "eventImage", "rewardZh",
-        "stampImage", "centerBadgeImage", "coords", "lat", "lng", "address"
-    ):
-        if not item.get(field) and current.get(field):
-            item[field] = current[field]
-
-    result[key] = item
-
-return list(result.values())
-
-def build_event_metadata(items, old_events=None):
-if old_events is None:
-old_events = []
-
-grouped = {}
-
-for item in items:
-    key = canonical_activity_key(item)
-    if not key:
-        continue
-
-    event = grouped.get(key)
-    if event is None:
-        grouped[key] = {
-            "eventId": item.get("eventId") or ("STAMP-AUTO-" + make_hash(key)),
-            "event": item.get("event") or item.get("eventName") or "GO 集章趣",
-            "eventName": item.get("eventName") or item.get("event") or "GO 集章趣",
-            "eventZh": item.get("eventZh") or item.get("eventNameZh") or item.get("event") or "GO 集章趣",
-            "eventNameZh": item.get("eventNameZh") or item.get("eventZh") or item.get("event") or "GO 集章趣",
-            "activity": "GO Stamp Rally",
-            "activityZh": "GO 集章趣",
-            "startDate": "",
-            "endDate": "",
-            "pointCount": 0,
-            "activityImage": item.get("activityImage") or item.get("eventImage") or "",
-            "eventImage": item.get("eventImage") or item.get("activityImage") or "",
-            "sourceUrl": item.get("sourceUrl") or ""
-        }
-        event = grouped[key]
-
-    event["pointCount"] += 1
-
-    if item.get("startDate") and (not event["startDate"] or item["startDate"] < event["startDate"]):
-        event["startDate"] = item["startDate"]
-
-    if item.get("endDate") and (not event["endDate"] or item["endDate"] > event["endDate"]):
-        event["endDate"] = item["endDate"]
-
-    for field in ("eventZh", "eventNameZh", "activityImage", "eventImage"):
-        if not event.get(field) and item.get(field):
-            event[field] = item[field]
-
-# old events 補充，但 canonical 相同不新增第二筆
-for old in old_events:
-    source = old.get("sourceUrl", "")
-    key = canonical_source_url(source) if source else normalize_identity(old.get("eventId") or "")
-    
-    if not key or key in grouped:
-        continue
-    grouped[key] = old
-
-return sorted(
-    grouped.values(),
-    key=lambda x: (
-        x.get("startDate") or "9999",
-        x.get("eventZh") or x.get("event") or ""
+    soup = BeautifulSoup(html, "html.parser")
+    text = normalize_text(
+        soup.get_text(" ", strip=True)
     )
-)
 
-=========================================================
+    address = ""
 
-HISTORY
+    patterns = (
+        r"〒\s*\d{3}-?\d{4}\s*([^|｜]{5,180})",
+        r"住所\s*[:：]?\s*([^|｜]{5,180})",
+    )
 
-=========================================================
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            address = normalize_text(match.group(1))
+            break
 
-def history_detail(item):
-return {
-"id": item.get("id", ""),
-"event": item.get("event", ""),
-"eventZh": item.get("eventZh", ""),
-"name": item.get("name", ""),
-"venue": item.get("venue", ""),
-"startDate": item.get("startDate", ""),
-"endDate": item.get("endDate", ""),
-"sourceUrl": item.get("sourceUrl", ""),
+    item["address"] = address
+
+    if not item.get("pref"):
+        item["pref"] = extract_prefecture(address)
+
+    known = CENTER_HINTS.get(
+        item.get("venue") or item.get("name", "")
+    )
+
+    if known:
+        known_pref, known_city = known
+        if not item.get("pref"):
+            item["pref"] = known_pref
+        if not item.get("city"):
+            item["city"] = known_city
+
+    item["venueSourceUrl"] = venue_url
+
+    return item
+
+
+def is_pokemon_go_source(url):
+    host=(urlparse(normalize_text(url)).hostname or "").lower()
+    return host in {"pokemongo.com", "www.pokemongo.com"}
+
+def is_poke_lid_rally_text(value):
+    text=normalize_text(value).lower()
+    return any(token in text for token in ("poké lid","poke lid","ポケふた","ポケふたスタンプラリー"))
+
+def is_pokemon_center_onsite_text(value):
+    text=normalize_text(value).lower()
+    if "pokemon center" not in text and "ポケモンセンター" not in text:
+        return False
+    return not bool(re.search(r"pokemon\s*go|pokémon\s*go|go\s*stamp\s*rally|goスタンプラリー|go集章趣",text,re.I))
+
+KNOWN_GO_STAMP_POINTS={
+    "Nagasaki Station (Kamome Plaza)":(32.7521119,129.8687391),
+    "長崎駅（かもめ広場）":(32.7521119,129.8687391),
+    "長崎駅（海鷗廣場）":(32.7521119,129.8687391),
+    "Nagasaki Station":(32.7521119,129.8687391),
+    "長崎漁港尾上地区防災緑地（尾上の丘）":(32.7489722,129.8685),
+    "長崎漁港尾上地區防災綠地（尾上之丘）":(32.7489722,129.8685),
+    "Former Nagasaki Prefectural Office Site":(32.7496274,129.8674379),
+    "原長崎県庁舎跡地":(32.7496274,129.8674379),
+    "原長崎縣廳所在地":(32.7496274,129.8674379),
+    "Nagasaki Chinatown (Shinchibashi Square)":(32.74301,129.8751),
+    "長崎中華街（新地橋広場）":(32.74301,129.8751),
+    "長崎中華街（新地橋廣場）":(32.74301,129.8751),
+    "Nagasaki City Hall and Community Center":(32.7494464,129.8798385),
+    "長崎市役所／市民会館":(32.7494464,129.8798385),
+    "長崎市役所／社區中心":(32.7494464,129.8798385),
+    "Nagasaki Museum of History and Culture":(32.752846,129.879495),
+    "長崎歴史文化博物館":(32.752846,129.879495),
+    "長崎歷史文化博物館":(32.752846,129.879495),
+    "Nagasaki Water and Green Forest Park":(32.740778,129.868361),
+    "長崎水辺の森公園":(32.740778,129.868361),
+    "長崎水濱森林公園":(32.740778,129.868361),
+    "Nagasaki Sports Park":(32.758806,129.8644224),
+    "長崎スポーツ広場":(32.758806,129.8644224),
+    "長崎體育城":(32.758806,129.8644224),
+    "KLCC Park: In front of Esplanade":(3.155558,101.714787),
+    "Kuala Lumpur":(3.155558,101.714787),
+    "Xiangti Boulevard":(25.037245,121.566986),
+    "Taipei":(25.037245,121.566986),
+    "Changi Airport: Terminal 3 Departure Hall":(1.356355,101.0+2.986511),
+    "Singapore":(1.356355,103.986511),
+    "SM Mall of Asia: MOA Sky":(14.534429,120.980263),
+    "Manila":(14.534429,120.980263),
 }
 
+def is_japan_coordinate(coords):
+    try:
+        lat=float(coords[0]); lng=float(coords[1])
+    except (TypeError,ValueError,IndexError):
+        return False
+    return 24.0 <= lat <= 46.0 and 122.0 <= lng <= 146.5
+
+def parse_stamp_page(url, old_items):
+    if not is_pokemon_go_source(url):
+        return []
+    html=get_html(url)
+    if not html: return []
+    soup=BeautifulSoup(html,"html.parser")
+    page_text=normalize_text(soup.get_text(" ",strip=True))
+    if not has_strong_stamp_event_signal(soup,page_text,url):
+        print("  SKIP: not explicit GO Stamp Rally")
+        return []
+    event=extract_event_name(soup,page_text)
+    if is_poke_lid_rally_text(event) or is_instructional_stamp_text(event):
+        return []
+    event_id=get_event_id(event,url,old_items)
+    dates=extract_dates(page_text)
+    start_date=dates[0] if dates else ""
+    end_date=dates[1] if len(dates)>=2 else ""
+    image_url=extract_image(soup,url)
+    reward=extract_reward(page_text)
+    matched=[]
+    lower=page_text.lower()
+    for name,coords in KNOWN_GO_STAMP_POINTS.items():
+        if name.lower() in lower: matched.append((name,coords))
+    unique=[]; seen=set()
+    for name,coords in matched:
+        if not is_japan_coordinate(coords):
+            continue
+        key=(round(coords[0],7),round(coords[1],7))
+        if key in seen: continue
+        seen.add(key); unique.append((name,coords))
+    if not unique:
+        # Do not fabricate a point merely because the page mentions a stamp rally.
+        print("  SKIP: GO Stamp Rally page has no supported concrete point")
+        return []
+    points=[]
+    for venue,(lat,lng) in unique:
+        existing_id=get_existing_item_id(event_id,venue,old_items,url)
+        city=""
+        if "長崎" in venue or "Nagasaki" in venue: city="長崎市"
+        elif "Taipei" in venue or "台北" in venue or "Xiangti" in venue: city="台北"
+        elif "Kuala Lumpur" in venue or "KLCC" in venue: city="Kuala Lumpur"
+        elif "Singapore" in venue or "Changi" in venue: city="Singapore"
+        elif "Manila" in venue or "Mall of Asia" in venue: city="Manila"
+        points.append({
+            "id":existing_id or get_item_id(event_id,venue),
+            "eventId":event_id,"event":event,"eventName":event,"eventZh":event,"eventNameZh":event,
+            "activity":"Pokémon GO GO Stamp Rally","activityZh":"GO 集章趣",
+            "venueType":"in_game_pokestop","venue":venue,"name":venue,"nameZh":venue,
+            "pref":extract_prefecture(venue) or extract_prefecture(page_text),"city":city,"address":venue,
+            "coords":[lat,lng],"startDate":start_date,"endDate":end_date,"stampImage":image_url,"reward":reward,
+            "source":"Pokémon GO Official Website","sourceUrl":url,"official":True,
+        })
+    return points
+
+
+def is_invalid_existing_stamp_item(item):
+    """移除之前版本誤收進 JSON 的教學／FAQ／索引項目。"""
+    values = [
+        item.get("event", ""),
+        item.get("eventName", ""),
+        item.get("name", ""),
+        item.get("venue", ""),
+    ]
+    return any(is_instructional_stamp_text(value) for value in values if value)
+
+
+def merge_items(old_items, fresh_items):
+    """
+    Merge data while collapsing language variants of the same official activity.
+
+    Priority: zh-Hant > ja > en > other. Manual values are reapplied later.
+    Stable point IDs are preserved from old data whenever the same canonical
+    official source + venue is found.
+    """
+    def source_rank(item):
+        return preferred_source_rank(item.get("sourceUrl", ""))
+
+    def activity_key(item):
+        source = normalize_text(item.get("sourceUrl", ""))
+        if source:
+            return canonical_source_url(source)
+        return normalize_identity(
+            item.get("eventId") or item.get("event") or item.get("eventName") or ""
+        )
+
+    def point_key(item):
+        return (
+            activity_key(item),
+            normalize_identity(item.get("venue") or item.get("name") or "")
+        )
+
+    # -----------------------------------------------------
+    # Clean legacy incorrect entries and dedupe legacy locale variants.
+    # -----------------------------------------------------
+    old_by_key = {}
+    old_id_to_key = {}
+
+    for item in old_items:
+        source_url=normalize_text(item.get("sourceUrl",""))
+        text_blob=" ".join(str(item.get(k,"")) for k in ("event","eventName","eventZh","eventNameZh","activity","activityZh","venue","name"))
+        if not item.get("id") or is_invalid_existing_stamp_item(item):
+            continue
+        if not is_pokemon_go_source(source_url):
+            continue
+        if is_poke_lid_rally_text(text_blob) or is_pokemon_center_onsite_text(text_blob):
+            continue
+
+        key = point_key(item)
+        current = old_by_key.get(key)
+
+        if current is None:
+            old_by_key[key] = item
+            old_id_to_key[item.get("id")] = key
+            continue
+
+        # Keep the preferred language version but preserve useful fields from the other.
+        preferred = item if source_rank(item) < source_rank(current) else current
+        other = current if preferred is item else item
+
+        for field in (
+            "eventZh", "eventNameZh", "activityZh",
+            "nameZh", "venueZh", "cityZh", "addressZh",
+            "activityImage", "eventImage", "rewardZh",
+            "centerBadgeImage", "stampImage",
+            "coords", "lat", "lng", "address",
+        ):
+            if not preferred.get(field) and other.get(field):
+                preferred[field] = other[field]
+
+        old_by_key[key] = preferred
+
+        duplicate_id = other.get("id")
+        if duplicate_id:
+            old_id_to_key.pop(duplicate_id, None)
+
+    # -----------------------------------------------------
+    # Fresh data dedupe: zh-Hant/ja/en locale pages collapse to one point.
+    # -----------------------------------------------------
+    fresh_by_key = {}
+
+    for item in fresh_items:
+        if not item.get("id"):
+            continue
+
+        key = point_key(item)
+        current = fresh_by_key.get(key)
+
+        if current is None:
+            fresh_by_key[key] = item
+            continue
+
+        preferred = item if source_rank(item) < source_rank(current) else current
+        other = current if preferred is item else item
+
+        for field in (
+            "eventZh", "eventNameZh", "activityZh",
+            "nameZh", "venueZh", "cityZh", "addressZh",
+            "activityImage", "eventImage", "rewardZh",
+        ):
+            if not preferred.get(field) and other.get(field):
+                preferred[field] = other[field]
+
+        fresh_by_key[key] = preferred
+
+    # -----------------------------------------------------
+    # Preserve existing IDs for the same activity + venue.
+    # -----------------------------------------------------
+    merged = {}
+
+    for key, item in fresh_by_key.items():
+        old = old_by_key.get(key)
+        if old and old.get("id"):
+            item["id"] = old["id"]
+            # 官方頁面暫時沒重新解析到的座標／人工修正，不要被空值洗掉。
+            for field in (
+                "coords", "lat", "lng", "address", "addressZh",
+                "pref", "city", "prefZh", "cityZh",
+                "stampImage", "stampImageSource",
+                "venueZh", "nameZh", "rewardZh",
+            ):
+                if not item.get(field) and old.get(field):
+                    item[field] = old[field]
+        merged[item["id"]] = item
+
+    # Keep old items that are not represented by fresh data only when
+    # they still have a concrete, usable coordinate. This prevents legacy
+    # activity-only records from surviving forever.
+    def has_coords(item):
+        coords = item.get("coords")
+        if isinstance(coords, (list, tuple)) and len(coords) >= 2:
+            try:
+                return float(coords[0]) == float(coords[0]) and float(coords[1]) == float(coords[1])
+            except (TypeError, ValueError):
+                pass
+        try:
+            return float(item.get("lat")) == float(item.get("lat")) and float(item.get("lng")) == float(item.get("lng"))
+        except (TypeError, ValueError):
+            return False
+
+    fresh_keys = set(fresh_by_key)
+    for key, item in old_by_key.items():
+        if key not in fresh_keys and item.get("id") and has_coords(item):
+            merged[item["id"]] = item
+
+    # If a concrete prefecture record exists for an event, remove old generic placeholder.
+    concrete_event_families = {
+        activity_key(item)
+        for item in fresh_by_key.values()
+        if item.get("pref")
+    }
+
+    for item_id, item in list(merged.items()):
+        if (
+            activity_key(item) in concrete_event_families
+            and not item.get("pref")
+        ):
+            del merged[item_id]
+
+    return list(merged.values())
+
+
+def build_events_metadata(old_events, merged):
+    """Build one event record per canonical official activity URL."""
+    old_map = {}
+    for event in old_events or []:
+        source = normalize_text(event.get("sourceUrl", ""))
+        key = canonical_source_url(source) if source else normalize_identity(
+            event.get("eventId") or event.get("id") or event.get("event") or ""
+        )
+        if key:
+            old_map[key] = dict(event)
+
+    grouped = {}
+
+    def rank_event(event):
+        return preferred_source_rank(event.get("sourceUrl", ""))
+
+    for item in merged:
+        source = normalize_text(item.get("sourceUrl", ""))
+        key = canonical_source_url(source) if source else normalize_identity(
+            item.get("eventId") or item.get("event") or item.get("eventName") or ""
+        )
+        if not key:
+            continue
+
+        current = grouped.get(key)
+        if current is None:
+            current = dict(old_map.get(key, {}))
+            grouped[key] = current
+
+        # Prefer Traditional Chinese source when the same activity has multiple locales.
+        current_source_rank = rank_event(current) if current.get("sourceUrl") else 99
+        item_rank = preferred_source_rank(source)
+        if not current.get("sourceUrl") or item_rank < current_source_rank:
+            for field in (
+                "event", "eventName", "eventZh", "eventNameZh",
+                "activity", "activityZh", "descriptionZh",
+                "activityImage", "eventImage", "reward", "rewardZh",
+                "source", "sourceUrl",
+            ):
+                if item.get(field):
+                    current[field] = item[field]
+
+        else:
+            for field in (
+                "eventZh", "eventNameZh", "activityZh",
+                "descriptionZh", "activityImage", "eventImage",
+                "rewardZh",
+            ):
+                if not current.get(field) and item.get(field):
+                    current[field] = item[field]
+
+        current["eventId"] = current.get("eventId") or item.get("eventId") or key
+        current["event"] = current.get("event") or item.get("event") or "GO 集章趣"
+        current["eventName"] = current.get("eventName") or item.get("eventName") or current["event"]
+
+        if item.get("startDate") and (not current.get("startDate") or item["startDate"] < current["startDate"]):
+            current["startDate"] = item["startDate"]
+        if item.get("endDate") and (not current.get("endDate") or item["endDate"] > current["endDate"]):
+            current["endDate"] = item["endDate"]
+
+    result = []
+    for key, event in grouped.items():
+        points = []
+        seen = set()
+        for item in merged:
+            source = normalize_text(item.get("sourceUrl", ""))
+            item_key = canonical_source_url(source) if source else normalize_identity(
+                item.get("eventId") or item.get("event") or item.get("eventName") or ""
+            )
+            if item_key != key:
+                continue
+            venue = normalize_identity(item.get("venue") or item.get("name") or "")
+            if not venue or venue in seen:
+                continue
+            if venue == normalize_identity(event.get("event") or ""):
+                continue
+            seen.add(venue)
+            points.append(item)
+
+        # 沒有實際集章點的 metadata 不應出現在 events。
+        if not points:
+            continue
+
+        event["pointCount"] = len(points)
+        if not event.get("expectedStamps") and points:
+            event["expectedStamps"] = len(points)
+
+        result.append(event)
+
+    return sorted(
+        result,
+        key=lambda row: (
+            row.get("startDate", "9999"),
+            row.get("eventZh") or row.get("event") or "",
+        )
+    )
+
+
+
+def load_manual_overrides():
+    if not OVERRIDE_FILE.exists():
+        return {}
+    data=load_json(OVERRIDE_FILE,{})
+    rows=[]
+    if isinstance(data,dict) and isinstance(data.get("items"),list): rows=data["items"]
+    elif isinstance(data,list): rows=data
+    elif isinstance(data,dict): rows=[{"id":k,**v} for k,v in data.items() if isinstance(v,dict)]
+    result={}
+    for row in rows:
+        if not isinstance(row,dict): continue
+        item_id=str(row.get("id") or "").strip()
+        if item_id: result[item_id]={k:v for k,v in row.items() if k!="id"}
+    return result
+
+
+def apply_manual_overrides(items, overrides):
+    """Apply only explicit manual fields; never create records from overrides."""
+    if not isinstance(overrides, dict):
+        return list(items or [])
+
+    result = []
+    for item in items or []:
+        row = dict(item)
+        item_id = str(row.get("id") or "").strip()
+        override = overrides.get(item_id)
+        if isinstance(override, dict):
+            for field, value in override.items():
+                # Internal control keys are not copied into the stamp record.
+                if field in {"id", "delete", "remove"}:
+                    continue
+                row[field] = value
+        result.append(row)
+    return result
+
+
+def _stable_item_signature(item):
+    """Signature used for history/change detection, excluding volatile fields."""
+    ignored = {"updated", "lastSeen", "_debug"}
+    return json.dumps(
+        {k: v for k, v in item.items() if k not in ignored},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
 def compare_items(old_items, new_items):
-old_map = {item.get("id"): item for item in old_items if item.get("id")}
-new_map = {item.get("id"): item for item in new_items if item.get("id")}
+    old_map = {
+        str(item.get("id")): item
+        for item in (old_items or [])
+        if item.get("id")
+    }
+    new_map = {
+        str(item.get("id")): item
+        for item in (new_items or [])
+        if item.get("id")
+    }
 
-added = [key for key in new_map if key not in old_map]
-removed = [key for key in old_map if key not in new_map]
-changed = [
-    key for key in new_map
-    if key in old_map and old_map[key] != new_map[key]
-]
+    added = sorted(set(new_map) - set(old_map))
+    removed = sorted(set(old_map) - set(new_map))
+    changed = sorted(
+        item_id
+        for item_id in (set(old_map) & set(new_map))
+        if _stable_item_signature(old_map[item_id]) != _stable_item_signature(new_map[item_id])
+    )
+    return added, removed, changed
 
-return added, removed, changed
 
-=========================================================
-
-MAIN
-
-=========================================================
+def history_detail(item):
+    """Compact history representation for one stamp point."""
+    if not isinstance(item, dict):
+        return {}
+    return {
+        "id": item.get("id", ""),
+        "eventId": item.get("eventId", ""),
+        "event": item.get("event", ""),
+        "eventZh": item.get("eventZh", ""),
+        "venue": item.get("venue") or item.get("name", ""),
+        "venueZh": item.get("venueZh", ""),
+        "pref": item.get("pref", ""),
+        "city": item.get("city", ""),
+        "coords": item.get("coords", []),
+        "sourceUrl": item.get("sourceUrl", ""),
+    }
 
 def main():
-print("========================================")
-print("Pokémon GO GO Stamp Rally Sync 7.0")
-print("Canonical activity dedupe")
-print("PokéXciting unified")
-print("Manual override protected")
-print("========================================")
+    print("========================================")
+    print("Pokémon Stamp Rally AUTO UPDATER")
+    print("Official-source discovery mode")
+    print("========================================")
 
-old_data = load_json(
-    STAMP_FILE,
-    {
-        "version": "7.0",
-        "events": [],
-        "list": []
-    }
-)
-
-old_items = old_data.get("list", [])
-if not isinstance(old_items, list):
-    old_items = []
-
-old_events = old_data.get("events", [])
-if not isinstance(old_events, list):
-    old_events = []
-
-overrides = load_manual_overrides()
-old_items = apply_manual_overrides(old_items, overrides)
-urls = discover_urls(old_items)
-
-print("Candidates:", len(urls))
-
-fresh = []
-for url in urls:
-    print("CHECK:", url)
-    try:
-        rows = parse_stamp_page(url, old_items)
-        if rows:
-            print("  FOUND:", len(rows))
-            fresh.extend(rows)
-    except Exception as error:
-        print("  PARSE ERROR:", error)
-    time.sleep(REQUEST_DELAY)
-
-merged = merge_items(old_items, fresh)
-
-# 官方座標缺失時再補地理編碼。
-# 人工 override 跳過。
-for item in merged:
-    override = find_manual_override(item, overrides)
-    if override:
-        continue
-    enrich_coordinates(item)
-    time.sleep(REQUEST_DELAY)
-
-merged = apply_manual_overrides(merged, overrides)
-
-merged.sort(
-    key=lambda x: (
-        x.get("startDate", ""),
-        x.get("event", ""),
-        x.get("pref", ""),
-        x.get("name", ""),
-        x.get("id", "")
-    )
-)
-
-events = build_event_metadata(merged, old_events)
-added, removed, changed = compare_items(old_items, merged)
-
-now = datetime.now(timezone.utc).astimezone()
-updated = now.strftime("%Y-%m-%d %H:%M:%S")
-
-write_json(
-    STAMP_FILE,
-    {
-        "version": "7.0",
-        "updated": updated,
-        "source": "official",
-        "sourceMode": (
-            "official GO discovery; canonical activity dedupe; "
-            "PokéXciting unified; manual overrides protected; "
-            "place-name geocoding fallback"
-        ),
-        "rule": (
-            "Only in-game Pokémon GO GO Stamp Rally. "
-            "Offline stamp rallies, ordinary PokéStops and Poké Lid are excluded."
-        ),
-        "events": events,
-        "list": merged
-    }
-)
-
-# =====================================================
-# HISTORY
-# =====================================================
-history = load_json(HISTORY_FILE, {"history": []})
-history_rows = history.get("history", [])
-if not isinstance(history_rows, list):
-    history_rows = []
-
-merged_map = {item.get("id"): item for item in merged if item.get("id")}
-
-if added or removed or changed:
-    history_rows.insert(
-        0,
+    old_data = load_json(
+        STAMP_FILE,
         {
-            "time": updated,
-            "type": "stamp",
-            "event": "Automatic official GO Stamp Rally sync",
-            "eventZh": "自動同步 Pokémon GO 官方 GO 集章趣",
-            "source": "Pokémon GO Official Website",
-            "total": len(merged),
-            "added": added,
-            "removed": removed,
-            "changed": changed,
-            "addedItems": [
-                history_detail(merged_map[key])
-                for key in added if key in merged_map
-            ],
-            "removedItems": [
-                {"id": key} for key in removed
-            ],
-            "changedItems": [
-                history_detail(merged_map[key])
-                for key in changed if key in merged_map
-            ]
+            "list": []
         }
     )
 
-history_rows = history_rows[:100]
-write_json(HISTORY_FILE, {"history": history_rows})
+    old_items = old_data.get(
+        "list",
+        []
+    )
+    old_events = old_data.get("events", []) if isinstance(old_data, dict) else []
 
-print("========================================")
-print("Records:", len(merged))
-print("Events:", len(events))
-print("Added:", len(added))
-print("Removed:", len(removed))
-print("Changed:", len(changed))
-print("========================================")
+    old_events = [e for e in old_events if is_pokemon_go_source(e.get("sourceUrl", "")) and not is_poke_lid_rally_text(" ".join(str(e.get(k,"")) for k in ("event","eventName","eventZh","eventNameZh","activity","activityZh")))]
 
-if name == "main":
-main()
+    manual_overrides = load_manual_overrides()
+    old_items = apply_manual_overrides(old_items, manual_overrides)
+
+    # Remove legacy non-target records before merge. Manual coordinates are applied first
+    # so an intentionally corrected point is not accidentally discarded.
+    old_items = [
+        item for item in old_items
+        if is_pokemon_go_source(item.get("sourceUrl", ""))
+        and not is_poke_lid_rally_text(" ".join(str(item.get(k,"")) for k in ("event","eventName","eventZh","eventNameZh","activity","activityZh","venue","name")))
+        and not is_pokemon_center_onsite_text(" ".join(str(item.get(k,"")) for k in ("event","eventName","eventZh","eventNameZh","activity","activityZh","venue","name")))
+        and is_japan_coordinate(item.get("coords", []))
+    ]
+
+    print(
+        "Existing records:",
+        len(old_items)
+    )
+    print(
+        "Manual overrides:",
+        len(manual_overrides)
+    )
+
+    urls = discover_urls(
+        old_items
+    )
+
+    print(
+        "Discovered official candidate URLs:",
+        len(urls)
+    )
+
+    fresh_items = []
+
+    for url in urls:
+        print(
+            "CHECK:",
+            url
+        )
+
+        try:
+            items = parse_stamp_page(
+                url,
+                old_items
+            )
+
+            if items:
+                print(
+                    "  FOUND:",
+                    len(items),
+                    "records"
+                )
+                fresh_items.extend(items)
+
+        except Exception as error:
+            print(
+                "  PARSE ERROR:",
+                error
+            )
+
+        time.sleep(
+            REQUEST_DELAY
+        )
+
+    # 去重
+    unique = {}
+    for item in fresh_items:
+        if item.get("id"):
+            unique[item["id"]] = item
+
+    fresh_items = list(
+        unique.values()
+    )
+
+    fresh_items = apply_manual_overrides(
+        fresh_items,
+        manual_overrides
+    )
+
+    print(
+        "Fresh official records:",
+        len(fresh_items)
+    )
+
+    # =====================================================
+    # 安全機制
+    # =====================================================
+    # 如果這次完全抓不到，就什麼都不改。
+    if not fresh_items:
+        print(
+            "No official Stamp Rally found."
+        )
+        print(
+            "Existing JSON kept unchanged."
+        )
+        return
+
+    merged = merge_items(
+        old_items,
+        fresh_items
+    )
+
+    merged = apply_manual_overrides(
+        merged,
+        manual_overrides
+    )
+
+    merged.sort(
+        key=lambda item: (
+            item.get("startDate", ""),
+            item.get("event", ""),
+            item.get("pref", ""),
+            item.get("name", ""),
+            item.get("id", ""),
+        )
+    )
+
+    added, removed, changed = compare_items(
+        old_items,
+        merged
+    )
+
+    now = datetime.now(
+        timezone.utc
+    ).astimezone()
+
+    updated = now.strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    write_json(
+        STAMP_FILE,
+        {
+            "version": "6.0",
+            "updated": updated,
+            "source": "official",
+            "sourceMode": "official GO discovery + locale dedupe + manual overrides protected",
+            "events": build_events_metadata(old_events, merged),
+            "list": merged,
+        }
+    )
+
+    history = load_json(
+        HISTORY_FILE,
+        {
+            "history": []
+        }
+    )
+
+    history_list = history.get(
+        "history",
+        []
+    )
+
+    merged_map = {
+        item.get("id"): item
+        for item in merged
+        if item.get("id")
+    }
+
+    if added or changed or removed:
+        history_list.insert(
+            0,
+            {
+                "time": updated,
+                "type": "stamp",
+                "event": "Automatic official Stamp Rally sync",
+                "source": (
+                    "Pokémon Official Website / "
+                    "Pokémon Center Official Website"
+                ),
+                "total": len(merged),
+                "added": added,
+                "removed": removed,
+                "changed": changed,
+                "addedItems": [
+                    history_detail(merged_map[item_id])
+                    for item_id in added
+                    if item_id in merged_map
+                ],
+                "changedItems": [
+                    history_detail(merged_map[item_id])
+                    for item_id in changed
+                    if item_id in merged_map
+                ],
+            }
+        )
+
+    history["history"] = history_list[:100]
+
+    write_json(
+        HISTORY_FILE,
+        history
+    )
+
+    print("========================================")
+    print("Total records:", len(merged))
+    print("Added:", len(added))
+    print("Changed:", len(changed))
+    print("Removed:", len(removed))
+    print("========================================")
+
+
+if __name__ == "__main__":
+    main()

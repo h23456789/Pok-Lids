@@ -1195,11 +1195,6 @@ button{
 
   overflow:auto;
 
-  /* 可拖曳右下角調整大小 */
-  resize:both;
-  min-width:320px;
-  min-height:280px;
-
   background:#fff;
 
   border-radius:24px;
@@ -1815,16 +1810,11 @@ button{
 ========================================================= */
 .admin-modal{
   width:min(1180px,calc(100vw - 24px));
-  height:min(760px,calc(100vh - 24px));
-  min-width:520px;
-  min-height:420px;
-  max-width:calc(100vw - 24px);
   max-height:calc(100vh - 24px);
   background:#f7fcfc;
   border-radius:24px;
   box-shadow:0 20px 80px rgba(0,0,0,.38);
-  overflow:auto;
-  resize:both;
+  overflow:hidden;
   position:relative;
   z-index:11001;
   display:flex;
@@ -1855,7 +1845,7 @@ button{
 .admin-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .admin-crop-preview{margin-top:12px;min-height:80px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#eef7f6;padding:10px}
 .admin-crop-preview img{max-width:240px;max-height:240px;object-fit:contain;border-radius:12px;background:repeating-conic-gradient(#eef2f2 0 25%,#fff 0 50%) 50%/16px 16px}
-@media(max-width:900px){.admin-grid{grid-template-columns:1fr}.admin-modal{width:calc(100vw - 12px);height:min(720px,calc(100vh - 12px));min-width:0;min-height:320px;max-width:calc(100vw - 12px);max-height:calc(100vh - 12px);border-radius:20px}.admin-canvas-wrap{height:330px}.admin-row2{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.admin-grid{grid-template-columns:1fr}.admin-modal{width:calc(100vw - 12px);max-height:calc(100vh - 12px);border-radius:20px}.admin-canvas-wrap{height:330px}.admin-row2{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.admin-modal-title{font-size:19px}.admin-modal-body{padding:10px}.admin-canvas-wrap{height:300px}}
 
 /* =========================================================
@@ -2197,6 +2187,7 @@ button{
 .stamp-event-live-status{margin-top:6px;display:inline-block;padding:4px 9px;border-radius:999px;background:#eaf7ed;color:#2d8b50;font-size:11px;font-weight:900;}
 .stamp-event-live-status.upcoming{background:#eef4ff;color:#42689a;}
 .stamp-event-live-status.ended{background:#f0f0f0;color:#777;}
+.stamp-event-live-status.unknown{background:#fff6dc;color:#9a731c;}
 </style>
 
 </head>
@@ -2984,7 +2975,7 @@ async function adminSaveOverride(){
     const arr=adminState.overrides.items||[];const idx=arr.findIndex(x=>String(x.id||"")===item.id);if(idx>=0)arr[idx]={...arr[idx],...item};else arr.push(item);adminState.overrides.items=arr;adminState.overrides.version="1.0";adminState.overrides.updated=new Date().toISOString();
     let sha=null;try{const old=await adminGithubGet("svgstamp_manual_overrides.json");sha=old.sha;}catch{}
     await adminGithubPut("svgstamp_manual_overrides.json",adminUtf8ToB64(JSON.stringify(adminState.overrides,null,2)+"\n"),"chore: update manual GO stamp overrides",sha);
-    await loadManualOverrides();applyRuntimeManualOverrides();renderRegions();updateOverall();adminSetSaveStatus(`已儲存。\n圖章：${adminPointName(p)}\n${coords.length?"座標："+coords.join(", ")+"\n":""}${imageUrl?"圖片："+imageUrl:""}`,true);
+    await loadManualOverrides();applyRuntimeManualOverrides();renderCurrentHome();updateOverall();adminSetSaveStatus(`已儲存。\n圖章：${adminPointName(p)}\n${coords.length?"座標："+coords.join(", ")+"\n":""}${imageUrl?"圖片："+imageUrl:""}`,true);
     adminShowPointInfo();
   }catch(e){adminSetSaveStatus(e.message,false);}
 }
@@ -3312,10 +3303,9 @@ function getItemLatLng(item){
 
 function getStampStatus(item){
   const now=new Date();
-  const start=item?.startDate?new Date(item.startDate+"T00:00:00"):null;
+  const start=item?.startDate?new Date(item.startDate):null;
   const end=item?.endDate?new Date(item.endDate+"T23:59:59"):null;
-  if(!start)return "日期未定";
-  if(now<start)return "即將開始";
+  if(start&&now<start)return "即將開始";
   if(end&&now>end)return "已結束";
   return "進行中";
 }
@@ -3375,28 +3365,6 @@ function buildGroups(type){
   }
 }
 
-function hasValidJapanStampCoordinate(item){
-  const c=getCoords(item);
-  if(!c)return false;
-  /* 日本本土 + 沖繩 + 離島的大致範圍；排除台北、東南亞等海外點 */
-  return c.lat>=20 && c.lat<=46.5 && c.lng>=122 && c.lng<=154.5;
-}
-function stampEventPointSignature(event){
-  const pts=(event?.items||[])
-    .map(x=>getCoords(x))
-    .filter(Boolean)
-    .map(c=>`${c.lat.toFixed(5)},${c.lng.toFixed(5)}`)
-    .sort();
-  return pts.join("|");
-}
-function stampEventDisplayScore(event){
-  let score=0;
-  if(event?.eventZh && /[\u3400-\u9fff]/.test(event.eventZh))score+=20;
-  if(event?.sourceUrl && /zh[-_]hant/i.test(event.sourceUrl))score+=10;
-  score+=(event?.items||[]).length;
-  return score;
-}
-
 function getStampEvents(){
   const map=new Map();
   const ensure=(meta)=>{
@@ -3420,33 +3388,21 @@ function getStampEvents(){
   };
   for(const meta of stampEventsMeta) ensure(meta);
   for(const item of dataSets.stamp){
-    /* 前端再做最後一道保險：沒有日本有效座標就不是可收集圖章點 */
-    if(!hasValidJapanStampCoordinate(item))continue;
-    const blob=[item?.event,item?.eventName,item?.eventZh,item?.eventNameZh,item?.activity,item?.activityZh,item?.name,item?.venue].filter(Boolean).join(" ").toLowerCase();
-    if(/ポケモンセンター|pokemon center|pokémon center|寶可夢中心|ポケふた|pok[eé] lid|pokefuta/.test(blob))continue;
     const event=ensure(item);
-    if(!event.items.some(x=>getItemId(x)===getItemId(item)))event.items.push(item);
-    if(!event.startDate || (item.startDate && item.startDate<event.startDate))event.startDate=item.startDate;
-    if(!event.endDate || (item.endDate && item.endDate>event.endDate))event.endDate=item.endDate;
-    if(!event.sourceUrl && item.sourceUrl)event.sourceUrl=item.sourceUrl;
-    if(!event.activityImage && item.activityImage)event.activityImage=item.activityImage;
-    if(!event.eventImage && (item.eventImage||item.activityImage))event.eventImage=item.eventImage||item.activityImage;
-    if(event.expectedStamps==null && Number.isFinite(Number(item.expectedStamps)))event.expectedStamps=Number(item.expectedStamps);
+    const titleOriginal=item?.name||item?.venue||item?.event||"";
+    const looksLikePlaceholder=!item?.stampImage&&!item?.lat&&!item?.lng&&String(titleOriginal)===String(event.event);
+    if(looksLikePlaceholder) continue;
+    if(!event.items.some(x=>getItemId(x)===getItemId(item))){ event.items.push(item); }
+    if(!event.startDate || (item.startDate && item.startDate<event.startDate)) event.startDate=item.startDate;
+    if(!event.endDate || (item.endDate && item.endDate>event.endDate)) event.endDate=item.endDate;
+    if(!event.sourceUrl && item.sourceUrl) event.sourceUrl=item.sourceUrl;
+    if(!event.activityImage && item.activityImage) event.activityImage=item.activityImage;
+    if(!event.eventImage && (item.eventImage||item.activityImage)) event.eventImage=item.eventImage||item.activityImage;
+    if(event.expectedStamps==null && Number.isFinite(Number(item.expectedStamps))) event.expectedStamps=Number(item.expectedStamps);
   }
-
-  /* 沒有實際日本圖章點的 metadata 不顯示。 */
-  const valid=[...map.values()].filter(e=>(e.items||[]).length>0);
-
-  /* 同活動不同語言：若實際座標集合完全相同，只留一個，優先繁中。 */
-  const bySignature=new Map();
-  for(const event of valid){
-    const sig=stampEventPointSignature(event);
-    if(!sig)continue;
-    const current=bySignature.get(sig);
-    if(!current || stampEventDisplayScore(event)>stampEventDisplayScore(current))bySignature.set(sig,event);
-  }
-  return [...bySignature.values()].sort((a,b)=>(a.startDate||"9999").localeCompare(b.startDate||"9999") || (a.eventZh||a.event).localeCompare(b.eventZh||b.event));
+  return [...map.values()].sort((a,b)=>(a.startDate||"9999").localeCompare(b.startDate||"9999") || (a.eventZh||a.event).localeCompare(b.eventZh||b.event));
 }
+
 function switchCollectionType(type){
   if(!["lid","stamp"].includes(type)) return;
   collectionType=type;
@@ -3454,9 +3410,26 @@ function switchCollectionType(type){
   document.getElementById("tabStamp").classList.toggle("active",type==="stamp");
   document.getElementById("sectionTitle").textContent=type==="lid"?"🔴 Poké Lid 蒐集進度":"🎟️ GO 集章趣 蒐集進度";
   document.getElementById("progressLabel").textContent=type==="lid"?"Poké Lid 已收集：":"GO 集章趣 已收集：";
-  closeAllPanels(); currentRegion=null; currentPrefecture=null; currentStampEventId=null; currentCollectionItems=[]; currentItem=null;
+  closeAllPanels();
+  currentRegion=null;
+  currentPrefecture=null;
+  currentStampEventId=null;
+  currentCollectionItems=[];
+  currentItem=null;
   document.getElementById("stampAllDownloadBox").style.display = type === "stamp" ? "flex" : "none";
-  renderRegions(); updateOverall();
+  renderCurrentHome();
+  updateOverall();
+}
+
+// 兩個主分頁使用完全獨立的資料與首頁 render 流程。
+// Lid 永遠只走 renderRegions()；GO 集章趣永遠只走 renderStampEvents()。
+function renderCurrentHome(){
+  const el=document.getElementById("regions");
+  if(collectionType==="stamp"){
+    renderStampEvents(el);
+    return;
+  }
+  renderRegions();
 }
 function closeAllPanels(){ for(const id of ["prefecturePanel","collectionPanel","modalOverlay"]) document.getElementById(id).classList.remove("show"); document.body.classList.remove("no-scroll"); }
 function updateOverall(){
@@ -3474,7 +3447,6 @@ function updateOverall(){
 
 function renderRegions(){
   const el=document.getElementById("regions");
-  if(collectionType==="stamp") return renderStampEvents(el);
   const list=dataSets.lid||[];
   if(!list.length){ el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ Poké Lid 沒有資料</div>`; return; }
   el.innerHTML="";
@@ -3496,8 +3468,8 @@ function getStampEventStatus(event){
   const now=new Date();
   const start=event?.startDate?new Date(`${event.startDate}T00:00:00`):null;
   const end=event?.endDate?new Date(`${event.endDate}T23:59:59`):null;
-  if(!start)return "活動日期未定";
-  if(now<start)return "活動尚未開始";
+  if(!start && !end)return "日期未定";
+  if(start && now<start)return "活動尚未開始";
   if(end && now>end)return "活動已結束";
   return "進行中";
 }
@@ -3529,7 +3501,7 @@ function renderStampEvents(el){
     const card=document.createElement("div");
     card.className="region-card stamp-event-card";
     card.onclick=()=>openStampEvent(event.id);
-    const statusKey=(status==="活動尚未開始"||status==="活動日期未定")?"upcoming":(status==="活動已結束"?"ended":"active");
+    const statusKey=status==="活動尚未開始"?"upcoming":(status==="活動已結束"?"ended":(status==="日期未定"?"unknown":"active"));
     const statusOverlay=(statusKey!=="active")
       ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
     const completeStamp=(total>0 && obtained>=total)
@@ -3656,7 +3628,7 @@ function renderCollectionGrid(){
 function backToPrefectureList(){
   closeModal();
   if(collectionType==="stamp"){
-    document.getElementById("collectionPanel").classList.remove("show"); currentStampEventId=null; currentCollectionItems=[]; document.body.classList.remove("no-scroll"); renderRegions(); return;
+    document.getElementById("collectionPanel").classList.remove("show"); currentStampEventId=null; currentCollectionItems=[]; document.body.classList.remove("no-scroll"); renderCurrentHome(); return;
   }
   document.getElementById("collectionPanel").classList.remove("show"); renderPrefectureSummary(); renderPrefectureGrid(); document.getElementById("prefecturePanel").classList.add("show"); document.body.classList.add("no-scroll"); currentPrefecture=null; currentCollectionItems=[];
 }
@@ -3680,7 +3652,7 @@ function openModal(item,pref,lat,lng){
 }
 function updateModalObtained(){ if(!currentItem)return; const checked=obtainedIds[currentItemType].has(getItemId(currentItem)); document.getElementById("obtainedCheckbox").checked=checked; document.getElementById("saveStatus").textContent=checked?"✓ 已獲得":""; }
 function refreshAllCollectionUI(){
-  updateOverall(); renderRegions();
+  updateOverall(); renderCurrentHome();
   if(collectionType==="lid"){
     if(currentRegion) {renderPrefectureSummary();renderPrefectureGrid();}
     if(currentPrefecture) {updateCollectionSummary();renderCollectionGrid();}
@@ -3864,7 +3836,7 @@ async function start(){
   if(lidReady){
     switchCollectionType("lid");
   }else{
-    renderRegions();
+    renderCurrentHome();
     updateOverall();
   }
 
@@ -3876,10 +3848,9 @@ async function start(){
   ]);
 
   applyRuntimeManualOverrides();
-  migrateStampObtainedData();
 
-  // 保持目前所在分頁；若仍是 Lid，刷新即可，不再把畫面強制切頁。
-  renderRegions();
+  // 保持目前所在分頁；Lid 與 GO 集章趣各自走獨立 render。
+  renderCurrentHome();
   updateOverall();
 
   if(currentStampEventId){

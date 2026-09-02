@@ -330,7 +330,82 @@
       "coordinatesSource": "Manual admin",
       "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P004.png",
       "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260903002027-STAMP-P001",
+      "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+      "venue": "芝公園",
+      "name": "芝公園",
+      "manualName": "芝公園",
+      "manualVenue": "芝公園",
+      "manualCoordinates": [
+        35.6671448,
+        139.7574141
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260903002027-STAMP-P001.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260903002027-STAMP-P002",
+      "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+      "venue": "東京鐵塔",
+      "name": "東京鐵塔",
+      "manualName": "東京鐵塔",
+      "manualVenue": "東京鐵塔",
+      "manualCoordinates": [
+        35.6669716,
+        139.7454765
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260903002027-STAMP-P002.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260903002027-STAMP-P003",
+      "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+      "venue": "港區小學校校舍跡碑",
+      "name": "港區小學校校舍跡碑",
+      "manualName": "港區小學校校舍跡碑",
+      "manualVenue": "港區小學校校舍跡碑",
+      "manualCoordinates": [
+        35.665661,
+        139.7461202
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260903002027-STAMP-P003.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260903002027-STAMP-P004",
+      "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+      "venue": "江戸見坂公園",
+      "name": "江戸見坂公園",
+      "manualName": "江戸見坂公園",
+      "manualVenue": "江戸見坂公園",
+      "manualCoordinates": [
+        35.6586,
+        139.7454
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260903002027-STAMP-P004.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260903002027-STAMP-P005",
+      "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+      "venue": "新橋駅西口広場（SL広場）",
+      "name": "新橋駅西口広場（SL広場）",
+      "manualName": "新橋駅西口広場（SL広場）",
+      "manualVenue": "新橋駅西口広場（SL広場）",
+      "manualCoordinates": [
+        35.6560133,
+        139.7490935
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260903002027-STAMP-P005.png",
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T16:01:12.884Z"
+  "updated": "2026-09-02T16:23:56.686Z"
 }

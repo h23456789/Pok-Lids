@@ -3503,8 +3503,7 @@ function renderStampEvents(el){
     card.className="region-card stamp-event-card";
     card.onclick=()=>openStampEvent(event.id);
     const statusKey=status==="即將開始"?"upcoming":(status==="活動已結束"?"ended":(status==="日期未定"?"unknown":"active"));
-    const statusOverlay=(statusKey!=="active")
-      ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
+    const statusOverlay=`<div class="stamp-event-status-overlay ${statusKey}">${escapeHtml(status)}</div>`;
     const completeStamp=(total>0 && obtained>=total)
       ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
       : "";

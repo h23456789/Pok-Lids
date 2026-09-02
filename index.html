@@ -1684,18 +1684,6 @@ button{
    DOWNLOAD
 ========================================================= */
 
-.download-box{
-  margin-top:22px;
-
-  display:flex;
-
-  flex-wrap:wrap;
-
-  justify-content:center;
-
-  gap:8px;
-}
-
 .download-btn{
   border:0;
 
@@ -1738,7 +1726,7 @@ button{
 }
 
 .stamp-all-download-box{
-  margin-top:8px;
+  margin-top:22px;
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
@@ -2758,54 +2746,30 @@ button{
      DOWNLOAD
 ========================================================= -->
 
-<div class="download-box" id="mainDownloadBox">
-
-  <button
-    class="download-btn"
-    onclick="downloadAll()"
-    title="下載目前類別全部資料"
-  >
-    TXT
-  </button>
-
-  <button
-    class="download-btn"
-    onclick="downloadJSON()"
-    title="下載目前類別全部資料"
-  >
-    JSON
-  </button>
-
-  <button
-    class="download-btn"
-    onclick="downloadCSV()"
-    title="下載目前類別全部資料"
-  >
-    CSV
-  </button>
-
-</div>
-
 <div
-  id="stampAllDownloadBox"
+  id="mainDownloadBox"
   class="stamp-all-download-box"
-  style="display:none;"
 >
   <button
     class="stamp-all-download-btn"
-    onclick="downloadAllStampPoints('txt')"
+    onclick="downloadAll()"
+    title="下載目前類別全部圖章 TXT"
   >
     🎟️ 所有圖章 TXT
   </button>
+
   <button
     class="stamp-all-download-btn"
-    onclick="downloadAllStampPoints('json')"
+    onclick="downloadJSON()"
+    title="下載目前類別全部圖章 JSON"
   >
     🎟️ 所有圖章 JSON
   </button>
+
   <button
     class="stamp-all-download-btn"
-    onclick="downloadAllStampPoints('csv')"
+    onclick="downloadCSV()"
+    title="下載目前類別全部圖章 CSV"
   >
     🎟️ 所有圖章 CSV
   </button>
@@ -6221,7 +6185,6 @@ function switchCollectionType(type){
   document.getElementById("sectionTitle").textContent=type==="lid"?"🔴 Poké Lid 蒐集進度":"🎟️ GO 集章趣 蒐集進度";
   document.getElementById("progressLabel").textContent=type==="lid"?"Poké Lid 已收集：":"GO 集章趣 已收集：";
   closeAllPanels(); currentRegion=null; currentPrefecture=null; currentStampEventId=null; currentCollectionItems=[]; currentItem=null;
-  document.getElementById("stampAllDownloadBox").style.display = type === "stamp" ? "flex" : "none";
   renderRegions(); updateOverall();
 }
 function closeAllPanels(){ for(const id of ["prefecturePanel","collectionPanel","modalOverlay"]) document.getElementById(id).classList.remove("show"); document.body.classList.remove("no-scroll"); }

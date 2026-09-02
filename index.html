@@ -3256,6 +3256,22 @@ button{
             <div class="admin-field"><label>圖章／地點</label><select id="adminPointSelect"></select></div>
             <div id="adminPointInfo" class="admin-point-info">請先載入資料。</div>
 
+            <div class="admin-field" style="margin-top:12px">
+              <label>圖章圖片網址</label>
+              <div class="admin-image-url-row">
+                <input id="adminImageUrl" type="url" placeholder="https://example.com/stamp.png">
+                <button class="admin-mini-btn" type="button" onclick="adminLoadStampUrl()">載入網址</button>
+              </div>
+            </div>
+            <div id="adminStampUrlStatus" class="admin-image-url-status"></div>
+
+            <div class="admin-buttons" style="margin-top:2px">
+              <button class="admin-mini-btn" type="button" onclick="adminUseOfficialCenterBadge()">🏬 自動帶入 Pokémon Center 官方 Logo</button>
+            </div>
+            <div class="admin-help">
+              會依目前圖章名稱去比對網站既有的 Pokémon Center 官方 Logo 對照資料，找到後會直接填入上方網址並立即預覽。
+            </div>
+
             <div class="admin-current-stamp">
               <div class="admin-current-stamp-title">目前圖章</div>
               <div id="adminCurrentStampFrame" class="admin-current-stamp-frame">
@@ -3315,14 +3331,6 @@ button{
 
           <div class="admin-section">
             <h3>⑦ 圖章圖片與暫存</h3>
-            <div class="admin-field">
-              <label>圖章圖片網址（可不填）</label>
-              <div class="admin-image-url-row">
-                <input id="adminImageUrl" type="url" placeholder="https://example.com/stamp.png">
-                <button class="admin-mini-btn" type="button" onclick="adminLoadStampUrl()">載入網址</button>
-              </div>
-            </div>
-            <div id="adminStampUrlStatus" class="admin-image-url-status"></div>
             <div class="admin-field">
               <label>圖片來源說明</label>
               <input id="adminImageSource" placeholder="例如：遊戲截圖人工裁切">
@@ -3696,6 +3704,74 @@ async function adminLoadBannerUrl(){
       `⚠️ 無法直接下載（可能是網站 CORS 限制）。仍可直接使用此圖片網址。`,
       "warn"
     );
+  }
+}
+
+function adminFindOfficialCenterBadgeByName(name){
+  const normalized=String(name||"")
+    .trim()
+    .replace(/\s+/g,"")
+    .replace(/Pokémon/gi,"寶可夢")
+    .replace(/Pokemon/gi,"寶可夢");
+
+  // First use the existing official-center badge mapping already in this site.
+  for(const [key,url] of Object.entries(OFFICIAL_CENTER_BADGES||{})){
+    const k=String(key||"").replace(/\s+/g,"");
+    if(
+      normalized===k ||
+      normalized.includes(k) ||
+      k.includes(normalized)
+    ){
+      return {url,key};
+    }
+  }
+
+  return null;
+}
+
+async function adminUseOfficialCenterBadge(){
+  try{
+    const pointId=String(document.getElementById("adminPointSelect").value||"");
+    const point=adminState.list.find(x=>String(x.id)===pointId);
+    if(!point)throw new Error("請先選擇圖章。");
+
+    const editableName=document.getElementById("adminStampNameInput").value.trim();
+    const name=editableName||adminPointName(point);
+
+    const found=adminFindOfficialCenterBadgeByName(name);
+    if(!found){
+      throw new Error(
+        "目前的中心名稱沒有在網站既有 Pokémon Center 官方 Logo 對照資料中。\\n"+
+        "可以直接貼官方圖片網址，或之後再擴充中心名稱對照。"
+      );
+    }
+
+    document.getElementById("adminImageUrl").value=found.url;
+    adminState.stampUrlValue=found.url;
+    adminState.stampUrlBlob=null;
+
+    // Preview instantly
+    const frame=document.getElementById("adminCurrentStampFrame");
+    const meta=document.getElementById("adminCurrentStampMeta");
+    if(frame){
+      frame.innerHTML=`<img src="${escapeHtml(found.url)}" alt="${escapeHtml(name)}">`;
+    }
+    if(meta){
+      meta.style.display="block";
+      meta.className="admin-current-stamp-meta legacy";
+      meta.textContent=`自動找到：${found.key}\\n${found.url}\\n尚未暫存`;
+    }
+
+    adminSetImageUrlStatus(
+      "adminStampUrlStatus",
+      `✓ 已依名稱自動帶入 Pokémon Center 官方 Logo：${found.key}`,
+      "ok"
+    );
+
+    // Then try fetching it so GitHub can store a local copy.
+    await adminLoadStampUrl();
+  }catch(error){
+    adminSetImageUrlStatus("adminStampUrlStatus",error.message,"error");
   }
 }
 
@@ -4569,7 +4645,7 @@ function adminResolveStampImageInfo(p){
   if(fallback){
     return {
       image:String(fallback),
-      source:"舊版自動帶入：Pokémon Center 徽章對照資料",
+      source:"舊版自動帶入：Pokémon Center 徽章對照資料（尚未真正寫入此圖章資料）",
       legacy:true
     };
   }

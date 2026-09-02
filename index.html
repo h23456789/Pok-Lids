@@ -6423,7 +6423,7 @@ function renderStampEvents(el){
   const events=getStampEvents();
 
   if(!events.length){
-    el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。<br><br>請從右上角「管理／手動修正」新增 GO 集章趣活動。</div>`;
+    el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。<br><br>請從右上角「管理」新增 GO 集章趣活動。</div>`;
     return;
   }
 
@@ -6821,7 +6821,7 @@ function renderHistory(){
 
   const labels={lid:"Poké Lid",stamp:"GO 集章趣"};
 
-  el.innerHTML=logs.slice(0,50).map(item=>{
+  el.innerHTML=logs.slice(0,5).map(item=>{
     const reasons=Array.isArray(item.reasons)&&item.reasons.length
       ? `<br><span class="muted">內容：${escapeHtml(item.reasons.join("、"))}</span>`
       : "";

@@ -1,6 +1,48 @@
 {
   "history": [
     {
+      "time": "2026-09-02T15:59:41.555Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 27,
+      "added": [
+        "MANUAL-STAMP-20260902235251-STAMP-P002",
+        "MANUAL-STAMP-20260902235251-STAMP-P003",
+        "MANUAL-STAMP-20260902235251-STAMP-P004"
+      ],
+      "removed": [],
+      "changed": [
+        "EVENT:MANUAL-STAMP-20260902235251-STAMP:活動資料修改"
+      ],
+      "addedItems": [
+        {
+          "id": "MANUAL-STAMP-20260902235251-STAMP-P002",
+          "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+          "eventZh": "臺北市立兒童新樂園",
+          "nameZh": "入口廣場"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902235251-STAMP-P003",
+          "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+          "eventZh": "臺北市立兒童新樂園",
+          "nameZh": "星之還"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902235251-STAMP-P004",
+          "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+          "eventZh": "臺北市立兒童新樂園",
+          "nameZh": "夢想海前廣場"
+        }
+      ],
+      "removedItems": [],
+      "changedItems": [],
+      "reasons": [
+        "活動資料"
+      ]
+    },
+    {
       "time": "2026-09-02T15:56:12.148Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

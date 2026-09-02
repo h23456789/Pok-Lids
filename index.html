@@ -1809,12 +1809,12 @@ button{
    ADMIN FLOATING PANEL
 ========================================================= */
 .admin-modal{
-  width:min(1220px,calc(100vw - 24px));
-  height:min(880px,calc(100vh - 24px));
+  width:90vw;
+  height:90vh;
   min-width:720px;
   min-height:520px;
-  max-width:calc(100vw - 12px);
-  max-height:calc(100vh - 12px);
+  max-width:96vw;
+  max-height:96vh;
   background:#f7fcfc;
   border-radius:24px;
   box-shadow:0 20px 80px rgba(0,0,0,.38);
@@ -1835,7 +1835,7 @@ button{
 .admin-modal-body{overflow:auto;padding:16px;min-height:0;flex:1 1 auto}
 .admin-grid{
   display:grid;
-  grid-template-columns:minmax(320px,1fr) minmax(390px,1.12fr);
+  grid-template-columns:minmax(380px,1.08fr) minmax(420px,1fr);
   gap:14px;
   min-height:100%;
 }
@@ -1875,7 +1875,21 @@ button{
   font:inherit;
   background:#fff;
 }
-.admin-field textarea{resize:vertical;min-height:76px}
+.admin-field textarea{
+  resize:vertical;
+  min-height:120px;
+  font-size:15px;
+  line-height:1.65;
+}
+#adminDirectPointsBulk{
+  min-height:240px;
+  max-height:520px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  font-size:16px;
+  line-height:1.75;
+  padding:14px 16px;
+  letter-spacing:.1px;
+}
 .admin-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .admin-help{font-size:11px;line-height:1.55;color:#718c90;margin-top:6px}
 .admin-status{
@@ -1992,11 +2006,13 @@ button{
 .admin-import-input{
   width:100%;
   min-width:0;
-  padding:7px 8px;
+  padding:9px 10px;
   border:1px solid #d7e6e6;
   border-radius:9px;
   background:#fff;
   font:inherit;
+  font-size:13px;
+  line-height:1.4;
   color:#456970
 }
 .admin-import-input.coord-empty{
@@ -2026,6 +2042,13 @@ button{
   color:#a66d22;
   background:#fff9eb;
   border-top:1px solid #f3e7c6
+}
+.stamp-location-pending{
+  margin-top:4px;
+  color:#9a7a42;
+  font-size:11px;
+  font-weight:800;
+  line-height:1.35;
 }
 .admin-import-remove{
   width:28px;height:28px;border:0;border-radius:50%;background:#fff0f0;color:#c65353;
@@ -2098,8 +2121,8 @@ button{
 @media(max-width:900px){
   .admin-grid{grid-template-columns:1fr}
   .admin-modal{
-    width:calc(100vw - 12px);
-    height:calc(100vh - 12px);
+    width:96vw;
+    height:96vh;
     min-width:0;
     min-height:0;
     max-height:calc(100vh - 12px);
@@ -3099,7 +3122,7 @@ button{
               <label>直接貼上／輸入多筆點位</label>
               <textarea
                 id="adminDirectPointsBulk"
-                rows="7"
+                rows="10"
                 placeholder="AAA,121.517055,25.047675&#10;BBB,121.564468,25.033968&#10;CCC,121.565200,25.041800"
               ></textarea>
             </div>
@@ -3481,7 +3504,14 @@ function adminParseLngLat(value){
   if(Math.abs(lat)>90||Math.abs(lng)>180)return null;
   return {lat,lng,swapped};
 }
+function adminHasPointCoord(p){
+  if(!p)return false;
+  if(p.lat===null || p.lng===null || p.lat==="" || p.lng==="" || p.lat===undefined || p.lng===undefined)return false;
+  return Number.isFinite(Number(p.lat)) && Number.isFinite(Number(p.lng));
+}
+
 function adminFormatLngLat(lat,lng){
+  if(lat===null || lng===null || lat==="" || lng==="" || lat===undefined || lng===undefined)return "";
   if(!Number.isFinite(Number(lat))||!Number.isFinite(Number(lng)))return "";
   return `${Number(lng)},${Number(lat)}`;
 }
@@ -3587,10 +3617,10 @@ function adminRenderImportPreview(message=""){
     return;
   }
 
-  const missing=pts.filter(p=>!Number.isFinite(Number(p.lat))||!Number.isFinite(Number(p.lng))).length;
+  const missing=pts.filter(p=>!adminHasPointCoord(p)).length;
 
   box.innerHTML=pts.map((p,i)=>{
-    const hasCoord=Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lng));
+    const hasCoord=adminHasPointCoord(p);
     const coord=hasCoord?adminFormatLngLat(p.lat,p.lng):"";
     const name=p.name||`圖章點 ${i+1}`;
     const mapUrl=adminGoogleMapsSearchUrl(name);
@@ -3737,7 +3767,7 @@ function adminAddDirectPoints(){
   textarea.value="";
   adminRenderImportPreview();
 
-  const blankCount=added.filter(p=>!Number.isFinite(Number(p.lat))||!Number.isFinite(Number(p.lng))).length;
+  const blankCount=added.filter(p=>!adminHasPointCoord(p)).length;
   const hint=document.getElementById("adminDirectCoordHint");
 
   hint.textContent=
@@ -3788,13 +3818,16 @@ function adminLoadSelectedEvent(){
   const points=adminState.list.filter(x=>String(x.eventId||"")===adminState.editingEventId);
   adminState.importedPoints=points.map(p=>{
     const coords=Array.isArray(p.coords)&&p.coords.length>=2?p.coords:[p.lat,p.lng];
-    const lat=Number(coords?.[0]);
-    const lng=Number(coords?.[1]);
+    const rawLat=coords?.[0],rawLng=coords?.[1];
+    const hasCoord=rawLat!==null && rawLng!==null &&
+                   rawLat!=="" && rawLng!=="" &&
+                   rawLat!==undefined && rawLng!==undefined &&
+                   Number.isFinite(Number(rawLat)) && Number.isFinite(Number(rawLng));
     return {
       id:p.id,
       name:adminPointName(p),
-      lat:Number.isFinite(lat)?lat:null,
-      lng:Number.isFinite(lng)?lng:null
+      lat:hasCoord?Number(rawLat):null,
+      lng:hasCoord?Number(rawLng):null
     };
   });
 
@@ -3904,7 +3937,7 @@ function adminDeleteSelectedEvent(){
 
 function adminBuildEventPoint(eventId,eventName,startDate,endDate,p,index,oldPoint=null){
   const pointId=p.id||oldPoint?.id||`${eventId}-P${String(index+1).padStart(3,"0")}`;
-  const hasCoord=Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lng));
+  const hasCoord=adminHasPointCoord(p);
 
   const point={
     ...(oldPoint||{}),
@@ -4038,7 +4071,10 @@ async function adminSaveEvent(){
     adminPopulateEvents(eventId);
     adminMarkDirty("活動資料");
 
-    const missingCoordCount=points.filter(p=>!Array.isArray(p.coords)||p.coords.length<2).length;
+    const missingCoordCount=points.filter(p=>!Array.isArray(p.coords)||p.coords.length<2 ||
+      p.coords[0]===null || p.coords[1]===null ||
+      p.coords[0]==="" || p.coords[1]==="" ||
+      !Number.isFinite(Number(p.coords[0])) || !Number.isFinite(Number(p.coords[1]))).length;
 
     adminSetEventSaveStatus(
       `✓ 已暫存活動變更，尚未更新 GitHub。\n活動：${name}\n日期：${startDate} → ${endDate||"無限期"}\n圖章點：${points.length}`+
@@ -5171,19 +5207,46 @@ function knownCoordinateForItem(item){
   return null;
 }
 function getItemLatLng(item){
-  let lat=Number(item?.coords?.[0] ?? item?.lat);
-  let lng=Number(item?.coords?.[1] ?? item?.lng);
-  if((!Number.isFinite(lat)||!Number.isFinite(lng)) && String(item?.venueType||"")==="pokemon_center"){
+  const rawLat=(Array.isArray(item?.coords)&&item.coords.length>=2)?item.coords[0]:item?.lat;
+  const rawLng=(Array.isArray(item?.coords)&&item.coords.length>=2)?item.coords[1]:item?.lng;
+
+  const hasExplicit=
+    rawLat!==null && rawLng!==null &&
+    rawLat!=="" && rawLng!=="" &&
+    rawLat!==undefined && rawLng!==undefined &&
+    Number.isFinite(Number(rawLat)) && Number.isFinite(Number(rawLng));
+
+  if(hasExplicit){
+    return {lat:Number(rawLat),lng:Number(rawLng)};
+  }
+
+  // GO Stamp Rally: blank coordinate means the location has not been published
+  // or has not been manually entered yet. Never auto-fill it from old fallbacks.
+  const isStamp=
+    String(item?.activity||"").toLowerCase().includes("stamp") ||
+    String(item?.activityZh||"").includes("集章") ||
+    String(item?.venueType||"").includes("stamp") ||
+    !!item?.eventId;
+
+  if(isStamp){
+    return {lat:NaN,lng:NaN};
+  }
+
+  let lat=NaN,lng=NaN;
+
+  if(String(item?.venueType||"")==="pokemon_center"){
     const center=findCenterRecord(item);
     if(center){
       lat=Number(center?.coords?.[0] ?? center?.lat);
       lng=Number(center?.coords?.[1] ?? center?.lng);
     }
   }
+
   if(!Number.isFinite(lat)||!Number.isFinite(lng)){
     const known=knownCoordinateForItem(item);
     if(known){ lat=Number(known[0]); lng=Number(known[1]); }
   }
+
   return {lat,lng};
 }
 
@@ -5467,6 +5530,8 @@ function renderCollectionGrid(){
     const obtained=obtainedIds[collectionType].has(getItemId(item));
     const title=getItemTitle(collectionType,item);
     const image=getItemImageUrl(collectionType,item);
+    const itemLocation=getItemLatLng(item);
+    const hasPublishedLocation=Number.isFinite(itemLocation.lat)&&Number.isFinite(itemLocation.lng);
     const card=document.createElement("div");
     card.className="collection-item "+(obtained?"obtained":"not-obtained");
     card.onclick=()=>openModalFromItem(item);
@@ -5480,9 +5545,11 @@ function renderCollectionGrid(){
         }
       </div>
       <div class="collection-city">${escapeHtml(item.nameZh||item.venueZh||title)}</div>
-      ${item.countryZh||item.cityZh
-        ? `<div style="margin-top:3px;color:#7b999d;font-size:10px;line-height:1.35">${escapeHtml(item.cityZh||item.countryZh||"")}</div>`
-        : ""
+      ${collectionType==="stamp" && !hasPublishedLocation
+        ? `<div class="stamp-location-pending">📍 尚未公布地點</div>`
+        : (item.countryZh||item.cityZh
+          ? `<div style="margin-top:3px;color:#7b999d;font-size:10px;line-height:1.35">${escapeHtml(item.cityZh||item.countryZh||"")}</div>`
+          : "")
       }
       <div class="collection-status">${obtained?"● 已收集":"● 未收集"}</div>
       <label class="stamp-inline-obtain" onclick="event.stopPropagation()">
@@ -5512,8 +5579,18 @@ function openModal(item,pref,lat,lng){
   modalImage.src=image || "";
   modalImage.alt=title;
   modalImage.style.display=image ? "block" : "none";
-  document.getElementById("modalType").textContent=currentItemType==="lid"?"🔴 Poké Lid":"🎟️ Pokémon GO GO 集章趣"; document.getElementById("modalPref").textContent=pref; document.getElementById("modalCity").textContent=title; document.getElementById("modalAddress").textContent=item.addressZh||item.address||item.location||item.venueZh||item.venue||"";
-  const valid=Number.isFinite(lat)&&Number.isFinite(lng); document.getElementById("modalCoordinate").textContent=valid?`${lat}, ${lng}`:"無座標資料";
+  const valid=Number.isFinite(lat)&&Number.isFinite(lng);
+  document.getElementById("modalType").textContent=currentItemType==="lid"?"🔴 Poké Lid":"🎟️ Pokémon GO GO 集章趣";
+  document.getElementById("modalPref").textContent=pref;
+  document.getElementById("modalCity").textContent=title;
+  document.getElementById("modalAddress").textContent=
+    currentItemType==="stamp" && !valid
+      ? "尚未公布地點"
+      : (item.addressZh||item.address||item.location||item.venueZh||item.venue||"");
+  document.getElementById("modalCoordinate").textContent=
+    currentItemType==="stamp" && !valid
+      ? "尚未公布座標"
+      : (valid?`${lat}, ${lng}`:"無座標資料");
   const details=document.getElementById("stampDetails");
   if(currentItemType==="stamp"){
     details.innerHTML=`<div class="stamp-event">🎟️ ${escapeHtml(getStampEventName(item))}</div>${item.venueZh&&item.venueZh!==title?`<div class="stamp-venue">📍 ${escapeHtml(item.venueZh)}</div>`:""}${getStampDates(item)?`<div class="stamp-dates">📅 ${escapeHtml(getStampDates(item))}</div>`:""}<span class="stamp-status">${escapeHtml(getStampStatus(item))}</span>${item.rewardZh||item.reward?`<div class="stamp-reward">🎁 ${escapeHtml(item.rewardZh||item.reward)}</div>`:""}${item.stampImageSource?`<div class="stamp-source">圖片來源：${escapeHtml(item.stampImageSource)}</div>`:""}`; details.style.display="block";

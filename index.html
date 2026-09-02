@@ -2002,20 +2002,6 @@ button{
 }
 .admin-danger-btn:hover{background:#ffe1e1}
 .admin-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.admin-top-save{
-  position:sticky;
-  top:0;
-  z-index:8;
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  margin:0 0 10px;
-  padding:8px 0 10px;
-  background:linear-gradient(to bottom,rgba(255,255,255,.98) 78%,rgba(255,255,255,0));
-}
-.admin-top-save .download-btn{
-  min-width:170px;
-}
 .admin-crop-preview{
   margin-top:12px;
   min-height:80px;
@@ -2163,6 +2149,17 @@ button{
   line-height:1.5
 }
 .admin-publish-status.dirty{color:#9a731c}
+.admin-publish-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.admin-publish-actions .download-btn{
+  min-width:150px;
+  white-space:nowrap;
+}
 .admin-publish-btn{
   border:0;
   border-radius:999px;
@@ -2226,6 +2223,8 @@ button{
   .admin-import-remove{grid-column:3;grid-row:1 / span 4}
   .admin-import-coord{white-space:normal}
   .admin-publish-bar{align-items:stretch;flex-direction:column}
+  .admin-publish-actions{width:100%;display:grid;grid-template-columns:1fr}
+  .admin-publish-actions .download-btn,
   .admin-publish-btn{width:100%}
 }
 /* =========================================================
@@ -3120,7 +3119,12 @@ button{
 
     <div class="admin-publish-bar">
       <div id="adminPublishStatus" class="admin-publish-status">尚未載入 GitHub 資料。</div>
-      <button id="adminPublishBtn" class="admin-publish-btn" type="button" onclick="adminPublishAll()" disabled>🚀 一鍵更新到 GitHub</button>
+
+      <div class="admin-publish-actions">
+        <button class="download-btn" type="button" onclick="adminSaveEvent()">💾 暫存活動變更</button>
+        <button class="download-btn" type="button" onclick="adminSaveOverride()">💾 暫存圖章變更</button>
+        <button id="adminPublishBtn" class="admin-publish-btn" type="button" onclick="adminPublishAll()" disabled>🚀 一鍵更新到 GitHub</button>
+      </div>
     </div>
 
     <div class="admin-modal-body">
@@ -3131,12 +3135,7 @@ button{
         ==================================================== -->
         <div class="admin-column">
           <div class="admin-column-title">🎟️ 活動區塊編輯</div>
-
-          <div class="admin-top-save">
-            <button class="download-btn" type="button" onclick="adminSaveEvent()">💾 暫存活動變更</button>
-          </div>
-
-          <div class="admin-section">
+<div class="admin-section">
             <h3>GitHub 連線</h3>
             <div class="admin-field"><label>Repository</label><input id="adminRepo" value="h23456789/Pok-Lids"></div>
             <div class="admin-field"><label>Branch</label><input id="adminBranch" value="main"></div>
@@ -3252,10 +3251,9 @@ button{
             <h3>③ 暫存活動變更</h3>
             <div class="admin-help">
               按下後<b>不會立即寫入 GitHub</b>，只會放入本次後台的暫存區。<br>
-              可以繼續修改其他活動或右側圖章，最後再按上方「一鍵更新到 GitHub」。
+              可以繼續修改其他活動或右側圖章；三個主要操作按鈕都集中在後台上方的更新列。
             </div>
             <div class="admin-buttons">
-              <button class="download-btn" type="button" onclick="adminSaveEvent()">💾 暫存活動變更</button>
               <button class="admin-mini-btn" type="button" onclick="adminLoadData()">放棄暫存並重新載入</button>
             </div>
             <div id="adminEventSaveStatus" class="admin-status"></div>
@@ -3267,12 +3265,7 @@ button{
         ==================================================== -->
         <div class="admin-column">
           <div class="admin-column-title">🖼️ 活動圖章手動編輯</div>
-
-          <div class="admin-top-save">
-            <button class="download-btn" type="button" onclick="adminSaveOverride()">💾 暫存圖章變更</button>
-          </div>
-
-          <div class="admin-section">
+<div class="admin-section">
             <h3>④ 選擇活動／圖章</h3>
             <div class="admin-field"><label>活動</label><select id="adminStampEventSelect"></select></div>
             <div class="admin-field"><label>圖章／地點</label><select id="adminPointSelect"></select></div>
@@ -3359,10 +3352,7 @@ button{
             </div>
 
             <div class="admin-help">
-              裁切後按「暫存圖章變更」只會暫存 PNG 與欄位，不會立即上傳 GitHub。
-            </div>
-            <div class="admin-buttons">
-              <button class="download-btn" type="button" onclick="adminSaveOverride()">💾 暫存圖章變更</button>
+              裁切後可使用後台上方更新列的「暫存圖章變更」；只會暫存 PNG 與欄位，不會立即上傳 GitHub。
             </div>
             <div id="adminSaveStatus" class="admin-status"></div>
           </div>

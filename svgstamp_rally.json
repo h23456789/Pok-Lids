@@ -946,7 +946,7 @@
       "lng": 101.71226982697253,
       "coordinatesManual": true,
       "coordinatesSource": "Manual admin",
-      "stampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P001.jpg",
+      "stampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P001.png",
       "stampImageManual": true,
       "stampImageSource": "Manual admin"
     },
@@ -1050,7 +1050,7 @@
       "coords": []
     }
   ],
-  "updated": "2026-09-02T16:30:50.850Z",
+  "updated": "2026-09-02T16:41:42.770Z",
   "source": "manual-admin",
   "sourceMode": "manual staged GitHub admin",
   "version": "manual-1.0",

@@ -3269,7 +3269,7 @@ button{
               <button class="admin-mini-btn" type="button" onclick="adminUseOfficialCenterBadge()">🏬 自動帶入 Pokémon Center 官方 Logo</button>
             </div>
             <div class="admin-help">
-              會依目前圖章名稱去比對網站既有的 Pokémon Center 官方 Logo 對照資料，找到後會直接填入上方網址並立即預覽。
+              會依目前圖章名稱自動比對 Pokémon Center。支援中文／英文／日文名稱，例如「Pokémon Center MEGA TOKYO」「ポケモンセンターメガトウキョー」「寶可夢中心 Mega 東京」。找到後會直接填入上方網址並立即預覽。
             </div>
 
             <div class="admin-current-stamp">
@@ -3707,26 +3707,106 @@ async function adminLoadBannerUrl(){
   }
 }
 
-function adminFindOfficialCenterBadgeByName(name){
-  const normalized=String(name||"")
-    .trim()
-    .replace(/\s+/g,"")
-    .replace(/Pokémon/gi,"寶可夢")
-    .replace(/Pokemon/gi,"寶可夢");
+const OFFICIAL_CENTER_BADGE_ALIASES = {
+  "寶可夢中心札幌":[
+    "札幌","sapporo","サッポロ"
+  ],
+  "寶可夢中心東北":[
+    "東北","tohoku","トウホク"
+  ],
+  "寶可夢中心東京DX":[
+    "東京dx","tokyodx","tokyo dx","トウキョーdx","トウキョーDX"
+  ],
+  "寶可夢中心Mega東京":[
+    "mega東京","megatokyo","mega tokyo","メガトウキョー"
+  ],
+  "寶可夢中心澀谷":[
+    "澀谷","渋谷","shibuya","シブヤ"
+  ],
+  "寶可夢中心晴空塔城":[
+    "晴空塔城","晴空塔","skytree","skytreetown","skytree town","スカイツリータウン"
+  ],
+  "寶可夢中心東京灣":[
+    "東京灣","東京湾","tokyobay","tokyo bay","トウキョーベイ"
+  ],
+  "寶可夢中心橫濱":[
+    "橫濱","横浜","yokohama","ヨコハマ"
+  ],
+  "寶可夢中心名古屋":[
+    "名古屋","nagoya","ナゴヤ"
+  ],
+  "寶可夢中心金澤":[
+    "金澤","金沢","kanazawa","カナザワ"
+  ],
+  "寶可夢中心京都":[
+    "京都","kyoto","キョウト"
+  ],
+  "寶可夢中心大阪DX":[
+    "大阪dx","osakadx","osaka dx","オーサカdx","オーサカDX"
+  ],
+  "寶可夢中心大阪":[
+    "大阪","osaka","オーサカ"
+  ],
+  "寶可夢中心廣島":[
+    "廣島","広島","hiroshima","ヒロシマ"
+  ],
+  "寶可夢中心香川":[
+    "香川","kagawa","カガワ"
+  ],
+  "寶可夢中心福岡":[
+    "福岡","fukuoka","フクオカ"
+  ],
+  "寶可夢中心沖繩":[
+    "沖繩","沖縄","okinawa","オキナワ"
+  ]
+};
 
-  // First use the existing official-center badge mapping already in this site.
+function adminNormalizeCenterLookup(value){
+  return String(value||"")
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/pok[eé]mon/g,"")
+    .replace(/ポケモン/g,"")
+    .replace(/寶可夢/g,"")
+    .replace(/宝可梦/g,"")
+    .replace(/center/g,"")
+    .replace(/centre/g,"")
+    .replace(/センター/g,"")
+    .replace(/中心/g,"")
+    .replace(/[・･\-‐‑–—_.,，。()（）[\]【】]/g,"")
+    .replace(/\s+/g,"")
+    .trim();
+}
+
+function adminFindOfficialCenterBadgeByName(name){
+  const normalized=adminNormalizeCenterLookup(name);
+  if(!normalized)return null;
+
+  const candidates=[];
+
   for(const [key,url] of Object.entries(OFFICIAL_CENTER_BADGES||{})){
-    const k=String(key||"").replace(/\s+/g,"");
-    if(
-      normalized===k ||
-      normalized.includes(k) ||
-      k.includes(normalized)
-    ){
-      return {url,key};
+    const aliases=[
+      key,
+      ...(OFFICIAL_CENTER_BADGE_ALIASES[key]||[])
+    ];
+
+    for(const alias of aliases){
+      const a=adminNormalizeCenterLookup(alias);
+      if(!a)continue;
+
+      let score=0;
+      if(normalized===a)score=10000+a.length;
+      else if(normalized.includes(a))score=5000+a.length;
+      else if(a.includes(normalized) && normalized.length>=3)score=1000+normalized.length;
+
+      if(score){
+        candidates.push({key,url,alias,score});
+      }
     }
   }
 
-  return null;
+  candidates.sort((a,b)=>b.score-a.score);
+  return candidates[0]||null;
 }
 
 async function adminUseOfficialCenterBadge(){
@@ -3741,8 +3821,14 @@ async function adminUseOfficialCenterBadge(){
     const found=adminFindOfficialCenterBadgeByName(name);
     if(!found){
       throw new Error(
-        "目前的中心名稱沒有在網站既有 Pokémon Center 官方 Logo 對照資料中。\\n"+
-        "可以直接貼官方圖片網址，或之後再擴充中心名稱對照。"
+        `找不到符合的 Pokémon Center 官方 Logo。
+
+目前辨識名稱：${name}
+
+可使用中文、英文或日文中心名稱，例如：
+Pokémon Center MEGA TOKYO
+ポケモンセンターメガトウキョー
+寶可夢中心 Mega 東京`
       );
     }
 
@@ -3764,7 +3850,7 @@ async function adminUseOfficialCenterBadge(){
 
     adminSetImageUrlStatus(
       "adminStampUrlStatus",
-      `✓ 已依名稱自動帶入 Pokémon Center 官方 Logo：${found.key}`,
+      `✓ 已找到：${found.key}（比對：${found.alias}）`,
       "ok"
     );
 

@@ -1,6 +1,32 @@
 {
   "history": [
     {
+      "time": "2026-09-02T16:30:50.853Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 32,
+      "added": [],
+      "removed": [],
+      "changed": [
+        "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P001"
+      ],
+      "addedItems": [],
+      "removedItems": [],
+      "changedItems": [
+        {
+          "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P001",
+          "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+          "eventZh": "「PokéXciting!」GO集章趣",
+          "nameZh": "馬來西亞吉隆坡（城中城公園：露天廣場前）"
+        }
+      ],
+      "reasons": [
+        "圖章人工修正"
+      ]
+    },
+    {
       "time": "2026-09-02T16:24:02.910Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

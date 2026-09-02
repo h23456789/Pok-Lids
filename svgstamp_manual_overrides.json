@@ -405,7 +405,22 @@
       "coordinatesSource": "Manual admin",
       "manualStampImage": "assets/stamps/MANUAL-STAMP-20260903002027-STAMP-P005.png",
       "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P001",
+      "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+      "venue": "馬來西亞吉隆坡（城中城公園：露天廣場前）",
+      "name": "馬來西亞吉隆坡（城中城公園：露天廣場前）",
+      "manualName": "馬來西亞吉隆坡（城中城公園：露天廣場前）",
+      "manualVenue": "馬來西亞吉隆坡（城中城公園：露天廣場前）",
+      "manualCoordinates": [
+        3.1577316546057643,
+        101.71226982697253
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P001.jpg",
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T16:23:56.686Z"
+  "updated": "2026-09-02T16:30:48.476Z"
 }

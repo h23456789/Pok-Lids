@@ -1981,6 +1981,23 @@ button{
   padding:8px
 }
 .admin-banner-preview img{width:100%;max-height:220px;object-fit:cover;border-radius:10px}
+.admin-image-url-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:8px;
+  align-items:end
+}
+.admin-image-url-status{
+  margin-top:-4px;
+  margin-bottom:8px;
+  min-height:16px;
+  color:#6f8f94;
+  font-size:11px;
+  line-height:1.45
+}
+.admin-image-url-status.ok{color:#27835b}
+.admin-image-url-status.warn{color:#9c7221}
+.admin-image-url-status.error{color:#b64c4c}
 .admin-banner-empty{color:#718c90;font-size:12px;text-align:center;line-height:1.6}
 .admin-date-mode{display:flex;gap:14px;flex-wrap:wrap;color:#55757a;font-size:12px;font-weight:800}
 .admin-date-mode label{display:flex;align-items:center;gap:6px;cursor:pointer}
@@ -3080,9 +3097,19 @@ button{
             </div>
 
             <div class="admin-field">
-              <label>活動 Banner *</label>
+              <label>活動 Banner（本機上傳）</label>
               <input id="adminBannerInput" type="file" accept="image/png,image/jpeg,image/webp">
             </div>
+
+            <div class="admin-field">
+              <label>或輸入 Banner 圖片網址</label>
+              <div class="admin-image-url-row">
+                <input id="adminBannerUrlInput" type="url" placeholder="https://example.com/banner.jpg">
+                <button class="admin-mini-btn" type="button" onclick="adminLoadBannerUrl()">載入網址</button>
+              </div>
+            </div>
+            <div id="adminBannerUrlStatus" class="admin-image-url-status"></div>
+
             <div id="adminBannerPreview" class="admin-banner-preview">
               <div class="admin-banner-empty">尚未選擇 Banner</div>
             </div>
@@ -3227,9 +3254,13 @@ button{
           <div class="admin-section">
             <h3>⑦ 圖章圖片與暫存</h3>
             <div class="admin-field">
-              <label>已有圖片網址（可不填）</label>
-              <input id="adminImageUrl" placeholder="https://... 或 assets/stamps/...png">
+              <label>圖章圖片網址（可不填）</label>
+              <div class="admin-image-url-row">
+                <input id="adminImageUrl" type="url" placeholder="https://example.com/stamp.png">
+                <button class="admin-mini-btn" type="button" onclick="adminLoadStampUrl()">載入網址</button>
+              </div>
             </div>
+            <div id="adminStampUrlStatus" class="admin-image-url-status"></div>
             <div class="admin-field">
               <label>圖片來源說明</label>
               <input id="adminImageSource" placeholder="例如：遊戲截圖人工裁切">
@@ -3263,6 +3294,8 @@ const adminState={
 
   editingEventId:"",
   bannerFile:null,
+  bannerUrl:"",
+  bannerUrlBlob:null,
   bannerExisting:"",
   importedPoints:[],
 
@@ -3273,6 +3306,8 @@ const adminState={
 
   cropBlob:null,
   cropDataUrl:"",
+  stampUrlBlob:null,
+  stampUrlValue:"",
   img:null,
   fitScale:1,
   zoom:1,
@@ -3459,6 +3494,110 @@ function adminBannerPreview(src){
     box.innerHTML=`<img src="${escapeHtml(src)}" alt="活動 Banner 預覽">`;
   }else{
     box.innerHTML=`<div class="admin-banner-empty">尚未選擇 Banner</div>`;
+  }
+}
+
+function adminSetImageUrlStatus(id,msg,type=""){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.className="admin-image-url-status"+(type?` ${type}`:"");
+  el.textContent=msg||"";
+}
+
+function adminGuessImageExt(contentType,url){
+  const type=String(contentType||"").toLowerCase();
+  if(type.includes("png"))return "png";
+  if(type.includes("webp"))return "webp";
+  if(type.includes("gif"))return "gif";
+  if(type.includes("jpeg")||type.includes("jpg"))return "jpg";
+
+  const m=String(url||"").match(/\.([a-zA-Z0-9]{2,5})(?:[?#]|$)/);
+  const ext=(m?.[1]||"").toLowerCase();
+  if(["png","jpg","jpeg","webp","gif"].includes(ext))return ext==="jpeg"?"jpg":ext;
+  return "jpg";
+}
+
+async function adminFetchRemoteImage(url){
+  const clean=String(url||"").trim();
+  if(!/^https?:\/\//i.test(clean))throw new Error("請輸入 http:// 或 https:// 圖片網址。");
+
+  const response=await fetch(clean,{mode:"cors",cache:"no-store"});
+  if(!response.ok)throw new Error(`圖片下載失敗：HTTP ${response.status}`);
+
+  const type=response.headers.get("content-type")||"";
+  if(type && !type.toLowerCase().startsWith("image/")){
+    throw new Error(`網址回傳的不是圖片（${type}）。`);
+  }
+
+  const blob=await response.blob();
+  if(!blob.size)throw new Error("圖片內容是空的。");
+  return {blob,type:type||blob.type,url:clean};
+}
+
+async function adminLoadBannerUrl(){
+  const url=document.getElementById("adminBannerUrlInput").value.trim();
+  adminState.bannerUrl=url;
+  adminState.bannerUrlBlob=null;
+
+  if(!url){
+    adminBannerPreview(adminState.bannerExisting||"");
+    adminSetImageUrlStatus("adminBannerUrlStatus","");
+    return;
+  }
+
+  // Preview immediately, even if remote server blocks CORS.
+  adminBannerPreview(url);
+  adminSetImageUrlStatus("adminBannerUrlStatus","正在嘗試下載圖片……");
+
+  try{
+    const result=await adminFetchRemoteImage(url);
+    adminState.bannerUrlBlob=result.blob;
+    adminSetImageUrlStatus(
+      "adminBannerUrlStatus",
+      `✓ 已抓取圖片（${Math.round(result.blob.size/1024)} KB）。暫存活動時會準備存進 GitHub。`,
+      "ok"
+    );
+  }catch(error){
+    // CORS is common. Keep URL mode usable as a hotlink fallback.
+    adminState.bannerUrlBlob=null;
+    adminSetImageUrlStatus(
+      "adminBannerUrlStatus",
+      `⚠️ 無法直接下載（可能是網站 CORS 限制）。仍可直接使用此圖片網址。`,
+      "warn"
+    );
+  }
+}
+
+async function adminLoadStampUrl(){
+  const url=document.getElementById("adminImageUrl").value.trim();
+  adminState.stampUrlValue=url;
+  adminState.stampUrlBlob=null;
+
+  if(!url){
+    adminSetImageUrlStatus("adminStampUrlStatus","");
+    return;
+  }
+
+  // URL preview uses existing crop preview box.
+  document.getElementById("adminCropPreview").innerHTML=
+    `<img src="${escapeHtml(url)}" alt="圖章網址預覽">`;
+  adminSetImageUrlStatus("adminStampUrlStatus","正在嘗試下載圖片……");
+
+  try{
+    const result=await adminFetchRemoteImage(url);
+    adminState.stampUrlBlob=result.blob;
+    adminSetImageUrlStatus(
+      "adminStampUrlStatus",
+      `✓ 已抓取圖片（${Math.round(result.blob.size/1024)} KB）。暫存圖章時會準備存進 GitHub。`,
+      "ok"
+    );
+  }catch(error){
+    adminState.stampUrlBlob=null;
+    adminSetImageUrlStatus(
+      "adminStampUrlStatus",
+      `⚠️ 無法直接下載（可能是網站 CORS 限制）。仍可直接使用此圖片網址。`,
+      "warn"
+    );
   }
 }
 
@@ -3786,11 +3925,15 @@ function adminAddDirectPoints(){
 function adminNewEvent(){
   adminState.editingEventId="";
   adminState.bannerFile=null;
+  adminState.bannerUrl="";
+  adminState.bannerUrlBlob=null;
   adminState.bannerExisting="";
   adminState.importedPoints=[];
 
   document.getElementById("adminEventNameInput").value="";
   document.getElementById("adminBannerInput").value="";
+  document.getElementById("adminBannerUrlInput").value="";
+  adminSetImageUrlStatus("adminBannerUrlStatus","");
   document.getElementById("adminStartDate").value="";
   document.getElementById("adminEndDate").value="";
 
@@ -3813,7 +3956,9 @@ function adminLoadSelectedEvent(){
 
   adminState.editingEventId=adminEventIdOf(e);
   adminState.bannerFile=null;
+  adminState.bannerUrlBlob=null;
   adminState.bannerExisting=e.activityImage||e.eventImage||e.image||"";
+  adminState.bannerUrl=/^https?:\/\//i.test(adminState.bannerExisting)?adminState.bannerExisting:"";
 
   const points=adminState.list.filter(x=>String(x.eventId||"")===adminState.editingEventId);
   adminState.importedPoints=points.map(p=>{
@@ -3833,6 +3978,12 @@ function adminLoadSelectedEvent(){
 
   document.getElementById("adminEventNameInput").value=adminEventName(e);
   document.getElementById("adminBannerInput").value="";
+  document.getElementById("adminBannerUrlInput").value=adminState.bannerUrl||"";
+  adminSetImageUrlStatus(
+    "adminBannerUrlStatus",
+    adminState.bannerUrl?"目前使用圖片網址。":"",
+    adminState.bannerUrl?"ok":""
+  );
   document.getElementById("adminStartDate").value=e.startDate||"";
   document.getElementById("adminEndDate").value=e.endDate||"";
 
@@ -3984,14 +4135,29 @@ function adminFindOldPoint(oldPoints,p,index){
 }
 
 function adminStageBanner(eventId){
-  if(!adminState.bannerFile)return adminState.bannerExisting||"";
+  // 1) Local file upload
+  if(adminState.bannerFile){
+    const file=adminState.bannerFile;
+    const ext=adminGuessImageExt(file.type,file.name);
+    const path=`assets/stamp-events/${adminSafeId(eventId)}-banner.${ext}`;
+    adminState.pendingFiles.set(path,file);
+    return path;
+  }
 
-  const file=adminState.bannerFile;
-  const type=String(file.type||"").toLowerCase();
-  const ext=type.includes("png")?"png":type.includes("webp")?"webp":"jpg";
-  const path=`assets/stamp-events/${adminSafeId(eventId)}-banner.${ext}`;
-  adminState.pendingFiles.set(path,file);
-  return path;
+  // 2) URL was fetched successfully: save a local repo copy.
+  const url=String(document.getElementById("adminBannerUrlInput")?.value||adminState.bannerUrl||"").trim();
+  if(url && adminState.bannerUrlBlob){
+    const ext=adminGuessImageExt(adminState.bannerUrlBlob.type,url);
+    const path=`assets/stamp-events/${adminSafeId(eventId)}-banner.${ext}`;
+    adminState.pendingFiles.set(path,adminState.bannerUrlBlob);
+    return path;
+  }
+
+  // 3) URL could not be fetched due CORS: keep the URL directly.
+  if(url)return url;
+
+  // 4) Existing image
+  return adminState.bannerExisting||"";
 }
 
 async function adminSaveEvent(){
@@ -4009,7 +4175,8 @@ async function adminSaveEvent(){
     const isNew=!adminState.editingEventId;
     const eventId=isNew?adminMakeEventId(name):adminState.editingEventId;
 
-    if(isNew&&!adminState.bannerFile)throw new Error("新增活動請上傳 Banner。");
+    const bannerUrlInput=document.getElementById("adminBannerUrlInput").value.trim();
+    if(isNew&&!adminState.bannerFile&&!bannerUrlInput)throw new Error("新增活動請上傳 Banner 或輸入 Banner 圖片網址。");
     if(isNew&&!adminState.importedPoints.length)throw new Error("新增活動至少需要 1 個點位。");
 
     const banner=adminStageBanner(eventId);
@@ -4066,7 +4233,10 @@ async function adminSaveEvent(){
     adminState.editingEventId=eventId;
     adminState.bannerExisting=banner;
     adminState.bannerFile=null;
+    adminState.bannerUrlBlob=null;
+    adminState.bannerUrl=/^https?:\/\//i.test(banner)?banner:"";
     document.getElementById("adminBannerInput").value="";
+    document.getElementById("adminBannerUrlInput").value=adminState.bannerUrl;
 
     adminPopulateEvents(eventId);
     adminMarkDirty("活動資料");
@@ -4121,7 +4291,11 @@ async function adminLoadData(force=false){
     adminState.dirtyReasons.clear();
     adminState.editingEventId="";
     adminState.bannerFile=null;
+    adminState.bannerUrl="";
+    adminState.bannerUrlBlob=null;
     adminState.bannerExisting="";
+    adminState.stampUrlBlob=null;
+    adminState.stampUrlValue="";
     adminState.importedPoints=[];
 
     adminPopulateEvents();
@@ -4233,8 +4407,17 @@ function adminShowPointInfo(){
   document.getElementById("adminCoordSource").value=
     o?.coordinatesSource||p.coordinatesSource||"";
 
+  const currentStampImage=o?.manualStampImage||p.stampImage||"";
   document.getElementById("adminImageUrl").value=
-    o?.manualStampImage||p.stampImage||"";
+    /^https?:\/\//i.test(currentStampImage)?currentStampImage:"";
+
+  adminState.stampUrlValue=/^https?:\/\//i.test(currentStampImage)?currentStampImage:"";
+  adminState.stampUrlBlob=null;
+  adminSetImageUrlStatus(
+    "adminStampUrlStatus",
+    adminState.stampUrlValue?"目前使用圖片網址。":"",
+    adminState.stampUrlValue?"ok":""
+  );
 
   document.getElementById("adminImageSource").value=
     o?.stampImageSource||p.stampImageSource||"";
@@ -4665,11 +4848,23 @@ async function adminSaveOverride(){
       p.coordinatesSource=document.getElementById("adminCoordSource").value.trim()||"Manual admin";
     }
 
-    let imagePath=document.getElementById("adminImageUrl").value.trim()||p.stampImage||"";
+    const urlInput=document.getElementById("adminImageUrl").value.trim();
+    let imagePath=p.stampImage||"";
 
+    // Priority 1: manual screenshot crop
     if(adminState.cropBlob){
       imagePath=`assets/stamps/${adminSafeId(p.id)}.png`;
       adminState.pendingFiles.set(imagePath,adminState.cropBlob);
+    }
+    // Priority 2: remote URL successfully fetched -> store local GitHub copy
+    else if(urlInput && adminState.stampUrlBlob){
+      const ext=adminGuessImageExt(adminState.stampUrlBlob.type,urlInput);
+      imagePath=`assets/stamps/${adminSafeId(p.id)}.${ext}`;
+      adminState.pendingFiles.set(imagePath,adminState.stampUrlBlob);
+    }
+    // Priority 3: remote URL fallback (CORS blocked or user did not click load)
+    else if(urlInput){
+      imagePath=urlInput;
     }
 
     if(imagePath){
@@ -4717,6 +4912,8 @@ async function adminSaveOverride(){
 
     adminState.cropBlob=null;
     adminState.cropDataUrl="";
+    adminState.stampUrlBlob=null;
+    adminState.stampUrlValue=/^https?:\/\//i.test(imagePath)?imagePath:"";
     document.getElementById("adminCropPreview").innerHTML="";
 
     adminSetSaveStatus(
@@ -4862,12 +5059,36 @@ document.getElementById("adminBannerInput").addEventListener("change",()=>{
   adminState.bannerFile=file;
 
   if(!file){
-    adminBannerPreview(adminState.bannerExisting||"");
+    adminBannerPreview(adminState.bannerUrl||adminState.bannerExisting||"");
     return;
   }
 
+  // Local upload wins over URL mode.
+  adminState.bannerUrl="";
+  adminState.bannerUrlBlob=null;
+  document.getElementById("adminBannerUrlInput").value="";
+  adminSetImageUrlStatus("adminBannerUrlStatus","使用本機上傳圖片。","ok");
+
   const url=URL.createObjectURL(file);
   adminBannerPreview(url);
+});
+
+document.getElementById("adminBannerUrlInput").addEventListener("input",()=>{
+  const value=document.getElementById("adminBannerUrlInput").value.trim();
+  if(value!==adminState.bannerUrl){
+    adminState.bannerUrl=value;
+    adminState.bannerUrlBlob=null;
+    adminSetImageUrlStatus("adminBannerUrlStatus",value?"網址已變更，請按「載入網址」預覽／抓取。":"",value?"warn":"");
+  }
+});
+
+document.getElementById("adminImageUrl").addEventListener("input",()=>{
+  const value=document.getElementById("adminImageUrl").value.trim();
+  if(value!==adminState.stampUrlValue){
+    adminState.stampUrlValue=value;
+    adminState.stampUrlBlob=null;
+    adminSetImageUrlStatus("adminStampUrlStatus",value?"網址已變更，請按「載入網址」預覽／抓取。":"",value?"warn":"");
+  }
 });
 
 document.getElementById("adminPointTxtInput").addEventListener("change",async()=>{

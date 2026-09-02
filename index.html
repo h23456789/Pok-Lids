@@ -2801,7 +2801,7 @@ button{
 
 
   <div id="history">
-    載入中……
+    正在載入更新紀錄……
   </div>
 
 </div>
@@ -6056,6 +6056,27 @@ async function fetchJSON(url){
   return await response.json();
 }
 
+async function fetchJSONWithTimeout(url,timeoutMs=7000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+
+  try{
+    const sep=url.includes("?")?"&":"?";
+    const response=await fetch(
+      url+sep+"ts="+Date.now(),
+      {
+        cache:"no-store",
+        signal:controller.signal
+      }
+    );
+
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
 function normalizeDataList(json,type){
   if(type==="stamp" && Array.isArray(json?.list)) return json.list;
   if(Array.isArray(json?.list)) return json.list;
@@ -6560,7 +6581,7 @@ async function loadHistoryFile(type){
 
   for(const url of urls){
     try{
-      const json=await fetchJSON(url);
+      const json=await fetchJSONWithTimeout(url,7000);
       const list=Array.isArray(json?.history)?json.history:[];
       return list.map(entry=>({...entry,type}));
     }catch(error){
@@ -6576,15 +6597,23 @@ async function loadHistory(){
   const el=document.getElementById("history");
   if(el)el.innerHTML=`<span class="muted">正在載入更新紀錄…</span>`;
 
-  const [lidHistory,stampHistory]=await Promise.all([
-    loadHistoryFile("lid"),
-    loadHistoryFile("stamp")
-  ]);
+  try{
+    const [lidHistory,stampHistory]=await Promise.all([
+      loadHistoryFile("lid"),
+      loadHistoryFile("stamp")
+    ]);
 
-  historyEntries=[...lidHistory,...stampHistory]
-    .sort((a,b)=>new Date(b.time||0)-new Date(a.time||0));
+    historyEntries=[...lidHistory,...stampHistory]
+      .sort((a,b)=>new Date(b.time||0)-new Date(a.time||0));
 
-  renderHistory();
+    renderHistory();
+  }catch(error){
+    console.error("[History] load failed",error);
+    historyEntries=[];
+    if(el){
+      el.innerHTML=`<span class="muted">更新紀錄目前無法載入，請稍後重新整理。</span>`;
+    }
+  }
 }
 function setHistoryFilter(filter){currentHistoryFilter=filter;document.getElementById("historyAll").classList.toggle("active",filter==="all");document.getElementById("historyLid").classList.toggle("active",filter==="lid");document.getElementById("historyStamp").classList.toggle("active",filter==="stamp");renderHistory();}
 function renderHistory(){
@@ -6628,6 +6657,10 @@ async function start(){
   loadLocalCollection("lid");
   loadLocalCollection("stamp");
 
+  // History 獨立載入，不等待 Center / Stamp / manual 資料。
+  // 這樣即使其他資料來源較慢，History 也不會一直停在「載入中」。
+  const historyTask=loadHistory();
+
   // 先只載入 Lid，讓首頁可以立即顯示，不必等待中心／活動／人工覆蓋資料。
   const lidReady = await loadDataSet("lid");
   if(lidReady){
@@ -6659,7 +6692,8 @@ async function start(){
     renderCollectionGrid();
   }
 
-  await loadHistory();
+  // 不阻塞主要頁面；History 已在 start() 一開始獨立載入。
+  await historyTask.catch(()=>{});
 }
 start();
 

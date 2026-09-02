@@ -2765,7 +2765,7 @@ button{
     onclick="downloadAll()"
     title="下載目前類別全部資料"
   >
-    🎟️ 所有圖章 TXT
+    TXT
   </button>
 
   <button
@@ -2773,7 +2773,7 @@ button{
     onclick="downloadJSON()"
     title="下載目前類別全部資料"
   >
-    🎟️ 所有圖章 JSON
+    JSON
   </button>
 
   <button
@@ -2781,9 +2781,34 @@ button{
     onclick="downloadCSV()"
     title="下載目前類別全部資料"
   >
-    🎟️ 所有圖章 CSV
+    CSV
   </button>
 
+</div>
+
+<div
+  id="stampAllDownloadBox"
+  class="stamp-all-download-box"
+  style="display:none;"
+>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('txt')"
+  >
+    🎟️ 所有圖章 TXT
+  </button>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('json')"
+  >
+    🎟️ 所有圖章 JSON
+  </button>
+  <button
+    class="stamp-all-download-btn"
+    onclick="downloadAllStampPoints('csv')"
+  >
+    🎟️ 所有圖章 CSV
+  </button>
 </div>
 
 

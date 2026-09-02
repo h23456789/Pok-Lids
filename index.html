@@ -1113,7 +1113,7 @@ button{
   justify-content:center;
   gap:6px;
   color:#397b83;
-  font-size:11px;
+  font-size:13px;
   font-weight:900;
   cursor:pointer;
   user-select:none;
@@ -1869,7 +1869,7 @@ button{
 .admin-field label{font-size:12px;font-weight:900;color:#397b83}
 .admin-field input,.admin-field select,.admin-field textarea{
   width:100%;
-  padding:9px 10px;
+  padding:12px 12px;
   border:1px solid #c9dddd;
   border-radius:10px;
   font:inherit;
@@ -1885,8 +1885,8 @@ button{
   min-height:240px;
   max-height:520px;
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
-  font-size:16px;
-  line-height:1.75;
+  font-size:18px;
+  line-height:1.8;
   padding:14px 16px;
   letter-spacing:.1px;
 }
@@ -2028,8 +2028,8 @@ button{
   border-radius:9px;
   background:#fff;
   font:inherit;
-  font-size:13px;
-  line-height:1.4;
+  font-size:17px;
+  line-height:1.5;
   color:#456970
 }
 .admin-import-input.coord-empty{
@@ -3109,6 +3109,9 @@ button{
               </div>
             </div>
             <div id="adminBannerUrlStatus" class="admin-image-url-status"></div>
+            <div class="admin-help">
+              Banner 會自動等比例縮小：最長邊不超過 1600px，不裁切、不拉伸；較小的圖片不會放大。
+            </div>
 
             <div id="adminBannerPreview" class="admin-banner-preview">
               <div class="admin-banner-empty">尚未選擇 Banner</div>
@@ -3534,6 +3537,66 @@ async function adminFetchRemoteImage(url){
   return {blob,type:type||blob.type,url:clean};
 }
 
+async function adminOptimizeBannerBlob(blob){
+  if(!(blob instanceof Blob) || !blob.size)throw new Error("Banner 圖片資料無效。");
+
+  const bitmap=await createImageBitmap(blob);
+  try{
+    const MAX_W=1600;
+    const MAX_H=1000;
+
+    const scale=Math.min(
+      1,
+      MAX_W/bitmap.width,
+      MAX_H/bitmap.height
+    );
+
+    const width=Math.max(1,Math.round(bitmap.width*scale));
+    const height=Math.max(1,Math.round(bitmap.height*scale));
+
+    // If already suitably sized and reasonably small, keep original bytes.
+    if(scale===1 && blob.size<=900*1024){
+      return {
+        blob,
+        width:bitmap.width,
+        height:bitmap.height,
+        originalWidth:bitmap.width,
+        originalHeight:bitmap.height,
+        optimized:false
+      };
+    }
+
+    const canvas=document.createElement("canvas");
+    canvas.width=width;
+    canvas.height=height;
+    const ctx=canvas.getContext("2d",{alpha:false});
+    ctx.imageSmoothingEnabled=true;
+    ctx.imageSmoothingQuality="high";
+
+    // Banner is a photographic / card image; use white background if source has transparency.
+    ctx.fillStyle="#ffffff";
+    ctx.fillRect(0,0,width,height);
+    ctx.drawImage(bitmap,0,0,width,height);
+
+    let output=await new Promise(resolve=>canvas.toBlob(resolve,"image/webp",0.86));
+    if(!output){
+      output=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",0.88));
+    }
+    if(!output)throw new Error("Banner 縮圖失敗。");
+
+    return {
+      blob:output,
+      width,
+      height,
+      originalWidth:bitmap.width,
+      originalHeight:bitmap.height,
+      optimized:true
+    };
+  }finally{
+    bitmap.close?.();
+  }
+}
+
 async function adminLoadBannerUrl(){
   const url=document.getElementById("adminBannerUrlInput").value.trim();
   adminState.bannerUrl=url;
@@ -3551,10 +3614,17 @@ async function adminLoadBannerUrl(){
 
   try{
     const result=await adminFetchRemoteImage(url);
-    adminState.bannerUrlBlob=result.blob;
+    const optimized=await adminOptimizeBannerBlob(result.blob);
+    adminState.bannerUrlBlob=optimized.blob;
+
+    const sizeText=`${optimized.width}×${optimized.height}px / ${Math.round(optimized.blob.size/1024)} KB`;
+    const fromText=optimized.optimized
+      ? `（原圖 ${optimized.originalWidth}×${optimized.originalHeight}px，已自動縮小）`
+      : "（原圖尺寸已適合，不放大）";
+
     adminSetImageUrlStatus(
       "adminBannerUrlStatus",
-      `✓ 已抓取圖片（${Math.round(result.blob.size/1024)} KB）。暫存活動時會準備存進 GitHub。`,
+      `✓ 已抓取 Banner：${sizeText} ${fromText}。最後更新時會存進 GitHub。`,
       "ok"
     );
   }catch(error){
@@ -4247,7 +4317,7 @@ async function adminSaveEvent(){
       !Number.isFinite(Number(p.coords[0])) || !Number.isFinite(Number(p.coords[1]))).length;
 
     adminSetEventSaveStatus(
-      `✓ 已暫存活動變更，尚未更新 GitHub。\n活動：${name}\n日期：${startDate} → ${endDate||"無限期"}\n圖章點：${points.length}`+
+      `✓ 已暫存活動變更，尚未更新 GitHub。\n活動：${name}\n日期：${startDate} → ${endDate||"無限期"}\n圖章點：${points.length}\nBanner：${banner}`+
       (missingCoordCount?`\n⚠️ 尚有 ${missingCoordCount} 個點位未填座標，可之後再回來補。`:""),
       true
     );
@@ -5054,9 +5124,9 @@ document.getElementById("adminEventSelect").addEventListener("change",adminLoadS
 document.getElementById("adminStampEventSelect").addEventListener("change",()=>adminPopulatePoints());
 document.getElementById("adminPointSelect").addEventListener("change",adminShowPointInfo);
 
-document.getElementById("adminBannerInput").addEventListener("change",()=>{
+document.getElementById("adminBannerInput").addEventListener("change",async()=>{
   const file=document.getElementById("adminBannerInput").files?.[0]||null;
-  adminState.bannerFile=file;
+  adminState.bannerFile=null;
 
   if(!file){
     adminBannerPreview(adminState.bannerUrl||adminState.bannerExisting||"");
@@ -5067,10 +5137,35 @@ document.getElementById("adminBannerInput").addEventListener("change",()=>{
   adminState.bannerUrl="";
   adminState.bannerUrlBlob=null;
   document.getElementById("adminBannerUrlInput").value="";
-  adminSetImageUrlStatus("adminBannerUrlStatus","使用本機上傳圖片。","ok");
+  adminSetImageUrlStatus("adminBannerUrlStatus","正在自動調整 Banner 尺寸……");
 
-  const url=URL.createObjectURL(file);
-  adminBannerPreview(url);
+  const previewUrl=URL.createObjectURL(file);
+  adminBannerPreview(previewUrl);
+
+  try{
+    const optimized=await adminOptimizeBannerBlob(file);
+    adminState.bannerFile=optimized.blob;
+
+    const sizeText=`${optimized.width}×${optimized.height}px / ${Math.round(optimized.blob.size/1024)} KB`;
+    const fromText=optimized.optimized
+      ? `（原圖 ${optimized.originalWidth}×${optimized.originalHeight}px，已自動縮小）`
+      : "（原圖尺寸已適合，不放大）";
+
+    adminSetImageUrlStatus(
+      "adminBannerUrlStatus",
+      `✓ Banner：${sizeText} ${fromText}`,
+      "ok"
+    );
+  }catch(error){
+    adminState.bannerFile=file;
+    adminSetImageUrlStatus(
+      "adminBannerUrlStatus",
+      `⚠️ 自動縮圖失敗，將保留原圖：${error.message}`,
+      "warn"
+    );
+  }finally{
+    setTimeout(()=>URL.revokeObjectURL(previewUrl),1500);
+  }
 });
 
 document.getElementById("adminBannerUrlInput").addEventListener("input",()=>{

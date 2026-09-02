@@ -1,4 +1,45 @@
 {
   "version": "1.0",
-  "items": []
+  "items": [
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P001",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "Pokémon Center SAPPORO",
+      "name": "Pokémon Center SAPPORO",
+      "manualName": "Pokémon Center SAPPORO",
+      "manualVenue": "Pokémon Center SAPPORO",
+      "manualCoordinates": [
+        43.06746909999999,
+        141.3492665
+      ],
+      "coordinatesSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P002",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "Pokémon Center TOHOKU",
+      "name": "Pokémon Center TOHOKU",
+      "manualName": "Pokémon Center TOHOKU",
+      "manualVenue": "Pokémon Center TOHOKU",
+      "manualCoordinates": [
+        38.2621602,
+        140.8817018
+      ],
+      "coordinatesSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P003",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "Pokémon Center TOKYO-BAY",
+      "name": "Pokémon Center TOKYO-BAY",
+      "manualName": "Pokémon Center TOKYO-BAY",
+      "manualVenue": "Pokémon Center TOKYO-BAY",
+      "manualCoordinates": [
+        35.6866032,
+        139.9890362
+      ],
+      "coordinatesSource": "Manual admin"
+    }
+  ],
+  "updated": "2026-09-02T14:25:12.256Z"
 }

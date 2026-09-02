@@ -1,6 +1,46 @@
 {
   "history": [
     {
+      "time": "2026-09-02T14:28:10.649Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 23,
+      "added": [],
+      "removed": [],
+      "changed": [
+        "MANUAL-STAMP-20260902220813-2026-P001",
+        "MANUAL-STAMP-20260902220813-2026-P002",
+        "MANUAL-STAMP-20260902220813-2026-P003"
+      ],
+      "addedItems": [],
+      "removedItems": [],
+      "changedItems": [
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P001",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "Pokémon Center SAPPORO"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P002",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "Pokémon Center TOHOKU"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P003",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "Pokémon Center TOKYO-BAY"
+        }
+      ],
+      "reasons": [
+        "圖章人工修正"
+      ]
+    },
+    {
       "time": "2026-09-02 12:11:57",
       "type": "stamp",
       "event": "Automatic official GO Stamp Rally sync",

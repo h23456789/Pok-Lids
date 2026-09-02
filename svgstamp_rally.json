@@ -177,10 +177,10 @@
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "venueType": "go_stamp_point",
-      "venue": "北海道&Pokémon Center SAPPORO",
-      "venueZh": "北海道&Pokémon Center SAPPORO",
-      "name": "北海道&Pokémon Center SAPPORO",
-      "nameZh": "北海道&Pokémon Center SAPPORO",
+      "venue": "Pokémon Center SAPPORO",
+      "venueZh": "Pokémon Center SAPPORO",
+      "name": "Pokémon Center SAPPORO",
+      "nameZh": "Pokémon Center SAPPORO",
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
       "source": "Manual admin",
@@ -191,7 +191,9 @@
         141.3492665
       ],
       "lat": 43.06746909999999,
-      "lng": 141.3492665
+      "lng": 141.3492665,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P002",
@@ -203,10 +205,10 @@
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "venueType": "go_stamp_point",
-      "venue": "宮城県&Pokémon Center TOHOKU",
-      "venueZh": "宮城県&Pokémon Center TOHOKU",
-      "name": "宮城県&Pokémon Center TOHOKU",
-      "nameZh": "宮城県&Pokémon Center TOHOKU",
+      "venue": "Pokémon Center TOHOKU",
+      "venueZh": "Pokémon Center TOHOKU",
+      "name": "Pokémon Center TOHOKU",
+      "nameZh": "Pokémon Center TOHOKU",
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
       "source": "Manual admin",
@@ -217,7 +219,9 @@
         140.8817018
       ],
       "lat": 38.2621602,
-      "lng": 140.8817018
+      "lng": 140.8817018,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P003",
@@ -229,10 +233,10 @@
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "venueType": "go_stamp_point",
-      "venue": "千葉県&Pokémon Center TOKYO-BAY",
-      "venueZh": "千葉県&Pokémon Center TOKYO-BAY",
-      "name": "千葉県&Pokémon Center TOKYO-BAY",
-      "nameZh": "千葉県&Pokémon Center TOKYO-BAY",
+      "venue": "Pokémon Center TOKYO-BAY",
+      "venueZh": "Pokémon Center TOKYO-BAY",
+      "name": "Pokémon Center TOKYO-BAY",
+      "nameZh": "Pokémon Center TOKYO-BAY",
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
       "source": "Manual admin",
@@ -243,7 +247,9 @@
         139.9890362
       ],
       "lat": 35.6866032,
-      "lng": 139.9890362
+      "lng": 139.9890362,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P004",
@@ -636,7 +642,7 @@
       "lng": 127.7962995
     }
   ],
-  "updated": "2026-09-02T14:08:30.805Z",
+  "updated": "2026-09-02T14:28:10.646Z",
   "source": "manual-admin",
   "sourceMode": "manual staged GitHub admin",
   "version": "manual-1.0",

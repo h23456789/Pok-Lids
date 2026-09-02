@@ -12,7 +12,9 @@
         43.06746909999999,
         141.3492665
       ],
-      "coordinatesSource": "Manual admin"
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-sapporo.webp",
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P002",
@@ -270,5 +272,5 @@
       "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T14:34:36.300Z"
+  "updated": "2026-09-02T14:35:53.609Z"
 }

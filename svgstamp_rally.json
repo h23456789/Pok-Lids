@@ -193,7 +193,10 @@
       "lat": 43.06746909999999,
       "lng": 141.3492665,
       "coordinatesManual": true,
-      "coordinatesSource": "Manual admin"
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-sapporo.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P002",
@@ -723,7 +726,7 @@
       "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T14:34:38.754Z",
+  "updated": "2026-09-02T14:35:55.899Z",
   "source": "manual-admin",
   "sourceMode": "manual staged GitHub admin",
   "version": "manual-1.0",

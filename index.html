@@ -1809,8 +1809,12 @@ button{
    ADMIN FLOATING PANEL
 ========================================================= */
 .admin-modal{
-  width:min(1180px,calc(100vw - 24px));
-  max-height:calc(100vh - 24px);
+  width:min(1220px,calc(100vw - 24px));
+  height:min(880px,calc(100vh - 24px));
+  min-width:720px;
+  min-height:520px;
+  max-width:calc(100vw - 12px);
+  max-height:calc(100vh - 12px);
   background:#f7fcfc;
   border-radius:24px;
   box-shadow:0 20px 80px rgba(0,0,0,.38);
@@ -1819,50 +1823,262 @@ button{
   z-index:11001;
   display:flex;
   flex-direction:column;
+  resize:both;
 }
 .admin-modal-head{
   padding:18px 22px;
   background:linear-gradient(135deg,#c8edf5,#aee0ed);
+  flex:0 0 auto;
 }
 .admin-modal-title{color:#397b83;font-size:23px;font-weight:900}
 .admin-modal-sub{margin-top:4px;color:#58919a;font-size:13px}
-.admin-modal-body{overflow:auto;padding:16px}
-.admin-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:14px}
-.admin-section{background:#fff;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 3px 12px rgba(70,130,140,.08)}
+.admin-modal-body{overflow:auto;padding:16px;min-height:0;flex:1 1 auto}
+.admin-grid{
+  display:grid;
+  grid-template-columns:minmax(320px,1fr) minmax(390px,1.12fr);
+  gap:14px;
+  min-height:100%;
+}
+.admin-column{
+  min-width:0;
+}
+.admin-column-title{
+  position:sticky;
+  top:-16px;
+  z-index:15;
+  margin:-16px -2px 14px;
+  padding:12px 14px;
+  border-radius:0 0 16px 16px;
+  background:rgba(247,252,252,.96);
+  backdrop-filter:blur(7px);
+  color:#397b83;
+  font-size:18px;
+  font-weight:1000;
+  text-align:center;
+  border-bottom:1px solid #dcebec;
+}
+.admin-section{
+  background:#fff;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 3px 12px rgba(70,130,140,.08)
+}
 .admin-section h3{margin:0 0 12px;color:#397b83;font-size:17px}
 .admin-field{display:flex;flex-direction:column;gap:6px;margin-bottom:11px}
 .admin-field label{font-size:12px;font-weight:900;color:#397b83}
-.admin-field input,.admin-field select{width:100%;padding:9px 10px;border:1px solid #c9dddd;border-radius:10px;font:inherit;background:#fff}
+.admin-field input,.admin-field select,.admin-field textarea{
+  width:100%;
+  padding:9px 10px;
+  border:1px solid #c9dddd;
+  border-radius:10px;
+  font:inherit;
+  background:#fff;
+}
+.admin-field textarea{resize:vertical;min-height:76px}
 .admin-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .admin-help{font-size:11px;line-height:1.55;color:#718c90;margin-top:6px}
-.admin-status{margin-top:10px;padding:9px 11px;border-radius:10px;background:#eef7f7;color:#55757a;font-size:12px;white-space:pre-wrap}
-.admin-point-info{padding:12px;border:1px solid #deebeb;border-radius:12px;color:#58757b;font-size:12px;line-height:1.6}
-.admin-canvas-wrap{height:420px;overflow:auto;background:#edf8f5;border-radius:14px;padding:8px;touch-action:none}
+.admin-status{
+  margin-top:10px;
+  padding:9px 11px;
+  border-radius:10px;
+  background:#eef7f7;
+  color:#55757a;
+  font-size:12px;
+  white-space:pre-wrap
+}
+.admin-point-info{
+  padding:12px;
+  border:1px solid #deebeb;
+  border-radius:12px;
+  color:#58757b;
+  font-size:12px;
+  line-height:1.6
+}
+.admin-canvas-wrap{
+  height:420px;
+  min-height:220px;
+  resize:vertical;
+  overflow:auto;
+  background:#edf8f5;
+  border-radius:14px;
+  padding:8px;
+  touch-action:none
+}
 .admin-canvas-wrap canvas{display:block;max-width:none;cursor:crosshair}
-.admin-crop-toolbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:10px;color:#55757a;font-size:12px}
+.admin-crop-toolbar{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+  color:#55757a;
+  font-size:12px
+}
 .admin-crop-toolbar input[type=range]{width:90px}
-.admin-mini-btn{border:0;border-radius:999px;padding:8px 12px;background:#e7f3f3;color:#397b83;font-weight:900;cursor:pointer}
+.admin-mini-btn{
+  border:0;
+  border-radius:999px;
+  padding:8px 12px;
+  background:#e7f3f3;
+  color:#397b83;
+  font-weight:900;
+  cursor:pointer
+}
+.admin-mini-btn:hover{background:#d9ebeb}
 .admin-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.admin-crop-preview{margin-top:12px;min-height:80px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#eef7f6;padding:10px}
-.admin-crop-preview img{max-width:240px;max-height:240px;object-fit:contain;border-radius:12px;background:repeating-conic-gradient(#eef2f2 0 25%,#fff 0 50%) 50%/16px 16px}
+.admin-crop-preview{
+  margin-top:12px;
+  min-height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:#eef7f6;
+  padding:10px
+}
+.admin-crop-preview img{
+  max-width:240px;
+  max-height:240px;
+  object-fit:contain;
+  border-radius:12px;
+  background:repeating-conic-gradient(#eef2f2 0 25%,#fff 0 50%) 50%/16px 16px
+}
 .admin-event-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.admin-banner-preview{min-height:130px;border:1px dashed #c9dddd;border-radius:14px;background:#eef7f6;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px}
+.admin-banner-preview{
+  min-height:130px;
+  border:1px dashed #c9dddd;
+  border-radius:14px;
+  background:#eef7f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  padding:8px
+}
 .admin-banner-preview img{width:100%;max-height:220px;object-fit:cover;border-radius:10px}
 .admin-banner-empty{color:#718c90;font-size:12px;text-align:center;line-height:1.6}
 .admin-date-mode{display:flex;gap:14px;flex-wrap:wrap;color:#55757a;font-size:12px;font-weight:800}
 .admin-date-mode label{display:flex;align-items:center;gap:6px;cursor:pointer}
-.admin-import-preview{max-height:260px;overflow:auto;border:1px solid #deebeb;border-radius:12px;background:#fbfefe}
-.admin-import-row{display:grid;grid-template-columns:52px 1fr 145px;gap:8px;padding:8px 10px;border-bottom:1px solid #edf3f3;font-size:11px;align-items:center}
+.admin-import-preview{
+  max-height:300px;
+  overflow:auto;
+  border:1px solid #deebeb;
+  border-radius:12px;
+  background:#fbfefe
+}
+.admin-import-row{
+  display:grid;
+  grid-template-columns:48px minmax(120px,1fr) 155px 34px;
+  gap:8px;
+  padding:8px 10px;
+  border-bottom:1px solid #edf3f3;
+  font-size:11px;
+  align-items:center
+}
 .admin-import-row:last-child{border-bottom:0}
 .admin-import-row b{color:#397b83}
 .admin-import-coord{font-family:monospace;color:#58757b;white-space:nowrap}
+.admin-import-remove{
+  width:28px;height:28px;border:0;border-radius:50%;background:#fff0f0;color:#c65353;
+  font-weight:1000;cursor:pointer
+}
 .admin-import-empty{padding:18px;color:#718c90;font-size:12px;text-align:center;line-height:1.6}
-.admin-event-note{margin-top:8px;padding:9px 11px;border-radius:10px;background:#fff7df;color:#8a6a13;font-size:11px;line-height:1.6}
-@media(max-width:700px){.admin-import-row{grid-template-columns:42px 1fr}.admin-import-coord{grid-column:2;white-space:normal}}
-
-@media(max-width:900px){.admin-grid{grid-template-columns:1fr}.admin-modal{width:calc(100vw - 12px);max-height:calc(100vh - 12px);border-radius:20px}.admin-canvas-wrap{height:330px}.admin-row2{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){.admin-modal-title{font-size:19px}.admin-modal-body{padding:10px}.admin-canvas-wrap{height:300px}}
-
+.admin-event-note{
+  margin-top:8px;
+  padding:9px 11px;
+  border-radius:10px;
+  background:#fff7df;
+  color:#8a6a13;
+  font-size:11px;
+  line-height:1.6
+}
+.admin-direct-add{
+  display:grid;
+  grid-template-columns:minmax(120px,1fr) minmax(150px,1fr) auto;
+  gap:8px;
+  align-items:end
+}
+.admin-publish-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 18px;
+  background:#fff;
+  border-bottom:1px solid #dcebec;
+  flex:0 0 auto;
+}
+.admin-publish-status{
+  color:#55757a;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.5
+}
+.admin-publish-status.dirty{color:#9a731c}
+.admin-publish-btn{
+  border:0;
+  border-radius:999px;
+  padding:10px 18px;
+  background:#27b876;
+  color:#fff;
+  font-weight:1000;
+  cursor:pointer;
+  white-space:nowrap;
+  box-shadow:0 4px 12px rgba(39,184,118,.2)
+}
+.admin-publish-btn:disabled{
+  background:#b7c8c7;
+  cursor:not-allowed;
+  box-shadow:none
+}
+.admin-coordinate-hint{
+  min-height:16px;
+  margin-top:-5px;
+  margin-bottom:8px;
+  color:#6f8f94;
+  font-size:11px
+}
+.admin-staged-badge{
+  display:inline-block;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#fff4d8;
+  color:#977018;
+  font-size:10px;
+  font-weight:1000;
+}
+.admin-resize-hint{
+  margin-top:5px;
+  color:#6d8f94;
+  font-size:11px;
+}
+@media(max-width:900px){
+  .admin-grid{grid-template-columns:1fr}
+  .admin-modal{
+    width:calc(100vw - 12px);
+    height:calc(100vh - 12px);
+    min-width:0;
+    min-height:0;
+    max-height:calc(100vh - 12px);
+    border-radius:20px;
+    resize:none
+  }
+  .admin-canvas-wrap{height:330px}
+  .admin-row2{grid-template-columns:1fr 1fr}
+  .admin-column-title{top:-16px}
+}
+@media(max-width:700px){
+  .admin-modal-title{font-size:19px}
+  .admin-modal-body{padding:10px}
+  .admin-canvas-wrap{height:300px}
+  .admin-import-row{grid-template-columns:38px 1fr 30px}
+  .admin-import-coord{grid-column:2;white-space:normal}
+  .admin-import-remove{grid-column:3;grid-row:1 / span 2}
+  .admin-direct-add{grid-template-columns:1fr}
+  .admin-publish-bar{align-items:stretch;flex-direction:column}
+  .admin-publish-btn{width:100%}
+}
 /* =========================================================
    MOBILE
 ========================================================= */
@@ -2748,35 +2964,43 @@ button{
     <div class="admin-modal-head">
       <div>
         <div class="admin-modal-title">⚙️ GO 集章趣後台管理</div>
-        <div class="admin-modal-sub">手動建立活動、上傳 Banner、設定活動日期、TXT 匯入集章點座標；原有圖章截圖裁切／上傳功能保留。</div>
+        <div class="admin-modal-sub">左側編輯活動；右側手動編輯活動內的圖章。所有「暫存」都只保留在目前瀏覽器，最後再一鍵更新到 GitHub。</div>
+        <div class="admin-resize-hint">桌面版可拖曳浮動視窗右下角調整大小；截圖區高度也可拖曳調整。</div>
       </div>
+    </div>
+
+    <div class="admin-publish-bar">
+      <div id="adminPublishStatus" class="admin-publish-status">尚未載入 GitHub 資料。</div>
+      <button id="adminPublishBtn" class="admin-publish-btn" type="button" onclick="adminPublishAll()" disabled>🚀 一鍵更新到 GitHub</button>
     </div>
 
     <div class="admin-modal-body">
       <div class="admin-grid">
 
-        <!-- LEFT -->
-        <div>
+        <!-- ===================================================
+             LEFT: EVENT EDITOR
+        ==================================================== -->
+        <div class="admin-column">
+          <div class="admin-column-title">🎟️ 活動區塊編輯</div>
+
           <div class="admin-section">
             <h3>GitHub 連線</h3>
             <div class="admin-field"><label>Repository</label><input id="adminRepo" value="h23456789/Pok-Lids"></div>
             <div class="admin-field"><label>Branch</label><input id="adminBranch" value="main"></div>
             <div class="admin-field"><label>GitHub Fine-grained Token</label><input id="adminToken" type="password" placeholder="只在本次工作階段使用"></div>
-            <div class="admin-help">需要 Repository 的 Contents: Read and write 權限。Token 不會寫入 localStorage。</div>
+            <div class="admin-help">需要 Contents: Read and write 權限。Token 不會寫入 localStorage。</div>
             <div class="admin-buttons">
-              <button class="download-btn" type="button" onclick="adminLoadData()">載入目前資料</button>
+              <button class="download-btn" type="button" onclick="adminLoadData()">載入 GitHub 現有資料</button>
             </div>
             <div id="adminStatus" class="admin-status">尚未載入。</div>
           </div>
 
           <div class="admin-section">
             <h3>① 活動基本資料</h3>
-
             <div class="admin-field">
               <label>既有活動</label>
               <select id="adminEventSelect"></select>
             </div>
-
             <div class="admin-event-actions">
               <button class="admin-mini-btn" type="button" onclick="adminLoadSelectedEvent()">載入選取活動</button>
               <button class="admin-mini-btn" type="button" onclick="adminNewEvent()">＋ 新增活動</button>
@@ -2810,68 +3034,93 @@ button{
               <label><input type="radio" name="adminDateMode" value="range" checked onchange="adminUpdateDateMode()"> 日期範圍</label>
               <label><input type="radio" name="adminDateMode" value="indefinite" onchange="adminUpdateDateMode()"> 起始日至無限期</label>
             </div>
-
-            <div class="admin-event-note">
-              「無限期」會只保存起始日，endDate 留空。首頁會持續判定為進行中。
-            </div>
           </div>
 
           <div class="admin-section">
-            <h3>② TXT 匯入活動位置</h3>
+            <h3>② 活動位置／座標</h3>
+
             <div class="admin-field">
-              <label>座標 TXT</label>
-              <input id="adminPointTxtInput" type="file" accept=".txt,text/plain">
+              <label>文件匯入（TXT / CSV）</label>
+              <input id="adminPointTxtInput" type="file" accept=".txt,.csv,text/plain,text/csv">
             </div>
             <div class="admin-help">
-              支援三種格式：<br>
-              ① <b>名稱,緯度,經度</b><br>
-              ② <b>名稱 [換行] 緯度,經度</b><br>
-              ③ 只有 <b>緯度,經度</b>，系統會自動命名「圖章點 01、02…」。
+              建議格式：<b>圖章名稱,經度,緯度</b>。<br>
+              也支援「名稱一行、座標下一行」；若經緯度其中一個絕對值大於 90，會自動辨識順序。
             </div>
+
+            <div style="height:10px"></div>
+            <div class="admin-field"><label>直接新增單一點位</label></div>
+            <div class="admin-direct-add">
+              <div class="admin-field" style="margin:0">
+                <label>圖章名稱</label>
+                <input id="adminDirectPointName" placeholder="例如：台北車站">
+              </div>
+              <div class="admin-field" style="margin:0">
+                <label>座標（經度,緯度）</label>
+                <input id="adminDirectPointCoord" placeholder="121.517055,25.047675">
+              </div>
+              <button class="admin-mini-btn" type="button" onclick="adminAddDirectPoint()">＋ 加入</button>
+            </div>
+            <div id="adminDirectCoordHint" class="admin-coordinate-hint"></div>
+
             <div id="adminImportPreview" class="admin-import-preview" style="margin-top:10px">
-              <div class="admin-import-empty">尚未匯入 TXT。</div>
+              <div class="admin-import-empty">目前沒有活動點位。</div>
             </div>
+
             <div class="admin-buttons">
-              <button class="admin-mini-btn" type="button" onclick="adminClearImportedPoints()">清除匯入資料</button>
+              <button class="admin-mini-btn" type="button" onclick="adminClearImportedPoints()">清除全部點位</button>
             </div>
           </div>
 
           <div class="admin-section">
-            <h3>③ 建立／更新活動</h3>
+            <h3>③ 暫存活動變更</h3>
             <div class="admin-help">
-              新增活動時會直接寫入 <b>svgstamp_rally.json</b>。<br>
-              若正在編輯既有活動，只有在重新匯入 TXT 時才會更新該活動的集章點。
+              按下後<b>不會立即寫入 GitHub</b>，只會放入本次後台的暫存區。<br>
+              可以繼續修改其他活動或右側圖章，最後再按上方「一鍵更新到 GitHub」。
             </div>
             <div class="admin-buttons">
-              <button class="download-btn" type="button" onclick="adminSaveEvent()">儲存活動到 GitHub</button>
-              <button class="admin-mini-btn" type="button" onclick="adminLoadData()">重新載入</button>
+              <button class="download-btn" type="button" onclick="adminSaveEvent()">💾 暫存活動變更</button>
+              <button class="admin-mini-btn" type="button" onclick="adminLoadData()">放棄暫存並重新載入</button>
             </div>
             <div id="adminEventSaveStatus" class="admin-status"></div>
           </div>
         </div>
 
-        <!-- RIGHT -->
-        <div>
+        <!-- ===================================================
+             RIGHT: STAMP MANUAL EDITOR
+        ==================================================== -->
+        <div class="admin-column">
+          <div class="admin-column-title">🖼️ 活動圖章手動編輯</div>
+
           <div class="admin-section">
-            <h3>④ 選擇圖章／地點</h3>
+            <h3>④ 選擇活動／圖章</h3>
             <div class="admin-field"><label>活動</label><select id="adminStampEventSelect"></select></div>
             <div class="admin-field"><label>圖章／地點</label><select id="adminPointSelect"></select></div>
             <div id="adminPointInfo" class="admin-point-info">請先載入資料。</div>
           </div>
 
           <div class="admin-section">
-            <h3>⑤ 手動座標修正</h3>
-            <div class="admin-row2">
-              <div class="admin-field"><label>緯度 Latitude</label><input id="adminLat" inputmode="decimal"></div>
-              <div class="admin-field"><label>經度 Longitude</label><input id="adminLng" inputmode="decimal"></div>
+            <h3>⑤ 圖章名稱與座標</h3>
+            <div class="admin-field">
+              <label>圖章名稱</label>
+              <input id="adminStampNameInput" placeholder="可修改圖章顯示名稱">
             </div>
-            <div class="admin-field"><label>座標來源說明</label><input id="adminCoordSource" placeholder="例如：人工確認地圖座標"></div>
-            <button class="admin-mini-btn" type="button" onclick="adminClearCoord()">清除手動座標</button>
+            <div class="admin-field">
+              <label>座標（經度,緯度）</label>
+              <input id="adminCoordPair" inputmode="decimal" placeholder="121.517055,25.047675">
+            </div>
+            <div id="adminCoordPairHint" class="admin-coordinate-hint">輸入格式：經度,緯度；若順序明顯相反會自動交換。</div>
+            <div class="admin-field">
+              <label>座標來源說明</label>
+              <input id="adminCoordSource" placeholder="例如：人工確認 Google Maps">
+            </div>
+            <button class="admin-mini-btn" type="button" onclick="adminClearCoord()">清空座標欄位</button>
           </div>
 
           <div class="admin-section">
             <h3>⑥ 遊戲截圖 → 圖章</h3>
             <div class="admin-field"><label>上傳遊戲截圖</label><input id="adminImageInput" type="file" accept="image/*"></div>
+
             <div class="admin-crop-toolbar">
               <button class="admin-mini-btn" type="button" onclick="adminZoom(-0.2)">－</button>
               <span id="adminZoomLabel">100%</span>
@@ -2887,7 +3136,9 @@ button{
               <canvas id="adminCanvas" width="900" height="600"></canvas>
             </div>
 
-            <div class="admin-help">原有操作保留：滑鼠／觸控拖曳框選圖章；滾輪或 ± 縮放；裁切後可直接上傳至 GitHub。</div>
+            <div class="admin-help">
+              裁切框可自由調整：<b>拖曳框內＝移動</b>；<b>拖曳四角／四邊控制點＝縮放</b>；框外重新拖曳＝建立新裁切框。
+            </div>
 
             <div class="admin-buttons">
               <button class="admin-mini-btn" type="button" onclick="adminCropPreview()">裁切預覽</button>
@@ -2897,12 +3148,21 @@ button{
           </div>
 
           <div class="admin-section">
-            <h3>⑦ 儲存圖章人工修正</h3>
-            <div class="admin-field"><label>已有圖片網址（可不填）</label><input id="adminImageUrl" placeholder="https://... 或 assets/stamps/...png"></div>
-            <div class="admin-field"><label>圖片來源說明</label><input id="adminImageSource" placeholder="例如：遊戲截圖人工裁切"></div>
+            <h3>⑦ 圖章圖片與暫存</h3>
+            <div class="admin-field">
+              <label>已有圖片網址（可不填）</label>
+              <input id="adminImageUrl" placeholder="https://... 或 assets/stamps/...png">
+            </div>
+            <div class="admin-field">
+              <label>圖片來源說明</label>
+              <input id="adminImageSource" placeholder="例如：遊戲截圖人工裁切">
+            </div>
+
+            <div class="admin-help">
+              裁切後按「暫存圖章變更」只會暫存 PNG 與欄位，不會立即上傳 GitHub。
+            </div>
             <div class="admin-buttons">
-              <button class="download-btn" type="button" onclick="adminSaveOverride()">儲存圖章修正到 GitHub</button>
-              <button class="admin-mini-btn" type="button" onclick="adminLoadData()">重新載入</button>
+              <button class="download-btn" type="button" onclick="adminSaveOverride()">💾 暫存圖章變更</button>
             </div>
             <div id="adminSaveStatus" class="admin-status"></div>
           </div>
@@ -2915,27 +3175,38 @@ button{
 <script>
 
 /* =========================================================
-   ADMIN FLOATING MANAGEMENT
+   ADMIN FLOATING MANAGEMENT — MANUAL / STAGED MODE
 ========================================================= */
+
 const adminState={
   events:[],
   list:[],
-  overrides:{items:[]},
+  overrides:{version:"1.0",items:[]},
   rallyJson:{events:[],list:[]},
-  rallySha:"",
+
   editingEventId:"",
   bannerFile:null,
   bannerExisting:"",
   importedPoints:[],
-  importTouched:false,
+
+  // All changes remain in-browser until "Publish all".
+  pendingFiles:new Map(),
+  dirtyReasons:new Set(),
+
   cropBlob:null,
   cropDataUrl:"",
   img:null,
   fitScale:1,
   zoom:1,
-  drawStart:null,
-  rect:null
+  rect:null,
+  dragMode:null,
+  dragOrigin:null,
+  dragStartRect:null
 };
+
+function adminDeepClone(value){
+  return JSON.parse(JSON.stringify(value));
+}
 
 function adminOpenOverlay(){
   document.getElementById("adminOverlay").classList.add("show");
@@ -2943,61 +3214,148 @@ function adminOpenOverlay(){
 }
 function openAdminPanel(){
   adminOpenOverlay();
-  if(!adminState.list.length) adminLoadData();
+  adminUpdatePublishBar();
 }
 function closeAdminPanel(event){
   if(event)event.stopPropagation();
   document.getElementById("adminOverlay").classList.remove("show");
-  if(!document.getElementById("modalOverlay").classList.contains("show")&&!document.getElementById("collectionPanel").classList.contains("show")&&!document.getElementById("prefecturePanel").classList.contains("show")) document.body.classList.remove("no-scroll");
+  if(!document.getElementById("modalOverlay").classList.contains("show")
+     &&!document.getElementById("collectionPanel").classList.contains("show")
+     &&!document.getElementById("prefecturePanel").classList.contains("show")){
+    document.body.classList.remove("no-scroll");
+  }
 }
-function adminOverlayClick(event){if(event.target===document.getElementById("adminOverlay"))closeAdminPanel();}
-function adminHeaders(){return {"Accept":"application/vnd.github+json","Authorization":"Bearer "+document.getElementById("adminToken").value.trim(),"X-GitHub-Api-Version":"2022-11-28","Content-Type":"application/json"};}
-async function adminGithubGet(path){
-  const repo=document.getElementById("adminRepo").value.trim();
-  const branch=document.getElementById("adminBranch").value.trim();
-  const r=await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`,{headers:adminHeaders()});
-  if(!r.ok)throw new Error(`GitHub ${r.status}: ${await r.text()}`);
-  return r.json();
-}
-function adminB64ToUtf8(b64){return decodeURIComponent(escape(atob(b64)));}
-function adminUtf8ToB64(text){return btoa(unescape(encodeURIComponent(text)));}
-async function adminGithubPut(path,content,message,sha){
-  const repo=document.getElementById("adminRepo").value.trim();
-  const branch=document.getElementById("adminBranch").value.trim();
-  const body={message,content,branch};
-  if(sha)body.sha=sha;
-  const r=await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{method:"PUT",headers:adminHeaders(),body:JSON.stringify(body)});
-  if(!r.ok)throw new Error(`GitHub ${r.status}: ${await r.text()}`);
-  return r.json();
-}
-function adminSetStatus(msg,ok=false){const e=document.getElementById("adminStatus");e.textContent=msg;e.style.color=ok?"#239f62":"#55757a";}
-function adminSetSaveStatus(msg,ok=false){const e=document.getElementById("adminSaveStatus");e.textContent=msg;e.style.color=ok?"#239f62":"#a64f4f";}
-function adminEventName(e){return e?.eventZh||e?.eventNameZh||e?.event||e?.eventName||e?.id||"GO 集章趣";}
-function adminPointName(p){return p?.nameZh||p?.venueZh||p?.name||p?.venue||p?.cityZh||p?.city||p?.id||"集章點";}
-function adminNormalize(v){return String(v??"").toLowerCase().replace(/\s+/g,"").replace(/[‐‑–—ー・.]/g,"");}
-function adminFindOverride(p){
-  return (adminState.overrides.items||[]).find(o=>String(o.id||"")===String(p.id)) || (adminState.overrides.items||[]).find(o=>String(o.eventId||"")===String(p.eventId||"") && [o.venue,o.name,o.venueZh,o.nameZh,...(Array.isArray(o.venueAliases)?o.venueAliases:[])].filter(Boolean).map(adminNormalize).includes(adminNormalize(adminPointName(p)))) || null;
+function adminOverlayClick(event){
+  if(event.target===document.getElementById("adminOverlay"))closeAdminPanel();
 }
 
-function adminEventIdOf(e){return String(e?.eventId||e?.id||e?.event||"");}
-function adminSelectedDateMode(){return document.querySelector('input[name="adminDateMode"]:checked')?.value||"range";}
-function adminUpdateDateMode(){
-  const indefinite=adminSelectedDateMode()==="indefinite";
-  const end=document.getElementById("adminEndDate");
-  end.disabled=indefinite;
-  if(indefinite)end.value="";
+function adminHeaders(){
+  return {
+    "Accept":"application/vnd.github+json",
+    "Authorization":"Bearer "+document.getElementById("adminToken").value.trim(),
+    "X-GitHub-Api-Version":"2022-11-28",
+    "Content-Type":"application/json"
+  };
+}
+
+function adminRepoInfo(){
+  const repo=document.getElementById("adminRepo").value.trim();
+  const branch=document.getElementById("adminBranch").value.trim();
+  if(!repo)throw new Error("請輸入 GitHub Repository。");
+  if(!branch)throw new Error("請輸入 GitHub Branch。");
+  if(!document.getElementById("adminToken").value.trim())throw new Error("請先輸入 GitHub Token。");
+  return {repo,branch};
+}
+
+async function adminGithubGet(path){
+  const {repo,branch}=adminRepoInfo();
+  const r=await fetch(
+    `https://api.github.com/repos/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`,
+    {headers:adminHeaders()}
+  );
+  if(!r.ok)throw new Error(`GitHub ${r.status}: ${await r.text()}`);
+  return r.json();
+}
+
+async function adminGithubApi(path,{method="GET",body=null}={}){
+  const {repo}=adminRepoInfo();
+  const r=await fetch(`https://api.github.com/repos/${repo}${path}`,{
+    method,
+    headers:adminHeaders(),
+    body:body===null?undefined:JSON.stringify(body)
+  });
+  if(!r.ok)throw new Error(`GitHub ${r.status}: ${await r.text()}`);
+  if(r.status===204)return null;
+  return r.json();
+}
+
+function adminB64ToUtf8(b64){
+  const bin=atob(String(b64||"").replace(/\n/g,""));
+  const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+function adminUtf8ToB64(value){
+  const bytes=new TextEncoder().encode(String(value??""));
+  let bin="";
+  for(let i=0;i<bytes.length;i+=0x8000){
+    bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
+  }
+  return btoa(bin);
+}
+async function adminBlobToB64(blob){
+  const bytes=new Uint8Array(await blob.arrayBuffer());
+  let bin="";
+  for(let i=0;i<bytes.length;i+=0x8000){
+    bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
+  }
+  return btoa(bin);
+}
+
+function adminSetStatus(msg,ok=false){
+  const e=document.getElementById("adminStatus");
+  e.textContent=msg;
+  e.style.color=ok?"#239f62":"#55757a";
+}
+function adminSetSaveStatus(msg,ok=false){
+  const e=document.getElementById("adminSaveStatus");
+  e.textContent=msg;
+  e.style.color=ok?"#239f62":"#a64f4f";
 }
 function adminSetEventSaveStatus(msg,ok=false){
   const e=document.getElementById("adminEventSaveStatus");
   e.textContent=msg;
   e.style.color=ok?"#239f62":"#a64f4f";
 }
+
+function adminMarkDirty(reason){
+  if(reason)adminState.dirtyReasons.add(reason);
+  adminUpdatePublishBar();
+}
+function adminUpdatePublishBar(){
+  const el=document.getElementById("adminPublishStatus");
+  const btn=document.getElementById("adminPublishBtn");
+  if(!el||!btn)return;
+
+  const dirty=adminState.dirtyReasons.size;
+  const files=adminState.pendingFiles.size;
+
+  if(!adminState.events.length && !adminState.list.length && !dirty){
+    el.className="admin-publish-status";
+    el.textContent="尚未載入 GitHub 資料。";
+    btn.disabled=true;
+    return;
+  }
+
+  if(!dirty){
+    el.className="admin-publish-status";
+    el.textContent="目前沒有暫存變更。";
+    btn.disabled=true;
+    return;
+  }
+
+  el.className="admin-publish-status dirty";
+  el.innerHTML=`<span class="admin-staged-badge">暫存中</span> ${dirty} 類變更${files?`，含 ${files} 個待上傳圖片檔`:""}。尚未寫入 GitHub。`;
+  btn.disabled=false;
+}
+
+function adminEventName(e){
+  return e?.eventZh||e?.eventNameZh||e?.event||e?.eventName||e?.id||"GO 集章趣";
+}
+function adminPointName(p){
+  return p?.nameZh||p?.venueZh||p?.name||p?.venue||p?.cityZh||p?.city||p?.id||"集章點";
+}
+function adminNormalize(v){
+  return String(v??"").toLowerCase().replace(/\s+/g,"").replace(/[‐‑–—ー・.]/g,"");
+}
+function adminEventIdOf(e){
+  return String(e?.eventId||e?.id||e?.event||"");
+}
 function adminSafeId(value){
   return String(value??"")
     .normalize("NFKD")
     .replace(/[^\w\-]+/g,"-")
     .replace(/^-+|-+$/g,"")
-    .slice(0,42) || "STAMP";
+    .slice(0,48) || "STAMP";
 }
 function adminMakeEventId(name){
   const d=new Date();
@@ -3005,6 +3363,17 @@ function adminMakeEventId(name){
   const stamp=`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
   return `MANUAL-STAMP-${stamp}-${adminSafeId(name).toUpperCase()}`;
 }
+
+function adminSelectedDateMode(){
+  return document.querySelector('input[name="adminDateMode"]:checked')?.value||"range";
+}
+function adminUpdateDateMode(){
+  const indefinite=adminSelectedDateMode()==="indefinite";
+  const end=document.getElementById("adminEndDate");
+  end.disabled=indefinite;
+  if(indefinite)end.value="";
+}
+
 function adminBannerPreview(src){
   const box=document.getElementById("adminBannerPreview");
   if(src){
@@ -3013,38 +3382,217 @@ function adminBannerPreview(src){
     box.innerHTML=`<div class="admin-banner-empty">尚未選擇 Banner</div>`;
   }
 }
+
+function adminFindOverride(p){
+  return (adminState.overrides.items||[]).find(o=>String(o.id||"")===String(p.id))
+    || (adminState.overrides.items||[]).find(o=>
+      String(o.eventId||"")===String(p.eventId||"")
+      && [o.venue,o.name,o.venueZh,o.nameZh,...(Array.isArray(o.venueAliases)?o.venueAliases:[])]
+        .filter(Boolean)
+        .map(adminNormalize)
+        .includes(adminNormalize(adminPointName(p)))
+    )
+    || null;
+}
+
+/* ---------------------------------------------------------
+   Coordinate parser
+   UI input is expected as Longitude,Latitude.
+   If one value is > 90, automatically infer orientation.
+--------------------------------------------------------- */
+function adminParseLngLat(value){
+  const parts=String(value??"")
+    .trim()
+    .replace(/[，；;]/g,",")
+    .split(/[,\s]+/)
+    .filter(Boolean);
+
+  if(parts.length!==2)return null;
+
+  const a=Number(parts[0]);
+  const b=Number(parts[1]);
+  if(!Number.isFinite(a)||!Number.isFinite(b))return null;
+
+  let lng=a,lat=b,swapped=false;
+
+  // Clearly entered as latitude,longitude => swap.
+  if(Math.abs(a)<=90 && Math.abs(b)>90 && Math.abs(b)<=180){
+    lat=a;
+    lng=b;
+    swapped=true;
+  }
+
+  if(Math.abs(lat)>90||Math.abs(lng)>180)return null;
+  return {lat,lng,swapped};
+}
+function adminFormatLngLat(lat,lng){
+  if(!Number.isFinite(Number(lat))||!Number.isFinite(Number(lng)))return "";
+  return `${Number(lng)},${Number(lat)}`;
+}
+
+function adminUpdateCoordHint(inputId,hintId){
+  const raw=document.getElementById(inputId)?.value.trim()||"";
+  const hint=document.getElementById(hintId);
+  if(!hint)return;
+  if(!raw){
+    hint.textContent="輸入格式：經度,緯度；若順序明顯相反會自動交換。";
+    return;
+  }
+  const p=adminParseLngLat(raw);
+  if(!p){
+    hint.textContent="⚠️ 無法辨識座標格式。";
+    return;
+  }
+  hint.textContent=`✓ 辨識結果：經度 ${p.lng} ／ 緯度 ${p.lat}${p.swapped?"（已自動交換順序）":""}`;
+}
+
+/* ---------------------------------------------------------
+   Activity point import / direct input
+--------------------------------------------------------- */
+function adminParsePointDocument(raw){
+  const lines=String(raw??"")
+    .replace(/^\uFEFF/,"")
+    .split(/\r?\n/)
+    .map(v=>v.trim())
+    .filter(v=>v && !v.startsWith("#"));
+
+  const points=[];
+  let pendingName="";
+
+  for(const line of lines){
+    // name,lng,lat OR name,lat,lng (auto when obvious)
+    const chunks=line.split(/[\t,，]/).map(v=>v.trim());
+    if(chunks.length>=3){
+      const name=chunks.slice(0,-2).join(" ").trim();
+      const pair=adminParseLngLat(`${chunks[chunks.length-2]},${chunks[chunks.length-1]}`);
+      if(pair){
+        points.push({
+          name:name||`圖章點 ${String(points.length+1).padStart(2,"0")}`,
+          lat:pair.lat,
+          lng:pair.lng
+        });
+        pendingName="";
+        continue;
+      }
+    }
+
+    // coordinate-only line
+    const pair=adminParseLngLat(line);
+    if(pair){
+      points.push({
+        name:pendingName||`圖章點 ${String(points.length+1).padStart(2,"0")}`,
+        lat:pair.lat,
+        lng:pair.lng
+      });
+      pendingName="";
+      continue;
+    }
+
+    pendingName=line;
+  }
+
+  return points;
+}
+
+function adminRenderImportPreview(message=""){
+  const box=document.getElementById("adminImportPreview");
+  const pts=adminState.importedPoints||[];
+
+  if(!pts.length){
+    box.innerHTML=`<div class="admin-import-empty">${escapeHtml(message||"目前沒有活動點位。")}</div>`;
+    return;
+  }
+
+  box.innerHTML=pts.map((p,i)=>`
+    <div class="admin-import-row">
+      <b>#${String(i+1).padStart(2,"0")}</b>
+      <span>${escapeHtml(p.name||`圖章點 ${i+1}`)}</span>
+      <span class="admin-import-coord">${escapeHtml(adminFormatLngLat(p.lat,p.lng))}</span>
+      <button class="admin-import-remove" type="button" onclick="adminRemoveImportedPoint(${i})" title="刪除">×</button>
+    </div>
+  `).join("");
+}
+
+function adminRemoveImportedPoint(index){
+  adminState.importedPoints.splice(index,1);
+  adminRenderImportPreview();
+  adminSetEventSaveStatus("點位清單已修改，請按「暫存活動變更」。",true);
+}
+function adminClearImportedPoints(){
+  adminState.importedPoints=[];
+  const f=document.getElementById("adminPointTxtInput");
+  if(f)f.value="";
+  adminRenderImportPreview("已清除全部活動點位。");
+  adminSetEventSaveStatus("點位清單已清空，請按「暫存活動變更」。",true);
+}
+function adminAddDirectPoint(){
+  const name=document.getElementById("adminDirectPointName").value.trim();
+  const raw=document.getElementById("adminDirectPointCoord").value.trim();
+  const p=adminParseLngLat(raw);
+
+  if(!p){
+    adminSetEventSaveStatus("直接新增失敗：座標請輸入「經度,緯度」。",false);
+    return;
+  }
+
+  adminState.importedPoints.push({
+    name:name||`圖章點 ${String(adminState.importedPoints.length+1).padStart(2,"0")}`,
+    lat:p.lat,
+    lng:p.lng
+  });
+
+  document.getElementById("adminDirectPointName").value="";
+  document.getElementById("adminDirectPointCoord").value="";
+  adminUpdateCoordHint("adminDirectPointCoord","adminDirectCoordHint");
+  adminRenderImportPreview();
+  adminSetEventSaveStatus(`已加入點位，目前共 ${adminState.importedPoints.length} 點；尚未暫存活動。`,true);
+}
+
+/* ---------------------------------------------------------
+   Activity editor
+--------------------------------------------------------- */
 function adminNewEvent(){
   adminState.editingEventId="";
   adminState.bannerFile=null;
   adminState.bannerExisting="";
   adminState.importedPoints=[];
-  adminState.importTouched=false;
 
   document.getElementById("adminEventNameInput").value="";
   document.getElementById("adminBannerInput").value="";
   document.getElementById("adminStartDate").value="";
   document.getElementById("adminEndDate").value="";
+
   const radio=document.querySelector('input[name="adminDateMode"][value="range"]');
   if(radio)radio.checked=true;
   adminUpdateDateMode();
   adminBannerPreview("");
   adminRenderImportPreview();
-  adminSetEventSaveStatus("新增模式：請輸入活動資料。",true);
+  adminSetEventSaveStatus("新增模式：輸入活動資料後按「暫存活動變更」。",true);
 }
+
 function adminLoadSelectedEvent(){
   const id=document.getElementById("adminEventSelect").value;
   const e=adminState.events.find(x=>adminEventIdOf(x)===String(id));
+
   if(!e){
     adminNewEvent();
-    adminSetEventSaveStatus("找不到選取活動。",false);
     return;
   }
 
   adminState.editingEventId=adminEventIdOf(e);
   adminState.bannerFile=null;
   adminState.bannerExisting=e.activityImage||e.eventImage||e.image||"";
-  adminState.importedPoints=[];
-  adminState.importTouched=false;
+
+  const points=adminState.list.filter(x=>String(x.eventId||"")===adminState.editingEventId);
+  adminState.importedPoints=points.map(p=>{
+    const coords=Array.isArray(p.coords)&&p.coords.length>=2?p.coords:[p.lat,p.lng];
+    return {
+      id:p.id,
+      name:adminPointName(p),
+      lat:Number(coords?.[0]),
+      lng:Number(coords?.[1])
+    };
+  }).filter(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lng));
 
   document.getElementById("adminEventNameInput").value=adminEventName(e);
   document.getElementById("adminBannerInput").value="";
@@ -3056,109 +3604,13 @@ function adminLoadSelectedEvent(){
   if(radio)radio.checked=true;
   adminUpdateDateMode();
   adminBannerPreview(adminState.bannerExisting);
-  adminRenderImportPreview(
-    `目前活動已有 ${adminState.list.filter(x=>String(x.eventId)===adminState.editingEventId).length} 個圖章點。未重新匯入 TXT 時，儲存活動不會更動既有圖章點。`
-  );
-  adminSetEventSaveStatus(`編輯模式：${adminEventName(e)}`,true);
+  adminRenderImportPreview();
+
+  adminSetEventSaveStatus(`正在編輯：${adminEventName(e)}（${points.length} 個圖章點）`,true);
 }
-function adminParseCoordPair(value){
-  const m=String(value??"").trim().match(/^(-?\d+(?:\.\d+)?)\s*[,，\t ]\s*(-?\d+(?:\.\d+)?)$/);
-  if(!m)return null;
-  const lat=Number(m[1]),lng=Number(m[2]);
-  if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;
-  return [lat,lng];
-}
-function adminParsePointTxt(raw){
-  const lines=String(raw??"")
-    .replace(/^\uFEFF/,"")
-    .split(/\r?\n/)
-    .map(s=>s.trim())
-    .filter(s=>s && !s.startsWith("#"));
 
-  const points=[];
-  let pendingName="";
-
-  for(let i=0;i<lines.length;i++){
-    const line=lines[i];
-
-    // name,lat,lng / name<TAB>lat<TAB>lng
-    const parts=line.split(/[\t,，]/).map(s=>s.trim()).filter((s,idx,arr)=>!(s===""&&idx===arr.length-1));
-    if(parts.length>=3){
-      const lat=Number(parts[parts.length-2]);
-      const lng=Number(parts[parts.length-1]);
-      if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180){
-        const name=parts.slice(0,-2).join(" ").trim() || `圖章點 ${String(points.length+1).padStart(2,"0")}`;
-        points.push({name,lat,lng});
-        pendingName="";
-        continue;
-      }
-    }
-
-    // coordinate-only line, possibly paired with preceding name
-    const pair=adminParseCoordPair(line);
-    if(pair){
-      points.push({
-        name:pendingName || `圖章點 ${String(points.length+1).padStart(2,"0")}`,
-        lat:pair[0],
-        lng:pair[1]
-      });
-      pendingName="";
-      continue;
-    }
-
-    // otherwise treat as point name; next coordinate line will pair with it.
-    pendingName=line;
-  }
-
-  return points;
-}
-function adminRenderImportPreview(message=""){
-  const box=document.getElementById("adminImportPreview");
-  const pts=adminState.importedPoints||[];
-
-  if(!pts.length){
-    box.innerHTML=`<div class="admin-import-empty">${escapeHtml(message||"尚未匯入 TXT。")}</div>`;
-    return;
-  }
-
-  box.innerHTML=pts.map((p,i)=>`
-    <div class="admin-import-row">
-      <b>#${String(i+1).padStart(2,"0")}</b>
-      <span>${escapeHtml(p.name)}</span>
-      <span class="admin-import-coord">${p.lat}, ${p.lng}</span>
-    </div>
-  `).join("");
-}
-function adminClearImportedPoints(){
-  adminState.importedPoints=[];
-  adminState.importTouched=true;
-  document.getElementById("adminPointTxtInput").value="";
-  adminRenderImportPreview("已清除匯入資料。");
-}
-async function adminUploadBinary(path,file,message){
-  const buf=await file.arrayBuffer();
-  const bytes=new Uint8Array(buf);
-  let bin="";
-  for(let i=0;i<bytes.length;i+=0x8000){
-    bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
-  }
-  let sha=null;
-  try{const old=await adminGithubGet(path);sha=old.sha;}catch{}
-  await adminGithubPut(path,btoa(bin),message,sha);
-  return path;
-}
-async function adminUploadBanner(eventId){
-  if(!adminState.bannerFile)return adminState.bannerExisting||"";
-
-  const file=adminState.bannerFile;
-  const type=String(file.type||"").toLowerCase();
-  const ext=type.includes("png")?"png":type.includes("webp")?"webp":"jpg";
-  const safe=adminSafeId(eventId);
-  const path=`assets/stamp-events/${safe}-banner.${ext}`;
-  return adminUploadBinary(path,file,"chore: update GO stamp event banner");
-}
 function adminBuildEventPoint(eventId,eventName,startDate,endDate,p,index,oldPoint=null){
-  const pointId=oldPoint?.id || `${eventId}-P${String(index+1).padStart(3,"0")}`;
+  const pointId=p.id||oldPoint?.id||`${eventId}-P${String(index+1).padStart(3,"0")}`;
   return {
     ...(oldPoint||{}),
     id:pointId,
@@ -3174,9 +3626,9 @@ function adminBuildEventPoint(eventId,eventName,startDate,endDate,p,index,oldPoi
     venueZh:p.name,
     name:p.name,
     nameZh:p.name,
-    coords:[p.lat,p.lng],
-    lat:p.lat,
-    lng:p.lng,
+    coords:[Number(p.lat),Number(p.lng)],
+    lat:Number(p.lat),
+    lng:Number(p.lng),
     startDate,
     endDate,
     source:"Manual admin",
@@ -3184,15 +3636,29 @@ function adminBuildEventPoint(eventId,eventName,startDate,endDate,p,index,oldPoi
     official:false
   };
 }
-function adminFindOldPointForImport(oldPoints,p,index){
+
+function adminFindOldPoint(oldPoints,p,index){
+  if(p.id){
+    const byId=oldPoints.find(x=>String(x.id)===String(p.id));
+    if(byId)return byId;
+  }
   const byName=oldPoints.find(x=>adminNormalize(adminPointName(x))===adminNormalize(p.name));
-  if(byName)return byName;
-  return oldPoints[index]||null;
+  return byName||oldPoints[index]||null;
 }
+
+function adminStageBanner(eventId){
+  if(!adminState.bannerFile)return adminState.bannerExisting||"";
+
+  const file=adminState.bannerFile;
+  const type=String(file.type||"").toLowerCase();
+  const ext=type.includes("png")?"png":type.includes("webp")?"webp":"jpg";
+  const path=`assets/stamp-events/${adminSafeId(eventId)}-banner.${ext}`;
+  adminState.pendingFiles.set(path,file);
+  return path;
+}
+
 async function adminSaveEvent(){
   try{
-    if(!document.getElementById("adminToken").value.trim())throw new Error("請先輸入 GitHub Token，並按「載入目前資料」。");
-
     const name=document.getElementById("adminEventNameInput").value.trim();
     const startDate=document.getElementById("adminStartDate").value.trim();
     const mode=adminSelectedDateMode();
@@ -3206,34 +3672,20 @@ async function adminSaveEvent(){
     const isNew=!adminState.editingEventId;
     const eventId=isNew?adminMakeEventId(name):adminState.editingEventId;
 
-    if(isNew && !adminState.bannerFile)throw new Error("新增活動請上傳活動 Banner。");
-    if(isNew && !adminState.importedPoints.length)throw new Error("新增活動請先匯入座標 TXT。");
+    if(isNew&&!adminState.bannerFile)throw new Error("新增活動請上傳 Banner。");
+    if(isNew&&!adminState.importedPoints.length)throw new Error("新增活動至少需要 1 個點位。");
 
-    adminSetEventSaveStatus("正在儲存活動資料……",true);
-
-    const banner=await adminUploadBanner(eventId);
+    const banner=adminStageBanner(eventId);
     if(!banner)throw new Error("活動 Banner 不可空白。");
 
     const oldEvent=adminState.events.find(x=>adminEventIdOf(x)===eventId)||{};
     const oldPoints=adminState.list.filter(x=>String(x.eventId||"")===eventId);
 
-    let points=oldPoints;
-    if(adminState.importTouched){
-      points=(adminState.importedPoints||[]).map((p,i)=>
-        adminBuildEventPoint(eventId,name,startDate,endDate,p,i,adminFindOldPointForImport(oldPoints,p,i))
-      );
-    }else{
-      // Editing event without importing TXT: preserve existing points, but sync name/date.
-      points=oldPoints.map(p=>({
-        ...p,
-        event:name,
-        eventZh:name,
-        eventName:name,
-        eventNameZh:name,
-        startDate,
-        endDate
-      }));
-    }
+    const points=adminState.importedPoints.map((p,i)=>
+      adminBuildEventPoint(
+        eventId,name,startDate,endDate,p,i,adminFindOldPoint(oldPoints,p,i)
+      )
+    );
 
     const event={
       ...oldEvent,
@@ -3257,12 +3709,8 @@ async function adminSaveEvent(){
       official:false
     };
 
-    const root=adminState.rallyJson && typeof adminState.rallyJson==="object"
-      ? JSON.parse(JSON.stringify(adminState.rallyJson))
-      : {};
-
-    let events=Array.isArray(root.events)?root.events:[];
-    let list=Array.isArray(root.list)?root.list:[];
+    let events=Array.isArray(adminState.rallyJson.events)?adminState.rallyJson.events:[];
+    let list=Array.isArray(adminState.rallyJson.list)?adminState.rallyJson.list:[];
 
     events=events.filter(e=>adminEventIdOf(e)!==eventId);
     events.push(event);
@@ -3270,110 +3718,99 @@ async function adminSaveEvent(){
     list=list.filter(p=>String(p.eventId||"")!==eventId);
     list.push(...points);
 
-    root.version=root.version||"manual-1.0";
-    root.updated=new Date().toISOString();
-    root.source="manual-admin";
-    root.sourceMode="manual GitHub admin";
-    root.rule="GO Stamp Rally activities are created and maintained manually from the website admin panel.";
-    root.events=events;
-    root.list=list;
+    adminState.rallyJson.events=events;
+    adminState.rallyJson.list=list;
+    adminState.rallyJson.updated=new Date().toISOString();
+    adminState.rallyJson.source="manual-admin";
+    adminState.rallyJson.sourceMode="manual staged GitHub admin";
 
-    let sha=adminState.rallySha||null;
-    if(!sha){
-      try{const old=await adminGithubGet("svgstamp_rally.json");sha=old.sha;}catch{}
-    }
-
-    await adminGithubPut(
-      "svgstamp_rally.json",
-      adminUtf8ToB64(JSON.stringify(root,null,2)+"\n"),
-      isNew?"feat: add manual GO stamp event":"chore: update manual GO stamp event",
-      sha
-    );
-
-    adminState.rallyJson=root;
+    adminState.events=events;
+    adminState.list=list;
     adminState.editingEventId=eventId;
     adminState.bannerExisting=banner;
     adminState.bannerFile=null;
-    adminState.importTouched=false;
+    document.getElementById("adminBannerInput").value="";
 
-    // Refresh public runtime data immediately from the just-saved root.
-    stampEventsMeta=events;
-    dataSets.stamp=list;
-    buildGroups("stamp");
-    applyRuntimeManualOverrides();
-    updateOverall();
-    renderRegions();
-
-    await adminLoadData();
-    const eSelect=document.getElementById("adminEventSelect");
-    if([...eSelect.options].some(o=>o.value===eventId))eSelect.value=eventId;
-    adminLoadSelectedEvent();
-
-    const sSelect=document.getElementById("adminStampEventSelect");
-    if([...sSelect.options].some(o=>o.value===eventId)){
-      sSelect.value=eventId;
-      adminPopulatePoints();
-    }
+    adminPopulateEvents(eventId);
+    adminMarkDirty("活動資料");
 
     adminSetEventSaveStatus(
-      `已儲存活動。\n活動：${name}\n日期：${startDate} → ${endDate||"無限期"}\n圖章點：${points.length}\nBanner：${banner}`,
+      `✓ 已暫存活動變更，尚未更新 GitHub。\n活動：${name}\n日期：${startDate} → ${endDate||"無限期"}\n圖章點：${points.length}`,
       true
     );
-  }catch(e){
-    adminSetEventSaveStatus(e.message,false);
+  }catch(error){
+    adminSetEventSaveStatus(error.message,false);
   }
 }
 
-async function adminLoadData(){
+/* ---------------------------------------------------------
+   Load existing GitHub JSON into the draft workspace
+--------------------------------------------------------- */
+async function adminLoadData(force=false){
   try{
-    if(!document.getElementById("adminToken").value.trim())throw new Error("請先輸入 GitHub Token。");
+    if(adminState.dirtyReasons.size&&!force){
+      if(!confirm("目前有尚未更新到 GitHub 的暫存變更。確定要放棄暫存並重新載入嗎？"))return;
+    }
+
+    adminSetStatus("正在從 GitHub 載入資料……",true);
 
     const [data,ov]=await Promise.all([
       adminGithubGet("svgstamp_rally.json"),
       adminGithubGet("svgstamp_manual_overrides.json").catch(()=>null)
     ]);
 
-    const json=JSON.parse(adminB64ToUtf8(data.content.replace(/\n/g,"")));
-    adminState.rallyJson=json;
-    adminState.rallySha=data.sha||"";
-    adminState.events=Array.isArray(json.events)?json.events:[];
-    adminState.list=Array.isArray(json.list)?json.list:[];
-    adminState.overrides=ov?JSON.parse(adminB64ToUtf8(ov.content.replace(/\n/g,""))):{version:"1.0",items:[]};
+    const rally=JSON.parse(adminB64ToUtf8(data.content));
+    const overrides=ov
+      ? JSON.parse(adminB64ToUtf8(ov.content))
+      : {version:"1.0",items:[]};
 
-    if(!Array.isArray(adminState.overrides.items))adminState.overrides.items=[];
+    if(!Array.isArray(rally.events))rally.events=[];
+    if(!Array.isArray(rally.list))rally.list=[];
+    if(!Array.isArray(overrides.items))overrides.items=[];
+
+    adminState.rallyJson=adminDeepClone(rally);
+    adminState.overrides=adminDeepClone(overrides);
+    adminState.events=adminState.rallyJson.events;
+    adminState.list=adminState.rallyJson.list;
+
+    adminState.pendingFiles.clear();
+    adminState.dirtyReasons.clear();
+    adminState.editingEventId="";
+    adminState.bannerFile=null;
+    adminState.bannerExisting="";
+    adminState.importedPoints=[];
 
     adminPopulateEvents();
-
-    if(adminState.editingEventId){
-      const main=document.getElementById("adminEventSelect");
-      if([...main.options].some(o=>o.value===adminState.editingEventId))main.value=adminState.editingEventId;
-      const stamp=document.getElementById("adminStampEventSelect");
-      if([...stamp.options].some(o=>o.value===adminState.editingEventId))stamp.value=adminState.editingEventId;
-      adminPopulatePoints();
+    if(adminState.events.length){
+      document.getElementById("adminEventSelect").selectedIndex=0;
+      adminLoadSelectedEvent();
+    }else{
+      adminNewEvent();
     }
 
-    adminSetStatus(`已載入 ${adminState.events.length} 個活動、${adminState.list.length} 個圖章；人工圖章修正 ${adminState.overrides.items.length} 筆。`,true);
-  }catch(e){
-    adminSetStatus(e.message,false);
+    adminSetStatus(
+      `已載入 ${adminState.events.length} 個活動、${adminState.list.length} 個圖章；人工修正 ${adminState.overrides.items.length} 筆。`,
+      true
+    );
+    adminUpdatePublishBar();
+  }catch(error){
+    adminSetStatus(error.message,false);
   }
 }
 
 function adminCurrentPoints(){
   const id=document.getElementById("adminStampEventSelect").value;
-  return adminState.list.filter(x=>String(x.eventId||x.event||x.eventName)===String(id));
+  return adminState.list.filter(x=>String(x.eventId||"")===String(id));
 }
 
-function adminPopulateEvents(){
-  const events=adminState.events.length
-    ? adminState.events
-    : Array.from(new Map(adminState.list.map(x=>[
-        String(x.eventId||x.event||x.eventName),
-        {eventId:String(x.eventId||x.event||x.eventName),event:adminEventName(x)}
-      ])).values());
+function adminPopulateEvents(preferredEventId=""){
+  const events=adminState.events||[];
 
   for(const selectId of ["adminEventSelect","adminStampEventSelect"]){
     const sel=document.getElementById(selectId);
+    const old=preferredEventId||sel.value;
     sel.innerHTML="";
+
     if(!events.length){
       const o=document.createElement("option");
       o.value="";
@@ -3381,19 +3818,23 @@ function adminPopulateEvents(){
       sel.appendChild(o);
       continue;
     }
+
     for(const e of events){
       const o=document.createElement("option");
       o.value=adminEventIdOf(e);
       o.textContent=adminEventName(e);
       sel.appendChild(o);
     }
+
+    if([...sel.options].some(o=>o.value===old))sel.value=old;
   }
 
   adminPopulatePoints();
 }
 
-function adminPopulatePoints(){
+function adminPopulatePoints(preferredPointId=""){
   const sel=document.getElementById("adminPointSelect");
+  const old=preferredPointId||sel.value;
   sel.innerHTML="";
 
   for(const p of adminCurrentPoints()){
@@ -3408,138 +3849,699 @@ function adminPopulatePoints(){
     o.value="";
     o.textContent="目前沒有圖章點資料";
     sel.appendChild(o);
+  }else if([...sel.options].some(o=>o.value===old)){
+    sel.value=old;
   }
 
   adminShowPointInfo();
 }
 
-function adminGetItemImage(p){return getItemImageUrl("stamp",p);}
-function adminShowPointInfo(){
-  const p=adminState.list.find(x=>String(x.id)===String(document.getElementById("adminPointSelect").value));
-  if(!p){document.getElementById("adminPointInfo").textContent="目前沒有資料。";return;}
-  const o=adminFindOverride(p);
-  const coords=Array.isArray(o?.manualCoordinates)&&o.manualCoordinates.length>=2?o.manualCoordinates:(Array.isArray(p.coords)?p.coords:[p.lat,p.lng]);
-  document.getElementById("adminLat").value=Number.isFinite(Number(coords?.[0]))?coords[0]:"";
-  document.getElementById("adminLng").value=Number.isFinite(Number(coords?.[1]))?coords[1]:"";
-  document.getElementById("adminCoordSource").value=o?.coordinatesSource||p.coordinatesSource||p.coordsSource||"";
-  document.getElementById("adminImageUrl").value=o?.manualStampImage||"";
-  document.getElementById("adminImageSource").value=o?.stampImageSource||p.stampImageSource||"";
-  document.getElementById("adminPointInfo").innerHTML=`<b>${escapeHtml(adminPointName(p))}</b><br>ID：${escapeHtml(p.id||"")}<br>目前座標：${escapeHtml(Array.isArray(p.coords)?p.coords.join(", "):(p.lat??"")+" / "+(p.lng??""))}<br>圖片：${escapeHtml(adminGetItemImage(p)?"已有":"無")}${o?'<br><span style="color:#6f4bb8;font-weight:900">● 已有人工修正</span>':''}`;
+function adminGetItemImage(p){
+  return p?.stampImage||p?.manualStampImage||getItemImageUrl("stamp",p);
 }
 
+function adminShowPointInfo(){
+  const p=adminState.list.find(x=>String(x.id)===String(document.getElementById("adminPointSelect").value));
+  const info=document.getElementById("adminPointInfo");
+
+  if(!p){
+    info.textContent="目前活動沒有圖章資料。";
+    document.getElementById("adminStampNameInput").value="";
+    document.getElementById("adminCoordPair").value="";
+    document.getElementById("adminImageUrl").value="";
+    return;
+  }
+
+  const o=adminFindOverride(p);
+  const coords=Array.isArray(o?.manualCoordinates)&&o.manualCoordinates.length>=2
+    ? o.manualCoordinates
+    : (Array.isArray(p.coords)&&p.coords.length>=2?p.coords:[p.lat,p.lng]);
+
+  const lat=Number(coords?.[0]);
+  const lng=Number(coords?.[1]);
+
+  document.getElementById("adminStampNameInput").value=
+    o?.manualName||o?.manualVenue||adminPointName(p);
+
+  document.getElementById("adminCoordPair").value=
+    Number.isFinite(lat)&&Number.isFinite(lng)?adminFormatLngLat(lat,lng):"";
+
+  document.getElementById("adminCoordSource").value=
+    o?.coordinatesSource||p.coordinatesSource||"";
+
+  document.getElementById("adminImageUrl").value=
+    o?.manualStampImage||p.stampImage||"";
+
+  document.getElementById("adminImageSource").value=
+    o?.stampImageSource||p.stampImageSource||"";
+
+  adminUpdateCoordHint("adminCoordPair","adminCoordPairHint");
+
+  info.innerHTML=
+    `<b>${escapeHtml(adminPointName(p))}</b><br>`+
+    `ID：${escapeHtml(String(p.id||""))}<br>`+
+    `目前座標：${escapeHtml(Number.isFinite(lat)&&Number.isFinite(lng)?adminFormatLngLat(lat,lng):"無")}<br>`+
+    `圖片：${escapeHtml(adminGetItemImage(p)?"已有":"無")}`+
+    `${o?'<br><span style="color:#6f4bb8;font-weight:900">● 已有人工修正</span>':""}`;
+}
+
+/* ---------------------------------------------------------
+   Crop canvas — resizable / movable crop box
+--------------------------------------------------------- */
 const adminCanvas=document.getElementById("adminCanvas");
 const adminCtx=adminCanvas.getContext("2d");
+const ADMIN_HANDLE=9;
+
+function adminNormalizeRect(rect){
+  if(!rect)return null;
+  let x=rect.x,y=rect.y,w=rect.w,h=rect.h;
+  if(w<0){x+=w;w=-w;}
+  if(h<0){y+=h;h=-h;}
+  return {x,y,w,h};
+}
+function adminClampRect(rect){
+  rect=adminNormalizeRect(rect);
+  const min=12;
+  rect.w=Math.max(min,Math.min(rect.w,adminCanvas.width));
+  rect.h=Math.max(min,Math.min(rect.h,adminCanvas.height));
+  rect.x=Math.max(0,Math.min(rect.x,adminCanvas.width-rect.w));
+  rect.y=Math.max(0,Math.min(rect.y,adminCanvas.height-rect.h));
+  return rect;
+}
+function adminCropHandlePoints(rect){
+  rect=adminNormalizeRect(rect);
+  const x=rect.x,y=rect.y,r=rect.x+rect.w,b=rect.y+rect.h,cx=x+rect.w/2,cy=y+rect.h/2;
+  return {
+    nw:[x,y],n:[cx,y],ne:[r,y],
+    e:[r,cy],se:[r,b],s:[cx,b],
+    sw:[x,b],w:[x,cy]
+  };
+}
 function adminRenderCanvas(){
   if(!adminState.img)return;
+
   const displayW=Math.max(1,Math.round(adminState.img.width*adminState.fitScale*adminState.zoom));
   const displayH=Math.max(1,Math.round(adminState.img.height*adminState.fitScale*adminState.zoom));
-  adminCanvas.width=displayW;adminCanvas.height=displayH;
+
+  if(adminCanvas.width!==displayW||adminCanvas.height!==displayH){
+    adminCanvas.width=displayW;
+    adminCanvas.height=displayH;
+  }
+
   adminCtx.clearRect(0,0,displayW,displayH);
   adminCtx.drawImage(adminState.img,0,0,displayW,displayH);
-  if(adminState.rect){adminCtx.save();adminCtx.strokeStyle="#397b83";adminCtx.lineWidth=3;adminCtx.setLineDash([8,5]);adminCtx.strokeRect(adminState.rect.x,adminState.rect.y,adminState.rect.w,adminState.rect.h);adminCtx.fillStyle="rgba(57,123,131,.16)";adminCtx.fillRect(adminState.rect.x,adminState.rect.y,adminState.rect.w,adminState.rect.h);adminCtx.restore();}
+
+  if(adminState.rect){
+    const r=adminNormalizeRect(adminState.rect);
+
+    adminCtx.save();
+
+    // shade outside crop box
+    adminCtx.fillStyle="rgba(20,55,60,.28)";
+    adminCtx.beginPath();
+    adminCtx.rect(0,0,displayW,displayH);
+    adminCtx.rect(r.x,r.y,r.w,r.h);
+    adminCtx.fill("evenodd");
+
+    adminCtx.strokeStyle="#397b83";
+    adminCtx.lineWidth=3;
+    adminCtx.setLineDash([8,5]);
+    adminCtx.strokeRect(r.x,r.y,r.w,r.h);
+    adminCtx.setLineDash([]);
+
+    const handles=adminCropHandlePoints(r);
+    for(const [key,[x,y]] of Object.entries(handles)){
+      adminCtx.beginPath();
+      adminCtx.fillStyle="#fff";
+      adminCtx.strokeStyle="#397b83";
+      adminCtx.lineWidth=2;
+      adminCtx.rect(x-ADMIN_HANDLE/2,y-ADMIN_HANDLE/2,ADMIN_HANDLE,ADMIN_HANDLE);
+      adminCtx.fill();
+      adminCtx.stroke();
+    }
+
+    adminCtx.restore();
+  }
 }
 function adminFitImage(img){
   adminState.img=img;
-  const maxW=Math.max(320,(document.getElementById("adminCanvasWrap").clientWidth||800)-16),maxH=390;
+  const maxW=Math.max(320,(document.getElementById("adminCanvasWrap").clientWidth||800)-16);
+  const maxH=440;
   adminState.fitScale=Math.min(maxW/img.width,maxH/img.height,1);
-  adminState.zoom=1;adminState.rect=null;adminRenderCanvas();adminUpdateZoomLabel();
+  adminState.zoom=1;
+  adminState.rect=null;
+  adminState.dragMode=null;
+  adminRenderCanvas();
+  adminUpdateZoomLabel();
 }
-function adminUpdateZoomLabel(){document.getElementById("adminZoomLabel").textContent=Math.round(adminState.zoom*100)+"%";}
-function adminZoom(delta){adminState.zoom=Math.max(.25,Math.min(4,adminState.zoom+delta));adminRenderCanvas();adminUpdateZoomLabel();}
-function adminResetZoom(){adminState.zoom=1;adminRenderCanvas();adminUpdateZoomLabel();}
-document.getElementById("adminImageInput").addEventListener("change",()=>{const f=document.getElementById("adminImageInput").files?.[0];if(!f)return;const img=new Image();img.onload=()=>adminFitImage(img);img.src=URL.createObjectURL(f);});
-function adminPointerPos(ev){const r=adminCanvas.getBoundingClientRect();return{x:Math.max(0,Math.min(adminCanvas.width,ev.clientX-r.left)),y:Math.max(0,Math.min(adminCanvas.height,ev.clientY-r.top))};}
-adminCanvas.addEventListener("pointerdown",ev=>{ev.preventDefault();adminCanvas.setPointerCapture?.(ev.pointerId);adminState.drawStart=adminPointerPos(ev);adminState.rect={x:adminState.drawStart.x,y:adminState.drawStart.y,w:0,h:0};adminRenderCanvas();});
-adminCanvas.addEventListener("pointermove",ev=>{if(!adminState.drawStart)return;ev.preventDefault();const p=adminPointerPos(ev);const x=Math.min(adminState.drawStart.x,p.x),y=Math.min(adminState.drawStart.y,p.y);adminState.rect={x,y,w:Math.abs(p.x-adminState.drawStart.x),h:Math.abs(p.y-adminState.drawStart.y)};adminRenderCanvas();});
-adminCanvas.addEventListener("pointerup",ev=>{ev.preventDefault();adminState.drawStart=null;});
-adminCanvas.addEventListener("pointercancel",()=>{adminState.drawStart=null;});
-adminCanvas.addEventListener("wheel",ev=>{ev.preventDefault();adminZoom(ev.deltaY<0?.1:-.1);},{passive:false});
+function adminUpdateZoomLabel(){
+  document.getElementById("adminZoomLabel").textContent=Math.round(adminState.zoom*100)+"%";
+}
+function adminSetZoom(next){
+  const old=adminState.zoom;
+  next=Math.max(.25,Math.min(4,next));
+  if(adminState.rect&&old>0){
+    const ratio=next/old;
+    adminState.rect={
+      x:adminState.rect.x*ratio,
+      y:adminState.rect.y*ratio,
+      w:adminState.rect.w*ratio,
+      h:adminState.rect.h*ratio
+    };
+  }
+  adminState.zoom=next;
+  adminRenderCanvas();
+  adminUpdateZoomLabel();
+}
+function adminZoom(delta){
+  adminSetZoom(adminState.zoom+delta);
+}
+function adminResetZoom(){
+  adminSetZoom(1);
+}
+function adminPointerPos(ev){
+  const r=adminCanvas.getBoundingClientRect();
+  return {
+    x:Math.max(0,Math.min(adminCanvas.width,(ev.clientX-r.left)*(adminCanvas.width/r.width))),
+    y:Math.max(0,Math.min(adminCanvas.height,(ev.clientY-r.top)*(adminCanvas.height/r.height)))
+  };
+}
+function adminPointInRect(p,r){
+  return p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h;
+}
+function adminHitCrop(p){
+  if(!adminState.rect)return null;
+  const r=adminNormalizeRect(adminState.rect);
+  const handles=adminCropHandlePoints(r);
+  const radius=13;
+
+  for(const [key,[x,y]] of Object.entries(handles)){
+    if(Math.hypot(p.x-x,p.y-y)<=radius)return key;
+  }
+  if(adminPointInRect(p,r))return "move";
+  return null;
+}
+function adminCursorForMode(mode){
+  const map={
+    nw:"nwse-resize",se:"nwse-resize",
+    ne:"nesw-resize",sw:"nesw-resize",
+    n:"ns-resize",s:"ns-resize",
+    e:"ew-resize",w:"ew-resize",
+    move:"move"
+  };
+  return map[mode]||"crosshair";
+}
+function adminResizeRect(start,mode,dx,dy){
+  let left=start.x,top=start.y,right=start.x+start.w,bottom=start.y+start.h;
+
+  if(mode.includes("w"))left+=dx;
+  if(mode.includes("e"))right+=dx;
+  if(mode.includes("n"))top+=dy;
+  if(mode.includes("s"))bottom+=dy;
+
+  const min=12;
+  if(right-left<min){
+    if(mode.includes("w"))left=right-min;
+    else right=left+min;
+  }
+  if(bottom-top<min){
+    if(mode.includes("n"))top=bottom-min;
+    else bottom=top+min;
+  }
+
+  left=Math.max(0,Math.min(left,adminCanvas.width-min));
+  top=Math.max(0,Math.min(top,adminCanvas.height-min));
+  right=Math.max(left+min,Math.min(right,adminCanvas.width));
+  bottom=Math.max(top+min,Math.min(bottom,adminCanvas.height));
+
+  return {x:left,y:top,w:right-left,h:bottom-top};
+}
+
+adminCanvas.addEventListener("pointerdown",ev=>{
+  if(!adminState.img)return;
+  ev.preventDefault();
+  adminCanvas.setPointerCapture?.(ev.pointerId);
+
+  const p=adminPointerPos(ev);
+  const hit=adminHitCrop(p);
+
+  adminState.dragOrigin=p;
+  adminState.dragStartRect=adminState.rect?adminNormalizeRect(adminState.rect):null;
+
+  if(hit){
+    adminState.dragMode=hit;
+  }else{
+    adminState.dragMode="draw";
+    adminState.rect={x:p.x,y:p.y,w:0,h:0};
+  }
+  adminCanvas.style.cursor=adminCursorForMode(adminState.dragMode);
+});
+
+adminCanvas.addEventListener("pointermove",ev=>{
+  if(!adminState.img)return;
+  const p=adminPointerPos(ev);
+
+  if(!adminState.dragMode){
+    adminCanvas.style.cursor=adminCursorForMode(adminHitCrop(p));
+    return;
+  }
+
+  ev.preventDefault();
+  const origin=adminState.dragOrigin||p;
+  const dx=p.x-origin.x;
+  const dy=p.y-origin.y;
+
+  if(adminState.dragMode==="draw"){
+    adminState.rect=adminNormalizeRect({
+      x:origin.x,y:origin.y,w:p.x-origin.x,h:p.y-origin.y
+    });
+  }else if(adminState.dragMode==="move"){
+    const s=adminState.dragStartRect;
+    adminState.rect=adminClampRect({
+      x:s.x+dx,y:s.y+dy,w:s.w,h:s.h
+    });
+  }else{
+    adminState.rect=adminResizeRect(adminState.dragStartRect,adminState.dragMode,dx,dy);
+  }
+
+  adminRenderCanvas();
+});
+
+function adminEndCropDrag(ev){
+  if(ev)ev.preventDefault();
+  if(adminState.rect&&adminState.rect.w<12)adminState.rect.w=12;
+  if(adminState.rect&&adminState.rect.h<12)adminState.rect.h=12;
+  adminState.rect=adminState.rect?adminClampRect(adminState.rect):null;
+  adminState.dragMode=null;
+  adminState.dragOrigin=null;
+  adminState.dragStartRect=null;
+  adminRenderCanvas();
+}
+adminCanvas.addEventListener("pointerup",adminEndCropDrag);
+adminCanvas.addEventListener("pointercancel",adminEndCropDrag);
+adminCanvas.addEventListener("wheel",ev=>{
+  ev.preventDefault();
+  adminZoom(ev.deltaY<0?.1:-.1);
+},{passive:false});
+
+document.getElementById("adminImageInput").addEventListener("change",()=>{
+  const f=document.getElementById("adminImageInput").files?.[0];
+  if(!f)return;
+  const img=new Image();
+  const url=URL.createObjectURL(f);
+  img.onload=()=>{
+    adminFitImage(img);
+    URL.revokeObjectURL(url);
+  };
+  img.src=url;
+});
+
 function adminRemoveBgFromCanvas(c,tolerance){
-  const ctx=c.getContext("2d");const w=c.width,h=c.height;const img=ctx.getImageData(0,0,w,h);const d=img.data;
+  const ctx=c.getContext("2d");
+  const w=c.width,h=c.height;
+  const img=ctx.getImageData(0,0,w,h);
+  const d=img.data;
   const seeds=[[0,0],[w-1,0],[0,h-1],[w-1,h-1]];
   const base=[];
-  for(const [x,y] of seeds){const i=(y*w+x)*4;base.push([d[i],d[i+1],d[i+2]]);}
-  const avg=[0,0,0];for(const c0 of base){avg[0]+=c0[0];avg[1]+=c0[1];avg[2]+=c0[2];}avg[0]/=base.length;avg[1]/=base.length;avg[2]/=base.length;
-  const seen=new Uint8Array(w*h),q=[];for(const [x,y] of seeds){const idx=y*w+x;if(!seen[idx]){seen[idx]=1;q.push(idx);}}
-  let qi=0;const tol=Math.max(1,Number(tolerance)||36);
-  const similar=(idx)=>{const i=idx*4;const dr=d[i]-avg[0],dg=d[i+1]-avg[1],db=d[i+2]-avg[2];return Math.sqrt(dr*dr+dg*dg+db*db)<=tol;};
-  while(qi<q.length){const idx=q[qi++];if(!similar(idx))continue;d[idx*4+3]=0;const x=idx%w,y=Math.floor(idx/w);const n=[idx-1,idx+1,idx-w,idx+w];if(x===0)n.shift();if(x===w-1)n.splice(1,1);if(y===0)n.splice(2,1);if(y===h-1)n.splice(3,1);for(const ni of n){if(ni>=0&&ni<w*h&&!seen[ni]){seen[ni]=1;q.push(ni);}}}
+
+  for(const [x,y] of seeds){
+    const i=(y*w+x)*4;
+    base.push([d[i],d[i+1],d[i+2]]);
+  }
+
+  const avg=[0,0,0];
+  for(const c0 of base){
+    avg[0]+=c0[0];avg[1]+=c0[1];avg[2]+=c0[2];
+  }
+  avg[0]/=base.length;avg[1]/=base.length;avg[2]/=base.length;
+
+  const seen=new Uint8Array(w*h),q=[];
+  for(const [x,y] of seeds){
+    const idx=y*w+x;
+    if(!seen[idx]){seen[idx]=1;q.push(idx);}
+  }
+
+  let qi=0;
+  const tol=Math.max(1,Number(tolerance)||36);
+  const similar=idx=>{
+    const i=idx*4;
+    const dr=d[i]-avg[0],dg=d[i+1]-avg[1],db=d[i+2]-avg[2];
+    return Math.sqrt(dr*dr+dg*dg+db*db)<=tol;
+  };
+
+  while(qi<q.length){
+    const idx=q[qi++];
+    if(!similar(idx))continue;
+    d[idx*4+3]=0;
+
+    const x=idx%w,y=Math.floor(idx/w);
+    const neighbors=[];
+    if(x>0)neighbors.push(idx-1);
+    if(x<w-1)neighbors.push(idx+1);
+    if(y>0)neighbors.push(idx-w);
+    if(y<h-1)neighbors.push(idx+w);
+
+    for(const ni of neighbors){
+      if(!seen[ni]){
+        seen[ni]=1;
+        q.push(ni);
+      }
+    }
+  }
   ctx.putImageData(img,0,0);
 }
+
 async function adminCropPreview(){
   try{
-    if(!adminState.img||!adminState.rect||adminState.rect.w<3||adminState.rect.h<3)throw new Error("請先上傳截圖並圈選圖章。 ");
-    const s=adminState.fitScale*adminState.zoom;const sx=adminState.rect.x/s,sy=adminState.rect.y/s,sw=adminState.rect.w/s,sh=adminState.rect.h/s;
-    const out=document.createElement("canvas");out.width=Math.max(1,Math.round(sw));out.height=Math.max(1,Math.round(sh));const octx=out.getContext("2d");octx.clearRect(0,0,out.width,out.height);octx.drawImage(adminState.img,sx,sy,sw,sh,0,0,out.width,out.height);
-    if(document.getElementById("adminRemoveBg").checked)adminRemoveBgFromCanvas(out,document.getElementById("adminBgTolerance").value);
-    let finalCanvas=out;
-    if(document.getElementById("adminCircleCrop").checked){
-      const size=Math.min(out.width,out.height);const sq=document.createElement("canvas");sq.width=size;sq.height=size;const q=sq.getContext("2d");q.clearRect(0,0,size,size);q.save();q.beginPath();q.arc(size/2,size/2,size/2,0,Math.PI*2);q.closePath();q.clip();q.drawImage(out,(size-out.width)/2,(size-out.height)/2);q.restore();finalCanvas=sq;
+    if(!adminState.img||!adminState.rect||adminState.rect.w<3||adminState.rect.h<3){
+      throw new Error("請先上傳截圖並建立裁切框。");
     }
-    const blob=await new Promise((resolve,reject)=>finalCanvas.toBlob(b=>b?resolve(b):reject(new Error("PNG 製作失敗")),"image/png"));
-    adminState.cropBlob=blob;adminState.cropDataUrl=finalCanvas.toDataURL("image/png");document.getElementById("adminCropPreview").innerHTML=`<img src="${adminState.cropDataUrl}" alt="裁切預覽">`;adminSetSaveStatus("裁切完成，可儲存。",true);
-  }catch(e){adminSetSaveStatus(e.message,false);}
+
+    const r=adminNormalizeRect(adminState.rect);
+    const scale=adminState.fitScale*adminState.zoom;
+
+    const sx=r.x/scale;
+    const sy=r.y/scale;
+    const sw=r.w/scale;
+    const sh=r.h/scale;
+
+    const out=document.createElement("canvas");
+    out.width=Math.max(1,Math.round(sw));
+    out.height=Math.max(1,Math.round(sh));
+
+    const octx=out.getContext("2d");
+    octx.clearRect(0,0,out.width,out.height);
+    octx.drawImage(adminState.img,sx,sy,sw,sh,0,0,out.width,out.height);
+
+    if(document.getElementById("adminRemoveBg").checked){
+      adminRemoveBgFromCanvas(out,document.getElementById("adminBgTolerance").value);
+    }
+
+    let finalCanvas=out;
+
+    if(document.getElementById("adminCircleCrop").checked){
+      const size=Math.min(out.width,out.height);
+      const sq=document.createElement("canvas");
+      sq.width=size;
+      sq.height=size;
+      const q=sq.getContext("2d");
+      q.clearRect(0,0,size,size);
+      q.save();
+      q.beginPath();
+      q.arc(size/2,size/2,size/2,0,Math.PI*2);
+      q.clip();
+      q.drawImage(out,(size-out.width)/2,(size-out.height)/2);
+      q.restore();
+      finalCanvas=sq;
+    }
+
+    const blob=await new Promise((resolve,reject)=>
+      finalCanvas.toBlob(b=>b?resolve(b):reject(new Error("PNG 製作失敗")),"image/png")
+    );
+
+    adminState.cropBlob=blob;
+    adminState.cropDataUrl=finalCanvas.toDataURL("image/png");
+
+    document.getElementById("adminCropPreview").innerHTML=
+      `<img src="${adminState.cropDataUrl}" alt="裁切預覽">`;
+
+    adminSetSaveStatus("裁切完成。可繼續調整裁切框再重新預覽，或直接暫存圖章變更。",true);
+  }catch(error){
+    adminSetSaveStatus(error.message,false);
+  }
 }
-function adminDownloadCrop(){if(!adminState.cropBlob){adminSetSaveStatus("請先裁切預覽。",false);return;}const a=document.createElement("a");const u=URL.createObjectURL(adminState.cropBlob);a.href=u;a.download="stamp-crop.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
-function adminClearCoord(){document.getElementById("adminLat").value="";document.getElementById("adminLng").value="";}
-async function adminUploadCrop(p){
-  if(!adminState.cropBlob)return document.getElementById("adminImageUrl").value.trim()||"";
-  const safe=String(p?.id||Date.now()).replace(/[^a-zA-Z0-9_-]/g,"_");const path=`assets/stamps/${safe}.png`;
-  const buf=await adminState.cropBlob.arrayBuffer();const bytes=new Uint8Array(buf);let bin="";for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
-  let sha=null;try{const old=await adminGithubGet(path);sha=old.sha;}catch{}
-  await adminGithubPut(path,btoa(bin),"chore: update manual GO stamp image",sha);return path;
+
+function adminDownloadCrop(){
+  if(!adminState.cropBlob){
+    adminSetSaveStatus("請先裁切預覽。",false);
+    return;
+  }
+  const a=document.createElement("a");
+  const u=URL.createObjectURL(adminState.cropBlob);
+  a.href=u;
+  a.download="stamp-crop.png";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
 }
+
+function adminClearCoord(){
+  document.getElementById("adminCoordPair").value="";
+  adminUpdateCoordHint("adminCoordPair","adminCoordPairHint");
+}
+
+/* ---------------------------------------------------------
+   Stamp manual staging
+--------------------------------------------------------- */
 async function adminSaveOverride(){
   try{
-    if(!document.getElementById("adminToken").value.trim())throw new Error("請先輸入 GitHub Token。");
-    const p=adminState.list.find(x=>String(x.id)===String(document.getElementById("adminPointSelect").value));if(!p)throw new Error("請先選擇圖章。");
-    const la=document.getElementById("adminLat").value.trim(),ln=document.getElementById("adminLng").value.trim();let coords=[];if(la!==""||ln!==""){const lat=Number(la),lng=Number(ln);if(!Number.isFinite(lat)||!Number.isFinite(lng))throw new Error("座標格式不正確。");coords=[lat,lng];}
-    const uploaded=await adminUploadCrop(p);const imageUrl=uploaded||document.getElementById("adminImageUrl").value.trim();
-    const item={id:String(p.id),eventId:String(p.eventId||document.getElementById("adminStampEventSelect").value),venue:p.venue||p.name||adminPointName(p),name:p.name||adminPointName(p)};
-    item.manualCoordinates=coords; if(document.getElementById("adminCoordSource").value.trim())item.coordinatesSource=document.getElementById("adminCoordSource").value.trim(); if(imageUrl)item.manualStampImage=imageUrl; if(document.getElementById("adminImageSource").value.trim())item.stampImageSource=document.getElementById("adminImageSource").value.trim();
-    const arr=adminState.overrides.items||[];const idx=arr.findIndex(x=>String(x.id||"")===item.id);if(idx>=0)arr[idx]={...arr[idx],...item};else arr.push(item);adminState.overrides.items=arr;adminState.overrides.version="1.0";adminState.overrides.updated=new Date().toISOString();
-    let sha=null;try{const old=await adminGithubGet("svgstamp_manual_overrides.json");sha=old.sha;}catch{}
-    await adminGithubPut("svgstamp_manual_overrides.json",adminUtf8ToB64(JSON.stringify(adminState.overrides,null,2)+"\n"),"chore: update manual GO stamp overrides",sha);
-    await loadManualOverrides();applyRuntimeManualOverrides();renderRegions();updateOverall();adminSetSaveStatus(`已儲存。\n圖章：${adminPointName(p)}\n${coords.length?"座標："+coords.join(", ")+"\n":""}${imageUrl?"圖片："+imageUrl:""}`,true);
-    adminShowPointInfo();
-  }catch(e){adminSetSaveStatus(e.message,false);}
+    const pointId=String(document.getElementById("adminPointSelect").value||"");
+    const p=adminState.list.find(x=>String(x.id)===pointId);
+    if(!p)throw new Error("請先選擇圖章。");
+
+    const newName=document.getElementById("adminStampNameInput").value.trim()||adminPointName(p);
+    const coordRaw=document.getElementById("adminCoordPair").value.trim();
+    const coord=coordRaw?adminParseLngLat(coordRaw):null;
+
+    if(coordRaw&&!coord)throw new Error("座標格式不正確，請輸入「經度,緯度」。");
+
+    // Update the main stamp point itself so the public card behaves exactly
+    // like Lid cards without needing a special display path.
+    p.name=newName;
+    p.nameZh=newName;
+    p.venue=newName;
+    p.venueZh=newName;
+
+    if(coord){
+      p.coords=[coord.lat,coord.lng];
+      p.lat=coord.lat;
+      p.lng=coord.lng;
+      p.coordinatesManual=true;
+      p.coordinatesSource=document.getElementById("adminCoordSource").value.trim()||"Manual admin";
+    }
+
+    let imagePath=document.getElementById("adminImageUrl").value.trim()||p.stampImage||"";
+
+    if(adminState.cropBlob){
+      imagePath=`assets/stamps/${adminSafeId(p.id)}.png`;
+      adminState.pendingFiles.set(imagePath,adminState.cropBlob);
+    }
+
+    if(imagePath){
+      p.stampImage=imagePath;
+      p.stampImageManual=true;
+      p.stampImageSource=document.getElementById("adminImageSource").value.trim()||"Manual admin";
+    }
+
+    const item={
+      id:String(p.id),
+      eventId:String(p.eventId||document.getElementById("adminStampEventSelect").value),
+      venue:newName,
+      name:newName,
+      manualName:newName,
+      manualVenue:newName
+    };
+
+    if(coord){
+      item.manualCoordinates=[coord.lat,coord.lng];
+      item.coordinatesSource=document.getElementById("adminCoordSource").value.trim()||"Manual admin";
+    }
+
+    if(imagePath){
+      item.manualStampImage=imagePath;
+      item.stampImageSource=document.getElementById("adminImageSource").value.trim()||"Manual admin";
+    }
+
+    const arr=adminState.overrides.items||[];
+    const idx=arr.findIndex(x=>String(x.id||"")===item.id);
+    if(idx>=0)arr[idx]={...arr[idx],...item};
+    else arr.push(item);
+
+    adminState.overrides.items=arr;
+    adminState.overrides.version=adminState.overrides.version||"1.0";
+    adminState.overrides.updated=new Date().toISOString();
+    adminState.rallyJson.updated=new Date().toISOString();
+
+    adminMarkDirty("圖章人工修正");
+    if(adminState.cropBlob)adminMarkDirty("圖章圖片");
+
+    const selectedEvent=document.getElementById("adminStampEventSelect").value;
+    adminPopulateEvents(selectedEvent);
+    document.getElementById("adminStampEventSelect").value=selectedEvent;
+    adminPopulatePoints(pointId);
+
+    adminState.cropBlob=null;
+    adminState.cropDataUrl="";
+    document.getElementById("adminCropPreview").innerHTML="";
+
+    adminSetSaveStatus(
+      `✓ 已暫存圖章變更，尚未更新 GitHub。\n圖章：${newName}\n${coord?`座標：${adminFormatLngLat(coord.lat,coord.lng)}\n`:""}${imagePath?`圖片：${imagePath}`:""}`,
+      true
+    );
+  }catch(error){
+    adminSetSaveStatus(error.message,false);
+  }
 }
+
+/* ---------------------------------------------------------
+   ONE CLICK PUBLISH
+   Uses Git Data API so JSON + Banner + stamp PNG files are
+   committed together in a single Git commit.
+--------------------------------------------------------- */
+async function adminPublishAll(){
+  try{
+    if(!adminState.dirtyReasons.size){
+      adminUpdatePublishBar();
+      return;
+    }
+
+    const {branch}=adminRepoInfo();
+    const btn=document.getElementById("adminPublishBtn");
+    btn.disabled=true;
+    btn.textContent="更新中…";
+
+    const status=document.getElementById("adminPublishStatus");
+    status.className="admin-publish-status dirty";
+    status.textContent="正在建立單一 GitHub Commit……";
+
+    const ref=await adminGithubApi(`/git/ref/heads/${encodeURIComponent(branch)}`);
+    const baseCommitSha=ref.object.sha;
+
+    const baseCommit=await adminGithubApi(`/git/commits/${baseCommitSha}`);
+    const baseTreeSha=baseCommit.tree.sha;
+
+    const files=new Map(adminState.pendingFiles);
+
+    adminState.rallyJson.version=adminState.rallyJson.version||"manual-1.0";
+    adminState.rallyJson.updated=new Date().toISOString();
+    adminState.rallyJson.source="manual-admin";
+    adminState.rallyJson.sourceMode="manual staged GitHub admin";
+    adminState.rallyJson.rule="GO Stamp Rally activities are manually maintained in the website admin panel.";
+
+    files.set(
+      "svgstamp_rally.json",
+      JSON.stringify(adminState.rallyJson,null,2)+"\n"
+    );
+    files.set(
+      "svgstamp_manual_overrides.json",
+      JSON.stringify(adminState.overrides,null,2)+"\n"
+    );
+
+    const tree=[];
+
+    for(const [path,value] of files){
+      const content=value instanceof Blob
+        ? await adminBlobToB64(value)
+        : adminUtf8ToB64(String(value));
+
+      status.textContent=`正在準備：${path}`;
+
+      const blob=await adminGithubApi("/git/blobs",{
+        method:"POST",
+        body:{content,encoding:"base64"}
+      });
+
+      tree.push({
+        path,
+        mode:"100644",
+        type:"blob",
+        sha:blob.sha
+      });
+    }
+
+    status.textContent="正在建立 Git Tree……";
+    const newTree=await adminGithubApi("/git/trees",{
+      method:"POST",
+      body:{
+        base_tree:baseTreeSha,
+        tree
+      }
+    });
+
+    status.textContent="正在建立 Commit……";
+    const commit=await adminGithubApi("/git/commits",{
+      method:"POST",
+      body:{
+        message:"chore: update manual GO Stamp Rally data",
+        tree:newTree.sha,
+        parents:[baseCommitSha]
+      }
+    });
+
+    status.textContent="正在更新 Branch……";
+    await adminGithubApi(`/git/refs/heads/${encodeURIComponent(branch)}`,{
+      method:"PATCH",
+      body:{sha:commit.sha,force:false}
+    });
+
+    adminState.pendingFiles.clear();
+    adminState.dirtyReasons.clear();
+
+    btn.textContent="🚀 一鍵更新到 GitHub";
+    adminSetStatus(`GitHub 更新完成：${commit.sha.slice(0,7)}`,true);
+
+    await adminLoadData(true);
+    adminUpdatePublishBar();
+
+    // Refresh public data from repository path on next normal reload.
+    alert("GitHub 已更新完成。所有暫存變更已用同一個 Commit 寫入。");
+  }catch(error){
+    const btn=document.getElementById("adminPublishBtn");
+    btn.textContent="🚀 一鍵更新到 GitHub";
+    adminSetStatus(error.message,false);
+    adminUpdatePublishBar();
+  }
+}
+
+/* ---------------------------------------------------------
+   UI listeners
+--------------------------------------------------------- */
 document.getElementById("adminEventSelect").addEventListener("change",adminLoadSelectedEvent);
-document.getElementById("adminStampEventSelect").addEventListener("change",adminPopulatePoints);
+document.getElementById("adminStampEventSelect").addEventListener("change",()=>adminPopulatePoints());
 document.getElementById("adminPointSelect").addEventListener("change",adminShowPointInfo);
 
 document.getElementById("adminBannerInput").addEventListener("change",()=>{
-  const f=document.getElementById("adminBannerInput").files?.[0]||null;
-  adminState.bannerFile=f;
-  if(!f){
+  const file=document.getElementById("adminBannerInput").files?.[0]||null;
+  adminState.bannerFile=file;
+
+  if(!file){
     adminBannerPreview(adminState.bannerExisting||"");
     return;
   }
-  const url=URL.createObjectURL(f);
+
+  const url=URL.createObjectURL(file);
   adminBannerPreview(url);
 });
 
 document.getElementById("adminPointTxtInput").addEventListener("change",async()=>{
   try{
-    const f=document.getElementById("adminPointTxtInput").files?.[0];
-    if(!f)return;
-    const raw=await f.text();
-    const pts=adminParsePointTxt(raw);
-    if(!pts.length)throw new Error("TXT 中找不到有效座標。");
+    const file=document.getElementById("adminPointTxtInput").files?.[0];
+    if(!file)return;
+
+    const raw=await file.text();
+    const pts=adminParsePointDocument(raw);
+    if(!pts.length)throw new Error("文件中找不到有效座標。");
+
+    // File import replaces the activity point list. Direct entry can append after.
     adminState.importedPoints=pts;
-    adminState.importTouched=true;
     adminRenderImportPreview();
-    adminSetEventSaveStatus(`TXT 已解析：${pts.length} 個圖章點。`,true);
-  }catch(e){
-    adminState.importedPoints=[];
-    adminState.importTouched=true;
-    adminRenderImportPreview(e.message);
-    adminSetEventSaveStatus(e.message,false);
+    adminSetEventSaveStatus(`文件已匯入 ${pts.length} 個點位；請按「暫存活動變更」。`,true);
+  }catch(error){
+    adminSetEventSaveStatus(error.message,false);
   }
+});
+
+document.getElementById("adminDirectPointCoord").addEventListener("input",()=>{
+  adminUpdateCoordHint("adminDirectPointCoord","adminDirectCoordHint");
+});
+document.getElementById("adminCoordPair").addEventListener("input",()=>{
+  adminUpdateCoordHint("adminCoordPair","adminCoordPairHint");
 });
 
 adminUpdateDateMode();
 adminRenderImportPreview();
+adminUpdatePublishBar();
 
 
 /* =========================================================
@@ -3715,6 +4717,14 @@ function applyRuntimeManualOverrides(){
         item.coordinatesSource = override.coordinatesSource || "Manual override";
         if(override.coordinatesSourceUrl) item.coordinatesSourceUrl = override.coordinatesSourceUrl;
       }
+    }
+
+    const manualName = override.manualName || override.manualVenue;
+    if(manualName){
+      item.name = String(manualName);
+      item.nameZh = String(manualName);
+      item.venue = String(manualName);
+      item.venueZh = String(manualName);
     }
 
     if(override.manualStampImage){

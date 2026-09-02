@@ -2514,6 +2514,58 @@ button{
   letter-spacing:1px;
   margin-top:4px;
 }
+.stamp-event-title-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.stamp-event-title-row .region-name{
+  flex:1;
+  min-width:0;
+}
+.stamp-event-title-stamp{
+  position:relative;
+  flex:0 0 64px;
+  width:64px;
+  height:64px;
+  border:4px solid rgba(190,38,38,.92);
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:rgba(190,38,38,.96);
+  background:rgba(255,255,255,.72);
+  box-shadow:0 0 0 2px rgba(190,38,38,.12);
+  transform:rotate(-9deg);
+  font-size:15px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:1px;
+  pointer-events:none;
+}
+.stamp-event-title-stamp::before,
+.stamp-event-title-stamp::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  width:70%;
+  height:1.5px;
+  background:rgba(190,38,38,.72);
+  transform:translateX(-50%);
+}
+.stamp-event-title-stamp::before{top:16px;}
+.stamp-event-title-stamp::after{bottom:16px;}
+.stamp-event-title-stamp small{
+  display:block;
+  margin-top:3px;
+  font-size:7px;
+  line-height:1;
+  letter-spacing:.7px;
+}
+
 .stamp-event-date{
   margin-top:5px;
   color:#6f8f94;
@@ -6247,7 +6299,7 @@ function renderStampEvents(el){
     const statusOverlay=(statusKey!=="active")
       ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
     const completeStamp=(total>0 && obtained>=total)
-      ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
+      ? `<div class="stamp-event-title-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
       : "";
     const countText=total?`${obtained} / ${total}`:(known?`${obtained} / ${known}`:"尚待官方公布");
     const note=(total && known<total)
@@ -6259,10 +6311,12 @@ function renderStampEvents(el){
           : `<div class="stamp-event-banner-fallback">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
         }
         ${statusOverlay}
-        ${completeStamp}
       </div>
       <div class="region-info">
-        <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
+        <div class="stamp-event-title-row">
+          <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
+          ${completeStamp}
+        </div>
         <div class="region-count">${countText}</div>
         <div class="stamp-event-live-status ${statusKey}">${escapeHtml(status)}</div><div class="stamp-event-date">${escapeHtml(getStampEventDateText(event))}</div>
         <div class="region-percent">${total?`完成率 ${percent}%`:`資料待官方公布`}${note}${known?`<br>📍 座標資料 ${items.filter(item=>{const p=getItemLatLng(item);return Number.isFinite(p.lat)&&Number.isFinite(p.lng);}).length} / ${known}`:""}</div>

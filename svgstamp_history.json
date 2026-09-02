@@ -1,6 +1,151 @@
 {
   "history": [
     {
+      "time": "2026-09-02T14:34:38.756Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 23,
+      "added": [],
+      "removed": [],
+      "changed": [
+        "MANUAL-STAMP-20260902220813-2026-P001",
+        "MANUAL-STAMP-20260902220813-2026-P002",
+        "MANUAL-STAMP-20260902220813-2026-P003",
+        "MANUAL-STAMP-20260902220813-2026-P004",
+        "MANUAL-STAMP-20260902220813-2026-P005",
+        "MANUAL-STAMP-20260902220813-2026-P006",
+        "MANUAL-STAMP-20260902220813-2026-P007",
+        "MANUAL-STAMP-20260902220813-2026-P008",
+        "MANUAL-STAMP-20260902220813-2026-P009",
+        "MANUAL-STAMP-20260902220813-2026-P010",
+        "MANUAL-STAMP-20260902220813-2026-P011",
+        "MANUAL-STAMP-20260902220813-2026-P012",
+        "MANUAL-STAMP-20260902220813-2026-P013",
+        "MANUAL-STAMP-20260902220813-2026-P014",
+        "MANUAL-STAMP-20260902220813-2026-P015",
+        "MANUAL-STAMP-20260902220813-2026-P016",
+        "MANUAL-STAMP-20260902220813-2026-P017",
+        "MANUAL-STAMP-20260902220813-2026-P018"
+      ],
+      "addedItems": [],
+      "removedItems": [],
+      "changedItems": [
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P001",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "北海道&Pokémon Center SAPPORO"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P002",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "宮城県&Pokémon Center TOHOKU"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P003",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "千葉県&Pokémon Center TOKYO-BAY"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P004",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "東京都&Pokémon Center MEGA TOKYO"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P005",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "東京都&Pokémon Center SHIBUYA"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P006",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "東京都&Pokémon Center SKYTREE TOWN"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P007",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "東京都&Pokémon Center TOKYO DX"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P008",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "神奈川県&Pokémon Center YOKOHAMA"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P009",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "神奈川県&Pokémon Center YOKOHAMA SATELLITE"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P010",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "石川県&Pokémon Center KANAZAWA"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P011",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "愛知県&Pokémon Center NAGOYA"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P012",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "京都府&Pokémon Center KYOTO"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P013",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "大阪府&Pokémon Center OSAKA"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P014",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "大阪府&Pokémon Center OSAKA DX"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P015",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "広島県&Pokémon Center HIROSHIMA"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P016",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "香川県&Pokémon Center KAGAWA"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P017",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "福岡県&Pokémon Center FUKUOKA"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P018",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "沖縄県&Pokémon Center OKINAWA"
+        }
+      ],
+      "reasons": [
+        "圖章人工修正"
+      ]
+    },
+    {
       "time": "2026-09-02T14:28:10.649Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

@@ -4,10 +4,10 @@
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P001",
       "eventId": "MANUAL-STAMP-20260902220813-2026",
-      "venue": "Pokémon Center SAPPORO",
-      "name": "Pokémon Center SAPPORO",
-      "manualName": "Pokémon Center SAPPORO",
-      "manualVenue": "Pokémon Center SAPPORO",
+      "venue": "北海道&Pokémon Center SAPPORO",
+      "name": "北海道&Pokémon Center SAPPORO",
+      "manualName": "北海道&Pokémon Center SAPPORO",
+      "manualVenue": "北海道&Pokémon Center SAPPORO",
       "manualCoordinates": [
         43.06746909999999,
         141.3492665
@@ -17,29 +17,258 @@
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P002",
       "eventId": "MANUAL-STAMP-20260902220813-2026",
-      "venue": "Pokémon Center TOHOKU",
-      "name": "Pokémon Center TOHOKU",
-      "manualName": "Pokémon Center TOHOKU",
-      "manualVenue": "Pokémon Center TOHOKU",
+      "venue": "宮城県&Pokémon Center TOHOKU",
+      "name": "宮城県&Pokémon Center TOHOKU",
+      "manualName": "宮城県&Pokémon Center TOHOKU",
+      "manualVenue": "宮城県&Pokémon Center TOHOKU",
       "manualCoordinates": [
         38.2621602,
         140.8817018
       ],
-      "coordinatesSource": "Manual admin"
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tohoku.webp",
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P003",
       "eventId": "MANUAL-STAMP-20260902220813-2026",
-      "venue": "Pokémon Center TOKYO-BAY",
-      "name": "Pokémon Center TOKYO-BAY",
-      "manualName": "Pokémon Center TOKYO-BAY",
-      "manualVenue": "Pokémon Center TOKYO-BAY",
+      "venue": "千葉県&Pokémon Center TOKYO-BAY",
+      "name": "千葉県&Pokémon Center TOKYO-BAY",
+      "manualName": "千葉県&Pokémon Center TOKYO-BAY",
+      "manualVenue": "千葉県&Pokémon Center TOKYO-BAY",
       "manualCoordinates": [
         35.6866032,
         139.9890362
       ],
-      "coordinatesSource": "Manual admin"
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyobay.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P004",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "東京都&Pokémon Center MEGA TOKYO",
+      "name": "東京都&Pokémon Center MEGA TOKYO",
+      "manualName": "東京都&Pokémon Center MEGA TOKYO",
+      "manualVenue": "東京都&Pokémon Center MEGA TOKYO",
+      "manualCoordinates": [
+        35.7289056,
+        139.7193245
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P005",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "東京都&Pokémon Center SHIBUYA",
+      "name": "東京都&Pokémon Center SHIBUYA",
+      "manualName": "東京都&Pokémon Center SHIBUYA",
+      "manualVenue": "東京都&Pokémon Center SHIBUYA",
+      "manualCoordinates": [
+        35.66195569999999,
+        139.6984408
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-shibuya.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P006",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "東京都&Pokémon Center SKYTREE TOWN",
+      "name": "東京都&Pokémon Center SKYTREE TOWN",
+      "manualName": "東京都&Pokémon Center SKYTREE TOWN",
+      "manualVenue": "東京都&Pokémon Center SKYTREE TOWN",
+      "manualCoordinates": [
+        35.710344799999994,
+        139.8126119
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-skytreetown.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P007",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "東京都&Pokémon Center TOKYO DX",
+      "name": "東京都&Pokémon Center TOKYO DX",
+      "manualName": "東京都&Pokémon Center TOKYO DX",
+      "manualVenue": "東京都&Pokémon Center TOKYO DX",
+      "manualCoordinates": [
+        35.6802902,
+        139.7742695
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyodx.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P008",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "神奈川県&Pokémon Center YOKOHAMA",
+      "name": "神奈川県&Pokémon Center YOKOHAMA",
+      "manualName": "神奈川県&Pokémon Center YOKOHAMA",
+      "manualVenue": "神奈川県&Pokémon Center YOKOHAMA",
+      "manualCoordinates": [
+        35.4645717,
+        139.6244898
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P009",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "神奈川県&Pokémon Center YOKOHAMA SATELLITE",
+      "name": "神奈川県&Pokémon Center YOKOHAMA SATELLITE",
+      "manualName": "神奈川県&Pokémon Center YOKOHAMA SATELLITE",
+      "manualVenue": "神奈川県&Pokémon Center YOKOHAMA SATELLITE",
+      "manualCoordinates": [
+        35.46680229999999,
+        139.6213024
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P010",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "石川県&Pokémon Center KANAZAWA",
+      "name": "石川県&Pokémon Center KANAZAWA",
+      "manualName": "石川県&Pokémon Center KANAZAWA",
+      "manualVenue": "石川県&Pokémon Center KANAZAWA",
+      "manualCoordinates": [
+        36.5791483,
+        136.64975429999998
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kanazawa.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P011",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "愛知県&Pokémon Center NAGOYA",
+      "name": "愛知県&Pokémon Center NAGOYA",
+      "manualName": "愛知県&Pokémon Center NAGOYA",
+      "manualVenue": "愛知県&Pokémon Center NAGOYA",
+      "manualCoordinates": [
+        35.1636262,
+        136.90803
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-nagoya.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P012",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "京都府&Pokémon Center KYOTO",
+      "name": "京都府&Pokémon Center KYOTO",
+      "manualName": "京都府&Pokémon Center KYOTO",
+      "manualVenue": "京都府&Pokémon Center KYOTO",
+      "manualCoordinates": [
+        35.003416699999995,
+        135.75838389999998
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kyoto.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P013",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "大阪府&Pokémon Center OSAKA",
+      "name": "大阪府&Pokémon Center OSAKA",
+      "manualName": "大阪府&Pokémon Center OSAKA",
+      "manualVenue": "大阪府&Pokémon Center OSAKA",
+      "manualCoordinates": [
+        34.70185250000001,
+        135.49655909999998
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osaka.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P014",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "大阪府&Pokémon Center OSAKA DX",
+      "name": "大阪府&Pokémon Center OSAKA DX",
+      "manualName": "大阪府&Pokémon Center OSAKA DX",
+      "manualVenue": "大阪府&Pokémon Center OSAKA DX",
+      "manualCoordinates": [
+        34.6731719,
+        135.5007545
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osakadx.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P015",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "広島県&Pokémon Center HIROSHIMA",
+      "name": "広島県&Pokémon Center HIROSHIMA",
+      "manualName": "広島県&Pokémon Center HIROSHIMA",
+      "manualVenue": "広島県&Pokémon Center HIROSHIMA",
+      "manualCoordinates": [
+        34.3986243,
+        132.4759743
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-hiroshima.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P016",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "香川県&Pokémon Center KAGAWA",
+      "name": "香川県&Pokémon Center KAGAWA",
+      "manualName": "香川県&Pokémon Center KAGAWA",
+      "manualVenue": "香川県&Pokémon Center KAGAWA",
+      "manualCoordinates": [
+        34.3422817,
+        134.05006079999998
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kagawa.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P017",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "福岡県&Pokémon Center FUKUOKA",
+      "name": "福岡県&Pokémon Center FUKUOKA",
+      "manualName": "福岡県&Pokémon Center FUKUOKA",
+      "manualVenue": "福岡県&Pokémon Center FUKUOKA",
+      "manualCoordinates": [
+        33.5890033,
+        130.4192564
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-fukuoka.webp",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902220813-2026-P018",
+      "eventId": "MANUAL-STAMP-20260902220813-2026",
+      "venue": "沖縄県&Pokémon Center OKINAWA",
+      "name": "沖縄県&Pokémon Center OKINAWA",
+      "manualName": "沖縄県&Pokémon Center OKINAWA",
+      "manualVenue": "沖縄県&Pokémon Center OKINAWA",
+      "manualCoordinates": [
+        26.314085199999997,
+        127.7962995
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp",
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T14:25:12.256Z"
+  "updated": "2026-09-02T14:34:36.300Z"
 }

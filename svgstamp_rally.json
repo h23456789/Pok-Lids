@@ -177,10 +177,10 @@
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "venueType": "go_stamp_point",
-      "venue": "Pokémon Center SAPPORO",
-      "venueZh": "Pokémon Center SAPPORO",
-      "name": "Pokémon Center SAPPORO",
-      "nameZh": "Pokémon Center SAPPORO",
+      "venue": "北海道&Pokémon Center SAPPORO",
+      "venueZh": "北海道&Pokémon Center SAPPORO",
+      "name": "北海道&Pokémon Center SAPPORO",
+      "nameZh": "北海道&Pokémon Center SAPPORO",
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
       "source": "Manual admin",
@@ -205,10 +205,10 @@
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "venueType": "go_stamp_point",
-      "venue": "Pokémon Center TOHOKU",
-      "venueZh": "Pokémon Center TOHOKU",
-      "name": "Pokémon Center TOHOKU",
-      "nameZh": "Pokémon Center TOHOKU",
+      "venue": "宮城県&Pokémon Center TOHOKU",
+      "venueZh": "宮城県&Pokémon Center TOHOKU",
+      "name": "宮城県&Pokémon Center TOHOKU",
+      "nameZh": "宮城県&Pokémon Center TOHOKU",
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
       "source": "Manual admin",
@@ -221,7 +221,10 @@
       "lat": 38.2621602,
       "lng": 140.8817018,
       "coordinatesManual": true,
-      "coordinatesSource": "Manual admin"
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tohoku.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P003",
@@ -233,10 +236,10 @@
       "activity": "GO Stamp Rally",
       "activityZh": "GO 集章趣",
       "venueType": "go_stamp_point",
-      "venue": "Pokémon Center TOKYO-BAY",
-      "venueZh": "Pokémon Center TOKYO-BAY",
-      "name": "Pokémon Center TOKYO-BAY",
-      "nameZh": "Pokémon Center TOKYO-BAY",
+      "venue": "千葉県&Pokémon Center TOKYO-BAY",
+      "venueZh": "千葉県&Pokémon Center TOKYO-BAY",
+      "name": "千葉県&Pokémon Center TOKYO-BAY",
+      "nameZh": "千葉県&Pokémon Center TOKYO-BAY",
       "startDate": "2026-07-01",
       "endDate": "2027-08-31",
       "source": "Manual admin",
@@ -249,7 +252,10 @@
       "lat": 35.6866032,
       "lng": 139.9890362,
       "coordinatesManual": true,
-      "coordinatesSource": "Manual admin"
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyobay.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P004",
@@ -275,7 +281,12 @@
         139.7193245
       ],
       "lat": 35.7289056,
-      "lng": 139.7193245
+      "lng": 139.7193245,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-megatokyo.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P005",
@@ -301,7 +312,12 @@
         139.6984408
       ],
       "lat": 35.66195569999999,
-      "lng": 139.6984408
+      "lng": 139.6984408,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-shibuya.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P006",
@@ -327,7 +343,12 @@
         139.8126119
       ],
       "lat": 35.710344799999994,
-      "lng": 139.8126119
+      "lng": 139.8126119,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-skytreetown.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P007",
@@ -353,7 +374,12 @@
         139.7742695
       ],
       "lat": 35.6802902,
-      "lng": 139.7742695
+      "lng": 139.7742695,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-tokyodx.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P008",
@@ -379,7 +405,12 @@
         139.6244898
       ],
       "lat": 35.4645717,
-      "lng": 139.6244898
+      "lng": 139.6244898,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P009",
@@ -405,7 +436,12 @@
         139.6213024
       ],
       "lat": 35.46680229999999,
-      "lng": 139.6213024
+      "lng": 139.6213024,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-yokohama.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P010",
@@ -431,7 +467,12 @@
         136.64975429999998
       ],
       "lat": 36.5791483,
-      "lng": 136.64975429999998
+      "lng": 136.64975429999998,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kanazawa.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P011",
@@ -457,7 +498,12 @@
         136.90803
       ],
       "lat": 35.1636262,
-      "lng": 136.90803
+      "lng": 136.90803,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-nagoya.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P012",
@@ -483,7 +529,12 @@
         135.75838389999998
       ],
       "lat": 35.003416699999995,
-      "lng": 135.75838389999998
+      "lng": 135.75838389999998,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kyoto.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P013",
@@ -509,7 +560,12 @@
         135.49655909999998
       ],
       "lat": 34.70185250000001,
-      "lng": 135.49655909999998
+      "lng": 135.49655909999998,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osaka.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P014",
@@ -535,7 +591,12 @@
         135.5007545
       ],
       "lat": 34.6731719,
-      "lng": 135.5007545
+      "lng": 135.5007545,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-osakadx.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P015",
@@ -561,7 +622,12 @@
         132.4759743
       ],
       "lat": 34.3986243,
-      "lng": 132.4759743
+      "lng": 132.4759743,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-hiroshima.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P016",
@@ -587,7 +653,12 @@
         134.05006079999998
       ],
       "lat": 34.3422817,
-      "lng": 134.05006079999998
+      "lng": 134.05006079999998,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-kagawa.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P017",
@@ -613,7 +684,12 @@
         130.4192564
       ],
       "lat": 33.5890033,
-      "lng": 130.4192564
+      "lng": 130.4192564,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-fukuoka.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P018",
@@ -639,10 +715,15 @@
         127.7962995
       ],
       "lat": 26.314085199999997,
-      "lng": 127.7962995
+      "lng": 127.7962995,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T14:28:10.646Z",
+  "updated": "2026-09-02T14:34:38.754Z",
   "source": "manual-admin",
   "sourceMode": "manual staged GitHub admin",
   "version": "manual-1.0",

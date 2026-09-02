@@ -1,4 +1,5 @@
 <!doctype html> 
+
 <html lang="zh-Hant">
 
 <head>
@@ -6,9 +7,10 @@
 <meta charset="utf-8">
 
 <meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover"
->
+name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover"
+
+
 
 <title>
   Pokémon Japan Collection｜日本寶可夢收集圖鑑
@@ -2192,23 +2194,21 @@ button{
 
 </head>
 
-
 <body>
 
 <div class="container">
-
 
 <header class="header">
 
   <div class="logo-title">
 
-    <h1>
-      POKÉMON JAPAN COLLECTION
-    </h1>
+<h1>
+  POKÉMON JAPAN COLLECTION
+</h1>
 
-    <p>
-      日本寶可夢收集圖鑑
-    </p>
+<p>
+  日本寶可夢收集圖鑑
+</p>
 
   </div>
 
@@ -2218,56 +2218,55 @@ button{
   <button id="adminOpenBtn" class="download-btn" type="button" onclick="openAdminPanel()">⚙️ 管理／手動修正</button>
 </div>
 
-
 <!-- =========================================================
      TABS
 ========================================================= -->
 
 <div class="main-tabs">
 
-  <button
-    id="tabLid"
-    class="main-tab active"
-    onclick="switchCollectionType('lid')"
-  >
+<button
+id="tabLid"
+class="main-tab active"
+onclick="switchCollectionType('lid')"
 
-    <div class="main-tab-icon">
-      🔴
-    </div>
 
-    <div class="main-tab-title">
-      Poké Lid
-    </div>
 
-    <div class="main-tab-sub">
-      日本寶可夢井蓋
-    </div>
+<div class="main-tab-icon">
+  🔴
+</div>
+
+<div class="main-tab-title">
+  Poké Lid
+</div>
+
+<div class="main-tab-sub">
+  日本寶可夢井蓋
+</div>
 
   </button>
 
+<button
+id="tabStamp"
+class="main-tab"
+onclick="switchCollectionType('stamp')"
 
-  <button
-    id="tabStamp"
-    class="main-tab"
-    onclick="switchCollectionType('stamp')"
-  >
 
-    <div class="main-tab-icon">
-      🎟️
-    </div>
 
-    <div class="main-tab-title">
-      Stamp Rally
-    </div>
+<div class="main-tab-icon">
+  🎟️
+</div>
 
-    <div class="main-tab-sub">
-      限時活動圖章
-    </div>
+<div class="main-tab-title">
+  Stamp Rally
+</div>
+
+<div class="main-tab-sub">
+  限時活動圖章
+</div>
 
   </button>
 
 </div>
-
 
 <!-- =========================================================
      PROGRESS
@@ -2281,19 +2280,19 @@ button{
 
   <span>
 
-    <span id="progressLabel">
-      Poké Lid 已收集：
-    </span>
+<span id="progressLabel">
+  Poké Lid 已收集：
+</span>
 
-    <b id="totalObtained">
-      0
-    </b>
+<b id="totalObtained">
+  0
+</b>
 
-    ／
+／
 
-    <b id="totalCount">
-      0
-    </b>
+<b id="totalCount">
+  0
+</b>
 
   </span>
 
@@ -2303,14 +2302,12 @@ button{
 
 </div>
 
-
 <div
   id="sectionTitle"
   class="section-title"
 >
   🔴 Poké Lid 蒐集進度
 </div>
-
 
 <div
   id="regions"
@@ -2323,35 +2320,43 @@ button{
 
 </div>
 
-
 <!-- =========================================================
      DOWNLOAD
 ========================================================= -->
 
 <div class="download-box" id="mainDownloadBox">
 
-  <button
-    class="download-btn"
-    onclick="downloadAll()"
-    title="下載目前類別全部資料"
-  >
-    TXT
+<button
+class="download-btn"
+onclick="downloadAll()"
+title="下載目前類別全部資料"
+
+
+
+TXT
+
   </button>
 
-  <button
-    class="download-btn"
-    onclick="downloadJSON()"
-    title="下載目前類別全部資料"
-  >
-    JSON
+<button
+class="download-btn"
+onclick="downloadJSON()"
+title="下載目前類別全部資料"
+
+
+
+JSON
+
   </button>
 
-  <button
-    class="download-btn"
-    onclick="downloadCSV()"
-    title="下載目前類別全部資料"
-  >
-    CSV
+<button
+class="download-btn"
+onclick="downloadCSV()"
+title="下載目前類別全部資料"
+
+
+
+CSV
+
   </button>
 
 </div>
@@ -2381,7 +2386,6 @@ button{
   </button>
 </div>
 
-
 <!-- =========================================================
      HISTORY
 ========================================================= -->
@@ -2392,35 +2396,33 @@ button{
     📜 更新 History
   </h2>
 
-
   <div class="history-filter">
 
-    <button
-      id="historyAll"
-      class="active"
-      onclick="setHistoryFilter('all')"
-    >
-      全部
-    </button>
+<button
+  id="historyAll"
+  class="active"
+  onclick="setHistoryFilter('all')"
+>
+  全部
+</button>
 
 
-    <button
-      id="historyLid"
-      onclick="setHistoryFilter('lid')"
-    >
-      🔴 Poké Lid
-    </button>
+<button
+  id="historyLid"
+  onclick="setHistoryFilter('lid')"
+>
+  🔴 Poké Lid
+</button>
 
 
-    <button
-      id="historyStamp"
-      onclick="setHistoryFilter('stamp')"
-    >
-      🎟️ Stamp Rally
-    </button>
+<button
+  id="historyStamp"
+  onclick="setHistoryFilter('stamp')"
+>
+  🎟️ Stamp Rally
+</button>
 
   </div>
-
 
   <div id="history">
     載入中……
@@ -2429,7 +2431,6 @@ button{
 </div>
 
 </div>
-
 
 <!-- =========================================================
      PREFECTURE PANEL
@@ -2446,47 +2447,46 @@ button{
     onclick="event.stopPropagation()"
   >
 
-    <div class="prefecture-header">
+<div class="prefecture-header">
 
-      <div class="prefecture-header-title">
+  <div class="prefecture-header-title">
 
-        <div
-          id="prefectureTitle"
-          class="prefecture-title"
-        >
-          區域
-        </div>
-
-
-        <div
-          id="prefectureSummary"
-          class="prefecture-summary"
-        >
-          已收集 0 / 0
-        </div>
-
-      </div>
-
-
-      <button
-        class="panel-close"
-        onclick="closePrefecturePanel()"
-      >
-        ×
-      </button>
-
+    <div
+      id="prefectureTitle"
+      class="prefecture-title"
+    >
+      區域
     </div>
 
 
     <div
-      id="prefectureGrid"
-      class="prefecture-grid"
-    ></div>
+      id="prefectureSummary"
+      class="prefecture-summary"
+    >
+      已收集 0 / 0
+    </div>
+
+  </div>
+
+
+  <button
+    class="panel-close"
+    onclick="closePrefecturePanel()"
+  >
+    ×
+  </button>
+
+</div>
+
+
+<div
+  id="prefectureGrid"
+  class="prefecture-grid"
+></div>
 
   </div>
 
 </div>
-
 
 <!-- =========================================================
      COLLECTION PANEL
@@ -2503,89 +2503,88 @@ button{
     onclick="event.stopPropagation()"
   >
 
-    <div class="collection-header">
+<div class="collection-header">
 
-      <div class="collection-header-left">
+  <div class="collection-header-left">
 
-        <div
-          id="collectionTitle"
-          class="collection-title"
-        >
-          縣
-        </div>
-
-
-        <div
-          id="collectionSummary"
-          class="collection-summary"
-        >
-          已收集 0 / 0
-        </div>
-
-      </div>
-
-
-      <div class="collection-header-actions">
-
-        <button
-          class="back-btn"
-          onclick="backToPrefectureList()"
-        >
-          ← 返回縣列表
-        </button>
-
-
-        <button
-          class="collection-close"
-          onclick="closeCollectionPanel()"
-        >
-          ×
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="collection-toolbar">
-
-      <div class="collection-legend">
-
-        <div class="legend-item">
-
-          <span
-            class="legend-dot green"
-          ></span>
-
-          已收集
-
-        </div>
-
-
-        <div class="legend-item">
-
-          <span
-            class="legend-dot red"
-          ></span>
-
-          未收集
-
-        </div>
-
-      </div>
-
+    <div
+      id="collectionTitle"
+      class="collection-title"
+    >
+      縣
     </div>
 
 
     <div
-      id="collectionGrid"
-      class="collection-grid"
-    ></div>
+      id="collectionSummary"
+      class="collection-summary"
+    >
+      已收集 0 / 0
+    </div>
+
+  </div>
+
+
+  <div class="collection-header-actions">
+
+    <button
+      class="back-btn"
+      onclick="backToPrefectureList()"
+    >
+      ← 返回縣列表
+    </button>
+
+
+    <button
+      class="collection-close"
+      onclick="closeCollectionPanel()"
+    >
+      ×
+    </button>
 
   </div>
 
 </div>
 
+
+<div class="collection-toolbar">
+
+  <div class="collection-legend">
+
+    <div class="legend-item">
+
+      <span
+        class="legend-dot green"
+      ></span>
+
+      已收集
+
+    </div>
+
+
+    <div class="legend-item">
+
+      <span
+        class="legend-dot red"
+      ></span>
+
+      未收集
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div
+  id="collectionGrid"
+  class="collection-grid"
+></div>
+
+  </div>
+
+</div>
 
 <!-- =========================================================
      ITEM MODAL
@@ -2602,121 +2601,121 @@ button{
     onclick="event.stopPropagation()"
   >
 
-    <button
-      class="modal-close"
-      onclick="closeModal(event)"
+<button
+  class="modal-close"
+  onclick="closeModal(event)"
+>
+  ×
+</button>
+
+
+<div class="modal-image-wrap">
+
+  <img
+    id="modalImage"
+    class="modal-image"
+    src=""
+    alt=""
+  >
+
+</div>
+
+
+<div class="modal-content">
+
+  <div
+    id="modalType"
+    class="modal-type"
+  ></div>
+
+
+  <div
+    id="modalPref"
+    class="modal-pref"
+  ></div>
+
+
+  <div
+    id="modalCity"
+    class="modal-city"
+  ></div>
+
+
+  <div
+    id="modalAddress"
+    class="modal-address"
+  ></div>
+
+  <div
+    id="stampDetails"
+    style="display:none;"
+  ></div>
+
+
+  <div>
+
+    <span
+      id="modalCoordinate"
+      class="coordinate"
+      onclick="copyCoordinate(event)"
+    ></span>
+
+
+    <span
+      id="copyHint"
+      class="copy-hint"
     >
-      ×
+      ✓ 已複製
+    </span>
+
+  </div>
+
+
+  <div class="map-navigation">
+
+    <button
+      class="navigation-btn apple-map-btn"
+      onclick="openAppleMaps(event)"
+    >
+      🍎 Apple Maps 導航
     </button>
 
 
-    <div class="modal-image-wrap">
+    <button
+      class="navigation-btn google-map-btn"
+      onclick="openGoogleMaps(event)"
+    >
+      🗺 Google Maps 導航
+    </button>
 
-      <img
-        id="modalImage"
-        class="modal-image"
-        src=""
-        alt=""
+  </div>
+
+
+  <div class="obtain-row">
+
+    <label class="obtain-label">
+
+      <input
+        id="obtainedCheckbox"
+        type="checkbox"
+        onchange="toggleObtained()"
       >
 
-    </div>
+      <span>
+        已獲得
+      </span>
+
+    </label>
 
 
-    <div class="modal-content">
+    <div
+      id="saveStatus"
+      class="save-status"
+    ></div>
 
-      <div
-        id="modalType"
-        class="modal-type"
-      ></div>
+  </div>
 
-
-      <div
-        id="modalPref"
-        class="modal-pref"
-      ></div>
-
-
-      <div
-        id="modalCity"
-        class="modal-city"
-      ></div>
-
-
-      <div
-        id="modalAddress"
-        class="modal-address"
-      ></div>
-
-      <div
-        id="stampDetails"
-        style="display:none;"
-      ></div>
-
-
-      <div>
-
-        <span
-          id="modalCoordinate"
-          class="coordinate"
-          onclick="copyCoordinate(event)"
-        ></span>
-
-
-        <span
-          id="copyHint"
-          class="copy-hint"
-        >
-          ✓ 已複製
-        </span>
-
-      </div>
-
-
-      <div class="map-navigation">
-
-        <button
-          class="navigation-btn apple-map-btn"
-          onclick="openAppleMaps(event)"
-        >
-          🍎 Apple Maps 導航
-        </button>
-
-
-        <button
-          class="navigation-btn google-map-btn"
-          onclick="openGoogleMaps(event)"
-        >
-          🗺 Google Maps 導航
-        </button>
-
-      </div>
-
-
-      <div class="obtain-row">
-
-        <label class="obtain-label">
-
-          <input
-            id="obtainedCheckbox"
-            type="checkbox"
-            onchange="toggleObtained()"
-          >
-
-          <span>
-            已獲得
-          </span>
-
-        </label>
-
-
-        <div
-          id="saveStatus"
-          class="save-status"
-        ></div>
-
-      </div>
-
-    </div>
+</div>
 
   </div>
 
@@ -2727,6 +2726,7 @@ button{
 <!-- =========================================================
      ADMIN PANEL
 ========================================================= -->
+
 <div id="adminOverlay" class="modal-overlay" onclick="adminOverlayClick(event)">
   <div class="admin-modal" onclick="event.stopPropagation()">
     <button class="modal-close" type="button" onclick="closeAdminPanel(event)">×</button>
@@ -2749,62 +2749,63 @@ button{
             <div id="adminStatus" class="admin-status">尚未載入。</div>
           </div>
 
-          <div class="admin-section">
-            <h3>選擇活動／圖章</h3>
-            <div class="admin-field"><label>活動</label><select id="adminEventSelect"></select></div>
-            <div class="admin-field"><label>圖章／地點</label><select id="adminPointSelect"></select></div>
-            <div id="adminPointInfo" class="admin-point-info">請先載入資料。</div>
-          </div>
+      <div class="admin-section">
+        <h3>選擇活動／圖章</h3>
+        <div class="admin-field"><label>活動</label><select id="adminEventSelect"></select></div>
+        <div class="admin-field"><label>圖章／地點</label><select id="adminPointSelect"></select></div>
+        <div id="adminPointInfo" class="admin-point-info">請先載入資料。</div>
+      </div>
 
-          <div class="admin-section">
-            <h3>① 手動座標</h3>
-            <div class="admin-row2">
-              <div class="admin-field"><label>緯度 Latitude</label><input id="adminLat" inputmode="decimal"></div>
-              <div class="admin-field"><label>經度 Longitude</label><input id="adminLng" inputmode="decimal"></div>
-            </div>
-            <div class="admin-field"><label>座標來源說明</label><input id="adminCoordSource" placeholder="例如：人工確認地圖座標"></div>
-            <button class="admin-mini-btn" type="button" onclick="adminClearCoord()">清除手動座標</button>
-          </div>
+      <div class="admin-section">
+        <h3>① 手動座標</h3>
+        <div class="admin-row2">
+          <div class="admin-field"><label>緯度 Latitude</label><input id="adminLat" inputmode="decimal"></div>
+          <div class="admin-field"><label>經度 Longitude</label><input id="adminLng" inputmode="decimal"></div>
         </div>
-
-        <div>
-          <div class="admin-section">
-            <h3>② 遊戲截圖 → 圖章</h3>
-            <div class="admin-field"><label>上傳遊戲截圖</label><input id="adminImageInput" type="file" accept="image/*"></div>
-            <div class="admin-crop-toolbar">
-              <button class="admin-mini-btn" type="button" onclick="adminZoom(-0.2)">－</button>
-              <span id="adminZoomLabel">100%</span>
-              <button class="admin-mini-btn" type="button" onclick="adminZoom(0.2)">＋</button>
-              <button class="admin-mini-btn" type="button" onclick="adminResetZoom()">重設</button>
-              <label><input id="adminCircleCrop" type="checkbox"> 圓形輸出</label>
-              <label><input id="adminRemoveBg" type="checkbox" checked> 自動去背</label>
-              <label>去背容差 <input id="adminBgTolerance" type="range" min="8" max="100" value="36" oninput="document.getElementById('adminBgTolLabel').textContent=this.value"></label>
-              <span id="adminBgTolLabel">36</span>
-            </div>
-            <div id="adminCanvasWrap" class="admin-canvas-wrap">
-              <canvas id="adminCanvas" width="900" height="600"></canvas>
-            </div>
-            <div class="admin-help">滑鼠拖曳／觸控拖曳框選圖章。滑鼠滾輪、上方 ± 可以放大縮小截圖；放大後可在畫布中捲動查看細節。</div>
-            <div class="admin-buttons">
-              <button class="admin-mini-btn" type="button" onclick="adminCropPreview()">裁切預覽</button>
-              <button class="admin-mini-btn" type="button" onclick="adminDownloadCrop()">下載裁切 PNG</button>
-            </div>
-            <div id="adminCropPreview" class="admin-crop-preview"></div>
-          </div>
-
-          <div class="admin-section">
-            <h3>③ 儲存人工修正</h3>
-            <div class="admin-field"><label>已有圖片網址（可不填）</label><input id="adminImageUrl" placeholder="https://... 或 assets/stamps/...png"></div>
-            <div class="admin-field"><label>圖片來源說明</label><input id="adminImageSource" placeholder="例如：遊戲截圖人工裁切"></div>
-            <div class="admin-buttons">
-              <button class="download-btn" type="button" onclick="adminSaveOverride()">儲存人工修正到 GitHub</button>
-              <button class="admin-mini-btn" type="button" onclick="adminLoadData()">重新載入</button>
-            </div>
-            <div id="adminSaveStatus" class="admin-status"></div>
-          </div>
-        </div>
+        <div class="admin-field"><label>座標來源說明</label><input id="adminCoordSource" placeholder="例如：人工確認地圖座標"></div>
+        <button class="admin-mini-btn" type="button" onclick="adminClearCoord()">清除手動座標</button>
       </div>
     </div>
+
+    <div>
+      <div class="admin-section">
+        <h3>② 遊戲截圖 → 圖章</h3>
+        <div class="admin-field"><label>上傳遊戲截圖</label><input id="adminImageInput" type="file" accept="image/*"></div>
+        <div class="admin-crop-toolbar">
+          <button class="admin-mini-btn" type="button" onclick="adminZoom(-0.2)">－</button>
+          <span id="adminZoomLabel">100%</span>
+          <button class="admin-mini-btn" type="button" onclick="adminZoom(0.2)">＋</button>
+          <button class="admin-mini-btn" type="button" onclick="adminResetZoom()">重設</button>
+          <label><input id="adminCircleCrop" type="checkbox"> 圓形輸出</label>
+          <label><input id="adminRemoveBg" type="checkbox" checked> 自動去背</label>
+          <label>去背容差 <input id="adminBgTolerance" type="range" min="8" max="100" value="36" oninput="document.getElementById('adminBgTolLabel').textContent=this.value"></label>
+          <span id="adminBgTolLabel">36</span>
+        </div>
+        <div id="adminCanvasWrap" class="admin-canvas-wrap">
+          <canvas id="adminCanvas" width="900" height="600"></canvas>
+        </div>
+        <div class="admin-help">滑鼠拖曳／觸控拖曳框選圖章。滑鼠滾輪、上方 ± 可以放大縮小截圖；放大後可在畫布中捲動查看細節。</div>
+        <div class="admin-buttons">
+          <button class="admin-mini-btn" type="button" onclick="adminCropPreview()">裁切預覽</button>
+          <button class="admin-mini-btn" type="button" onclick="adminDownloadCrop()">下載裁切 PNG</button>
+        </div>
+        <div id="adminCropPreview" class="admin-crop-preview"></div>
+      </div>
+
+      <div class="admin-section">
+        <h3>③ 儲存人工修正</h3>
+        <div class="admin-field"><label>已有圖片網址（可不填）</label><input id="adminImageUrl" placeholder="https://... 或 assets/stamps/...png"></div>
+        <div class="admin-field"><label>圖片來源說明</label><input id="adminImageSource" placeholder="例如：遊戲截圖人工裁切"></div>
+        <div class="admin-buttons">
+          <button class="download-btn" type="button" onclick="adminSaveOverride()">儲存人工修正到 GitHub</button>
+          <button class="admin-mini-btn" type="button" onclick="adminLoadData()">重新載入</button>
+        </div>
+        <div id="adminSaveStatus" class="admin-status"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -3434,7 +3435,7 @@ function renderCurrentHome(){
 function closeAllPanels(){ for(const id of ["prefecturePanel","collectionPanel","modalOverlay"]) document.getElementById(id).classList.remove("show"); document.body.classList.remove("no-scroll"); }
 function updateOverall(){
   if(collectionType==="stamp"){
-    const events=getStampEvents().filter(event=>getStampEventStatus(event)!=="已結束"); let total=0,obtained=0;
+    const events=getStampEvents(); let total=0,obtained=0;
     for(const event of events){ const items=event.items||[]; const eventTotal=Number(event.expectedStamps||0)||items.length; total+=eventTotal; obtained+=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length; }
     document.getElementById("totalObtained").textContent=obtained;
     document.getElementById("totalCount").textContent=total;
@@ -3469,8 +3470,8 @@ function getStampEventStatus(event){
   const start=event?.startDate?new Date(`${event.startDate}T00:00:00`):null;
   const end=event?.endDate?new Date(`${event.endDate}T23:59:59`):null;
   if(!start && !end)return "日期未定";
-  if(start && now<start)return "即將開始";
-  if(end && now>end)return "已結束";
+  if(start && now<start)return "活動尚未開始";
+  if(end && now>end)return "活動已結束";
   return "進行中";
 }
 
@@ -3484,11 +3485,9 @@ function getStampEventDateText(event){
 }
 
 function renderStampEvents(el){
-  // 目前活動頁：官方有資料就顯示「即將開始 / 進行中 / 日期未定」；
-  // 已結束活動移到 History，不再顯示在目前活動列表。
-  const events=getStampEvents().filter(event=>getStampEventStatus(event)!=="已結束");
+  const events=getStampEvents();
   if(!events.length){
-    el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有可顯示的 Pokémon GO 官方「GO 集章趣」活動。<br><br>已結束活動可在下方 History 查看。</div>`;
+    el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。<br><br>資料由 GitHub Actions 自動同步 Pokémon GO 官方網站。</div>`;
     return;
   }
   el.innerHTML="";
@@ -3503,8 +3502,9 @@ function renderStampEvents(el){
     const card=document.createElement("div");
     card.className="region-card stamp-event-card";
     card.onclick=()=>openStampEvent(event.id);
-    const statusKey=status==="即將開始"?"upcoming":(status==="已結束"?"ended":(status==="日期未定"?"unknown":"active"));
-    const statusOverlay=`<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>`;
+    const statusKey=status==="活動尚未開始"?"upcoming":(status==="活動已結束"?"ended":(status==="日期未定"?"unknown":"active"));
+    const statusOverlay=(statusKey!=="active")
+      ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
     const completeStamp=(total>0 && obtained>=total)
       ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
       : "";
@@ -3677,9 +3677,7 @@ function getStampDownloadGroups(includeUpcoming=false){
   for(const event of getStampEvents()){
     // 「全部 GO 集章趣／所有圖章」下載：未開始活動不納入。
     // 單一活動下載則由 downloadStampEvent() 直接處理，不受此篩選影響。
-    const eventStatus=getStampEventStatus(event);
-    if(eventStatus==="已結束") continue;
-    if(!includeUpcoming && eventStatus==="即將開始") continue;
+    if(!includeUpcoming && getStampEventStatus(event)==="活動尚未開始") continue;
     const title=String(event.eventZh||event.event||"GO 集章趣").trim() || "GO 集章趣";
     if(!output[title]) output[title]=[];
     for(const item of (event.items||[])){
@@ -3825,40 +3823,7 @@ function downloadCSV(){
 async function loadHistoryFile(type){try{const json=await fetchJSON(HISTORY_URLS[type]);return(json.history||[]).map(entry=>({...entry,type}));}catch{return[];}}
 async function loadHistory(){const [lidHistory,stampHistory]=await Promise.all([loadHistoryFile("lid"),loadHistoryFile("stamp")]);historyEntries=[...lidHistory,...stampHistory].sort((a,b)=>new Date(b.time||0)-new Date(a.time||0));renderHistory();}
 function setHistoryFilter(filter){currentHistoryFilter=filter;document.getElementById("historyAll").classList.toggle("active",filter==="all");document.getElementById("historyLid").classList.toggle("active",filter==="lid");document.getElementById("historyStamp").classList.toggle("active",filter==="stamp");renderHistory();}
-function renderHistory(){
-  const el=document.getElementById("history");
-  let logs=historyEntries;
-  if(currentHistoryFilter!=="all")logs=logs.filter(x=>x.type===currentHistoryFilter);
-
-  const showEnded=currentHistoryFilter==="all"||currentHistoryFilter==="stamp";
-  const endedEvents=showEnded
-    ? getStampEvents()
-        .filter(event=>getStampEventStatus(event)==="已結束")
-        .sort((a,b)=>String(b.endDate||"").localeCompare(String(a.endDate||"")))
-    : [];
-
-  const endedHtml=endedEvents.map(event=>{
-    const items=event.items||[];
-    const total=Number(event.expectedStamps||0)||items.length;
-    const dateText=getStampEventDateText(event);
-    return `<div class="history-card">
-      <b>${escapeHtml(event.endDate||"日期未定")}</b>
-      <span class="history-type stamp">GO 集章趣</span>
-      <span class="stamp-event-live-status ended">已結束</span><br>
-      <span class="muted">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</span><br>
-      ${escapeHtml(dateText)}${total?`　共 ${total} 個圖章`:""}
-    </div>`;
-  }).join("");
-
-  const labels={lid:"Poké Lid",stamp:"GO 集章趣"};
-  const logHtml=logs.slice(0,50).map(item=>`<div class="history-card"><b>${escapeHtml(item.time||"")}</b><span class="history-type ${item.type}">${labels[item.type]||item.type}</span><br><span class="muted">${escapeHtml(item.eventZh||item.event||"")}　版本：${escapeHtml(item.total??"")} 筆</span><br>🟢 新增 ${(item.added||[]).length}　 🔴 移除 ${(item.removed||[]).length}　 🟡 修改 ${(item.changed||[]).length}</div>`).join("");
-
-  if(!endedHtml&&!logHtml){
-    el.innerHTML=`<span class="muted">尚無更新紀錄。</span>`;
-    return;
-  }
-  el.innerHTML=endedHtml+logHtml;
-}
+function renderHistory(){const el=document.getElementById("history");let logs=historyEntries;if(currentHistoryFilter!=="all")logs=logs.filter(x=>x.type===currentHistoryFilter);if(!logs.length){el.innerHTML=`<span class="muted">尚無更新紀錄。</span>`;return;}const labels={lid:"Poké Lid",stamp:"GO 集章趣"};el.innerHTML=logs.slice(0,50).map(item=>`<div class="history-card"><b>${escapeHtml(item.time||"")}</b><span class="history-type ${item.type}">${labels[item.type]||item.type}</span><br><span class="muted">${escapeHtml(item.eventZh||item.event||"")}　版本：${escapeHtml(item.total??"")} 筆</span><br>🟢 新增 ${(item.added||[]).length}　 🔴 移除 ${(item.removed||[]).length}　 🟡 修改 ${(item.changed||[]).length}</div>`).join("");}
 function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
 
 document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;const modal=document.getElementById("modalOverlay"),collection=document.getElementById("collectionPanel"),prefecture=document.getElementById("prefecturePanel");if(modal.classList.contains("show")){closeModal();return;}if(collection.classList.contains("show")){backToPrefectureList();return;}if(prefecture.classList.contains("show"))closePrefecturePanel();});

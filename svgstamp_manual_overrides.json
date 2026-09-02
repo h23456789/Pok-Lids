@@ -420,7 +420,62 @@
       "coordinatesSource": "Manual admin",
       "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P001.png",
       "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P002",
+      "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+      "venue": "台灣台北市（香堤大道）",
+      "name": "台灣台北市（香堤大道）",
+      "manualName": "台灣台北市（香堤大道）",
+      "manualVenue": "台灣台北市（香堤大道）",
+      "manualCoordinates": [
+        25.037441913401466,
+        121.56729623624294
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P002.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P003",
+      "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+      "venue": "新加坡（樟宜國際機場：第3航廈出境大廳）",
+      "name": "新加坡（樟宜國際機場：第3航廈出境大廳）",
+      "manualName": "新加坡（樟宜國際機場：第3航廈出境大廳）",
+      "manualVenue": "新加坡（樟宜國際機場：第3航廈出境大廳）",
+      "manualCoordinates": [
+        1.3584630917983989,
+        103.99003178438828
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P003.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P004",
+      "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+      "venue": "菲律賓馬尼拉（SM Mall of Asia：MOA Sky）",
+      "name": "菲律賓馬尼拉（SM Mall of Asia：MOA Sky）",
+      "manualName": "菲律賓馬尼拉（SM Mall of Asia：MOA Sky）",
+      "manualVenue": "菲律賓馬尼拉（SM Mall of Asia：MOA Sky）",
+      "manualCoordinates": [
+        14.533728878376962,
+        120.98002040211666
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P004.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P005",
+      "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+      "venue": "泰國曼谷",
+      "name": "泰國曼谷",
+      "manualName": "泰國曼谷",
+      "manualVenue": "泰國曼谷",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P005.png",
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T16:41:40.935Z"
+  "updated": "2026-09-02T17:00:37.096Z"
 }

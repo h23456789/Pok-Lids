@@ -1,6 +1,54 @@
 {
   "history": [
     {
+      "time": "2026-09-02T17:00:44.599Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 32,
+      "added": [],
+      "removed": [],
+      "changed": [
+        "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P002",
+        "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P003",
+        "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P004",
+        "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P005"
+      ],
+      "addedItems": [],
+      "removedItems": [],
+      "changedItems": [
+        {
+          "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P002",
+          "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+          "eventZh": "「PokéXciting!」GO集章趣",
+          "nameZh": "台灣台北市（香堤大道）"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P003",
+          "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+          "eventZh": "「PokéXciting!」GO集章趣",
+          "nameZh": "新加坡（樟宜國際機場：第3航廈出境大廳）"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P004",
+          "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+          "eventZh": "「PokéXciting!」GO集章趣",
+          "nameZh": "菲律賓馬尼拉（SM Mall of Asia：MOA Sky）"
+        },
+        {
+          "id": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P005",
+          "eventId": "MANUAL-STAMP-20260902212838-POKE-XCITING-GO",
+          "eventZh": "「PokéXciting!」GO集章趣",
+          "nameZh": "泰國曼谷"
+        }
+      ],
+      "reasons": [
+        "圖章人工修正",
+        "圖章圖片"
+      ]
+    },
+    {
       "time": "2026-09-02T16:41:42.773Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

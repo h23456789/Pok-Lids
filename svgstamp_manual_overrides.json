@@ -270,7 +270,22 @@
       "coordinatesSource": "Manual admin",
       "manualStampImage": "https://shop.pokemon.co.jp/images/logos/logo-pokemoncenter-okinawa.webp",
       "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902235251-STAMP-P001",
+      "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+      "venue": "彩虹廣場拱門",
+      "name": "彩虹廣場拱門",
+      "manualName": "彩虹廣場拱門",
+      "manualVenue": "彩虹廣場拱門",
+      "manualCoordinates": [
+        25.09664,
+        121.5156
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P001.png",
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T14:35:53.609Z"
+  "updated": "2026-09-02T15:55:48.785Z"
 }

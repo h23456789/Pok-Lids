@@ -1,6 +1,33 @@
 {
   "history": [
     {
+      "time": "2026-09-02T15:56:12.148Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 24,
+      "added": [],
+      "removed": [],
+      "changed": [
+        "MANUAL-STAMP-20260902235251-STAMP-P001"
+      ],
+      "addedItems": [],
+      "removedItems": [],
+      "changedItems": [
+        {
+          "id": "MANUAL-STAMP-20260902235251-STAMP-P001",
+          "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+          "eventZh": "臺北市立兒童新樂園",
+          "nameZh": "彩虹廣場拱門"
+        }
+      ],
+      "reasons": [
+        "圖章人工修正",
+        "圖章圖片"
+      ]
+    },
+    {
       "time": "2026-09-02T15:52:54.564Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

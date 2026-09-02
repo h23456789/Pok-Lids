@@ -800,7 +800,12 @@
         121
       ],
       "lat": 25.09726,
-      "lng": 121
+      "lng": 121,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P002.png",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902235251-STAMP-P003",
@@ -826,7 +831,12 @@
         121
       ],
       "lat": 25.09752,
-      "lng": 121
+      "lng": 121,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P003.png",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902235251-STAMP-P004",
@@ -852,10 +862,15 @@
         121
       ],
       "lat": 25.09742,
-      "lng": 121
+      "lng": 121,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P004.png",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T15:59:41.554Z",
+  "updated": "2026-09-02T16:01:15.080Z",
   "source": "manual-admin",
   "sourceMode": "manual staged GitHub admin",
   "version": "manual-1.0",

@@ -285,7 +285,52 @@
       "coordinatesSource": "Manual admin",
       "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P001.png",
       "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902235251-STAMP-P002",
+      "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+      "venue": "入口廣場",
+      "name": "入口廣場",
+      "manualName": "入口廣場",
+      "manualVenue": "入口廣場",
+      "manualCoordinates": [
+        25.09726,
+        121
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P002.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902235251-STAMP-P003",
+      "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+      "venue": "星之還",
+      "name": "星之還",
+      "manualName": "星之還",
+      "manualVenue": "星之還",
+      "manualCoordinates": [
+        25.09752,
+        121
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P003.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260902235251-STAMP-P004",
+      "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+      "venue": "夢想海前廣場",
+      "name": "夢想海前廣場",
+      "manualName": "夢想海前廣場",
+      "manualVenue": "夢想海前廣場",
+      "manualCoordinates": [
+        25.09742,
+        121
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902235251-STAMP-P004.png",
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-02T15:55:48.785Z"
+  "updated": "2026-09-02T16:01:12.884Z"
 }

@@ -1,6 +1,34 @@
 {
   "history": [
     {
+      "time": "2026-09-02T15:52:54.564Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 24,
+      "added": [
+        "MANUAL-STAMP-20260902235251-STAMP-P001"
+      ],
+      "removed": [],
+      "changed": [
+        "EVENT:MANUAL-STAMP-20260902235251-STAMP:新增活動"
+      ],
+      "addedItems": [
+        {
+          "id": "MANUAL-STAMP-20260902235251-STAMP-P001",
+          "eventId": "MANUAL-STAMP-20260902235251-STAMP",
+          "eventZh": "臺北市立兒童新樂園",
+          "nameZh": "123"
+        }
+      ],
+      "removedItems": [],
+      "changedItems": [],
+      "reasons": [
+        "活動資料"
+      ]
+    },
+    {
       "time": "2026-09-02T14:35:55.899Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

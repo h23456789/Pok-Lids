@@ -3469,7 +3469,7 @@ function getStampEventStatus(event){
   const start=event?.startDate?new Date(`${event.startDate}T00:00:00`):null;
   const end=event?.endDate?new Date(`${event.endDate}T23:59:59`):null;
   if(!start && !end)return "日期未定";
-  if(start && now<start)return "即將開始";
+  if(start && now<start)return "活動尚未開始";
   if(end && now>end)return "活動已結束";
   return "進行中";
 }
@@ -3491,7 +3491,6 @@ function renderStampEvents(el){
   }
   el.innerHTML="";
   for(const event of events){
-    if(getStampEventStatus(event)==="活動已結束") continue;
     const items=event.items||[];
     const obtained=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
     const total=Number(event.expectedStamps||0)||items.length;
@@ -3502,8 +3501,9 @@ function renderStampEvents(el){
     const card=document.createElement("div");
     card.className="region-card stamp-event-card";
     card.onclick=()=>openStampEvent(event.id);
-    const statusKey=status==="即將開始"?"upcoming":(status==="活動已結束"?"ended":(status==="日期未定"?"unknown":"active"));
-    const statusOverlay=`<div class="stamp-event-status-overlay ${statusKey}">${escapeHtml(status)}</div>`;
+    const statusKey=status==="活動尚未開始"?"upcoming":(status==="活動已結束"?"ended":(status==="日期未定"?"unknown":"active"));
+    const statusOverlay=(statusKey!=="active")
+      ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
     const completeStamp=(total>0 && obtained>=total)
       ? `<div class="collection-complete-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
       : "";
@@ -3676,7 +3676,7 @@ function getStampDownloadGroups(includeUpcoming=false){
   for(const event of getStampEvents()){
     // 「全部 GO 集章趣／所有圖章」下載：未開始活動不納入。
     // 單一活動下載則由 downloadStampEvent() 直接處理，不受此篩選影響。
-    if(!includeUpcoming && getStampEventStatus(event)==="即將開始") continue;
+    if(!includeUpcoming && getStampEventStatus(event)==="活動尚未開始") continue;
     const title=String(event.eventZh||event.event||"GO 集章趣").trim() || "GO 集章趣";
     if(!output[title]) output[title]=[];
     for(const item of (event.items||[])){
@@ -3822,34 +3822,7 @@ function downloadCSV(){
 async function loadHistoryFile(type){try{const json=await fetchJSON(HISTORY_URLS[type]);return(json.history||[]).map(entry=>({...entry,type}));}catch{return[];}}
 async function loadHistory(){const [lidHistory,stampHistory]=await Promise.all([loadHistoryFile("lid"),loadHistoryFile("stamp")]);historyEntries=[...lidHistory,...stampHistory].sort((a,b)=>new Date(b.time||0)-new Date(a.time||0));renderHistory();}
 function setHistoryFilter(filter){currentHistoryFilter=filter;document.getElementById("historyAll").classList.toggle("active",filter==="all");document.getElementById("historyLid").classList.toggle("active",filter==="lid");document.getElementById("historyStamp").classList.toggle("active",filter==="stamp");renderHistory();}
-function renderHistory(){
-  const el=document.getElementById("history");
-  let logs=historyEntries;
-  if(currentHistoryFilter!=="all") logs=logs.filter(x=>x.type===currentHistoryFilter);
-
-  const labels={lid:"Poké Lid",stamp:"GO 集章趣"};
-  const parts=[];
-
-  // GO 集章趣：已結束活動移到歷史區，不再顯示於目前活動首頁。
-  if(currentHistoryFilter==="all" || currentHistoryFilter==="stamp"){
-    const endedEvents=getStampEvents()
-      .filter(event=>getStampEventStatus(event)==="活動已結束")
-      .sort((a,b)=>(b.endDate||"").localeCompare(a.endDate||""));
-
-    for(const event of endedEvents){
-      const items=event.items||[];
-      const total=Number(event.expectedStamps||0)||items.length;
-      const dateText=getStampEventDateText(event);
-      parts.push(`<div class="history-card"><b>${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</b><span class="history-type stamp">已結束活動</span><br><span class="muted">${escapeHtml(dateText)}　圖章：${total||"未公布"}</span></div>`);
-    }
-  }
-
-  for(const item of logs.slice(0,50)){
-    parts.push(`<div class="history-card"><b>${escapeHtml(item.time||"")}</b><span class="history-type ${item.type}">${labels[item.type]||item.type}</span><br><span class="muted">${escapeHtml(item.eventZh||item.event||"")}　版本：${escapeHtml(item.total??"")} 筆</span><br>🟢 新增 ${(item.added||[]).length}　 🔴 移除 ${(item.removed||[]).length}　 🟡 修改 ${(item.changed||[]).length}</div>`);
-  }
-
-  el.innerHTML=parts.length?parts.join(""):`<span class="muted">尚無更新紀錄。</span>`;
-}
+function renderHistory(){const el=document.getElementById("history");let logs=historyEntries;if(currentHistoryFilter!=="all")logs=logs.filter(x=>x.type===currentHistoryFilter);if(!logs.length){el.innerHTML=`<span class="muted">尚無更新紀錄。</span>`;return;}const labels={lid:"Poké Lid",stamp:"GO 集章趣"};el.innerHTML=logs.slice(0,50).map(item=>`<div class="history-card"><b>${escapeHtml(item.time||"")}</b><span class="history-type ${item.type}">${labels[item.type]||item.type}</span><br><span class="muted">${escapeHtml(item.eventZh||item.event||"")}　版本：${escapeHtml(item.total??"")} 筆</span><br>🟢 新增 ${(item.added||[]).length}　 🔴 移除 ${(item.removed||[]).length}　 🟡 修改 ${(item.changed||[]).length}</div>`).join("");}
 function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
 
 document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;const modal=document.getElementById("modalOverlay"),collection=document.getElementById("collectionPanel"),prefecture=document.getElementById("prefecturePanel");if(modal.classList.contains("show")){closeModal();return;}if(collection.classList.contains("show")){backToPrefectureList();return;}if(prefecture.classList.contains("show"))closePrefecturePanel();});

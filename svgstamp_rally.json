@@ -1,9 +1,9 @@
 {
   "version": "6.0",
-  "updated": "2026-09-01 23:44:24",
+  "updated": "2026-09-02 12:11:57",
   "source": "official",
-  "sourceMode": "actual official GO Stamp Rally discovery; official stamp count authoritative; manual overrides highest priority",
-  "rule": "Only actual in-game Pokémon GO GO Stamp Rally in Japan. Poké Lid and Pokémon Center rallies are excluded.",
+  "sourceMode": "global official Pokémon GO discovery; cross-region event merge; locale dedupe; official coordinates first; manual overrides protected; global place-name geocoding fallback",
+  "rule": "Global in-game Pokémon GO GO Stamp Rally only. Cross-region rallies are one event containing all regional stamp points. Offline stamp rallies, Pokémon Center on-site rallies and Poké Lid are excluded.",
   "events": [
     {
       "eventId": "STAMP-AUTO-B4A4D73E3090",
@@ -46,8 +46,24 @@
       "canonicalPage": "pokemongo.com/news/event-apac-stamp-rally-2026",
       "official": true,
       "discoveryMode": "official-auto",
-      "pointCount": 5,
+      "pointCount": 7,
       "dataStatus": "complete"
+    },
+    {
+      "eventId": "STAMP-AUTO-57368C8161F6",
+      "event": "PokéXciting! Comes to KLCC Park — Get Ready, Kuala Lumpur! — Pokémon GO",
+      "eventName": "PokéXciting! Comes to KLCC Park — Get Ready, Kuala Lumpur! — Pokémon GO",
+      "eventZh": "PokéXciting! Comes to KLCC Park — Get Ready, Kuala Lumpur! — Pokémon GO",
+      "eventNameZh": "PokéXciting! Comes to KLCC Park — Get Ready, Kuala Lumpur! — Pokémon GO",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
+      "sourceUrl": "https://pokemongo.com/news/event-kuala-lumpur-30th-anniversary-2026",
+      "activityImage": "https://lh3.googleusercontent.com/R5icuDPTQf1ppU6yMDRpgn0k96xPy1tlgKD6bvpY0n0wATMDX5rfHl1QA__e0SAIYOEpY0895EyLm--tIhmrSysuuIVg1vIUNYZqOsc-Yw",
+      "eventImage": "https://lh3.googleusercontent.com/R5icuDPTQf1ppU6yMDRpgn0k96xPy1tlgKD6bvpY0n0wATMDX5rfHl1QA__e0SAIYOEpY0895EyLm--tIhmrSysuuIVg1vIUNYZqOsc-Yw",
+      "startDate": "",
+      "endDate": "",
+      "expectedStamps": 1,
+      "pointCount": 1
     },
     {
       "eventId": "STAMP-AUTO-32B16D77BD71",
@@ -74,8 +90,34 @@
   ],
   "list": [
     {
+      "id": "STAMP-POINT-EDFB63CE4870",
+      "eventId": "STAMP-AUTO-57368C8161F6",
+      "event": "PokéXciting! Comes to KLCC Park — Get Ready, Kuala Lumpur! — Pokémon GO",
+      "eventName": "PokéXciting! Comes to KLCC Park — Get Ready, Kuala Lumpur! — Pokémon GO",
+      "eventZh": "",
+      "eventNameZh": "",
+      "activity": "GO Stamp Rally",
+      "activityZh": "",
+      "venueType": "event",
+      "venue": "",
+      "name": "PokéXciting! Comes to KLCC Park — Get Ready, Kuala Lumpur! — Pokémon GO",
+      "pref": "",
+      "city": "",
+      "address": "",
+      "coords": [],
+      "startDate": "",
+      "endDate": "",
+      "stampImage": "",
+      "activityImage": "https://lh3.googleusercontent.com/R5icuDPTQf1ppU6yMDRpgn0k96xPy1tlgKD6bvpY0n0wATMDX5rfHl1QA__e0SAIYOEpY0895EyLm--tIhmrSysuuIVg1vIUNYZqOsc-Yw",
+      "eventImage": "https://lh3.googleusercontent.com/R5icuDPTQf1ppU6yMDRpgn0k96xPy1tlgKD6bvpY0n0wATMDX5rfHl1QA__e0SAIYOEpY0895EyLm--tIhmrSysuuIVg1vIUNYZqOsc-Yw",
+      "reward": "",
+      "source": "Pokémon GO Official Website",
+      "sourceUrl": "https://pokemongo.com/news/event-kuala-lumpur-30th-anniversary-2026",
+      "official": true
+    },
+    {
       "id": "STAMP-AUTO-32B16D77BD71-P003",
-      "eventId": "STAMP-AUTO-32B16D77BD71",
+      "eventId": "STAMP-AUTO-BCCDC32DB6CE",
       "event": "Pokémon GO Stamp Rally in Nagasaki",
       "eventName": "Pokémon GO Stamp Rally in Nagasaki",
       "eventZh": "Pokémon GO Stamp Rally in Nagasaki",
@@ -101,7 +143,7 @@
     },
     {
       "id": "STAMP-AUTO-32B16D77BD71-P004",
-      "eventId": "STAMP-AUTO-32B16D77BD71",
+      "eventId": "STAMP-AUTO-BCCDC32DB6CE",
       "event": "Pokémon GO Stamp Rally in Nagasaki",
       "eventName": "Pokémon GO Stamp Rally in Nagasaki",
       "eventZh": "Pokémon GO Stamp Rally in Nagasaki",
@@ -127,7 +169,7 @@
     },
     {
       "id": "STAMP-AUTO-32B16D77BD71-P005",
-      "eventId": "STAMP-AUTO-32B16D77BD71",
+      "eventId": "STAMP-AUTO-BCCDC32DB6CE",
       "event": "Pokémon GO Stamp Rally in Nagasaki",
       "eventName": "Pokémon GO Stamp Rally in Nagasaki",
       "eventZh": "Pokémon GO Stamp Rally in Nagasaki",
@@ -153,7 +195,7 @@
     },
     {
       "id": "STAMP-AUTO-32B16D77BD71-P006",
-      "eventId": "STAMP-AUTO-32B16D77BD71",
+      "eventId": "STAMP-AUTO-BCCDC32DB6CE",
       "event": "Pokémon GO Stamp Rally in Nagasaki",
       "eventName": "Pokémon GO Stamp Rally in Nagasaki",
       "eventZh": "Pokémon GO Stamp Rally in Nagasaki",
@@ -185,7 +227,7 @@
     },
     {
       "id": "STAMP-AUTO-32B16D77BD71-P001",
-      "eventId": "STAMP-AUTO-32B16D77BD71",
+      "eventId": "STAMP-AUTO-BCCDC32DB6CE",
       "event": "Pokémon GO Stamp Rally in Nagasaki",
       "eventName": "Pokémon GO Stamp Rally in Nagasaki",
       "eventZh": "Pokémon GO Stamp Rally in Nagasaki",
@@ -211,7 +253,7 @@
     },
     {
       "id": "STAMP-AUTO-32B16D77BD71-P007",
-      "eventId": "STAMP-AUTO-32B16D77BD71",
+      "eventId": "STAMP-AUTO-BCCDC32DB6CE",
       "event": "Pokémon GO Stamp Rally in Nagasaki",
       "eventName": "Pokémon GO Stamp Rally in Nagasaki",
       "eventZh": "Pokémon GO Stamp Rally in Nagasaki",
@@ -237,7 +279,7 @@
     },
     {
       "id": "STAMP-AUTO-32B16D77BD71-P002",
-      "eventId": "STAMP-AUTO-32B16D77BD71",
+      "eventId": "STAMP-AUTO-BCCDC32DB6CE",
       "event": "Pokémon GO Stamp Rally in Nagasaki",
       "eventName": "Pokémon GO Stamp Rally in Nagasaki",
       "eventZh": "Pokémon GO Stamp Rally in Nagasaki",
@@ -263,7 +305,7 @@
     },
     {
       "id": "STAMP-AUTO-32B16D77BD71-P008",
-      "eventId": "STAMP-AUTO-32B16D77BD71",
+      "eventId": "STAMP-AUTO-BCCDC32DB6CE",
       "event": "Pokémon GO Stamp Rally in Nagasaki",
       "eventName": "Pokémon GO Stamp Rally in Nagasaki",
       "eventZh": "Pokémon GO Stamp Rally in Nagasaki",
@@ -276,7 +318,10 @@
       "pref": "長崎県",
       "city": "",
       "address": "",
-      "coords": [],
+      "coords": [
+        40.8287354,
+        111.6567019
+      ],
       "startDate": "",
       "endDate": "",
       "stampImage": "",
@@ -285,11 +330,15 @@
       "source": "Pokémon GO Official Website",
       "sourceUrl": "https://pokemongo.com/zh-Hant/news/stamp-rally-nagasaki",
       "official": true,
-      "discoveryMode": "official-auto"
+      "discoveryMode": "official-auto",
+      "lat": 40.8287354,
+      "lng": 111.6567019,
+      "coordsSource": "Place-name geocoding (Nominatim)",
+      "coordinatesConfidence": "medium"
     },
     {
       "id": "STAMP-AUTO-B4A4D73E3090-P002",
-      "eventId": "STAMP-AUTO-B4A4D73E3090",
+      "eventId": "STAMP-AUTO-4D8E7518C251",
       "event": "GO集章趣",
       "eventName": "GO集章趣",
       "eventZh": "GO集章趣",
@@ -315,7 +364,7 @@
     },
     {
       "id": "STAMP-AUTO-B4A4D73E3090-P003",
-      "eventId": "STAMP-AUTO-B4A4D73E3090",
+      "eventId": "STAMP-AUTO-4D8E7518C251",
       "event": "GO集章趣",
       "eventName": "GO集章趣",
       "eventZh": "GO集章趣",
@@ -341,7 +390,7 @@
     },
     {
       "id": "STAMP-AUTO-B4A4D73E3090-P005",
-      "eventId": "STAMP-AUTO-B4A4D73E3090",
+      "eventId": "STAMP-AUTO-4D8E7518C251",
       "event": "GO集章趣",
       "eventName": "GO集章趣",
       "eventZh": "GO集章趣",
@@ -367,7 +416,7 @@
     },
     {
       "id": "STAMP-AUTO-B4A4D73E3090-P004",
-      "eventId": "STAMP-AUTO-B4A4D73E3090",
+      "eventId": "STAMP-AUTO-4D8E7518C251",
       "event": "GO集章趣",
       "eventName": "GO集章趣",
       "eventZh": "GO集章趣",
@@ -393,7 +442,7 @@
     },
     {
       "id": "STAMP-AUTO-B4A4D73E3090-P001",
-      "eventId": "STAMP-AUTO-B4A4D73E3090",
+      "eventId": "STAMP-AUTO-4D8E7518C251",
       "event": "GO集章趣",
       "eventName": "GO集章趣",
       "eventZh": "GO集章趣",
@@ -419,7 +468,7 @@
     },
     {
       "id": "STAMP-AUTO-FBD0F3C45730-P002",
-      "eventId": "STAMP-AUTO-FBD0F3C45730",
+      "eventId": "STAMP-EVENT-POKEXCITING-APAC",
       "event": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventName": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventZh": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
@@ -445,7 +494,7 @@
     },
     {
       "id": "STAMP-AUTO-FBD0F3C45730-P003",
-      "eventId": "STAMP-AUTO-FBD0F3C45730",
+      "eventId": "STAMP-EVENT-POKEXCITING-APAC",
       "event": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventName": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventZh": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
@@ -471,7 +520,7 @@
     },
     {
       "id": "STAMP-AUTO-FBD0F3C45730-P005",
-      "eventId": "STAMP-AUTO-FBD0F3C45730",
+      "eventId": "STAMP-EVENT-POKEXCITING-APAC",
       "event": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventName": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventZh": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
@@ -497,7 +546,7 @@
     },
     {
       "id": "STAMP-AUTO-FBD0F3C45730-P004",
-      "eventId": "STAMP-AUTO-FBD0F3C45730",
+      "eventId": "STAMP-EVENT-POKEXCITING-APAC",
       "event": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventName": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventZh": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
@@ -523,7 +572,7 @@
     },
     {
       "id": "STAMP-AUTO-FBD0F3C45730-P001",
-      "eventId": "STAMP-AUTO-FBD0F3C45730",
+      "eventId": "STAMP-EVENT-POKEXCITING-APAC",
       "event": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventName": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
       "eventZh": "「PokéXciting!」的跨地區「GO集章趣」活動是什麼？",
@@ -546,6 +595,58 @@
       "sourceUrl": "https://pokemongo.com/zh_Hant/news/event-apac-stamp-rally-2026",
       "official": true,
       "discoveryMode": "official-auto"
+    },
+    {
+      "id": "STAMP-POINT-161E34C3BABC",
+      "eventId": "STAMP-EVENT-POKEXCITING-APAC",
+      "event": "最令人興奮的寶可夢慶典──寶可夢30週年活動「PokéXciting!」精彩登場！ — Pokémon GO",
+      "eventName": "最令人興奮的寶可夢慶典──寶可夢30週年活動「PokéXciting!」精彩登場！ — Pokémon GO",
+      "eventZh": "最令人興奮的寶可夢慶典──寶可夢30週年活動「PokéXciting!」精彩登場！ — Pokémon GO",
+      "eventNameZh": "最令人興奮的寶可夢慶典──寶可夢30週年活動「PokéXciting!」精彩登場！ — Pokémon GO",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
+      "venueType": "event",
+      "venue": "",
+      "name": "最令人興奮的寶可夢慶典──寶可夢30週年活動「PokéXciting!」精彩登場！ — Pokémon GO",
+      "pref": "",
+      "city": "",
+      "address": "",
+      "coords": [],
+      "startDate": "2026-09-12",
+      "endDate": "2026-09-13",
+      "stampImage": "",
+      "activityImage": "https://lh3.googleusercontent.com/qY34YSOXE0Zh2j7uqgaqbBl5J2rU9busGpGyuqR67XqDagGgAfQc5GHVv4T_2AndIBYm7py5h0HjuriW3MFQX0y6qR-vgwPTCGl2tlcFblQ",
+      "eventImage": "https://lh3.googleusercontent.com/qY34YSOXE0Zh2j7uqgaqbBl5J2rU9busGpGyuqR67XqDagGgAfQc5GHVv4T_2AndIBYm7py5h0HjuriW3MFQX0y6qR-vgwPTCGl2tlcFblQ",
+      "reward": "",
+      "source": "Pokémon GO Official Website",
+      "sourceUrl": "https://pokemongo.com/zh_Hant/news/event-apac-30th-anniversary-2026",
+      "official": true
+    },
+    {
+      "id": "STAMP-POINT-D7C94E72F458",
+      "eventId": "STAMP-EVENT-POKEXCITING-APAC",
+      "event": "跟著「PokéXciting!」的跨地區「GO集章趣」活動探索亞太地區！ — Pokémon GO",
+      "eventName": "跟著「PokéXciting!」的跨地區「GO集章趣」活動探索亞太地區！ — Pokémon GO",
+      "eventZh": "跟著「PokéXciting!」的跨地區「GO集章趣」活動探索亞太地區！ — Pokémon GO",
+      "eventNameZh": "跟著「PokéXciting!」的跨地區「GO集章趣」活動探索亞太地區！ — Pokémon GO",
+      "activity": "GO Stamp Rally",
+      "activityZh": "GO 集章趣",
+      "venueType": "event",
+      "venue": "",
+      "name": "跟著「PokéXciting!」的跨地區「GO集章趣」活動探索亞太地區！ — Pokémon GO",
+      "pref": "",
+      "city": "",
+      "address": "",
+      "coords": [],
+      "startDate": "2026-09-12",
+      "endDate": "2029-09-11",
+      "stampImage": "",
+      "activityImage": "https://lh3.googleusercontent.com/nqJ9X06yWs01-pPsSB7I2KTTvPsVMwMW0VZqaJCU9jVUb6E45970crW3-rVyQWufr_esZMy3uqzvHwQDbryqqPxhFNhwx8o_8jXEB1TUoN8",
+      "eventImage": "https://lh3.googleusercontent.com/nqJ9X06yWs01-pPsSB7I2KTTvPsVMwMW0VZqaJCU9jVUb6E45970crW3-rVyQWufr_esZMy3uqzvHwQDbryqqPxhFNhwx8o_8jXEB1TUoN8",
+      "reward": "",
+      "source": "Pokémon GO Official Website",
+      "sourceUrl": "https://pokemongo.com/zh_Hant/news/event-apac-stamp-rally-2026",
+      "official": true
     }
   ]
 }

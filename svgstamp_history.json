@@ -1,6 +1,62 @@
 {
   "history": [
     {
+      "time": "2026-09-02T16:20:29.945Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 32,
+      "added": [
+        "MANUAL-STAMP-20260903002027-STAMP-P001",
+        "MANUAL-STAMP-20260903002027-STAMP-P002",
+        "MANUAL-STAMP-20260903002027-STAMP-P003",
+        "MANUAL-STAMP-20260903002027-STAMP-P004",
+        "MANUAL-STAMP-20260903002027-STAMP-P005"
+      ],
+      "removed": [],
+      "changed": [
+        "EVENT:MANUAL-STAMP-20260903002027-STAMP:新增活動"
+      ],
+      "addedItems": [
+        {
+          "id": "MANUAL-STAMP-20260903002027-STAMP-P001",
+          "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+          "eventZh": "東京：港區",
+          "nameZh": "芝公園"
+        },
+        {
+          "id": "MANUAL-STAMP-20260903002027-STAMP-P002",
+          "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+          "eventZh": "東京：港區",
+          "nameZh": "東京鐵塔"
+        },
+        {
+          "id": "MANUAL-STAMP-20260903002027-STAMP-P003",
+          "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+          "eventZh": "東京：港區",
+          "nameZh": "気象庁気象科学館"
+        },
+        {
+          "id": "MANUAL-STAMP-20260903002027-STAMP-P004",
+          "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+          "eventZh": "東京：港區",
+          "nameZh": "江戸見坂公園"
+        },
+        {
+          "id": "MANUAL-STAMP-20260903002027-STAMP-P005",
+          "eventId": "MANUAL-STAMP-20260903002027-STAMP",
+          "eventZh": "東京：港區",
+          "nameZh": "新橋駅西口広場（SL広場）"
+        }
+      ],
+      "removedItems": [],
+      "changedItems": [],
+      "reasons": [
+        "活動資料"
+      ]
+    },
+    {
       "time": "2026-09-02T16:01:15.081Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

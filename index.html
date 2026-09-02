@@ -1751,6 +1751,38 @@ button{
 .stamp-event-card .region-info{
   padding-bottom:12px;
 }
+.stamp-event-section-title{
+  grid-column:1 / -1;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:8px 0 2px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:#f0f7f7;
+  color:#397b83;
+  font-size:15px;
+  font-weight:1000;
+}
+.stamp-event-section-title.history{
+  margin-top:24px;
+  background:#f5f5f5;
+  color:#6f7c80;
+}
+.stamp-event-section-title .count{
+  margin-left:auto;
+  padding:4px 9px;
+  border-radius:999px;
+  background:#fff;
+  font-size:11px;
+  font-weight:900;
+}
+.stamp-event-history-card{
+  opacity:.88;
+}
+.stamp-event-history-card:hover{
+  opacity:1;
+}
 
 @media(max-width:700px){
   .download-subbtn{
@@ -6240,59 +6272,197 @@ function getStampEventDateText(event){
   return "日期尚待官方公布";
 }
 
+function stampEventTimeValue(event,field,fallback){
+  const raw=event?.[field]||"";
+  if(!raw)return fallback;
+  const value=new Date(`${raw}T00:00:00`).getTime();
+  return Number.isFinite(value)?value:fallback;
+}
+
+function sortActiveStampEvents(events){
+  const statusRank={
+    "進行中":0,
+    "即將開始":1,
+    "日期未定":2
+  };
+
+  return [...events].sort((a,b)=>{
+    const sa=getStampEventStatus(a);
+    const sb=getStampEventStatus(b);
+    const rankDiff=(statusRank[sa]??9)-(statusRank[sb]??9);
+    if(rankDiff)return rankDiff;
+
+    // 進行中：較早結束的排前面；沒有結束日則依開始日。
+    if(sa==="進行中"){
+      const ae=stampEventTimeValue(a,"endDate",Number.MAX_SAFE_INTEGER);
+      const be=stampEventTimeValue(b,"endDate",Number.MAX_SAFE_INTEGER);
+      if(ae!==be)return ae-be;
+
+      const as=stampEventTimeValue(a,"startDate",Number.MAX_SAFE_INTEGER);
+      const bs=stampEventTimeValue(b,"startDate",Number.MAX_SAFE_INTEGER);
+      if(as!==bs)return as-bs;
+    }
+
+    // 即將開始：最近要開始的排前面。
+    if(sa==="即將開始"){
+      const as=stampEventTimeValue(a,"startDate",Number.MAX_SAFE_INTEGER);
+      const bs=stampEventTimeValue(b,"startDate",Number.MAX_SAFE_INTEGER);
+      if(as!==bs)return as-bs;
+    }
+
+    return String(a.eventZh||a.event||"").localeCompare(
+      String(b.eventZh||b.event||""),
+      "zh-Hant"
+    );
+  });
+}
+
+function sortHistoryStampEvents(events){
+  return [...events].sort((a,b)=>{
+    // 歷史活動：最近結束的排最前面。
+    const ae=stampEventTimeValue(a,"endDate",0);
+    const be=stampEventTimeValue(b,"endDate",0);
+    if(ae!==be)return be-ae;
+
+    const as=stampEventTimeValue(a,"startDate",0);
+    const bs=stampEventTimeValue(b,"startDate",0);
+    if(as!==bs)return bs-as;
+
+    return String(a.eventZh||a.event||"").localeCompare(
+      String(b.eventZh||b.event||""),
+      "zh-Hant"
+    );
+  });
+}
+
+function buildStampEventCard(event,isHistory=false){
+  const items=event.items||[];
+  const obtained=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
+  const total=Number(event.expectedStamps||0)||items.length;
+  const percent=total?Math.round(obtained/total*1000)/10:0;
+  const known=items.length;
+  const status=getStampEventStatus(event);
+  const banner=event.activityImage || event.eventImage || event.image || "";
+
+  const card=document.createElement("div");
+  card.className="region-card stamp-event-card"+(isHistory?" stamp-event-history-card":"");
+  card.onclick=()=>openStampEvent(event.id);
+
+  const statusKey=status==="即將開始"
+    ?"upcoming"
+    :(status==="已結束"
+      ?"ended"
+      :(status==="日期未定"?"unknown":"active"));
+
+  const statusOverlay=(statusKey!=="active")
+    ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>`
+    : "";
+
+  const completeStamp=(total>0 && obtained>=total)
+    ? `<div class="stamp-event-title-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
+    : "";
+
+  const countText=total
+    ? `${obtained} / ${total}`
+    :(known?`${obtained} / ${known}`:"尚待官方公布");
+
+  const note=(total && known<total)
+    ? `<div class="stamp-event-data-note">目前已取得 ${known} / ${total} 個官方集章點資料</div>`
+    : "";
+
+  const coordKnown=items.filter(item=>{
+    const p=getItemLatLng(item);
+    return Number.isFinite(p.lat)&&Number.isFinite(p.lng);
+  }).length;
+
+  card.innerHTML=`
+    <div class="region-images stamp-event-banner-wrap">
+      ${banner
+        ? `<img class="stamp-event-banner" src="${escapeHtml(banner)}" alt="${escapeHtml(event.eventZh||event.event||"GO 集章趣")}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"> <div class="stamp-event-banner-fallback" style="display:none">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
+        : `<div class="stamp-event-banner-fallback">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
+      }
+      ${statusOverlay}
+    </div>
+
+    <div class="region-info">
+      <div class="stamp-event-title-row">
+        <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
+        ${completeStamp}
+      </div>
+
+      <div class="region-count">${countText}</div>
+
+      <div class="stamp-event-live-status ${statusKey}">
+        ${escapeHtml(status)}
+      </div>
+
+      <div class="stamp-event-date">
+        ${escapeHtml(getStampEventDateText(event))}
+      </div>
+
+      <div class="region-percent">
+        ${total?`完成率 ${percent}%`:`資料待官方公布`}
+        ${note}
+        ${known?`<br>📍 座標資料 ${coordKnown} / ${known}`:""}
+      </div>
+
+      <div class="download-subbox">
+        <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','txt')">TXT</button>
+        <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','json')">JSON</button>
+        <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','csv')">CSV</button>
+      </div>
+    </div>`;
+
+  return card;
+}
+
 function renderStampEvents(el){
   const events=getStampEvents();
+
   if(!events.length){
     el.innerHTML=`<div class="error-box" style="grid-column:1/-1">⚠️ 目前沒有找到 Pokémon GO 官方「GO 集章趣」資料。<br><br>請從右上角「管理／手動修正」新增 GO 集章趣活動。</div>`;
     return;
   }
+
+  const activeEvents=sortActiveStampEvents(
+    events.filter(event=>getStampEventStatus(event)!=="已結束")
+  );
+
+  const historyEvents=sortHistoryStampEvents(
+    events.filter(event=>getStampEventStatus(event)==="已結束")
+  );
+
   el.innerHTML="";
-  for(const event of events){
-    const items=event.items||[];
-    const obtained=items.filter(x=>obtainedIds.stamp.has(getItemId(x))).length;
-    const total=Number(event.expectedStamps||0)||items.length;
-    const percent=total?Math.round(obtained/total*1000)/10:0;
-    const known=items.length;
-    const status=getStampEventStatus(event);
-    const banner=event.activityImage || event.eventImage || event.image || "";
-    const card=document.createElement("div");
-    card.className="region-card stamp-event-card";
-    card.onclick=()=>openStampEvent(event.id);
-    const statusKey=status==="即將開始"?"upcoming":(status==="已結束"?"ended":(status==="日期未定"?"unknown":"active"));
-    const statusOverlay=(statusKey!=="active")
-      ? `<div class="stamp-event-status-overlay">${escapeHtml(status)}</div>` : "";
-    const completeStamp=(total>0 && obtained>=total)
-      ? `<div class="stamp-event-title-stamp" aria-label="已完成">完成<small>COMPLETE</small></div>`
-      : "";
-    const countText=total?`${obtained} / ${total}`:(known?`${obtained} / ${known}`:"尚待官方公布");
-    const note=(total && known<total)
-      ? `<div class="stamp-event-data-note">目前已取得 ${known} / ${total} 個官方集章點資料</div>` : "";
-    card.innerHTML=`
-      <div class="region-images stamp-event-banner-wrap">
-        ${banner
-          ? `<img class="stamp-event-banner" src="${escapeHtml(banner)}" alt="${escapeHtml(event.eventZh||event.event||"GO 集章趣")}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"> <div class="stamp-event-banner-fallback" style="display:none">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
-          : `<div class="stamp-event-banner-fallback">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>`
-        }
-        ${statusOverlay}
-      </div>
-      <div class="region-info">
-        <div class="stamp-event-title-row">
-          <div class="region-name">${escapeHtml(event.eventZh||event.event||"GO 集章趣")}</div>
-          ${completeStamp}
-        </div>
-        <div class="region-count">${countText}</div>
-        <div class="stamp-event-live-status ${statusKey}">${escapeHtml(status)}</div><div class="stamp-event-date">${escapeHtml(getStampEventDateText(event))}</div>
-        <div class="region-percent">${total?`完成率 ${percent}%`:`資料待官方公布`}${note}${known?`<br>📍 座標資料 ${items.filter(item=>{const p=getItemLatLng(item);return Number.isFinite(p.lat)&&Number.isFinite(p.lng);}).length} / ${known}`:""}</div>
-        <div class="download-subbox">
-          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','txt')">TXT</button>
-          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','json')">JSON</button>
-          <button class="download-subbtn" onclick="event.stopPropagation();downloadStampEvent('${escapeJs(event.id)}','csv')">CSV</button>
-        </div>
-      </div>`;
-    el.appendChild(card);
+
+  // Current / upcoming section
+  if(activeEvents.length){
+    const title=document.createElement("div");
+    title.className="stamp-event-section-title";
+    title.innerHTML=`<span>🎟️ 目前／即將活動</span><span class="count">${activeEvents.length} 個活動</span>`;
+    el.appendChild(title);
+
+    for(const event of activeEvents){
+      el.appendChild(buildStampEventCard(event,false));
+    }
+  }else{
+    const empty=document.createElement("div");
+    empty.className="stamp-event-section-title";
+    empty.innerHTML=`<span>🎟️ 目前沒有進行中或即將開始的活動</span>`;
+    el.appendChild(empty);
+  }
+
+  // Historical section
+  if(historyEvents.length){
+    const title=document.createElement("div");
+    title.className="stamp-event-section-title history";
+    title.innerHTML=`<span>🕘 歷史活動</span><span class="count">${historyEvents.length} 個活動</span>`;
+    el.appendChild(title);
+
+    for(const event of historyEvents){
+      el.appendChild(buildStampEventCard(event,true));
+    }
   }
 }
-
 function openRegion(regionName){
   if(collectionType==="stamp") return;
   currentRegion=regionName; document.getElementById("prefectureTitle").textContent=regionName; renderPrefectureSummary(); renderPrefectureGrid(); document.getElementById("prefecturePanel").classList.add("show"); document.body.classList.add("no-scroll");

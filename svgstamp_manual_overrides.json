@@ -475,7 +475,22 @@
       "manualVenue": "泰國曼谷",
       "manualStampImage": "assets/stamps/MANUAL-STAMP-20260902212838-POKE-XCITING-GO-P005.png",
       "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260905081848-STAMP-P001",
+      "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+      "venue": "天王洲島四號公園",
+      "name": "天王洲島四號公園",
+      "manualName": "天王洲島四號公園",
+      "manualVenue": "天王洲島四號公園",
+      "manualCoordinates": [
+        35.623578,
+        139.748265
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P001.png",
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-05T00:21:07.607Z"
+  "updated": "2026-09-05T00:22:22.358Z"
 }

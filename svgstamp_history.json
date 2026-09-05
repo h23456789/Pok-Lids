@@ -1,6 +1,33 @@
 {
   "history": [
     {
+      "time": "2026-09-05T00:22:24.467Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 36,
+      "added": [],
+      "removed": [],
+      "changed": [
+        "MANUAL-STAMP-20260905081848-STAMP-P001"
+      ],
+      "addedItems": [],
+      "removedItems": [],
+      "changedItems": [
+        {
+          "id": "MANUAL-STAMP-20260905081848-STAMP-P001",
+          "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+          "eventZh": "東京: 品川區",
+          "nameZh": "天王洲島四號公園"
+        }
+      ],
+      "reasons": [
+        "圖章人工修正",
+        "圖章圖片"
+      ]
+    },
+    {
       "time": "2026-09-05T00:21:12.598Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

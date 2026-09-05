@@ -553,7 +553,12 @@
         139.748265
       ],
       "lat": 35.623578,
-      "lng": 139.748265
+      "lng": 139.748265,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P001.png",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260905081848-STAMP-P002",
@@ -1192,7 +1197,7 @@
       "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-05T00:21:12.595Z",
+  "updated": "2026-09-05T00:22:24.464Z",
   "source": "manual-admin",
   "sourceMode": "manual staged GitHub admin",
   "version": "manual-1.0",

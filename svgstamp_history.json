@@ -1,6 +1,34 @@
 {
   "history": [
     {
+      "time": "2026-09-05T00:21:12.598Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 36,
+      "added": [],
+      "removed": [],
+      "changed": [
+        "MANUAL-STAMP-20260902220813-2026-P001"
+      ],
+      "addedItems": [],
+      "removedItems": [],
+      "changedItems": [
+        {
+          "id": "MANUAL-STAMP-20260902220813-2026-P001",
+          "eventId": "MANUAL-STAMP-20260902220813-2026",
+          "eventZh": "寶可夢中心集章活動2026",
+          "nameZh": "北海道&Pokémon Center SAPPORO"
+        }
+      ],
+      "reasons": [
+        "活動資料",
+        "圖章人工修正",
+        "圖章圖片"
+      ]
+    },
+    {
       "time": "2026-09-05T00:18:50.597Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

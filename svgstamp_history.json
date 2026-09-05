@@ -1,46 +1,46 @@
 {
   "history": [
     {
-      "time": "2026-09-05T00:16:51.802Z",
+      "time": "2026-09-05T00:18:50.597Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",
       "eventZh": "手動更新 GO 集章趣",
       "source": "Website Admin",
       "total": 36,
       "added": [
-        "MANUAL-STAMP-20260905081647-STAMP-P001",
-        "MANUAL-STAMP-20260905081647-STAMP-P002",
-        "MANUAL-STAMP-20260905081647-STAMP-P003",
-        "MANUAL-STAMP-20260905081647-STAMP-P004"
+        "MANUAL-STAMP-20260905081848-STAMP-P001",
+        "MANUAL-STAMP-20260905081848-STAMP-P002",
+        "MANUAL-STAMP-20260905081848-STAMP-P003",
+        "MANUAL-STAMP-20260905081848-STAMP-P004"
       ],
       "removed": [],
       "changed": [
-        "EVENT:MANUAL-STAMP-20260905081647-STAMP:新增活動"
+        "EVENT:MANUAL-STAMP-20260905081848-STAMP:新增活動"
       ],
       "addedItems": [
         {
-          "id": "MANUAL-STAMP-20260905081647-STAMP-P001",
-          "eventId": "MANUAL-STAMP-20260905081647-STAMP",
-          "eventZh": "東京: 江東區",
-          "nameZh": "江東区役所"
+          "id": "MANUAL-STAMP-20260905081848-STAMP-P001",
+          "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+          "eventZh": "東京: 品川區",
+          "nameZh": "天王洲島四號公園"
         },
         {
-          "id": "MANUAL-STAMP-20260905081647-STAMP-P002",
-          "eventId": "MANUAL-STAMP-20260905081647-STAMP",
-          "eventZh": "東京: 江東區",
-          "nameZh": "東方世紀21酒店"
+          "id": "MANUAL-STAMP-20260905081848-STAMP-P002",
+          "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+          "eventZh": "東京: 品川區",
+          "nameZh": "聖蹟公園"
         },
         {
-          "id": "MANUAL-STAMP-20260905081647-STAMP-P003",
-          "eventId": "MANUAL-STAMP-20260905081647-STAMP",
-          "eventZh": "東京: 江東區",
-          "nameZh": "仙台堀川公園"
+          "id": "MANUAL-STAMP-20260905081848-STAMP-P003",
+          "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+          "eventZh": "東京: 品川區",
+          "nameZh": "街道松の広場"
         },
         {
-          "id": "MANUAL-STAMP-20260905081647-STAMP-P004",
-          "eventId": "MANUAL-STAMP-20260905081647-STAMP",
-          "eventZh": "東京: 江東區",
-          "nameZh": "東京都現代美術館"
+          "id": "MANUAL-STAMP-20260905081848-STAMP-P004",
+          "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+          "eventZh": "東京: 品川區",
+          "nameZh": "鮫洲入江広場"
         }
       ],
       "removedItems": [],

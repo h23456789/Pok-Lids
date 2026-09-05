@@ -490,7 +490,52 @@
       "coordinatesSource": "Manual admin",
       "manualStampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P001.png",
       "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260905081848-STAMP-P002",
+      "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+      "venue": "聖蹟公園",
+      "name": "聖蹟公園",
+      "manualName": "聖蹟公園",
+      "manualVenue": "聖蹟公園",
+      "manualCoordinates": [
+        35.619162,
+        139.74419
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P002.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260905081848-STAMP-P003",
+      "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+      "venue": "街道松の広場",
+      "name": "街道松の広場",
+      "manualName": "街道松の広場",
+      "manualVenue": "街道松の広場",
+      "manualCoordinates": [
+        35.615484,
+        139.744176
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P003.png",
+      "stampImageSource": "Manual admin"
+    },
+    {
+      "id": "MANUAL-STAMP-20260905081848-STAMP-P004",
+      "eventId": "MANUAL-STAMP-20260905081848-STAMP",
+      "venue": "鮫洲入江広場",
+      "name": "鮫洲入江広場",
+      "manualName": "鮫洲入江広場",
+      "manualVenue": "鮫洲入江広場",
+      "manualCoordinates": [
+        35.603301,
+        139.743942
+      ],
+      "coordinatesSource": "Manual admin",
+      "manualStampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P004.png",
+      "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-05T00:22:22.358Z"
+  "updated": "2026-09-05T00:47:00.297Z"
 }

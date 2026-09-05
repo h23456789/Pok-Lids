@@ -584,7 +584,12 @@
         139.74419
       ],
       "lat": 35.619162,
-      "lng": 139.74419
+      "lng": 139.74419,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P002.png",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260905081848-STAMP-P003",
@@ -610,7 +615,12 @@
         139.744176
       ],
       "lat": 35.615484,
-      "lng": 139.744176
+      "lng": 139.744176,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P003.png",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260905081848-STAMP-P004",
@@ -636,7 +646,12 @@
         139.743942
       ],
       "lat": 35.603301,
-      "lng": 139.743942
+      "lng": 139.743942,
+      "coordinatesManual": true,
+      "coordinatesSource": "Manual admin",
+      "stampImage": "assets/stamps/MANUAL-STAMP-20260905081848-STAMP-P004.png",
+      "stampImageManual": true,
+      "stampImageSource": "Manual admin"
     },
     {
       "id": "MANUAL-STAMP-20260902220813-2026-P001",
@@ -1197,7 +1212,7 @@
       "stampImageSource": "Manual admin"
     }
   ],
-  "updated": "2026-09-05T00:22:24.464Z",
+  "updated": "2026-09-05T00:47:02.554Z",
   "source": "manual-admin",
   "sourceMode": "manual staged GitHub admin",
   "version": "manual-1.0",

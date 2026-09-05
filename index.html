@@ -2039,7 +2039,7 @@ button{
   max-width:240px;
   max-height:240px;
   object-fit:contain;
-  border-radius:12px;
+  border-radius:2px;
   background:repeating-conic-gradient(#eef2f2 0 25%,#fff 0 50%) 50%/16px 16px
 }
 .admin-event-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
@@ -3374,7 +3374,9 @@ button{
               <span id="adminZoomLabel">100%</span>
               <button class="admin-mini-btn" type="button" onclick="adminZoom(0.2)">＋</button>
               <button class="admin-mini-btn" type="button" onclick="adminResetZoom()">重設</button>
-              <label><input id="adminCircleCrop" type="checkbox"> 圓形輸出</label>
+              <span style="font-weight:900">輸出形狀：</span>
+              <label><input id="adminSquareCrop" name="adminCropShape" type="radio" value="square" checked> 四方型</label>
+              <label><input id="adminCircleCrop" name="adminCropShape" type="radio" value="circle"> 圓形</label>
               <label><input id="adminRemoveBg" type="checkbox" checked> 自動去背</label>
               <label>去背容差 <input id="adminBgTolerance" type="range" min="8" max="100" value="36" oninput="document.getElementById('adminBgTolLabel').textContent=this.value"></label>
               <span id="adminBgTolLabel">36</span>
@@ -3385,7 +3387,8 @@ button{
             </div>
 
             <div class="admin-help">
-              裁切框可自由調整：<b>拖曳框內＝移動</b>；<b>拖曳四角／四邊控制點＝縮放</b>；框外重新拖曳＝建立新裁切框。
+              裁切框可自由調整：<b>拖曳框內＝移動</b>；<b>拖曳四角／四邊控制點＝縮放</b>；框外重新拖曳＝建立新裁切框。<br>
+              <b>四方型</b>會完整保留裁切框的長寬比例；只有明確選擇<b>圓形</b>時才會套用圓形遮罩。
             </div>
 
             <div class="admin-buttons">
@@ -5126,9 +5129,19 @@ adminCanvas.addEventListener("wheel",ev=>{
   adminZoom(ev.deltaY<0?.1:-.1);
 },{passive:false});
 
+document.querySelectorAll('input[name="adminCropShape"]').forEach(input=>{
+  input.addEventListener("change",adminCropShapeChanged);
+});
+
 document.getElementById("adminImageInput").addEventListener("change",()=>{
   const f=document.getElementById("adminImageInput").files?.[0];
   if(!f)return;
+
+  // Every newly uploaded screenshot starts from 四方型.
+  const square=document.getElementById("adminSquareCrop");
+  if(square)square.checked=true;
+  adminResetCropOutput();
+
   const img=new Image();
   const url=URL.createObjectURL(f);
   img.onload=()=>{
@@ -5193,6 +5206,29 @@ function adminRemoveBgFromCanvas(c,tolerance){
   ctx.putImageData(img,0,0);
 }
 
+function adminGetCropShape(){
+  const selected=document.querySelector('input[name="adminCropShape"]:checked');
+  return selected?.value==="circle" ? "circle" : "square";
+}
+
+function adminResetCropOutput(){
+  adminState.cropBlob=null;
+  adminState.cropDataUrl="";
+  const preview=document.getElementById("adminCropPreview");
+  if(preview)preview.innerHTML="";
+}
+
+async function adminCropShapeChanged(){
+  // Important: changing square/circle must invalidate any cropBlob that was
+  // generated using the previous shape. Otherwise "暫存圖章變更" could save
+  // the old circular PNG even though the UI now says 四方型.
+  adminResetCropOutput();
+
+  if(adminState.img && adminState.rect && adminState.rect.w>=3 && adminState.rect.h>=3){
+    await adminCropPreview();
+  }
+}
+
 async function adminCropPreview(){
   try{
     if(!adminState.img||!adminState.rect||adminState.rect.w<3||adminState.rect.h<3){
@@ -5221,7 +5257,7 @@ async function adminCropPreview(){
 
     let finalCanvas=out;
 
-    if(document.getElementById("adminCircleCrop").checked){
+    if(adminGetCropShape()==="circle"){
       const size=Math.min(out.width,out.height);
       const sq=document.createElement("canvas");
       sq.width=size;
@@ -5258,7 +5294,8 @@ async function adminCropPreview(){
       currentMeta.textContent="目前預覽：截圖裁切（尚未暫存）";
     }
 
-    adminSetSaveStatus("裁切完成。上方「目前圖章」已同步顯示裁切預覽。",true);
+    const shapeLabel=adminGetCropShape()==="circle"?"圓形":"四方型";
+    adminSetSaveStatus(`裁切完成：${shapeLabel}輸出。上方「目前圖章」已同步顯示裁切預覽。`,true);
   }catch(error){
     adminSetSaveStatus(error.message,false);
   }
@@ -5316,6 +5353,12 @@ async function adminSaveOverride(){
 
     const urlInput=document.getElementById("adminImageUrl").value.trim();
     let imagePath=p.stampImage||"";
+
+    // If a screenshot and crop rectangle are present but cropBlob was
+    // invalidated by a shape change, rebuild it before staging.
+    if(adminState.img && adminState.rect && !adminState.cropBlob){
+      await adminCropPreview();
+    }
 
     // Priority 1: manual screenshot crop
     if(adminState.cropBlob){

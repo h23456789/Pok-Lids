@@ -1,6 +1,24 @@
 {
   "history": [
     {
+      "time": "2026-09-05T01:00:04.250Z",
+      "type": "stamp",
+      "event": "Manual GO Stamp Rally update",
+      "eventZh": "手動更新 GO 集章趣",
+      "source": "Website Admin",
+      "total": 36,
+      "added": [],
+      "removed": [],
+      "changed": [],
+      "addedItems": [],
+      "removedItems": [],
+      "changedItems": [],
+      "reasons": [
+        "圖章人工修正",
+        "圖章圖片"
+      ]
+    },
+    {
       "time": "2026-09-05T00:48:18.433Z",
       "type": "stamp",
       "event": "Manual GO Stamp Rally update",

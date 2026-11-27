@@ -1,6 +1,6 @@
 {
-  "last_sync": "2026-11-26T21:35:36.510Z",
-  "total": 18,
+  "last_sync": "2026-11-27T08:37:39.576Z",
+  "total": 19,
   "history": [
     {
       "time": "2026-08-27T16:55:12.167Z",
@@ -171,6 +171,23 @@
           "address": "Sunshine City alpa 2F3-1-2 Higashi-Ikebukuro, Toshima-ku, Tokyo170-6002"
         }
       ]
+    },
+    {
+      "time": "2026-11-27T08:37:39.576Z",
+      "type": "center",
+      "total": 19,
+      "added": [
+        {
+          "id": "pokemon-center-64247022b754",
+          "prefecture": null,
+          "title": "Pokémon Center BANGKOK",
+          "lat": "",
+          "lng": "",
+          "address": "centralwOrld, C604/2 Level 64, 4/1-4/2, 4/4 Ratchadamri Road, Pathum Wan, Pathum Wan, Bangkok10330"
+        }
+      ],
+      "removed": [],
+      "changed": []
     }
   ]
 }

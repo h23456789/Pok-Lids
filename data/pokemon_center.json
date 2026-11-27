@@ -287,6 +287,19 @@
       "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-okinawa/images/mv-pokemoncenter-okinawa-001.webp",
       "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-okinawa/",
       "source": "https://shop.pokemon.co.jp/en/sitemap/"
+    },
+    {
+      "id": "pokemon-center-64247022b754",
+      "type": "pokemon_center",
+      "pref": null,
+      "region": "",
+      "name": "Pokémon Center BANGKOK",
+      "city": "",
+      "address": "centralwOrld, C604/2 Level 64, 4/1-4/2, 4/4 Ratchadamri Road, Pathum Wan, Pathum Wan, Bangkok10330",
+      "coords": null,
+      "image": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-bangkok/images/mv/mv-pokemoncenter-bangkok-001.webp",
+      "official_url": "https://shop.pokemon.co.jp/en/shop/pokemoncenter-bangkok/",
+      "source": "https://shop.pokemon.co.jp/en/sitemap/"
     }
   ]
 }
